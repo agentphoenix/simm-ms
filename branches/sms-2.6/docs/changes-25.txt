@@ -1,0 +1,120 @@
+### SMS 2.5.4 ###
+
+2007.09.17
+
+*	[ framework/functionsGlobal.php ] - increased allowed JP authors from 6 to 8 in the function
+*	[ admin/post/addjp.php ] - increased allowed JP authors from 6 to 8
+*	[ admin/post/jp.php ] - increased allowed JP authors from 6 to 8
+
+### SMS 2.5.3 ###
+
+2007.08.13
+
+*	[ pages/info.php ] - setup fix for strange spacing in the latest posts section on the main page
+*	[ admin/user/message.php ] - fixed display bug with reply button on PM view page
+
+2007.08.11
+
+*	[ admin/user/account.php ] - fixed bug where updating own account wouldn't work
+*	[ admin/manage/activate.php ] - fixed bug where player being accepted or rejected wouldn't get email
+*	[ admin/manage/activate.php ] - fixed potential bug where player being accepted wouldn't be updated correctly
+
+### SMS 2.5.2 ###
+
+2007.08.09
+
+*	[ admin/ ] - fixed inconsistencies in granting of permissions across the system
+
+2007.08.08
+
+*	[ admin/post/jp.php ] - fixed bug where saving a joint post with 4 participants would overwrite the third author with a blank variable
+*	[ admin/manage/access.php ] - added more notes to the user access control sections
+*	[ admin/manage/access.php ] - removed inactive crew list from the user access control listing
+*	[ admin/manage/globals.php ] - changed tab text in site globals to prevent from wrapping to a new line at 1024x768 resolutions
+*	[ admin/user/stats.php ] - fixed incorrect display of dates on user statistics page
+*	[ admin/user/bio.php ] - fixed bug where when changing a user's position, the open count wouldn't increment
+*	[ admin/user/bio.php ] - added automatic access level change when moving between senior and crew positions
+*	[ admin/manage/menugeneral.php ] - added visual notification of whether menu items are ON or OFF
+*	[ admin/manage/menuadvanced.php ] - added visual notification of whether menu items are ON or OFF
+
+2007.08.07
+
+*	[ admin/manage/accessall.php ] - added page to add/remove a given access level for the entire crew at the same time
+
+2007.08.06
+
+*	[ admin/user/access.php ] - added page that gives full listing of a given user's access
+*	[ admin/manage/crew.php ] - added user access report link to the full crew listing by the stats link
+*	[ admin/manage/crew.php ] - added display of second position (if applicable) to the active crew list
+
+2007.08.04
+
+*	[ admin/manage/globals.php ] - when the sms posting system is turned on or off, the system will take actions to make sure the people are either stripped of or given posting access
+*	[ install/install.php ] - added character set and collation to install
+*	[ install/install.php ] - fixed bug where if the variables file was written the webLocation variable would be empty
+
+2007.08.03
+
+*	[ admin/manage/decklisting.php ] - fixed bug where textareas would show HTML break tags after updating
+
+2007.08.02
+
+*	[ pages/join.php ] - fixed bug where join page set wrong timestamp
+*	[ admin/reports/milestones.php ] - added nice message if the join date is empty instead of the 37 years, etc.
+*	[ admin/reports/milestones.php ] - fixed bug where time wouldn't display if it was 1 day or less
+*	[ admin/reports/milestones.php ] - updated logic to display date in a nicer fashion
+*	[ admin/reports/activity.php ] - improved display for dates less than 1 day
+*	[ admin/manage/menuadvanced.php ] - added on/off switch control to each menu item
+*	[ admin/manage/menugeneral.php ] - added on/off switch control to each menu item
+*	[ login.php ] - fixed bug where error message would extend across entire screen
+*	[ login.php ] - reactivated emailing of password
+*	[ admin/user/account.php ] - added visual separation between items that need a password to be changed and those that don't
+*	[ admin/user/account.php ] - removed username from being listed unless the person viewing it is the owner of the account
+
+2007.08.01
+
+*	[ pages/bio.php ] - fixed bug where dates wouldn't display by recent posts and logs
+*	[ install/install.php ] - added default character set (UTF-8) and collation (utf8_unicode_ci) to the table creation syntax
+*	[ framework/classMenu.php ] - added on/off switch to the menu items
+
+2007.07.31
+
+*	[ admin/user/account.php ] - fixed account bug where admin couldn't change active status of a player
+*	[ admin/post/message.php ] - fixed bug where private messages weren't be sent or received
+
+2007.07.29
+
+*	[ login.php ] - fixed typo that said password would be emailed to the user
+
+### SMS 2.5.1.1 ###
+
+2007.07.29
+
+*	[ admin/manage/activate.php ] - fixed bug where no players could be accepted or rejected
+
+### SMS 2.5.1 ###
+
+2007.07.25
+
+*	[ update/244.php ] - changed permanentCredits to sitePermanentCredits
+*	[ update/244.php ] - changed positionDisplay update to make sure it isn't trying to update something it shouldn't
+*	[ update/244.php ] - changed rankDisplay update to make sure it isn't trying to update something it shouldn't
+*	[ admin/manage/activate.php ] - fixed IE button submit issue with activation
+*	[ admin/manage/activate.php ] - fixed incorrect timestamping on activating new player
+*	[ update/244.php ] - added regular expression to make sure the timestamp loop doesn't override already updated UNIX timestamps with -1
+*	[ pages/statistics.php ] - fixed stats not properly showing
+*	[ pages/join.php ] - cleaned up the join email and logic about whether XOs get emails or not
+
+2007.07.26
+
+*	[ install/index.php ] - added index page in the install directory to make sure no one is viewing the directory listing
+*	[ install/install.php ] - removed MyISAM engine declaration from CREATE queries since MySQL uses that engine by default
+*	[ install/install.php ] - improved code consistency across CREATE and INSERT queries
+*	[ update/index.php ] - added index page in the update directory to make sure no one is viewing the directory listing
+*	[ update/2xx.php ] - removed MyISAM engine declaration from CREATE queries
+*	[ update/2xx.php ] - removed collation declaration from CREATE queries
+*	[ update/2xx.php ] - updated 2.5.0 code and added 2.5.1 code
+*	[ update/250.php ] - added 2.5.0 update file
+*	[ framework/functionsGlobal.php ] - update file version to 2.5.1
+
+### SMS 2.5.2 ###

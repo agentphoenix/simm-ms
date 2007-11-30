@@ -1,0 +1,37 @@
+Removed inactive crew list from the user access control listing since inactive players shouldn\'t have access;
+Removed username from being listed on the edit acount page unless the person viewing it is the owner of the account;
+
+Changed tab text in site globals to prevent from wrapping to a new line at 1024x768 resolutions;
+When the SMS posting system is turned on or off, the system will take actions to make sure the people are either stripped of or given posting access;
+Improved logic on milestones report to display date in a nicer fashion;
+Improved display for dates less than 1 day on the activity report;
+Reactivated emailing of password on password reset;
+
+Added visual separation between items that need a password to be changed and those that don\'t on the edit account page;
+Added on/off switch control to each menu item;
+Added logic to installation that will detect the MySQL version and add the UTF8 character set if the version is 4.0 and higher;
+Added nice message if the join date is empty instead of the 37 years, etc.;
+Added automatic access level change when moving between senior and crew positions;
+Added visual notification of whether menu items are ON or OFF;
+Added page to add/remove a given access level for the entire crew at the same time;
+Added page that gives full listing of a given user\'s access;
+Added user access report link to the full crew listing by the stats link;
+Added display of second position (if applicable) to the active crew list;
+Added more notes to the user access control sections;
+
+Fixed inconsistencies in granting of permissions across the system;
+Fixed bug where saving a joint post with 4 participants would overwrite the third author with a blank variable;
+Fixed incorrect display of dates on user statistics page;
+Fixed bug where when changing a user\'s position, the open count wouldn\'t increment;
+Fixed install bug where if the variables file was written the webLocation variable would be empty;
+Fixed bug where deck listing textareas would show HTML break tags after updating;
+Fixed bug where join page set wrong timestamp;
+Fixed bug on milestones report where time wouldn\'t display if it was 1 day or less;
+Fixed bug where dates wouldn\'t display by recent posts and logs;
+Fixed account bug where admin couldn\'t change active status of a player from the edit account page;
+Fixed bug on login where error message would extend across entire screen;
+Fixed bug where private messages weren\'t being sent or received
+
+===
+
+Provided potential fix for skinners related to strange spacing in the Latest Posts section on the main page when moving paddings from anchors to list items;Fixed display bug with reply button on PM view page;Fixed bug where updating own account wouldn\'t work;Fixed bug where player being accepted or rejected wouldn\'t get an email;Fixed potential bug where player being accepted wouldn\'t be updated correctly
