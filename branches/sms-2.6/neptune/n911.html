@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>NEPTUNE</title>
+		<link rel="stylesheet" type="text/css" href="neptune.css" />
+		<link rel="stylesheet" type="text/css" href="vista_toolbar/style.css" />
+		<script type="text/javascript" src="javascript/prototype.js"></script>
+		<script type="text/javascript" src="javascript/control.tabs.js"></script>
+		<script type="text/javascript" src="javascript/scriptaculous.js"></script>
+	</head>
+	<body>
+		
+		<div id="mainNav">
+			<!--
+			<ul>
+				<li><a href="#">Link #1</a></li>
+				<li><a href="#">Link #2</a></li>
+				<li><a href="#">Link #3</a></li>
+				<li><a href="#">Link #4</a></li>
+			</ul>
+			-->
+		
+			<ul id="tab_group_one">
+				<li><a href="#global">Global</a></li>
+				<li><a href="#user">User</a></li>
+			</ul>
+			
+			<div id="global">
+				<!--<p>I am the content for tab one.</p>-->
+				<ul>
+					<li><a href="#">Main</a></li>
+					<li><a href="#">Personnel</a></li>
+					<li><a href="#">The Ship</a></li>
+					<li><a href="#">The Simm</a></li>
+					<li><a href="#">Database</a></li>
+				</ul>
+				
+			</div>
+			<div id="user">
+				<!--<p>I am the content for tab two.</p>-->
+				<ul>
+					<li><a href="#">Write Mission Post</a></li>
+					<li><a href="#">Account</a></li>
+					<li><a href="#">Biography</a></li>
+					<li><a href="#">Site Globals</a></li>
+					<li><a href="#">Menu Items</a></li>
+				</ul>
+			</div>
+			<script>
+				new Control.Tabs('tab_group_one',{  
+				    showFunction: Effect.Appear  
+				});
+			</script>
+			
+			<p>&nbsp;</p>
+		
+			<div id="vista_toolbar">
+				<ul>
+					<li><a href="#"><span>Main</span></a></li>
+					<li><a href="#"><span>Personnel</span></a></li>
+					<li><a href="#"><span>The Ship</span></a></li>
+					<li><a href="#"><span>The Simm</span></a></li>
+					<li><a href="#"><span>Database</span></a></li>
+				</ul>
+				<!--
+				<ul>
+					<li><a href="#"><span><img align="left" src="vista_toolbar/add.gif" alt="add new" />Add New</span></a></li>
+					<li><a href="#"><span><img align="left" src="vista_toolbar/mail.gif" alt="check mail" />Check Mail</span></a></li>
+					<li><a href="#"><span><img align="left" src="vista_toolbar/chart.gif" alt="statistic" />Statistic</span></a></li>
+					<li><a href="#"><span><img align="left" src="vista_toolbar/mona.gif" alt="my pictures" />My Pictures</span></a></li>
+					<li><a class="right" href="#"><span><img align="left" src="vista_toolbar/sos.gif" alt="help" />Help</span></a></li>
+				</ul>
+				-->
+			</div>
+			
+		</div>
+		<!--
+		<br /><br />
+		<a onclick="new Effect.Fade(document.getElementById('test'))">CLICK</a><br />
+		<div id="test">
+			Click here if you've seen enough.
+		</div>
+		-->
+		
+	</body>
+</html>
