@@ -1,4 +1,4 @@
-Last Updated: 2007.11.29 0900 EST
+Last Updated: 2007.12.05 1147 EST
 
 2.6
 CODENAME: Eclipse
@@ -76,10 +76,16 @@ LAUNCH: Q1 2008
 	brings in the menus. Any way to hide that until the page is loaded?
 #	Logic on the awards page to check for the existence of the large version of the image, and
 	if it doesn't exist, fall back to the smaller version.
+#	Tags in the crew table for system admin, game runner and assistant game runner
+		*	isSysAdmin => identifies who the system administrator is
+		*	isGM => determines who the game manager is; should support multiple GMs, so the
+			various CO functions will need to be updated accordingly
+		*	isAGM => determines who the assistant game manager is; should support multiple
+			AGMs, so the various XO functions will need to be updated accordingly
 
 2.7
 CODENAME: Babylon
-LAUNCH: Q2 2008
+LAUNCH: Q3 2008
 =====
 
 #	Award categories
@@ -121,7 +127,7 @@ LAUNCH: Q2 2008
 
 3.0
 CODENAME: Jefferson
-LAUNCH: Q3 2009
+LAUNCH: Q4 2009
 =====
 
 #	Add install modules
@@ -196,19 +202,6 @@ MAYBE
 		*	Sometimes you just need to jot something down, whether that's character information
 			for an NPC or an idea you had for a mission.  SMS Notes will let you do just that
 			with a system similar to the posting system.  Only you can see your notes.
-
-RESEARCH
-==
-#	jQuery in place of Prototype/Scriptaculous
-		*	Used by Wordpress 2.3+
-		*	Version 1.1.3 is "800% faster" than 1.1.2
-				@	http://jquery.com/
-				@	http://ui.jquery.com/
-		*	Footprint
-				@	jQuery: 20kb
-				@	Prototype + Scriptaculous: 228kb
-#	ExtJS
-		*	http://extjs.com/
 
 JEFFERSON MILESTONES
 =====
