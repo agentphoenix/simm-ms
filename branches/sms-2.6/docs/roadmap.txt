@@ -1,4 +1,4 @@
-Last Updated: 2007.12.06 0015 EST
+Last Updated: 2007.12.06 1600 EST
 
 2.6
 CODENAME: Eclipse
@@ -125,7 +125,9 @@ LAUNCH: Q3 2008
 			pages
 		*	Tough part will be the join page and getting things to be spit out in an email
 			the way they should be
-#	Table sorting through jQuery
+#	User's editing their own posts
+		*	CO notification of changes?
+		*	News items?
 
 3.0
 CODENAME: Jefferson
@@ -155,7 +157,9 @@ LAUNCH: Q4 2009
 		*	Need to find people proficient in languages to offer their services
 #	Menu system updates
 		*	Can the system be more dynamic?
+		*	Menu automation for switch between starship and starbase
 #	More extension support
+		*	Happens by default with CI
 #	Documentation
 		*	Developer documentation
 				@	Working with Jon to put more inline documentation in place in the
@@ -191,19 +195,30 @@ LAUNCH: Q4 2009
 		*	In the foreach() loop, using the get_magic_quotes_gpc() function will get the
 			current server config and can be used to adjust logic for whether slashes need
 			to be added to the variable or not
+#	System-wide email shut off
+		*	Option to turn system emails off for people who are on a server that has problems
+			with the PHP mail() function
+#	HTML emails from the system?
+#	Notepad
+		*	Sometimes you just need to jot something down, whether that's character information
+			for an NPC or an idea you had for a mission.  SMS Notes will let you do just that
+			with a system similar to the posting system.  Only you can see your notes.
+#	Basic forum
+		*	There probably should be some kind of very basic forum system for helping with
+			team-building
+		*	In theory, someone could use a system like that for posting their missions
+		*	No email support
+		*	No attachments
+#	Creating/storing pages in database
+		*	An expansion of the database entry feature that lets admins create pages that can
+			be viewed from anywhere in the system
 
 MAYBE
 ==
 #	Require MySQL 4
-#	Creating/storing pages in database
 #	Email posts to the system
 #	Manual entry of post counts for sims not using the posting features
-#	Menu automation for switch between starship and starbase
 #	Inline help
-#	Player Notes
-		*	Sometimes you just need to jot something down, whether that's character information
-			for an NPC or an idea you had for a mission.  SMS Notes will let you do just that
-			with a system similar to the posting system.  Only you can see your notes.
 
 JEFFERSON MILESTONES
 =====
@@ -214,6 +229,7 @@ M3	-	non-authenticated pieces
 M4	-	authenticated management
 M5	-	authenticated reporting/posting
 M6	-	user system
+M7	-	basic forum system for community building (?)
 
 [ OLD ]
 M0 (Meridian) - non-public milestone aimed at putting the necessary framework pieces into place
