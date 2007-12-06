@@ -1,4 +1,4 @@
-Last Updated: 2007.12.05 1147 EST
+Last Updated: 2007.12.06 0015 EST
 
 2.6
 CODENAME: Eclipse
@@ -82,6 +82,8 @@ LAUNCH: Q1 2008
 			various CO functions will need to be updated accordingly
 		*	isAGM => determines who the assistant game manager is; should support multiple
 			AGMs, so the various XO functions will need to be updated accordingly
+#	Update system queries
+		*	System queries should be safe from SQL injection; see join page for example
 
 2.7
 CODENAME: Babylon
@@ -205,6 +207,15 @@ MAYBE
 
 JEFFERSON MILESTONES
 =====
+M0	-	basics with CodeIgniter in place; jQuery in place
+M1	-	basic installation; genre pieces in place
+M2	-	dynamic installation
+M3	-	non-authenticated pieces
+M4	-	authenticated management
+M5	-	authenticated reporting/posting
+M6	-	user system
+
+[ OLD ]
 M0 (Meridian) - non-public milestone aimed at putting the necessary framework pieces into place
 M1 (Diablo) - milestone aimed at getting the library system up and running with a basic
 	install package so that testers can get their hands on the product early
