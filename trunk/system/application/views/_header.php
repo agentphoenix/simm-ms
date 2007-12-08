@@ -14,10 +14,10 @@
 			</div>
 			<div class="mainnav">
 				<ul>
-					<li><?php echo anchor('main/index', 'Main');?></li>
-					<li><?php echo anchor('personnel/index', 'Personnel');?></li>
-					<li><?php echo anchor('ship/index', 'Ship');?></li>
-					<li><?php echo anchor('simm/index', 'Simm');?></li>
+					<li><?=anchor('main/index', 'Main');?></li>
+					<li><?=anchor('personnel/index', 'Personnel');?></li>
+					<li><?=anchor('ship/index', 'Ship');?></li>
+					<li><?=anchor('simm/index', 'Simm');?></li>
 				</ul>
 			</div>
 			<div class="body">
