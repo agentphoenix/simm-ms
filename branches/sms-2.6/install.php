@@ -45,7 +45,7 @@ if( $_GET['type'] == "update" ) {
 	<link rel="stylesheet" type="text/css" href="install/install.css" />
 </head>
 <body>
-	<div id="install">	
+	<div id="install">	#427ef4
 		<div class="header">
 			<img src="install/install.jpg" alt="" border="0" />
 		</div> <!-- close .header -->
