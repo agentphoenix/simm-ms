@@ -1,0 +1,157 @@
+/**
+This is a necessary system file. Do not modify this page unless you are highly
+knowledgeable as to the structure of the system. Modification of this file may
+cause SMS to no longer function.
+
+Author: David VanScott [ anodyne.sms@gmail.com ]
+File: skins/cobalt/style.css
+Purpose: Stylesheet that controls the look and feel of the site
+
+System Version: 2.5.0
+Last Modified: 2007-06-11 2141 EST
+**/
+
+/*
+	import the different other stylesheets
+	these imports are ESSENTIAL for the system to be displayed correctly
+*/
+@import url( "style-login.css" ); /* the login styles */
+@import url( "style-ui.tabs.css" ); /* jQuery-UI tabs stylesheet */
+@import url( "style-neptune.css" );
+@import url( "style-misc.css" ); /* miscellaneous styles */
+
+body {
+	background-color: #090909;
+	font-family: "Lucida Grande", "Verdana", sans-serif;
+	font-size: .8em;
+	color: #fff;
+	margin: 0;
+	padding: 0;
+}
+
+/* styles that control the main block containing the rest of the system */
+#container {
+	width: 90%;
+	margin: auto;
+	background-color: #000;
+	border-left: 1px solid #111;
+	border-right: 1px solid #111;
+	border-bottom: 1px solid #111;
+}
+
+/* styles that control the top and bottom spacers */
+#headerTopSpacer {
+	height: 25px;
+	background-color: #090909;
+	margin: 0 -1px 0 -1px;
+}
+#container .footerBottomSpacer {
+	height: 25px;
+	background-color: #090909;
+	margin: 0 -1px 0 -1px;
+}
+
+/* the template header */
+#header {
+	height: 92px;
+	background: url( 'images/mainnav-bg.jpg' ) repeat-x top left;
+	margin-top: -5px;
+	margin-left: -1px;
+	margin-right: -1px;
+}
+
+/* special class used for this skin alone */
+.headerTitle {
+	padding: 15px 0;
+}
+
+/* the main navigation section */
+#mainNav {
+	text-align: left;
+	height: 25px;
+	line-height: 25px;
+}
+#mainNav ul {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+#mainNav ul li {
+	display: inline;
+	list-style-type: none;
+}
+#mainNav ul li.spacer {
+	padding-top: 2px;
+}
+#mainNav a {
+	font-weight: bold;
+	color: #2954b2;
+	padding: 0 2em 0 0;
+}
+#mainNav a:hover {
+}
+
+/* the content of the template */
+#container .content {
+	padding: 0 1em 0 1em;
+}
+
+/* the body of the content class where the text is found */
+#container .content .body {
+	margin-right: 20%;
+	padding: 1em 0 1em 1em;
+}
+
+/* the side navigation menu */
+#container .content .nav {
+	float: right;
+	width: 18%;
+	font-size: 8.5pt;
+	padding: 1.5em 0 1em 0;
+	text-align: right;
+}
+#container .content .nav ul {
+	display: block;
+	margin: 0;
+	padding: .5em .2em 1em 0;
+}
+#container .content .nav ul li {
+	list-style-type: none;
+}
+#container .content .nav a {
+	padding: 0 .5em 0 0;
+}
+
+/* part of the nav menu ... controls the login display */
+#container .content .nav .login a {
+	padding: 0;
+}
+
+/*
+	part of the nav menu ... controls the info below the menu
+	that's shown in the main section (latest posts, mission, etc.)
+*/
+#container .content .nav .info {
+	padding: 0 1em 0 2em;
+}
+#container .content .nav .info .fontLarge {
+	margin: 0 -.5em 0 0;
+}
+#container .content .nav .info a {
+	margin: 0 -.5em 0 0;
+}
+
+/* the footer */
+#container .footer {
+	position: relative;
+	background: #090909;
+	text-align: center;
+	clear: both;
+	font-size: .8em;
+	height: 25px;
+	line-height: 25px;
+	color: #fff;
+	padding: 1em 0;
+	margin: 0 -1px -3em -1px;
+	border-top: 1px solid #111;
+}

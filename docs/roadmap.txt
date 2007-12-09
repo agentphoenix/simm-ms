@@ -1,0 +1,243 @@
+Last Updated: 2007.12.06 1600 EST
+
+2.6
+CODENAME: Eclipse
+LAUNCH: Q1 2008
+=====
+
+#	Dynamic acceptance and rejection messages
+		*	Using a character (or two), an admin should be able to define where dynamic elements,
+			like position and rank, are added to the acceptance and rejection emails.
+#	Departmental databases
+#	Add CC ability for private messages
+		*	Should be able to add 5 CCs to their messages
+		*	Options for Command Staff, Senior Staff, and Entire Crew in the list
+#	Threaded PM messages
+		*	Like Gmail, we'll be threading messages to save space and provide a "conversation" type
+			interface
+#	SMS Toolbar
+		*	Move the mainNav into a full-blown toolbar that'll act like the Office 2007 ribbon
+			idea. With a single click, the user should be able to change from the mainNav display
+			to a similar looking menu that contains five of their favorite SMS links, all which
+			can be set in the Site Options page. Might be able to use the Prototype JavaScript
+			library to set up some nice transition effects.
+#	Global preference for displaying text or images on the manifest
+		*	On department page, can be added below everything else with a field for the name
+			of the image being used
+#	Customizable message subject lines
+		*	Emails currently use [Ship Name], but users should be able to customize that
+		*	Default will be [Ship Name]
+#	Clean-up install and update files
+		*	Installation file should be made up of several smaller files to help keep initial
+			file size down. The different files should be structured accordingly:
+				@	Structure - all of the create table commands
+				@	Data - all of the data that needs to be put into the table
+		*	The update file should be broken up as well so that every single update file does
+			not need to be updated each time there is a release. Each release should have one
+			file and the main update file should be looping through to grab the files as needed
+		*	Character sets and collations need to be explicitly defined during install
+		*	What about update?
+#	Tab content immediately available
+		*	Current tab setup requires the page to be reloaded in order to view what's inside the
+			tab. Should be changed so that user can switch between content immediately.
+				@	http://www.dynamicdrive.com/dynamicindex17/tabcontent.htm
+				@	http://www.dynamicdrive.com/dynamicindex17/tabcontent2.htm
+				@	http://www.barelyfitz.com/projects/tabber/
+				@	http://livepipe.net/projects/control_tabs/ (requires Prototype)
+				@	http://loserbait.ulmb.com/digg/
+#	Global setting for default access levels
+#	Starbase menu items in place during install, but turned off
+		*	Unfortunately, there's no good way to dynamically turn the starship stuff off and
+			turn the starbase stuff on. The only way to do it would be to query for the URL
+			that's being used, turn off those items, then turn on the other ones, but I'm
+			not sure if we want to be going through all that trouble.
+#	Error catching page
+#	Rank drop down menus need to respect the rankDisplay flag
+#	Add cadet ranks (off by default)
+#	SMS Update options
+		*	Admins should be able to dictate exactly which updates they're notified of.
+				@	All Updates - notifies of all updates: major and minor
+				@	Major Only - notifies only of 2.x.0 releases and not of 2.x.x releases
+				@	No Updates - will turn off the notification system (users who choose
+					this option put themselves at risk in the event of a security release)
+#	Joint posting upper limit set by admin
+		*	Site globals should include an option for the admin to set how many possible
+			people can be in a joint post. Lower limit is 2, upper limit is the number of
+			crew the sim has.
+#	"Private" news messages
+		*	People should be able to set news items as private, meaning that only registered
+			crew can see them, be that when they're logged in or not
+#	[BUG] Database uses integer fields for the crew compliment section, meaning that if a comma
+	is used, the query will strip everything from the invalid character on
+#	Toggle boxes should use jQuery instead of the custom Javascript code
+#	Single posting page with the option to add more participants
+#	Database table and report for storing and retrieving SQL injection notifications
+#	[BUG] When the page is loading, the global/user menu shows first for a few seconds then 
+	brings in the menus. Any way to hide that until the page is loaded?
+#	Logic on the awards page to check for the existence of the large version of the image, and
+	if it doesn't exist, fall back to the smaller version.
+#	Tags in the crew table for system admin, game runner and assistant game runner
+		*	isSysAdmin => identifies who the system administrator is
+		*	isGM => determines who the game manager is; should support multiple GMs, so the
+			various CO functions will need to be updated accordingly
+		*	isAGM => determines who the assistant game manager is; should support multiple
+			AGMs, so the various XO functions will need to be updated accordingly
+#	Update system queries
+		*	System queries should be safe from SQL injection; see join page for example
+
+2.7
+CODENAME: Babylon
+LAUNCH: Q3 2008
+=====
+
+#	Award categories
+		*	COs should be able to set categories for awards, much like they can set categories
+			for news items now
+		*	http://forums.anodyne-productions.com/viewtopic.php?t=1167
+		*	Option for whether it's an in character or out of character award
+		*	Will allow NPCs to be given IC awards
+#	Extra information on award
+		*	Timestamp
+		*	Reason
+		*	1,Timestamp:Reason; 2,Timestamp:Reason; etc.
+#	Nominated Awards To a Queue
+		*	When someone nominates another crew member for an award, it'll put it up for
+			approval, much like a new crew member that the CO can review and then approve
+			and not approve.  If approved, the award will be activated on the player's
+			account, otherwise, it'll be deleted
+#	Strike management controls
+		*	COs should be able to set how many strikes before removal, the timeframe for strikes,
+			the colors for strikes to be displayed, and adding or removing a strike should
+			email that player notifying them
+		*	Message should be added for adding and removing strikes
+#	Skin Catalogue
+		*	Instead of storing skin information in a textarea field, we'll create a new
+			database table so that COs can set a skin to being in development, activated, or
+			deactivated.  The site options will then pulled based on those criteria.
+#	Rank Catalogue
+		*	Instead of storing rank information in a textarea field, we'll create a new
+			database table so that COs can set a rank to being in development, activated, or
+			deactivated.  The site options will then pulled based on those criteria.
+#	Skin credits (tied to system catalogue idea?)
+#	Specifications and join pages to be dynamically built
+		*	Will use separate tables like the OKI LMI uses (formFields, formValues, formData)
+		*	Will allow admins to specify exactly what they want to see on those two
+			pages
+		*	Tough part will be the join page and getting things to be spit out in an email
+			the way they should be
+#	User's editing their own posts
+		*	CO notification of changes?
+		*	News items?
+
+3.0
+CODENAME: Jefferson
+LAUNCH: Q4 2009
+=====
+
+#	Add install modules
+		*	Will allow admins to choose which type of sim they want to install:
+				@	Star Trek
+					-	Enterprise Era
+					-	Original Series
+					-	Movie Era
+					-	DS9+
+					-	Romulan
+					-	Klingon
+					-	Bajoran
+				@	Star Wars
+				@	Stargate
+				@	Babylon 5
+				@	Battlestar Galactica
+				@	Military
+					-	US Air Force
+					-	US Navy
+					-	US Army
+					-	US Marine Corps
+#	Localization
+		*	Need to find people proficient in languages to offer their services
+#	Menu system updates
+		*	Can the system be more dynamic?
+		*	Menu automation for switch between starship and starbase
+#	More extension support
+		*	Happens by default with CI
+#	Documentation
+		*	Developer documentation
+				@	Working with Jon to put more inline documentation in place in the
+					hopes that developers will latch on to the project
+		*	Skinning documentation
+				@	Full-fledged documentation for how to skin the system, including
+					reference for every piece and a step-by-step tutorial
+#	Smart installation (knows when system isn't install or needs to be updated)
+#	User-defined table prefixes (default: sms_)
+#	Global icons stored in skins
+#	Use sha1() for password hashing (requires PHP 4.3.0 and later)
+#	More PHP5 compatability
+		*	System should be tested with all the error testing turned on
+		*	Making sure variables are set instead of not there
+				@	if( isset(var) ) and if( !isset(var) ) instead of if( var ) or if( !var )
+#	More options for simm type
+		*	Ship
+		*	Base
+		*	Colony
+		*	Unit
+		*	Planet
+#	Add rich text composition and editing
+		*	Likely will use a 3rd party application - will require a function to translate the
+			code to HTML as it's being pulled (?)
+				@	FCKeditor [ http://www.fckeditor.net/ ]
+				@	TinyMCE [ http://tinymce.moxiecode.com/index.php ]
+				@	Xinha [ http://xinha.python-hosting.com/ ]
+				@	Full Listing [ http://www.geniisoft.com/showcase.nsf/WebEditors ]
+				@	Live Pipe Control Suite [ http://livepipe.net/projects/control_suite/ ]
+#	Smarter variable definition
+		*	Using a foreach() loop on the POST variables will allow variables to be defined on
+			the fly instead of having to define them one by one
+		*	In the foreach() loop, using the get_magic_quotes_gpc() function will get the
+			current server config and can be used to adjust logic for whether slashes need
+			to be added to the variable or not
+#	System-wide email shut off
+		*	Option to turn system emails off for people who are on a server that has problems
+			with the PHP mail() function
+#	HTML emails from the system?
+#	Notepad
+		*	Sometimes you just need to jot something down, whether that's character information
+			for an NPC or an idea you had for a mission.  SMS Notes will let you do just that
+			with a system similar to the posting system.  Only you can see your notes.
+#	Basic forum
+		*	There probably should be some kind of very basic forum system for helping with
+			team-building
+		*	In theory, someone could use a system like that for posting their missions
+		*	No email support
+		*	No attachments
+#	Creating/storing pages in database
+		*	An expansion of the database entry feature that lets admins create pages that can
+			be viewed from anywhere in the system
+
+MAYBE
+==
+#	Require MySQL 4
+#	Email posts to the system
+#	Manual entry of post counts for sims not using the posting features
+#	Inline help
+
+JEFFERSON MILESTONES
+=====
+M0	-	basics with CodeIgniter in place; jQuery in place
+M1	-	basic installation; genre pieces in place
+M2	-	dynamic installation
+M3	-	non-authenticated pieces
+M4	-	authenticated management
+M5	-	authenticated reporting/posting
+M6	-	user system
+M7	-	basic forum system for community building (?)
+
+[ OLD ]
+M0 (Meridian) - non-public milestone aimed at putting the necessary framework pieces into place
+M1 (Diablo) - milestone aimed at getting the library system up and running with a basic
+	install package so that testers can get their hands on the product early
+M2 (Sage) - milestone aimed at finalizing the dynamic install and putting the necessary genre
+	pieces into place
+M3 (Clover) - one of two milestones aimed at putting all other feature requests into place
+M4 (Aura) - one of two milestone aimed at putting all other feature requests into place
+M5 (Paradiso) - milestone aimed at retooling the templating system in the hopes of making it
+	easier to tweak SMS to ones own liking; localization

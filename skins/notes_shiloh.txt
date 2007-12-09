@@ -1,0 +1,7 @@
+Variants
+===
+
+Blue: #3b5998
+Green: #519049
+Platinum: #647282
+Red: #983335
