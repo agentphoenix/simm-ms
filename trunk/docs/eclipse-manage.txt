@@ -1,0 +1,84 @@
+#	Dynamic acceptance and rejection messages
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+		*	Testing: 		IN PROGRESS
+
+#	Departmental databases
+
+#	Add CC ability for private messages
+
+#	Threaded PM messages
+
+#	SMS Toolbar
+		*	Development: 	COMPLETED
+		*	Landing:		COMPLETED
+		*	Testing:		IN PROGRESS
+
+#	Global preference for displaying text or images on the manifest
+
+X	Customizable message subject lines
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+		*	Testing: 		COMPLETED
+
+#	Clean-up install and update files
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+		*	Testing: 		IN PROGRESS
+
+#	Tab content immediately available
+		*	Development: 	COMPLETED
+		*	Landing: 		IN PROGRESS
+		*	Testing:		IN PROGRESS
+
+#	Global setting for default access levels
+		*	Development:	IN PROGRESS
+		*	Landing:		COMPLETED
+		*	Testing:		IN PROGRESS
+
+#	Starbase menu items in place during install, but turned off
+
+X	Error catching page
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+		*	Testing: 		COMPLETED
+
+X	Add cadet ranks (off by default)
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+		*	Testing: 		COMPLETED
+
+#	SMS Update options
+		*	Development: 	IN PROGRESS
+		*	Landing: 		COMPLETED
+		*	Testing: 		IN PROGRESS
+
+#	Joint posting upper limit set by admin
+
+X	"Private" news messages
+		*	Development:	COMPLETED
+		*	Landing:		COMPLETED
+		*	Testing:		COMPLETED
+
+X	[BUG] Database uses integer fields for the crew compliment section
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+		*	Testing: 		COMPLETED
+
+X	[BUG] Rank drop down menus need to respect the rankDisplay flag
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+		*	Testing:		COMPLETED
+
+#	Toggle boxes should use jQuery instead of the custom Javascript code
+		*	Development:	COMPLETED
+		*	Landing:		IN PROGRESS
+		*	Testing:		COMPLETED
+
+#	Single posting page with the option to add more participants
+
+#	[BUG] If the large version of an award image doesn't exist, it won't fall back
+	to the small version
+		*	Development:	COMPLETED
+		*	Landing:		COMPLETED
+		*	Testing:		IN PROGRESS

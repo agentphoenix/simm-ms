@@ -1,0 +1,40 @@
+/**** special styles for the main nav container ****/
+
+#container-mainnav {
+	width: 75%;
+	margin: 0 auto;
+	text-align: center;
+}
+#container-mainnav .ui-tabs-nav a, .ui-tabs-nav a span {
+	padding: 0 5px;
+}
+#container-mainnav .ui-tabs-nav li {
+	float: left;
+	margin: 0;
+	min-width: 0;
+}
+#container-mainnav .ui-tabs-nav a {
+	font-size: 9px;
+}
+
+ol {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+ol li {
+	display: inline;
+	list-style-type: none;
+	font-size: 125%;
+}
+ol li.spacer {
+	padding-top: 2px;
+}
+ol li a {
+	font-weight: bold;
+	color: #fff;
+	padding: 0 1em 0 1em;
+}
+ol li a:hover {
+	color: #5b5a4f;
+}
