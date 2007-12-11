@@ -10,11 +10,11 @@ File: framework/dbconnect.php
 Purpose: Database connection file
 	
 System Version: 2.6.0
-Last Modified: 2007-08-22 1652 EST
+Last Modified: 2007-12-11 1221 EST
 **/
 
 /* pull in the variables */
-require_once( 'variables.php' );
+include_once( 'variables.php' );
 
 /* database connection */
 $db = @mysql_connect( $dbServer, $dbUser, $dbPassword ) or die ( "<b>" . $dbErrorMessage . "</b>" );
