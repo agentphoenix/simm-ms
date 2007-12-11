@@ -113,16 +113,16 @@ switch( $step ) {
 		} else {
 			$write = "failed";
 		}
-	break;
+		break;
 	
 	/* step 4 handles creating the database structure */
 	case 4:
 		/* pull in the DB connection variables */
-		require_once( 'framework/variables.php' );
 		require_once( 'framework/dbconnect.php' );
 		
+		/* pull in the structure file */
 		require_once( "resource_structure.php" );
-	break;
+		break;
 	
 	/*
 		step 5 handles inserting the necessary data into the database that lines up
@@ -130,11 +130,11 @@ switch( $step ) {
 	*/
 	case 5:
 		/* pull in the DB connection variables */
-		require_once( 'framework/variables.php' );
 		require_once( 'framework/dbconnect.php' );
 		
+		/* pull in the data file */
 		require_once( "resource_data.php" );
-	break;
+		break;
 	
 	/*
 		step 6 handles inserting the admin's character into the database, setting their
@@ -142,7 +142,6 @@ switch( $step ) {
 	*/
 	case 6:
 		/* pull in the DB connection variables */
-		require_once( 'framework/variables.php' );
 		require_once( 'framework/dbconnect.php' );
 		
 		$md5password = md5( $_POST['password'] );
@@ -169,7 +168,8 @@ switch( $step ) {
 		$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
 		$updatePosition.= "WHERE positionid = '$_POST[position]' LIMIT 1";
 		$updatePositionResult = mysql_query( $updatePosition );
-	break;
+		
+		break;
 	
 	/*
 		step 7 handles updating the globals that are set during step 5, including ship name,
@@ -177,13 +177,12 @@ switch( $step ) {
 	*/
 	case 7:
 		/* pull in the DB connection variables */
-		require_once( 'framework/variables.php' );
 		require_once( 'framework/dbconnect.php' );
 		
 		/* update the globals */
 		$updateGlobals = "UPDATE sms_globals SET shipName = '$_POST[shipName]', shipPrefix = '$_POST[shipPrefix]', shipRegistry = '$_POST[shipRegistry]', emailSubject = '[" . $_POST['shipPrefix'] . " " . $_POST['shipName'] . "]' WHERE globalid = '1' LIMIT 1";
 		$updateGlobalsResult = mysql_query( $updateGlobals );
-	break;
+		break;
 
 } /* close the switch */
 
@@ -214,7 +213,7 @@ switch( $step ) {
 			</div>
 			<br /><br />
 			
-			Thank you for choosing the Simm Management System by Anodyne Productions. We have
+			Thank you for choosing the SIMM Management System by Anodyne Productions. We have
 			worked hard to build the best possible product for you to manage your Star Trek simm
 			online. If you have questions, please refer to the documentation on the Anodyne site or our 
 			<a href="http://forums.anodyne-productions.com/" target="_blank">support forums</a> 
@@ -256,7 +255,7 @@ switch( $step ) {
 			<form method="post" action="install.php?step=2">
 				<table width="100%">
 					<tr>
-						<td colspan="3" class="fontLarge">Web Location</td>
+						<td colspan="3" class="fontLarge">Website URL</td>
 					</tr>
 					<tr>
 						<td colspan="3">
@@ -398,7 +397,7 @@ switch( $step ) {
 			</div>
 			<br /><br />
 			
-			<? if( $varError ) { ?>
+			<? if( isset( $varError ) ) { ?>
 			
 			<div class="code">
 				<b class="red">The database connection file (framework/variables.php) is
