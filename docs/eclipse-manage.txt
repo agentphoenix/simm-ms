@@ -82,3 +82,5 @@ X	[BUG] Rank drop down menus need to respect the rankDisplay flag
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
 		*	Testing:		IN PROGRESS
+
+#	Install file cleanup
