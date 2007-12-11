@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2007-08-22 1654 EST
+Last Modified: 2007-12-11 1338 EST
 **/
 
 session_start();
@@ -118,7 +118,7 @@ switch( $step ) {
 	/* step 4 handles creating the database structure */
 	case 4:
 		/* pull in the DB connection variables */
-		require_once( 'framework/dbconnect.php' );
+		require_once( '../framework/dbconnect.php' );
 		
 		/* pull in the structure file */
 		require_once( "resource_structure.php" );
@@ -130,7 +130,7 @@ switch( $step ) {
 	*/
 	case 5:
 		/* pull in the DB connection variables */
-		require_once( 'framework/dbconnect.php' );
+		require_once( '../framework/dbconnect.php' );
 		
 		/* pull in the data file */
 		require_once( "resource_data.php" );
@@ -142,7 +142,7 @@ switch( $step ) {
 	*/
 	case 6:
 		/* pull in the DB connection variables */
-		require_once( 'framework/dbconnect.php' );
+		require_once( '../framework/dbconnect.php' );
 		
 		$md5password = md5( $_POST['password'] );
 		
@@ -177,7 +177,7 @@ switch( $step ) {
 	*/
 	case 7:
 		/* pull in the DB connection variables */
-		require_once( 'framework/dbconnect.php' );
+		require_once( '../framework/dbconnect.php' );
 		
 		/* update the globals */
 		$updateGlobals = "UPDATE sms_globals SET shipName = '$_POST[shipName]', shipPrefix = '$_POST[shipPrefix]', shipRegistry = '$_POST[shipRegistry]', emailSubject = '[" . $_POST['shipPrefix'] . " " . $_POST['shipName'] . "]' WHERE globalid = '1' LIMIT 1";
@@ -235,7 +235,9 @@ switch( $step ) {
 			</ul>
 			<br />
 			
-			<h1><a href="install.php?step=2">Next Step &raquo;</a></h1>
+			<form method="post" action="install.php?step=2">
+				<input type="submit" name="submit" class="installButton" value="Begin Installation &raquo;" />
+			</form>
 		
 		<?php
 		
@@ -252,7 +254,7 @@ switch( $step ) {
 			
 			Please provide the following information to continue with the installation.<br /><br />
 			
-			<form method="post" action="install.php?step=2">
+			<form method="post" action="install.php?step=3">
 				<table width="100%">
 					<tr>
 						<td colspan="3" class="fontLarge">Website URL</td>
@@ -460,9 +462,11 @@ switch( $step ) {
 			crew instead of taking care of the little things.<br /><br />
 			
 			Please proceed to the next step to build the SMS 2 database and create your character
-			which you'll use to administer SMS.<br /><br />
+			which you'll use to administer SMS.<br /><br /><br />
 			
-			<h1><a href="install.php?step=3">Next Step &raquo;</a></h1>
+			<form method="post" action="install.php?step=4">
+				<input type="submit" name="submit" class="installButton" value="Next Step &raquo;" />
+			</form>
 			
 		<?php
 			
@@ -477,7 +481,11 @@ switch( $step ) {
 			</div>
 			<br /><br />
 			
-			You have successfully created the SMS database that will drive the site!<br /><br />
+			You have successfully created the SMS database that will drive the site!<br /><br /><br />
+			
+			<form method="post" action="install.php?step=5">
+				<input type="submit" name="submit" class="installButton" value="Next Step &raquo;" />
+			</form>
 			
 		<?php
 		
@@ -486,6 +494,12 @@ switch( $step ) {
 		
 		?>
 			
+			<div align="center"><b>Installation Progress</b><br /></div>
+			<div class="status">
+				<div class="step4">&nbsp;</div>
+			</div>
+			<br /><br />
+			
 			Use this page to create your character. You will use the username and password to log in
 			to your SMS site, so make sure you remember it. Once you have set up SMS, you can edit 
 			your biography.
@@ -493,7 +507,7 @@ switch( $step ) {
 			
 			<br /><br />
 			
-			<form method="post" action="install.php?step=4">
+			<form method="post" action="install.php?step=6">
 				<table width="100%">
 					<tr>
 						<td class="label">Username</td>
@@ -616,11 +630,11 @@ switch( $step ) {
 					
 			<div align="center"><b>Installation Progress</b><br /></div>
 			<div class="status">
-				<div class="step4">&nbsp;</div>
+				<div class="step5">&nbsp;</div>
 			</div>
 			<br /><br />
 			
-			<form method="post" action="install.php?step=5">
+			<form method="post" action="install.php?step=7">
 				<table width="100%">
 					<tr>
 						<td class="label">Ship Prefix</td>
@@ -658,7 +672,7 @@ switch( $step ) {
 			
 			<div align="center"><b>Installation Progress</b><br /></div>
 			<div class="status">
-				<div class="step5">&nbsp;</div>
+				<div class="step6">&nbsp;</div>
 			</div>
 			<br /><br />
 			
@@ -666,12 +680,12 @@ switch( $step ) {
 			
 			Congratulations, you have successfully installed SMS 2. If the install worked properly, you 
 			should now be able to see SMS running on your site. If you need technical support, please 
-			visit the <a href="http://anodyne.cyberplexus.net" target="_blank">Anodyne website</a>
-			or the <a href="http://anodyne.cyberplexus.net/forums/" target="_blank">Anodyne support \
-			forums</a>.<br /><br />
+			visit the <a href="http://forums.anodyne-productions.com" target="_blank">Anodyne support forums</a>.
+			<br /><br />
 	
-			Thank you for choosing SMS from Anodyne Productions. Please delete the install file and install
-			folder from your server. Accessing it additional times can cause errors.<br /><br />
+			Thank you for choosing the SIMM Management System from Anodyne Productions. Please delete the 
+			install file and install folder from your server. Accessing it additional times can cause errors.
+			<br /><br />
 	
 			<h1><a href="<?=$webLocation;?>login.php?action=login">Login to your SMS site now &raquo;</a></h1>
 			
@@ -684,8 +698,7 @@ switch( $step ) {
 		
 		</div>
 		<div class="footer">
-			Copyright &copy; 2005-<?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a><br />
-			SMS 2 designed by <a href="mailto:anodyne.sms@gmail.com">David VanScott</a>
+			Copyright &copy; 2005-<?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a>
 		</div> <!-- close .footer -->
 	</div> <!-- close #install -->
 </body>
