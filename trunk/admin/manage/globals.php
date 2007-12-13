@@ -99,7 +99,8 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		$updateGlobals.= "usePosting = '$usePosting', ";
 		$updateGlobals.= "hasWebmaster = '$hasWebmaster', webmasterName = '$webmasterName', ";
 		$updateGlobals.= "webmasterEmail = '$webmasterEmail', useMissionNotes = '$useMissionNotes', ";
-		$updateGlobals.= "emailSubject = '$emailSubject', updateNotify = '$updateNotify' WHERE globalid = '1' LIMIT 1";
+		$updateGlobals.= "emailSubject = '$emailSubject', updateNotify = '$updateNotify', maxJPAuthors = '$maxJPAuthors' ";
+		$updateGlobals.= "WHERE globalid = '1' LIMIT 1";
 		$result = mysql_query( $updateGlobals );
 		
 		/*
@@ -201,6 +202,10 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	$tfName = stripslashes( $tfName );
 	$tgName = stripslashes( $tgName );
 	$webmasterName = stripslashes( $webmasterName );
+	
+	$crewCountRaw = "SELECT count(crewid) FROM sms_crew WHERE crewType = 'active'";
+	$crewCountRawResult = mysql_query( $crewCountRaw );
+	$crewCount = mysql_fetch_array( $crewCountRawResult );
 
 ?>
 
@@ -403,6 +408,22 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 							<input type="radio" id="postingY" name="usePosting" value="y" <? if( $usePosting == "y" ) { echo "checked"; } ?>/> <label for="postingY">Yes</label>
 							<input type="radio" id="postingN" name="usePosting" value="n" <? if( $usePosting == "n" ) { echo "checked"; } ?>/> <label for="postingN">No</label>
 							<input type="hidden" name="oldPosting" value="<?=$usePosting;?>" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="5"></td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">
+							<b>Maximum JP Authors</b><br />
+							<span class="fontSmall">
+								This number defines the maximum number of participants in a joint post. This number
+								can be anywhere between 2 and <?php echo $crewCount[0];?>.
+							</span>
+						</td>
+						<td>&nbsp;</td>
+						<td>
+							<input type="text" class="order" name="maxJPAuthors" value="<?=$maxJPAuthors;?>" onChange="checkNumber(<?=$crewCount[0];?>, this.value)" />
 						</td>
 					</tr>
 					<tr>

@@ -63,3 +63,15 @@ function selectAll(formObj, isInverse)
 	}
 }
 /** END FUNCTION **/
+
+/**
+	Function to make sure that jp authors doesn't go
+	outside the acceptable range
+**/
+function checkNumber(upper, actual)
+{
+	if(actual < 1)
+		window.alert("You can't set the author number below 1! Please try again.");
+	else if(actual > upper)
+		window.alert("You do not have that many crew members! The limit cannot exceed your crew count. Please try again.")
+}

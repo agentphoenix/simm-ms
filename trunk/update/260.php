@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update page - 2.5.3 => Latest
-Last Modified: 2007-11-05 0946 EST
+Last Modified: 2007-12-13 0935 EST
 **/
 
 /* add the email subject field */
@@ -12,6 +12,7 @@ mysql_query( "ALTER TABLE `sms_globals` ADD `emailSubject` varchar(75) not null 
 mysql_query( "ALTER TABLE `sms_globals` ADD `updateNotify` enum('all','major','none') not null default 'all'" );
 mysql_query( "ALTER TABLE `sms_globals` ADD `stardateDisplaySD` enum('y','n') not null default 'y'" );
 mysql_query( "ALTER TABLE `sms_globals` ADD `stardateDisplayDate` enum('y','n') not null default 'y'" );
+mysql_query( "ALTER TABLE `sms_globals` ADD `maxJPAuthors` varchar(3) not null default '6'" );
 
 /* change compliments fields to accept characters like commas */
 mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentEmergency` `complimentEmergency` varchar(20) NOT NULL default ''" );
