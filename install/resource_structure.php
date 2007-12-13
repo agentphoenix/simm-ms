@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2007-11-06 0931 EST
+Last Modified: 2007-12-13 0935 EST
 **/
 
 /* query the database for the mysql version */
@@ -201,6 +201,7 @@ mysql_query( "CREATE TABLE `sms_globals` (
   `emailSubject` varchar(75) NOT NULL default '',
   `stardateDisplaySD` enum('y','n') NOT NULL default 'y',
   `stardateDisplayDate` enum('y','n') NOT NULL default 'y',
+  `maxJPAuthors` varchar(3) NOT NULL default '6'
   PRIMARY KEY  (`globalid`)
 ) " . $tail . " ;" );
 
