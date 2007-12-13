@@ -30,6 +30,11 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		$sec = 1;
 	}
 	
+	/* crew count for the options section */
+	$crewCountRaw = "SELECT count(crewid) FROM sms_crew WHERE crewType = 'active'";
+	$crewCountRawResult = mysql_query( $crewCountRaw );
+	$crewCount = mysql_fetch_array( $crewCountRawResult );
+	
 	if( isset( $action_simm ) ) {
 		
 		/* pop the x, y, and name values off the POST array */
@@ -77,7 +82,7 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		$updateGlobals.= "WHERE globalid = '1' LIMIT 1";
 		$result = mysql_query( $updateGlobals );
 		
-	} if( isset( $action_options ) ) {
+	} if( isset( $action_options ) && $_POST['maxJPAuthors'] > 0 ) {
 		
 		/* pop the x, y, and name values off the POST array */
 		array_pop( $_POST );
@@ -202,10 +207,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	$tfName = stripslashes( $tfName );
 	$tgName = stripslashes( $tgName );
 	$webmasterName = stripslashes( $webmasterName );
-	
-	$crewCountRaw = "SELECT count(crewid) FROM sms_crew WHERE crewType = 'active'";
-	$crewCountRawResult = mysql_query( $crewCountRaw );
-	$crewCount = mysql_fetch_array( $crewCountRawResult );
 
 ?>
 
@@ -417,8 +418,8 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 						<td class="tableCellLabel">
 							<b>Maximum JP Authors</b><br />
 							<span class="fontSmall">
-								This number defines the maximum number of participants in a joint post. This number
-								can be anywhere between 2 and <?php echo $crewCount[0];?>.
+								This defines the maximum number of participants in a joint post. This
+								should be between 1 and <?php echo $crewCount[0];?>.
 							</span>
 						</td>
 						<td>&nbsp;</td>
