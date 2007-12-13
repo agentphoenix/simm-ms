@@ -9,7 +9,7 @@ Purpose: Handles all Javascript actions by the system, including pulling in
 	the various jQuery elements
 
 System Version: 2.6.0
-Last Modified: 2007-12-07 2128 EST
+Last Modified: 2007-12-13 1556 EST
 **/
 
 /**
@@ -71,7 +71,8 @@ function selectAll(formObj, isInverse)
 function checkNumber(upper, actual)
 {
 	if(actual < 1)
-		window.alert("You can't set the author number below 1! Please try again.");
+		window.alert("ERROR: You can't set the author number below 1! Please try again.");
 	else if(actual > upper)
-		window.alert("You do not have that many crew members! The limit cannot exceed your crew count. Please try again.")
+		window.alert("WARNING: You do not have " + actual + " crew members, you only have " + upper + "! The number you input should not exceed your crew count.");
 }
+/** END FUNCTION **/
