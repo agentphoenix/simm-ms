@@ -10,7 +10,7 @@ File: index.php
 Purpose: The main file that pulls in the requested page
 
 System Version: 2.6.0
-Last Modified: 2007-11-13 1544 EST
+Last Modified: 2007-12-19 1201 EST
 **/
 
 /* start the session */
@@ -43,9 +43,9 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 	require_once( 'framework/functionsGlobal.php' );
 	require_once( 'framework/functionsAdmin.php' );
 	require_once( 'framework/functionsUtility.php' );
-	require_once( 'framework/classUtility.php' );
+	require_once( 'framework/classes/utility.php' );
 	require_once( 'framework/classMenu.php' );
-	
+
 	/* get the referenced page from the URL */
 	$page = $_GET['page'];
 

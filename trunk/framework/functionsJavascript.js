@@ -45,6 +45,8 @@ include_dom( 'js', 'framework/jquery/ui.tabs.js' );
 include_dom( 'js', 'framework/jquery/thickbox.js' );
 include_dom( 'css', 'framework/jquery/thickbox.css' );
 include_dom( 'js', 'framework/jquery/reflection.js' );
+include_dom( 'js', 'framework/jquery/jquery.clickmenu.js' );
+include_dom( 'css', 'framework/jquery/clickmenu.css' );
 
 /**
 	Function that toggles checkboxes

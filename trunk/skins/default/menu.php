@@ -18,6 +18,7 @@ Last Modified: 2007-11-08 1056 EST
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#container-mainnav > ul').tabs();
+		$('#list').clickMenu();
 	});
 </script>
 
@@ -30,6 +31,19 @@ $menu = new Menu;
 
 <div class="mainNav">
 <?php if( !isset( $sessionCrewid ) ) { ?>
+		
+		<ul id="list"> 
+		    <li><img src="dev/arrow.png" alt=">>" border="0" />
+		        <ul>
+		            <li><a href="#1">Account</a></li>
+		            <li><a href="#2">Biography</a></li>
+					<hr size="1" noshade color="#cc0000" />
+					<li><a href="#3">Write Personal Log</a></li>
+		            <li><a href="#4">All Characters</a></li>
+		        </ul>
+		    </li>
+		</ul>
+		
 		<? $menu->main( $sessionCrewid ); ?>
 <?php } else { ?>
 	<div id="container-mainnav">

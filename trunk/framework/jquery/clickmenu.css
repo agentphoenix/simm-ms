@@ -1,14 +1,16 @@
-/* div containing the menu */
+/* controls the container the clickMenu sits in */
 div.cmDiv
 {
 	border: none;
-	background-color: #ccc;
+	background-color: #000;
 }
+
 .clickMenu
 {
 	margin: 0;
 	padding: 0;
 	cursor: default;
+	font-size: 85%;
 }
 .clickMenu, .clickMenu ul
 {
@@ -16,23 +18,19 @@ div.cmDiv
 }
 .clickMenu ul
 {
-	margin: 1px 0 0 0;
+	margin: 0;
 	padding: 2px;
-	background-color: #999;
+	border: none;
+	background-color: #000;
 	min-width: 100px; /* ie doesnt know this :/ */
 	//float: left;/*ie again*/
 	//width: 100%;/*and again*/
 }
-.clickMenu li.divider {
-	background-color: #111;
-	margin-top: 3px;
-	margin-bottom: 7px; /* there's something weird, so the bottom margin is bigger than the top */
-	height: 1px; /* height of the divider */
-}
 .clickMenu div.outerbox
 {
 	display: none;
-	min-width: 106px; /* firefox produces animation-flickering when the box is bigger than this :/ */
+	min-width: 150px; /* firefox produces animation-flickering when the box is bigger than this :/ */
+	/* the min-width defines the width of the drop down as well */
 }
 .clickMenu div.inner
 {
@@ -53,36 +51,47 @@ div.cmDiv
 	padding: 0 20px 0 2px;
 	/*white-space: nowrap; does not really work in ie */
 }
+
+/* the small container with the arrow */
 .clickMenu li.main
 {
 	float: left;
 	padding: 0 5px;
-	background-color: #ccc;
-	color: #fff; /* text color of the clickable item */
+	background-color: #000;
 	//height: 20px; /* for ie */
+}
+
+/* submenu */
+.clickMenu li.main ul
+{
+	background-color: #090909; /* sets the background color of the submenu */
+	border: 1px solid #111;
 }
 .clickMenu li.main li
 {
 	z-index: 2;
 	min-width: 78px;
 }
-.clickMenu li.hover a
+.clickMenu li.hover
 {
 	z-index: 1 !important; /* the hover z-index has to be below the normal one the hovering items may be drawn over a submenu */
-	background-color: #090909;
-	color: #c00;
+	background-color: #111;
 }
+
+.clickMenu a
+{
+	text-decoration: none;
+	color: white;
+	cursor: default;
+}
+
+/*** NOT USING ***/
+
 .clickMenu img.liArrow
 {
 	position: absolute;
 	right: 5px;
 	top: 0.41em;
-}
-.clickMenu a
-{
-	text-decoration: none;
-	color: black;
-	cursor: default;
 }
 /* thats for the shadowbox */
 html>body div.outerbox

@@ -46,7 +46,7 @@ class Menu
 		}
 		
 		/* open the unordered list */
-		echo "<ul>";
+		echo "<ul id='nav-main'>";
 		
 		/* loop through each key of the array, evaluate it, then spit it out */
 		foreach( $menuArray as $key => $value ) {
