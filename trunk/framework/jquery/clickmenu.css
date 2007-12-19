@@ -1,7 +1,8 @@
+/* div containing the menu */
 div.cmDiv
 {
-	border: 1px solid black;
-	background-color: #eee;
+	border: none;
+	background-color: #ccc;
 }
 .clickMenu
 {
@@ -15,13 +16,18 @@ div.cmDiv
 }
 .clickMenu ul
 {
-	margin: 0;
+	margin: 1px 0 0 0;
 	padding: 2px;
-	border: 1px solid black;
-	background-color: #eee;
+	background-color: #999;
 	min-width: 100px; /* ie doesnt know this :/ */
 	//float: left;/*ie again*/
 	//width: 100%;/*and again*/
+}
+.clickMenu li.divider {
+	background-color: #111;
+	margin-top: 3px;
+	margin-bottom: 7px; /* there's something weird, so the bottom margin is bigger than the top */
+	height: 1px; /* height of the divider */
 }
 .clickMenu div.outerbox
 {
@@ -50,8 +56,9 @@ div.cmDiv
 .clickMenu li.main
 {
 	float: left;
-	padding: 0 10px;
-	background-color: #eee;
+	padding: 0 5px;
+	background-color: #ccc;
+	color: #fff; /* text color of the clickable item */
 	//height: 20px; /* for ie */
 }
 .clickMenu li.main li
@@ -59,10 +66,11 @@ div.cmDiv
 	z-index: 2;
 	min-width: 78px;
 }
-.clickMenu li.hover
+.clickMenu li.hover a
 {
 	z-index: 1 !important; /* the hover z-index has to be below the normal one the hovering items may be drawn over a submenu */
-	background-color: #aaa;
+	background-color: #090909;
+	color: #c00;
 }
 .clickMenu img.liArrow
 {
