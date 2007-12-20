@@ -10,15 +10,15 @@ File: skins/default/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
 Skin Version: 2.1
-Last Modified: 2007-11-08 1056 EST
+Last Modified: 2007-12-20 1303 EST
 **/
 
 ?>
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#container-mainnav > ul').tabs();
 		$('#list').clickMenu();
+		$('ul.hidemenu').show();
 	});
 </script>
 
@@ -30,35 +30,15 @@ $menu = new Menu;
 ?>
 
 <div class="mainNav">
-<?php if( !isset( $sessionCrewid ) ) { ?>
-		
-		<ul id="list"> 
-		    <li><img src="dev/arrow.png" alt=">>" border="0" />
-		        <ul>
-		            <li><a href="#1">Account</a></li>
-		            <li><a href="#2">Biography</a></li>
-					<hr size="1" noshade color="#cc0000" />
-					<li><a href="#3">Write Personal Log</a></li>
-		            <li><a href="#4">All Characters</a></li>
-		        </ul>
-		    </li>
-		</ul>
-		
-		<? $menu->main( $sessionCrewid ); ?>
-<?php } else { ?>
-	<div id="container-mainnav">
-		<ul>
-			<li><a href="#mainNav"><span>Global</span></a></li>
-			<li><a href="#userNav"><span>User</span></a></li>
-		</ul>
-		<div id="mainNav" class="ui-tabs-container ui-tabs-hide">
-			<? $menu->main( $sessionCrewid ); ?>
-		</div>
-		<div id="userNav" class="ui-tabs-container ui-tabs-hide">
-			<? $menu->user( $sessionCrewid ); ?>
-		</div>
-	</div>
-<?php } ?>
+	<?php
+	
+	$menu->main( $sessionCrewid );
+	
+	if( isset( $sessionCrewid ) ) {
+		$menu->user( $sessionCrewid );
+	}
+	
+	?>
 </div><br />
 
 <div class="content">

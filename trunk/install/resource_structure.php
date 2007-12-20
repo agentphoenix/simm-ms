@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2007-12-13 0935 EST
+Last Modified: 2007-12-20 1333 EST
 **/
 
 /* query the database for the mysql version */
@@ -128,6 +128,10 @@ mysql_query( "CREATE TABLE `sms_crew` (
   `menu4` int(5) NOT NULL DEFAULT '4',
   `menu5` int(5) NOT NULL DEFAULT '5',
   `menu6` int(5) NOT NULL DEFAULT '7',
+  `menu7` int(5) NOT NULL DEFAULT '7',
+  `menu8` int(5) NOT NULL DEFAULT '7',
+  `menu9` int(5) NOT NULL DEFAULT '7',
+  `menu10` int(5) NOT NULL DEFAULT '7',
   PRIMARY KEY  (`crewid`)
 ) " . $tail . " ;" );
 

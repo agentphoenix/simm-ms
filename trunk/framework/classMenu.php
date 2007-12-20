@@ -10,8 +10,8 @@ File: framework/menu.php
 Purpose: Page with the menu class that is called by the skin to build the various
 	menus used throughout SMS
 
-System Version: 2.5.2
-Last Modified: 2007-08-01 1132 EST
+System Version: 2.6.0
+Last Modified: 2007-12-20 1334 EST
 **/
 
 class Menu
@@ -84,7 +84,12 @@ class Menu
 			} /* close the if/else logic */
 
 		} /* close the foreach loop */
-		
+		/*
+		echo "<li class='spacer'>&nbsp;</li>";
+		echo "<li>&nbsp;";
+			$this->user( $sessionCrew );
+		echo "</li>";
+		*/
 		/* close the unordered list */
 		echo "</ul>";
 
@@ -118,12 +123,15 @@ class Menu
 					[x]['link'] => link
 					[x]['login'] => login
 					[x]['linkType'] => link type
+					[x]['access'] => menu access
 				*/
 				$menuArray[] = array(
 					'title' => $menuTitle,
 					'link' => $menuLink,
 					'login' => $menuLogin,
 					'linkType' => $menuLinkType,
+					'access' => $menuAccess,
+					'section' => $menuMainSec
 				);
 				
 			} /* close the while loop */
@@ -131,44 +139,54 @@ class Menu
 		} /* close the foreach */
 		
 		/* open the unordered list */
-		echo "<ul>";
+		echo "<ul id='list'>";
+			echo "<li><img src='dev/arrow.png' alt='>>' border='0' />";
+				echo "<ul class='hidemenu'>";
 		
-		/* loop through each key of the array, evaluate it, then spit it out */
-		foreach( $menuArray as $key => $value ) {
+				/* loop through each key of the array, evaluate it, then spit it out */
+				foreach( $menuArray as $key => $value ) {
 			
-			/* check the link type and then set the prefix and target */
-			if( $value['linkType'] == "onsite" ) {
-				$prefix = $webLocation;
-				$target = "";
-			} else {
-				$prefix = "";
-				$target = " target='_blank'";
-			}
-				
-			/* if the item doesn't require a login, display it */
-			if( $value['login'] == "n" ) {
-				
-				if( $key != 0 ) {
-					echo "<li class='spacer'>&nbsp;</li>";
-				}
-				
-				/* print out the item */
-				echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . ">" . $value['title'] . "</a></li>";
-				
-			} else {
-				if( isset( $sessionCrewid ) ) {
-					
-					if( $key != 0 ) {
-						echo "<li class='spacer'>&nbsp;</li>";
+					/* check the link type and then set the prefix and target */
+					if( $value['linkType'] == "onsite" ) {
+						$prefix = $webLocation;
+						$target = "";
+						
+						if( 
+							$value['section'] == "user" && (
+								substr( $value['access'], -1, 1 == "1" ) ||
+								substr( $value['access'], -1, 1 == "2" ) ||
+								substr( $value['access'], -1, 1 == "3" )
+							)
+						) {
+							$crew = "&crew=" . $sessionCrewid;
+						} else {
+							$crew = "";
+						}
+						
+					} else {
+						$prefix = "";
+						$target = " target='_blank'";
 					}
 				
-					/* print out the item */
-					echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . ">" . $value['title'] . "</a></li>";
+					/* if the item doesn't require a login, display it */
+					if( $value['login'] == "n" ) {
+				
+						/* print out the item */
+						echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
+				
+					} else {
+						if( isset( $sessionCrewid ) ) {
 					
-				}	/* close the if */
-			} /* close the if/else logic */
+							/* print out the item */
+							echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
+					
+						}	/* close the if */
+					} /* close the if/else logic */
 
-		} /* close the foreach loop */
+				} /* close the foreach loop */
+		
+				echo "</ul>";
+			echo "</li>";
 		
 		/* close the unordered list */
 		echo "</ul>";
