@@ -2,6 +2,8 @@
  * Copyright (c) 2007 Roman Weich
  * http://p.sohei.org
  *
+ * Anodyne Change: changed DIV to SPAN
+ *
  * Changelog: 
  * v 0.1.6 - 2007-09-06
  *	-fix: having a link in the top-level menu would not open the menu but call the link instead
@@ -482,7 +484,7 @@
 			}
 
 			//the floating list elements are destroying the layout..so make it nice again..
-			$(this).wrap('<div class="cmDiv"></div>').after('<div style="clear: both; visibility: hidden;"></div>');
+			$(this).wrap('<span class="cmDiv"></span>').after('<div style="clear: both; visibility: hidden;"></div>');
 	    });
 	};
 	$.fn.clickMenu.setDefaults = function(o)

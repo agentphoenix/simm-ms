@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update page - 2.5.3 => Latest
-Last Modified: 2007-12-13 0935 EST
+Last Modified: 2007-12-20 1333 EST
 **/
 
 /* add the email subject field */
@@ -101,7 +101,11 @@ mysql_query(
 	ADD  `menu3` INT( 5 ) NOT NULL DEFAULT  '3',
 	ADD  `menu4` INT( 5 ) NOT NULL DEFAULT  '4',
 	ADD  `menu5` INT( 5 ) NOT NULL DEFAULT  '5',
-	ADD  `menu6` INT( 5 ) NOT NULL DEFAULT  '7'"
+	ADD  `menu6` INT( 5 ) NOT NULL DEFAULT  '7',
+	ADD  `menu7` INT( 5 ) NOT NULL DEFAULT  '5',
+	ADD  `menu8` INT( 5 ) NOT NULL DEFAULT  '5',
+	ADD  `menu9` INT( 5 ) NOT NULL DEFAULT  '5',
+	ADD  `menu10` INT( 5 ) NOT NULL DEFAULT  '5'"
 );
 
 /* create the access levels table */

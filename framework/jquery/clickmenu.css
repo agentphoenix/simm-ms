@@ -1,8 +1,9 @@
 /* controls the container the clickMenu sits in */
-div.cmDiv
+span.cmDiv
 {
 	border: none;
 	background-color: #000;
+	width: 10%;
 }
 
 .clickMenu
@@ -26,6 +27,10 @@ div.cmDiv
 	//float: left;/*ie again*/
 	//width: 100%;/*and again*/
 }
+
+ul.hidemenu { display: none; }
+ul#list { list-style: none; }
+
 .clickMenu div.outerbox
 {
 	display: none;
@@ -56,7 +61,7 @@ div.cmDiv
 .clickMenu li.main
 {
 	float: left;
-	padding: 0 5px;
+	padding: 0 2px;
 	background-color: #000;
 	//height: 20px; /* for ie */
 }
@@ -71,12 +76,14 @@ div.cmDiv
 {
 	z-index: 2;
 	min-width: 78px;
+	cursor: pointer;
 }
 .clickMenu li.hover
 {
 	z-index: 1 !important; /* the hover z-index has to be below the normal one the hovering items may be drawn over a submenu */
 	background-color: #111;
 }
+.clickMenu li.hover a { cursor: pointer; }
 
 .clickMenu a
 {

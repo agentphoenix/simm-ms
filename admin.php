@@ -10,7 +10,7 @@ File: admin.php
 Purpose: The main file that pulls in the requested administration page
 
 System Version: 2.6.0
-Last Modified: 2007-11-13 1544 EST
+Last Modified: 2007-12-20 1335 EST
 **/
 
 /* start the session */
@@ -40,9 +40,9 @@ if( $updateVersion[0] < "2.5.0" ) {
 	require_once( 'framework/functionsGlobal.php' );
 	require_once( 'framework/functionsAdmin.php' );
 	require_once( 'framework/functionsUtility.php' );
-	require_once( 'framework/classUtility.php' );
+	require_once( 'framework/classes/utility.php' );
 	require_once( 'framework/classMenu.php' );
-	require_once( 'framework/classCheck.php' );
+	require_once( 'framework/classes/check.php' );
 	
 	/* set the variables */
 	$page = $_GET['page'];
