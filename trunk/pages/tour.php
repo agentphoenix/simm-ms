@@ -57,37 +57,45 @@ if( !empty( $tour ) ) {
 	
 	?>
 	
+	<script type="text/javascript">
+		$(function() {
+			$('#gallery a').lightBox();
+		});
+	</script>
+	
 	<br /><br />
-	<table>
-		<tr height="110">
-		<? if( !empty( $tourPicture1 ) ) { ?>
-			<td valign="top" width="10%">
-				<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>" target="_blank" class="thickbox"<?php if( $tourPicture1 > "" ) { echo " rel='tour'"; } else { echo ""; } ?>>
-					<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
-				</a>
-			</td>
-		<? } ?>
+	<div id="gallery">
+		<table>
+			<tr height="110">
+			<? if( !empty( $tourPicture1 ) ) { ?>
+				<td valign="top" width="10%">
+					<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>">
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
+					</a>
+				</td>
+			<? } ?>
 		
-		<? if( !empty( $tourPicture2 ) ) { ?>
-			<td width="10">&nbsp;</td>
-			<td valign="top" width="10%">
-				<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>" target="_blank" class="thickbox"<?php if( $tourPicture2 > "" ) { echo " rel='tour'"; } else { echo ""; } ?>>
-					<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
-				</a>
-			</td>
-		<? } ?>
+			<? if( !empty( $tourPicture2 ) ) { ?>
+				<td width="10">&nbsp;</td>
+				<td valign="top" width="10%">
+					<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>">
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
+					</a>
+				</td>
+			<? } ?>
 		
-		<? if( !empty( $tourPicture3 ) ) { ?>
-			<td width="10">&nbsp;</td>
-			<td valign="top" width="10%">
-				<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>" target="_blank" class="thickbox"<?php if( $tourPicture3 > "" ) { echo " rel='tour'"; } else { echo ""; } ?>>
-					<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
-				</a>
-			</td>
-		<? } ?>
-			<td width="70%"></td>
-		</tr>
-	</table>
+			<? if( !empty( $tourPicture3 ) ) { ?>
+				<td width="10">&nbsp;</td>
+				<td valign="top" width="10%">
+					<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>">
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
+					</a>
+				</td>
+			<? } ?>
+				<td width="70%"></td>
+			</tr>
+		</table>
+	</div>
 	<? } ?>
 	
 	<br />

@@ -9,7 +9,7 @@ Purpose: Handles all Javascript actions by the system, including pulling in
 	the various jQuery elements
 
 System Version: 2.6.0
-Last Modified: 2007-12-13 1556 EST
+Last Modified: 2007-12-20 2243 EST
 **/
 
 /**
@@ -40,13 +40,15 @@ function include_dom( type, script_filename )
 /** END FUNCTION **/
 
 /** pull in the JS files **/
-include_dom( 'js', 'framework/jquery.js' );
-include_dom( 'js', 'framework/jquery/ui.tabs.js' );
-include_dom( 'js', 'framework/jquery/thickbox.js' );
-include_dom( 'css', 'framework/jquery/thickbox.css' );
-include_dom( 'js', 'framework/jquery/reflection.js' );
-include_dom( 'js', 'framework/jquery/jquery.clickmenu.js' );
-include_dom( 'css', 'framework/jquery/clickmenu.css' );
+include_dom( 'js', 'framework/js/jquery.js' );
+include_dom( 'js', 'framework/js/ui.tabs.js' );
+include_dom( 'js', 'framework/js/lightbox.js' );
+include_dom( 'js', 'framework/js/reflection.js' );
+include_dom( 'js', 'framework/js/clickmenu.js' );
+
+/** pull in the CSS files **/
+include_dom( 'css', 'framework/js/lightbox.css' );
+include_dom( 'css', 'framework/js/clickmenu.css' );
 
 /**
 	Function that toggles checkboxes

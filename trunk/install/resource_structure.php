@@ -131,7 +131,7 @@ mysql_query( "CREATE TABLE `sms_crew` (
   `menu7` int(5) NOT NULL DEFAULT '7',
   `menu8` int(5) NOT NULL DEFAULT '7',
   `menu9` int(5) NOT NULL DEFAULT '7',
-  `menu10` int(5) NOT NULL DEFAULT '7',
+  `menu10` int(5) NOT NULL DEFAULT '7'
   PRIMARY KEY  (`crewid`)
 ) " . $tail . " ;" );
 
@@ -186,7 +186,6 @@ mysql_query( "CREATE TABLE `sms_globals` (
   `simmYear` varchar(4) NOT NULL default '2383',
   `rankSet` varchar(50) NOT NULL default 'default',
   `simmType` enum('ship','starbase') NOT NULL default 'ship',
-  `useArchive` enum('y','n') NOT NULL default 'y',
   `postCountDefault` int(3) NOT NULL default '14',
   `manifestDisplay` enum('split','full') NOT NULL default 'split',
   `useSamplePost` enum('y','n') NOT NULL default 'y',
@@ -205,7 +204,7 @@ mysql_query( "CREATE TABLE `sms_globals` (
   `emailSubject` varchar(75) NOT NULL default '',
   `stardateDisplaySD` enum('y','n') NOT NULL default 'y',
   `stardateDisplayDate` enum('y','n') NOT NULL default 'y',
-  `maxJPAuthors` varchar(3) NOT NULL default '6'
+  `maxJPAuthors` varchar(3) NOT NULL default '6',
   PRIMARY KEY  (`globalid`)
 ) " . $tail . " ;" );
 
