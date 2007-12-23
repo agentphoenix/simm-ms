@@ -10,7 +10,7 @@ File: admin/user/site.php
 Purpose: Page that allows a user to various site options
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 0952 EST
+Last Modified: 2007-12-22 2224 EST
 **/
 
 /* access check */
@@ -82,18 +82,9 @@ if( in_array( "u_options", $sessionAccess ) ) {
 	
 		$type = "rank set";
 		
-	} if( $options ) {
+	} if( isset( $options ) ) {
 	
-		/* set the vars */
-		/*
-$cpShowPosts = $_POST['cpShowPosts'];
-		$cpShowPostsNum = $_POST['cpShowPostsNum'];
-		$cpShowLogs = $_POST['cpShowLogs'];
-		$cpShowLogsNum = $_POST['cpShowLogsNum'];
-		$cpShowNews = $_POST['cpShowNews'];
-		$cpShowNewsNum = $_POST['cpShowNewsNum'];
-*/
-		
+		/* set the variables */
 		foreach( $_POST as $k => $v )
 		{
 			$$k = $v;
@@ -103,7 +94,8 @@ $cpShowPosts = $_POST['cpShowPosts'];
 		$query = "UPDATE sms_crew SET cpShowPosts = '$cpShowPosts', cpShowLogs = '$cpShowLogs', ";
 		$query.= "cpShowNews = '$cpShowNews', cpShowPostsNum = '$cpShowPostsNum', ";
 		$query.= "cpShowLogsNum = '$cpShowLogsNum', cpShowNewsNum = '$cpShowNewsNum', menu1 = '$menu1', ";
-		$query.= "menu2 = '$menu2', menu3 = '$menu3', menu4 = '$menu4', menu5 = '$menu5', menu6 = '$menu6' WHERE ";
+		$query.= "menu2 = '$menu2', menu3 = '$menu3', menu4 = '$menu4', menu5 = '$menu5', menu6 = '$menu6', ";
+		$query.= "menu7 = '$menu7', menu8 = '$menu8', menu9 = '$menu9', menu10 = '$menu10' WHERE ";
 		$query.= "crewid = '$sessionCrewid' LIMIT 1";
 		$result = mysql_query( $query );
 	
@@ -266,7 +258,7 @@ $cpShowPosts = $_POST['cpShowPosts'];
 			
 			<?php
 					
-			for( $i=1; $i<7; $i++ )
+			for( $i=1; $i<11; $i++ )
 			{
 				$menu = "menu" . $i;
 				
@@ -275,6 +267,8 @@ $cpShowPosts = $_POST['cpShowPosts'];
 					echo "<td>&nbsp;</td>";
 					echo "<td>";
 						echo "<select name='" . $menu . "'>";
+							echo "<option value='0'>No Selection</option>";
+							
 							echo "<optgroup label='General'>";
 								foreach( $array1 as $key1 => $value1 )
 								{

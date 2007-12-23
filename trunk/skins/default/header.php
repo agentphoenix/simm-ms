@@ -10,21 +10,15 @@ File: skins/default/header.php
 Purpose: The header file that the system calls for the template
 
 Skin Version: 2.1
-Last Modified: 2007-10-18 1328 EST
+Last Modified: 2007-12-22 2213 EST
 **/
 
-/* get the absolute path of the current file (header.php) */
-$path = dirname( __FILE__ );
+$path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */
+$path = explode( "/", $path ); /* explode the string into an array */
+$pcount = count( $path ); /* count the number of keys in the array */
 
-/* explode the string into an array */
-$path = explode( "/", $path );
-
-/* count the number of keys in the array */
-$pcount = count( $path );
-
-/* create the elements used */
-$pathElement1 = $pcount -2;
-$pathElement2 = $pcount -1;
+$pathElement1 = $pcount -2; /* create the first element used */
+$pathElement2 = $pcount -1; /* create the second element used */
 
 /* define the path */
 define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
@@ -58,6 +52,6 @@ define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
 	<body>
 		<div id="headerTopSpacer"></div>
 		<div id="header">
-			<!-- <img src="<?=SKIN_PATH;?>images/header.png" alt="SMS 2" style="padding-left:2.5em;" /> -->
+			<img src="<?=SKIN_PATH;?>images/header.png" alt="SMS 2" style="padding-left:2.5em;" />
 		</div>
 		<div id="container">

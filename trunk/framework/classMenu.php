@@ -99,7 +99,7 @@ class Menu
 	function user( $sessionCrewid ) {
 		
 		/* get the items from the user's prefs */
-		$getPrefs = "SELECT menu1, menu2, menu3, menu4, menu5, menu6 FROM sms_crew ";
+		$getPrefs = "SELECT menu1, menu2, menu3, menu4, menu5, menu6, menu7, menu8, menu9, menu10 FROM sms_crew ";
 		$getPrefs.= "WHERE crewid = '$sessionCrewid' LIMIT 1";
 		$getPrefsResult = mysql_query( $getPrefs );
 		$prefs = mysql_fetch_array( $getPrefsResult );

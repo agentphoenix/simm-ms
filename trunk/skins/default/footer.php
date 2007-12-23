@@ -10,7 +10,7 @@ File: skins/default/footer.php
 Purpose: The footer file that the system calls in for the template
 
 Skin Version: 2.1
-Last Modified: 2007-10-18 1332 EST
+Last Modified: 2007-12-22 2214 EST
 **/
 
 ?>
@@ -19,8 +19,10 @@ Last Modified: 2007-10-18 1332 EST
 			
 			<!-- Please do not edit this. If you wish to add credits, you can do so through the Site Messages panel -->
 			<div class="footer">
-				Powered by SMS 2 &nbsp; | &nbsp;
-				Copyright &copy; Anodyne Productions 2005 - <?=date('Y');?> &nbsp; | &nbsp;
+				Powered by SMS 2
+				&nbsp; | &nbsp;
+				Copyright &copy; <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a> 2005 - <?=date('Y');?>
+				&nbsp; | &nbsp;
 				<a href="<?=$webLocation;?>index.php?page=credits">Site Credits</a>
 			</div>
 			
