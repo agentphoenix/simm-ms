@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/summaries.php
 Purpose: Page that moderates the various messages found throughout SMS
 
-System Version: 2.5.0
-Last Modified: 2007-04-17 1405 EST
+System Version: 2.6.0
+Last Modified: 2007-12-23 1342 EST
 **/
 
 /* access check */
@@ -20,12 +20,6 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 	$pageClass = "admin";
 	$subMenuClass = "manage";
 	$actionUpdate = $_POST['action_update_x'];
-	$sec = $_GET['sec'];
-	
-	/* set the default tab section */
-	if( !$sec ) {
-		$sec = "current";
-	}
 	
 	/* if the POST action is update */
 	if( $actionUpdate ) {
@@ -46,6 +40,22 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 		$missionSummary = stripslashes( $missionSummary );
 		
 	}
+	
+	$completedCount = "SELECT * FROM sms_missions WHERE missionStatus = 'completed'";
+	$completedCountR = mysql_query( $completedCount );
+	$complete = mysql_num_rows( $completedCountR );
+	
+	$upcomingCount = "SELECT * FROM sms_missions WHERE missionStatus = 'upcoming'";
+	$upcomingCountR = mysql_query( $upcomingCount );
+	$upcoming = mysql_num_rows( $upcomingCountR );
+	
+	if( $complete == 0 ) {
+		$disableCompleted = "2, ";
+	} if( $upcoming == 0 ) {
+		$disableUpcoming = "3";
+	}
+
+	$disable = $disableCompleted . $disableUpcoming;
 
 ?>
 
@@ -63,147 +73,147 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 		
 		?>
 		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#container-1 > ul').tabs({ disabled: [<?php echo $disable; ?>] });
+			});
+		</script>
+		
 		<span class="fontTitle">Manage Mission Summaries</span><br /><br />
 		Mission summaries allow you to summarize your past and current missions so that new users can
 		get a feel for what your crew has done in-character.  It's also a great way for players that enter
 		during a mission or current players who have fallen behind to get caught up quickly.<br /><br />
 		
-		<div id="subnav">
+		<div id="container-1">
 			<ul>
-				<li <? if( $sec == "current" ) { echo "id='current'"; } ?>><a href="<?=$webLocation;?>admin.php?page=manage&sub=summaries&sec=current">Current Mission</a></li>
-				<li <? if( $sec == "completed" ) { echo "id='current'"; } ?>><a href="<?=$webLocation;?>admin.php?page=manage&sub=summaries&sec=completed">Completed Missions</a></li>
-				<li <? if( $sec == "upcoming" ) { echo "id='current'"; } ?>><a href="<?=$webLocation;?>admin.php?page=manage&sub=summaries&sec=upcoming">Upcoming Missions</a></li>
+				<li><a href="#one"><span>Current Mission</span></a></li>
+				<li><a href="#two"><span>Completed Missions</span></a></li>
+				<li><a href="#three"><span>Upcoming Missions</span></a></li>
 			</ul>
+			
+			<div id="one" class="ui-tabs-container ui-tabs-hide">
+				<table>
+					<?
+
+					$missions = "SELECT missionid, missionTitle, missionSummary ";
+					$missions.= "FROM sms_missions WHERE missionStatus = 'current' ";
+					$missions.= "ORDER BY missionOrder DESC";
+					$missionsResult = mysql_query($missions);
+
+					while( $summary = mysql_fetch_array( $missionsResult ) ) {
+						extract( $summary, EXTR_OVERWRITE );
+
+					?>
+					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
+					<tr>
+						<td class="tableCellLabel">
+							<? printText( $missionTitle );?>
+							<input type="hidden" name="missionid" value="<?=$missionid;?>" />
+						</td>
+						<td>&nbsp;</td>
+						<td>
+							<textarea name="missionSummary" rows="15" class="wideTextArea"><?=stripslashes( $missionSummary );?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="15"></td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td align="right">
+							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
+						</td>
+					</tr>
+					</form>
+				<? } ?>
+
+				</table>
+			</div>
+			
+			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<table>
+					<?
+
+					$missions = "SELECT missionid, missionTitle, missionSummary ";
+					$missions.= "FROM sms_missions WHERE missionStatus = 'completed' ";
+					$missions.= "ORDER BY missionOrder DESC";
+					$missionsResult = mysql_query($missions);
+
+					while( $summary = mysql_fetch_array( $missionsResult ) ) {
+						extract( $summary, EXTR_OVERWRITE );
+
+					?>
+					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
+					<tr>
+						<td class="tableCellLabel">
+							<? printText( $missionTitle );?>
+							<input type="hidden" name="missionid" value="<?=$missionid;?>" />
+						</td>
+						<td>&nbsp;</td>
+						<td>
+							<textarea name="missionSummary" rows="15" class="wideTextArea"><?=stripslashes( $missionSummary );?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="15"></td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td align="right">
+							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="25"></td>
+					</tr>
+					</form>
+				<? } ?>
+
+				</table>
+			</div>
+			
+			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<table>
+					<?
+
+					$missions = "SELECT missionid, missionTitle, missionSummary ";
+					$missions.= "FROM sms_missions WHERE missionStatus = 'upcoming' ";
+					$missions.= "ORDER BY missionOrder DESC";
+					$missionsResult = mysql_query($missions);
+
+					while( $summary = mysql_fetch_array( $missionsResult ) ) {
+						extract( $summary, EXTR_OVERWRITE );
+
+					?>
+					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
+					<tr>
+						<td class="tableCellLabel">
+							<? printText( $missionTitle );?>
+							<input type="hidden" name="missionid" value="<?=$missionid;?>" />
+						</td>
+						<td>&nbsp;</td>
+						<td>
+							<textarea name="missionSummary" rows="15" class="wideTextArea"><?=stripslashes( $missionSummary );?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="15"></td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td align="right">
+							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="25"></td>
+					</tr>
+					</form>
+				<? } ?>
+
+				</table>
+			</div>
 		</div>
-	
-		<div class="tabcontainer">
-		
-		<? if( $sec == "current" ) { ?>
-		<br /><br />
-		<table>
-			<?
-		
-			$missions = "SELECT missionid, missionTitle, missionSummary ";
-			$missions.= "FROM sms_missions WHERE missionStatus = '$sec' ";
-			$missions.= "ORDER BY missionOrder DESC";
-			$missionsResult = mysql_query($missions);
-			
-			while( $summary = mysql_fetch_array( $missionsResult ) ) {
-				extract( $summary, EXTR_OVERWRITE );
-			
-			?>
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
-			<tr>
-				<td class="tableCellLabel">
-					<? printText( $missionTitle );?>
-					<input type="hidden" name="missionid" value="<?=$missionid;?>" />
-				</td>
-				<td>&nbsp;</td>
-				<td>
-					<textarea name="missionSummary" rows="15" class="wideTextArea"><?=stripslashes( $missionSummary );?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="15"></td>
-			</tr>
-			<tr>
-				<td colspan="2"></td>
-				<td align="right">
-					<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
-				</td>
-			</tr>
-			</form>
-		<? } ?>
-		
-		</table>
-		
-		<? } if( $sec == "completed" ) { ?>
-		<br /><br />
-		<table>
-			<?
-		
-			$missions = "SELECT missionid, missionTitle, missionSummary ";
-			$missions.= "FROM sms_missions WHERE missionStatus = '$sec' ";
-			$missions.= "ORDER BY missionOrder DESC";
-			$missionsResult = mysql_query($missions);
-			
-			while( $summary = mysql_fetch_array( $missionsResult ) ) {
-				extract( $summary, EXTR_OVERWRITE );
-			
-			?>
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
-			<tr>
-				<td class="tableCellLabel">
-					<? printText( $missionTitle );?>
-					<input type="hidden" name="missionid" value="<?=$missionid;?>" />
-				</td>
-				<td>&nbsp;</td>
-				<td>
-					<textarea name="missionSummary" rows="15" class="wideTextArea"><?=stripslashes( $missionSummary );?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="15"></td>
-			</tr>
-			<tr>
-				<td colspan="2"></td>
-				<td align="right">
-					<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="25"></td>
-			</tr>
-			</form>
-		<? } ?>
-		
-		</table>
-		
-		<? } if( $sec == "upcoming" ) { ?>
-		<br /><br />
-		<table>
-			<?
-		
-			$missions = "SELECT missionid, missionTitle, missionSummary ";
-			$missions.= "FROM sms_missions WHERE missionStatus = '$sec' ";
-			$missions.= "ORDER BY missionOrder DESC";
-			$missionsResult = mysql_query($missions);
-			
-			while( $summary = mysql_fetch_array( $missionsResult ) ) {
-				extract( $summary, EXTR_OVERWRITE );
-			
-			?>
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
-			<tr>
-				<td class="tableCellLabel">
-					<? printText( $missionTitle );?>
-					<input type="hidden" name="missionid" value="<?=$missionid;?>" />
-				</td>
-				<td>&nbsp;</td>
-				<td>
-					<textarea name="missionSummary" rows="15" class="wideTextArea"><?=stripslashes( $missionSummary );?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="15"></td>
-			</tr>
-			<tr>
-				<td colspan="2"></td>
-				<td align="right">
-					<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="25"></td>
-			</tr>
-			</form>
-		<? } ?>
-		
-		</table>
-		
-		<? } ?>
-		
-		</div> <!-- close the tab container -->
 		
 	</div>
 
