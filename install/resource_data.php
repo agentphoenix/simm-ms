@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2007-11-07 1527 EST
+Last Modified: 2007-12-22 2216 EST
 **/
 
 /* insert data into the access levels table */
@@ -436,7 +436,7 @@ while( $i < $length ) {
 }
 
 /* populate the system table with data */
-mysql_query( "INSERT INTO sms_system ( sysid, sysuid, sysVersion, sysBaseVersion, sysIncrementVersion ) VALUES ( '1', '$string', '2.5.2', '2.5', '.2' )" );
+mysql_query( "INSERT INTO sms_system ( sysid, sysuid, sysVersion, sysBaseVersion, sysIncrementVersion ) VALUES ( '1', '$string', '2.6.0', '2.6', '.0' )" );
 
 /* populate the versions table with data */
 mysql_query( "INSERT INTO `sms_system_versions` ( `versionid`, `version`, `versionDate`, `versionShortDesc`, `versionDesc` )

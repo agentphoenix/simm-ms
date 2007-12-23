@@ -10,7 +10,7 @@ File: pages/join.php
 Purpose: To display the join application and submit it
 
 System Version: 2.6.0
-Last Modified: 2007-11-06 2117 EST
+Last Modified: 2007-12-22 2227 EST
 **/
 
 /* define the page class and vars */
@@ -115,13 +115,12 @@ You have recently submitted an application to join the $shipPrefix $shipName.  T
 Thank you for your interest.
 
 This is an automatically generated message, please do not respond.";
-
-	mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+		
+		/* send the email */
+		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
 
 		/* get the position name of the application */
-		$getPositionName = "SELECT positionName ";
-		$getPositionName.= "FROM sms_positions ";
-		$getPositionName.= "WHERE positionid = '$position'";
+		$getPositionName = "SELECT positionName FROM sms_positions WHERE positionid = '$position'";
 		$getPositionNameResult = mysql_query( $getPositionName );
 		$positioninfo = mysql_fetch_array( $getPositionNameResult );
 		
