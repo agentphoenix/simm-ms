@@ -10,7 +10,7 @@ File: admin/manage/missions.php
 Purpose: Page that creates and moderates the missions
 
 System Version: 2.5.0
-Last Modified: 2007-07-10 1005 EST
+Last Modified: 2007-12-26 0906 EST
 **/
 
 /* access check */
@@ -137,7 +137,7 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 				</td>
 				<td>
 					<span class="fontNormal"><b>Status</b></span><br />
-					<select name="select">
+					<select name="missionStatus">
 						<option value="upcoming">Upcoming Mission</option>
 						<option value="current">Current Mission</option>
 						<option value="completed">Completed Mission</option>
