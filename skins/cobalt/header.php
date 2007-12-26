@@ -1,48 +1,54 @@
 <?php
 
 /**
-This is a necessary system file. Do not modify this page unless you are highly
-knowledgeable as to the structure of the system. Modification of this file may
-cause the system to no longer function.
+This skin is the property of its owner and should not be duplicated or
+reproduced with the express written consent of the author. Edits to this skin
+are permissible if the original credits stay intact.
 
-Author: David VanScott [ david.vanscott@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/cobalt/header.php
 Purpose: The header file that the system calls for the template
 
-System Version: 2.5.0
-Last Modified: 2007-06-18 1438 EST
+Skin Version: 2.0
+Last Modified: 2007-12-26 0914 EST
 **/
+
+$path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */
+$path = explode( "/", $path ); /* explode the string into an array */
+$pcount = count( $path ); /* count the number of keys in the array */
+
+$pathElement1 = $pcount -2; /* create the first element used */
+$pathElement2 = $pcount -1; /* create the second element used */
+
+/* define the path */
+define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
 
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-<head>
-	<title><?=$shipPrefix . " " . $shipName;?></title>
-	<link rel="stylesheet" href="<?=$webLocation;?>skins/cobalt/style.css" type="text/css" media="screen" />
-	<script>
-		<? include_once( "framework/functionsJavascript.js" ); ?>
-		
-		if( document.images )
-		{
-			preload_image_object = new Image();
+	<head>
+		<title><?=$shipPrefix . " " . $shipName;?></title>
+		<link rel="stylesheet" href="<?=$webLocation . SKIN_PATH;?>style.css" type="text/css" />
+		<script type="text/javascript">
+			<? include_once( "framework/functionsJavascript.js" ); ?>
 			
-			// set image url
-			image_url = new Array();
-			image_url[0] = "skins/cobalt/buttons/button-off.png";
-			image_url[1] = "skins/cobalt/buttons/button-hover.png";
-			
-			var i = 0;
-			for( i=0; i<=1; i++ )
+			if( document.images )
 			{
-				preload_image_object.src = image_url[i];
+				preload_image_object = new Image();
+				
+				image_url = new Array();
+				image_url[0] = "<?=SKIN_PATH;?>buttons/button-off.png";
+				image_url[1] = "<?=SKIN_PATH;?>buttons/button-hover.png";
+				
+				var i = 0;
+				for( i = 0; i < image_url.length; i++ )
+				{
+					preload_image_object.src = image_url[i];
+				}
 			}
-		}
-
-	</script>
-</head>
-<body>
-
-<div id="container">
-<div id="headerTopSpacer"></div>
+		</script>
+	</head>
+	<body>
+		<div id="container">
+			<div id="headerTopSpacer"></div>

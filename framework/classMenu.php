@@ -5,13 +5,13 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: framework/menu.php
 Purpose: Page with the menu class that is called by the skin to build the various
 	menus used throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2007-12-20 1334 EST
+Last Modified: 2007-12-26 0904 EST
 **/
 
 class Menu

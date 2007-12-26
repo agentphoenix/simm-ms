@@ -52,6 +52,6 @@ define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
 	<body>
 		<div id="headerTopSpacer"></div>
 		<div id="header">
-			<img src="<?=SKIN_PATH;?>images/header.png" alt="SMS 2" style="padding-left:2.5em;" />
+			<!-- <img src="<?=SKIN_PATH;?>images/header.png" alt="SMS 2" style="padding-left:2.5em;" /> -->
 		</div>
 		<div id="container">

@@ -45,6 +45,7 @@ include_dom( 'js', 'framework/js/ui.tabs.js' );
 include_dom( 'js', 'framework/js/lightbox.js' );
 include_dom( 'js', 'framework/js/reflection.js' );
 include_dom( 'js', 'framework/js/clickmenu.js' );
+include_dom( 'js', 'framework/js/linkscrubber.js' );
 
 /** pull in the CSS files **/
 include_dom( 'css', 'framework/js/lightbox.css' );
