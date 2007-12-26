@@ -102,7 +102,7 @@ if( isset( $sessionCrewid ) ) {
 	
 	/* output the checks */
 	$system_check->output();
-	
+	/*
 	?>
 	
 	<span class="fontTitle"><b><? printCrewName( $sessionCrewid, "rank", "noLink" ); ?></b></span>
@@ -110,16 +110,16 @@ if( isset( $sessionCrewid ) ) {
 	<span class="fontMedium">
 		<?
 		
-		/* spit out the player position for position #1 */
+		/* spit out the player position for position #1 /
 		printPlayerPosition( $sessionCrewid, $positionid, "" );
 		
-		/* if there's a second position, spit that out as well */
+		/* if there's a second position, spit that out as well /
 		if( !empty( $positionid2 ) ) {
 			echo " &amp; ";
 			printPlayerPosition( $sessionCrewid, $positionid2, "2" );
 		}
 		
-		/* finally, print the ship name */
+		/* finally, print the ship name /
 		printText( ", " . $shipPrefix . " " . $shipName );
 		
 		if( $loa == "1" || $loa == "2" ) {
@@ -133,7 +133,7 @@ if( isset( $sessionCrewid ) ) {
 					break;
 			}
 		}		
-		
+		*/
 		?>
 	</span>
 	<p><? printText( $cpMessage ); ?></p>
