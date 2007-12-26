@@ -11,12 +11,11 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2007-11-13 0949 EST
+Last Modified: 2007-12-26 1716 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
 	print_active_crew_select_menu( $type, $author, $id, $section, $sub )
-	printText( $object )
 	printCO()
 	printXO()
 	printCOEmail()
