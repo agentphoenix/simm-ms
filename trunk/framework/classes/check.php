@@ -11,7 +11,7 @@ Purpose: Page with the class that is called by the system to check for
 	ACP items liked saved posts, pending items, SMS updates and PMs
 
 System Version: 2.6.0
-Last Modified: 2007-11-13 0939 EST
+Last Modified: 2007-12-26 1726 EST
 
 Included Classes:
 	SystemCheck
@@ -250,9 +250,10 @@ class SystemCheck
 		
 		if( $count > 0 ) {
 			$this->output_array[2][1] = "<div class='notify-blue'>";
-				$this->output_array[2][1].= "<b class='blue case'>" . $count . " saved " . $countPlural . "</b><br /><br />";
+				$this->output_array[2][1].= "<b class='blue case'>" . $count . " saved " . $countPlural . "</b>";
 				
-				$this->output_array[2][1].= "<table>";
+				$this->output_array[2][1].= "<table border='0' cellpadding='0' cellspacing='0'>";
+					$this->output_array[2][1].= "<tr><td height='10'></td></tr>";
 	
 				if( $countPostsFinal > 0 ) {
 					$this->output_array[2][1].= "<tr>";
