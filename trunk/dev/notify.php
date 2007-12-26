@@ -6,6 +6,15 @@
 			a { text-decoration: none; color: #a7a590; }
 			a:hover { color: #5b5a4f; }
 			
+			.update {
+				width: 98%;
+				color: #fff;
+				font-weight: bold;
+				padding: .5em;
+				background-color: #090909;
+				border: 1px solid #111;
+			}
+			
 			.notify-1-green {
 				width: 98%;
 				border-left: 4px solid #4b994b;
@@ -63,6 +72,9 @@
 		</style>
 	</head>
 	<body>
+		<h1>Original</h1>
+			<div class="update"><img src="../images/update.png" alt="" border="0" style="float:left; padding:0 10px 0 0;" />Lorem ipsum dolor sit amet, <a href="#">consectetuer adipiscing elit</a>.</div>
+			
 		<h1>Style 1</h1>
 			<div class="notify-1-green">Lorem ipsum dolor sit amet, <a href="#">consectetuer adipiscing elit</a>. Morbi commodo, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis. Nullam sit amet enim. Suspendisse id velit vitae ligula volutpat condimentum. Aliquam erat volutpat. Sed quis velit. Nulla facilisi. Nulla libero. Vivamus pharetra posuere sapien. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi commodo, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis. Nullam sit amet enim. Suspendisse id velit vitae ligula volutpat condimentum. Aliquam erat volutpat. Sed quis velit. Nulla facilisi. Nulla libero. Vivamus pharetra posuere sapien.</div>
 			<br /><br />
