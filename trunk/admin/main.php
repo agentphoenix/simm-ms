@@ -10,12 +10,11 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2007-12-26 2233 EST
+Last Modified: 2007-12-27 0942 EST
 **/
 
 /* define the page class */
 $pageClass = "admin";
-$sec = $_GET['sec'];
 
 /* fetch the user's information for their display preferences */
 $userFetch = "SELECT rank.rankImage, crew.positionid, crew.positionid2, crew.cpShowPosts, ";
@@ -181,12 +180,6 @@ if( isset( $sessionCrewid ) ) {
 			$getPosts.= "post.postStatus = 'activated' ORDER BY post.postPosted DESC LIMIT $cpShowPostsNum";
 			$getPostsResult = mysql_query( $getPosts );
 			$countPosts = mysql_num_rows( $getPostsResult );
-			
-				/* query the database to get the author rank, first name, and last name */
-				$getPostAuthor = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
-				$getPostAuthor.= "FROM sms_crew AS crew, sms_ranks AS rank WHERE crew.rankid = rank.rankid ";
-				$getPostAuthor.= "AND crew.crewid = '$postAuthor'";
-				$getPostAuthorResult = mysql_query( $getPostAuthor );
 				
 		} if( $cpShowLogs == "y" ) {
 		
@@ -214,14 +207,6 @@ if( isset( $sessionCrewid ) ) {
 	/* if any of them are yes, show the tab container */
 	if( in_array( "y", $cpOptionsArray ) ) {
 
-		/* find the first item they want to see */
-		$firstKey = array_search( "y", $cpOptionsArray );
-
-		/* if there's no SEC var, set the firstKey as that */
-		if( !$sec ) {
-			$sec = $firstKey;
-		}
-
 	?>
 	
 	<div id="container-1">
@@ -242,13 +227,6 @@ if( isset( $sessionCrewid ) ) {
 				/* loop through everything until you run out of results */
 				while( $posts = mysql_fetch_array( $getPostsResult ) ) {
 					extract( $posts, EXTR_OVERWRITE );
-					
-					while( $postAuthorArray = mysql_fetch_array( $getPostAuthorResult ) ) {
-						extract( $postAuthorArray, EXTR_OVERWRITE );
-					}
-					
-					/* set the author var w/ link */
-					$author = "<a href='" . $webLocation . "index.php?page=bio&user=" . $crewid . "'>" . $rankName . " " . $firstName . " " . $lastName . "</a>";
 					
 					$length = 50; /* The number of words you want */
 					$words = explode(' ', $postContent); /* Creates an array of words */

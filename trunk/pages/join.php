@@ -15,9 +15,20 @@ Last Modified: 2007-12-22 2227 EST
 
 /* define the page class and vars */
 $pageClass = "simm";
-$agree = $_GET['agree'];
-$action = $_POST['action_x'];
-$pid = $_GET['position'];
+$query = "";
+$result = "";
+
+if( isset( $_GET['agree'] ) ) {
+	$agree = $_GET['agree'];
+}
+
+if( isset( $_POST['action_x'] ) ) {
+	$action = $_POST['action_x'];
+}
+
+if( isset( $_GET['position'] ) ) {
+	$pid = $_GET['position'];
+}
 
 if( isset( $pid ) && !is_numeric( $pid ) ) {
 	errorMessageIllegal( __FILE__, $sessionCrewid, 'number', $pid );
@@ -34,7 +45,7 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* submit the application */
-if( $action ) {
+if( isset( $action ) ) {
 	
 	/* get today's date */
 	$today = getdate();
@@ -218,12 +229,12 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 	<span class="fontTitle">Join the <i><? printText( $shipPrefix . " " . $shipName ); ?></i></span>
 	<br /><br />
 
-	<? if( !$agree ) { ?>
+	<? if( !isset( $agree ) ) { ?>
 
 	<div style="padding: 1em;">Before continuing, you must agree to the following disclaimer:</div>
 	<div style="padding: 2em;"><i><? printText( $joinDisclaimer ); ?></i></div>
 	<div style="padding: 1em;">
-		<? if( $pid ) { ?>
+		<? if( isset( $pid ) ) { ?>
 		<a href="<?=$webLocation;?>index.php?page=join&position=<?=$pid;?>&agree=yes" class="fontMedium"><b>Agree</b></a>
 		<? } else { ?>
 		<a href="<?=$webLocation;?>index.php?page=join&agree=yes" class="fontMedium"><b>Agree</b></a>

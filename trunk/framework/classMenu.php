@@ -6,12 +6,12 @@ knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: framework/menu.php
+File: framework/classMenu.php
 Purpose: Page with the menu class that is called by the skin to build the various
 	menus used throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2007-12-26 0904 EST
+Last Modified: 2007-12-27 0949 EST
 **/
 
 class Menu
@@ -53,7 +53,7 @@ class Menu
 			
 			/* check the link type and then set the prefix and target */
 			if( $value['linkType'] == "onsite" ) {
-				$prefix = $webLocation;
+				$prefix = WEBLOC;
 				$target = "";
 			} else {
 				$prefix = "";
@@ -148,7 +148,7 @@ class Menu
 			
 					/* check the link type and then set the prefix and target */
 					if( $value['linkType'] == "onsite" ) {
-						$prefix = $webLocation;
+						$prefix = WEBLOC;
 						$target = "";
 						
 						if( 
@@ -234,7 +234,12 @@ class Menu
 					within that group
 				*/
 				if( in_array( $menuAccess, $access ) ) {
-				
+					
+					/* fixes a PHP warning */
+					if( !isset( $groupArray ) ) {
+						$groupArray = "";
+					}
+					
 					/* set up the group array */
 					if( !is_array( $groupArray ) ) {
 						$groupArray = array( $menuGroup );
@@ -265,7 +270,7 @@ class Menu
 					
 						/* check the link type and then set the prefix and target */
 						if( $value['linkType'] == "onsite" ) {
-							$prefix = $webLocation;
+							$prefix = WEBLOC;
 							$target = "";
 							
 							if( 
@@ -365,6 +370,11 @@ class Menu
 				'group' => $menuGroup
 			);
 			
+			/* fixes a PHP warning */
+			if( !isset( $groupArray ) ) {
+				$groupArray = "";
+			}
+			
 			/* set up the group array */
 			if( !is_array( $groupArray ) ) {
 				$groupArray = array( $menuGroup );
@@ -393,7 +403,7 @@ class Menu
 				
 					/* check the link type and then set the prefix and target */
 					if( $value['linkType'] == "onsite" ) {
-						$prefix = $webLocation;
+						$prefix = WEBLOC;
 						$target = "";
 					} else {
 						$prefix = "";

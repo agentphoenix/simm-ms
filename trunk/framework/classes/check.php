@@ -11,7 +11,7 @@ Purpose: Page with the class that is called by the system to check for
 	ACP items liked saved posts, pending items, SMS updates and PMs
 
 System Version: 2.6.0
-Last Modified: 2007-12-26 1726 EST
+Last Modified: 2007-12-27 0939 EST
 
 Included Classes:
 	SystemCheck
@@ -48,7 +48,7 @@ class SystemCheck
 		/* if the version the user has and the version from the XML file are different, display the notice */
 		if( VER_FILES < $rssVersion && VER_DB < $rssVersion ) {
 			
-			//$this->output_array[0][1].= "<img src='" . $webLocation . "images/feed.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+			//$this->output_array[0][1].= "<img src='" . WEBLOC . "images/feed.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 			//$this->output_array[0][1].= "<span class='fontTitle'>SMS Update Available</span><br /><br />";
 			$this->output_array[0][1] = "<div class='notify-red'>";
 			$this->output_array[0][1].= "<b class='red case'>Update Available</b> &mdash; ";
@@ -61,7 +61,7 @@ class SystemCheck
 			
 		} if( VER_DB > VER_FILES && VER_DB == $rssVersion ) {
 			
-			//$this->output_array[0][1].= "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+			//$this->output_array[0][1].= "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 			//$this->output_array[0][1].= "<span class='fontTitle'>SMS Update Warning</span><br /><br />";
 			$this->output_array[0][1] = "<div class='notify-orange'>";
 			$this->output_array[0][1].= "<b class='orange case'>Update Warning</b> &mdash; ";
@@ -78,12 +78,12 @@ class SystemCheck
 				$urlVersion = $urlVersion . "0";
 			}
 			
-			//$this->output_array[0][1].= "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+			//$this->output_array[0][1].= "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 			//$this->output_array[0][1].= "<span class='fontTitle'>SMS Update Warning</span><br /><br />";
 			$this->output_array[0][1] = "<div class='notify-orange'>";
 			$this->output_array[0][1].= "<b class='orange case'>Update Warning</b> &mdash; ";
 			$this->output_array[0][1].= "Your files are running SMS version " . VER_FILES . ", however, your database is running version " . VER_DB . " and needs to be updated. Please use the link below to finish your update. If you do not update your files and database SMS will not work correctly!<br /><br />";
-			$this->output_array[0][1].= "<a href='" . $webLocation . "update.php?version=" . $urlVersion . "'>Update SMS Database</a>";
+			$this->output_array[0][1].= "<a href='" . WEBLOC . "update.php?version=" . $urlVersion . "'>Update SMS Database</a>";
 			$this->output_array[0][1].= "</div>";
 			
 		}
@@ -91,6 +91,13 @@ class SystemCheck
 	
 	function pendings()
 	{
+		/* define the variables ahead of time */
+		$pendingUsers = "";
+		$pendingPosts = "";
+		$pendingLogs = "";
+		$pendingNews = "";
+		$pendingDockings = "";
+		
 		if( in_array( "x_approve_users", $this->access ) ) {
 			/* check for pending users */
 			$checkUsers = "SELECT crewid FROM sms_crew WHERE crewType = 'pending'";
@@ -173,7 +180,7 @@ class SystemCheck
 			( $pendingDockings > 0 && in_array( "x_approve_docking", $this->access ) )
 		) {
 			
-			//$this->output_array[1][1] = "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='warning' style='float:left; padding: 0 12px 0 0;' />";
+			//$this->output_array[1][1] = "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='warning' style='float:left; padding: 0 12px 0 0;' />";
 			//$this->output_array[1][1].= "<span class='fontTitle'>Pending Items</span><br /><br />";
 			$this->output_array[1][1] = "<div class='notify-orange'>";
 			$this->output_array[1][1].= "<b class='orange case'>Pending Items</b> &mdash; ";
@@ -203,7 +210,7 @@ class SystemCheck
 				
 			}
 			
-			$this->output_array[1][1].= " ] awaiting moderation. Visit the <a href='" . $webLocation . "admin.php?page=manage&sub=activate'>activation page</a> to view activation options.";
+			$this->output_array[1][1].= " ] awaiting moderation. Visit the <a href='" . WEBLOC . "admin.php?page=manage&sub=activate'>activation page</a> to view activation options.";
 			$this->output_array[1][1].= "</div>";
 		}
 	}
@@ -264,7 +271,7 @@ class SystemCheck
 						extract( $postFetch, EXTR_OVERWRITE );
 						
 						$this->output_array[2][1].= "<tr>";
-							$this->output_array[2][1].= "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=post&sub=mission&id=" . $postFetch['postid'] . "'>";
+							$this->output_array[2][1].= "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=post&sub=mission&id=" . $postFetch['postid'] . "'>";
 							
 							if( !empty( $postFetch['postTitle'] ) ) {
 								$this->output_array[2][1].= $postFetch['postTitle'];
@@ -291,11 +298,11 @@ class SystemCheck
 							
 							if( $postSave > 0 ) {
 								if( $postSave == $crew ) { } else {
-									$this->output_array[2][1].= "<img src='" . $webLocation . "images/message-unread-icon.png' border='0' alt='' /> &nbsp;";
+									$this->output_array[2][1].= "<img src='" . WEBLOC . "images/message-unread-icon.png' border='0' alt='' /> &nbsp;";
 								}
 							}
 							
-							$this->output_array[2][1].= "<a href='" . $webLocation . "admin.php?page=post&sub=jp&id=" . $jpFetch['postid'] . "'>";
+							$this->output_array[2][1].= "<a href='" . WEBLOC . "admin.php?page=post&sub=jp&id=" . $jpFetch['postid'] . "'>";
 							
 							if( !empty( $jpFetch['postTitle'] ) ) {
 								$this->output_array[2][1].= $jpFetch['postTitle'];
@@ -318,7 +325,7 @@ class SystemCheck
 						extract( $logFetch, EXTR_OVERWRITE );
 	
 						$this->output_array[2][1].= "<tr>";
-							$this->output_array[2][1].= "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=post&sub=log&id=" . $logFetch['logid'] . "'>";
+							$this->output_array[2][1].= "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=post&sub=log&id=" . $logFetch['logid'] . "'>";
 							
 							if( !empty( $logFetch['logTitle'] ) ) {
 								$this->output_array[2][1].= $logFetch['logTitle'];
@@ -341,7 +348,7 @@ class SystemCheck
 						extract( $newsFetch, EXTR_OVERWRITE );
 	
 						$this->output_array[2][1].= "<tr>";
-							$this->output_array[2][1].= "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=post&sub=news&id=" . $newsFetch['newsid'] . "'>";
+							$this->output_array[2][1].= "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=post&sub=news&id=" . $newsFetch['newsid'] . "'>";
 							
 							if( !empty( $newsFetch['newsTitle'] ) ) {
 								$this->output_array[2][1].= $newsFetch['newsTitle'];
@@ -388,7 +395,7 @@ class SystemCheck
 						extract( $msgFetch, EXTR_OVERWRITE );
 						
 						$this->output_array[3][1].= "<tr>";
-							$this->output_array[3][1].= "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=user&sub=message&id=" . $msgFetch['pmid'] . "'>";
+							$this->output_array[3][1].= "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=user&sub=message&id=" . $msgFetch['pmid'] . "'>";
 							
 							if( !empty( $msgFetch['pmSubject'] ) ) {
 								$this->output_array[3][1].= $msgFetch['pmSubject'];
