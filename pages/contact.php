@@ -15,8 +15,12 @@ Last Modified: 2007-08-21 0933 EST
 
 /* define the page class and set the vars */
 $pageClass = "main";
-$send = $_POST['action_x'];
 $query = "";
+$result = "";
+
+if( isset( $_POST['action_x'] ) ) {
+	$send = $_POST['action_x'];
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -28,7 +32,7 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* check action and send email if needed */
-if ( $send ) {
+if ( isset( $send ) ) {
 
 	/* strip the slashes */
 	$message = stripslashes( $_POST['message'] );
@@ -87,12 +91,12 @@ if ( $send ) {
 		<tr>
 			<td class="tableCellLabel">Commanding Officer</td>
 			<td>&nbsp;</td>
-			<td><?=printCO(); ?></td>
+			<td><?php echo printCO();?></td>
 		</tr>
 		<tr>
 			<td class="tableCellLabel">Executive Officer</td>
 			<td>&nbsp;</td>
-			<td><?=printXO(); ?></td>
+			<td><?php echo printXO();?></td>
 		</tr>
 		
 		<? if ( $hasWebmaster == "y" ) { ?>

@@ -10,13 +10,19 @@ File: pages/news.php
 Purpose: Page to display the news items
 
 System Version: 2.6.0
-Last Modified: 2007-11-12 1509 EST
+Last Modified: 2007-12-27 0957 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "main";
-$display = $_GET['disp'];
-$id = $_GET['id'];
+
+if( isset( $_GET['disp'] ) ) {
+	$display = $_GET['disp'];
+}
+
+if( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) {
+	$id = $_GET['id'];
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -69,7 +75,7 @@ if( isset( $sessionCrewid ) ) {
 	<span class="fontTitle">
 	<?
 	
-	if( !$display ) {
+	if( !isset( $display ) ) {
 		echo "All News";
 	} else {
 		echo $category['catName'];

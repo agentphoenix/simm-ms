@@ -15,8 +15,18 @@ Last Modified: 2007-10-10 0958 EST
 
 /* define the page class and vars */
 $pageClass = "simm";
-$entry = $_GET['entry'];
-$sort = $_GET['sort'];
+
+if( isset( $_GET['entry'] ) ) {
+	$entry = $_GET['entry'];
+} else {
+	$entry = "";
+}
+
+if( isset( $_GET['sort'] ) ) {
+	$sort = $_GET['sort'];
+} else {
+	$sort = "";
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {

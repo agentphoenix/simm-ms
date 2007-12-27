@@ -10,7 +10,7 @@ File: index.php
 Purpose: The main file that pulls in the requested page
 
 System Version: 2.6.0
-Last Modified: 2007-12-19 1201 EST
+Last Modified: 2007-12-27 0934 EST
 **/
 
 /* start the session */
@@ -51,9 +51,14 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 
 	/* define the session variables */
 	$sessionCrewid = $_SESSION['sessionCrewid'];
-	$sessionAccessLevel = $_SESSION['sessionAccessLevel'];
+	$sessionAccessLevel = $_SESSION['sessionAccess'];
 	$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
 	$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
+	
+	/* fixes a PHP warning with an undefined variable */
+	if( !isset( $sessionAccess ) ) {
+		$sessionAccess = "";
+	}
 	
 	/*
 		check to see if the session access variable is an array

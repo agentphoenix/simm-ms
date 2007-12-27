@@ -12,7 +12,7 @@ Purpose: Provides a listing from the database of either the active crew, the
 	on the simm.
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 1008 EST
+Last Modified: 2007-12-27 0950 EST
 **/
 
 if( $manifestDisplay == "full" && $_GET['disp'] == "crew" ) {
@@ -21,7 +21,12 @@ if( $manifestDisplay == "full" && $_GET['disp'] == "crew" ) {
 
 /* define the page class and set vars */
 $pageClass = "personnel";
-$display = $_GET['disp'];
+
+if( isset( $_GET['disp'] ) ) {
+	$display = $_GET['disp'];
+} else {
+	$display = "";
+}
 
 /* pull in the main navigation */
 if( isset( $sessionCrewid ) ) {
