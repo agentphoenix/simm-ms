@@ -10,7 +10,7 @@ File: admin/user/site.php
 Purpose: Page that allows a user to various site options
 
 System Version: 2.6.0
-Last Modified: 2007-12-26 0923 EST
+Last Modified: 2007-12-26 2233 EST
 **/
 
 /* access check */
@@ -182,9 +182,10 @@ if( in_array( "u_options", $sessionAccess ) ) {
 		
 		<div id="container-1">
 			<ul>
-				<li><a href="#one"><span>Options</span></a></li>
-				<li><a href="#two"><span>Rank Sets</span></a></li>
-				<li><a href="#three"><span>Site Skins</span></a></li>
+				<li><a href="#one"><span>Control Panel</span></a></li>
+				<li><a href="#two"><span>Personalized Menu</span></a></li>
+				<li><a href="#three"><span>Rank Set</span></a></li>
+				<li><a href="#four"><span>Site Skin</span></a></li>
 			</ul>
 	
 			<div id="one" class="ui-tabs-container ui-tabs-hide">
@@ -256,11 +257,23 @@ if( in_array( "u_options", $sessionAccess ) ) {
 						<td colspan="3" height="15"></td>
 					</tr>
 					<tr>
-						<td colspan="3" class="fontMedium">
-							<b>Personalized Menu Items</b>
+						<td colspan="3">
+							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="options" value="Update" class="button" />
 						</td>
 					</tr>
-
+				</table>
+				</form>
+			</div>
+			
+			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=3">
+				<table>
+					<tr>
+						<td colspan="3">Neptune description and instructions here</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="15"></td>
+					</tr>
 					<?php
 
 					for( $i=1; $i<11; $i++ )
@@ -309,9 +322,8 @@ if( in_array( "u_options", $sessionAccess ) ) {
 					}
 
 					?>
-
 					<tr>
-						<td colspan="3" height="15"></td>
+						<td colspan="3" height="25"></td>
 					</tr>
 					<tr>
 						<td colspan="3">
@@ -322,8 +334,8 @@ if( in_array( "u_options", $sessionAccess ) ) {
 				</form>
 			</div>
 			
-			<div id="two" class="ui-tabs-container ui-tabs-hide">
-				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=2">
+			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=3">
 				<table>
 					<tr>
 						<td>&nbsp;</td>
@@ -358,8 +370,8 @@ if( in_array( "u_options", $sessionAccess ) ) {
 				</form>
 			</div>
 			
-			<div id="three" class="ui-tabs-container ui-tabs-hide">
-				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=3">
+			<div id="four" class="ui-tabs-container ui-tabs-hide">
+				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=4">
 				<table>
 					<tr>
 						<td>&nbsp;</td>

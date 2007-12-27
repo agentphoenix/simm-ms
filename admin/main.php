@@ -10,7 +10,7 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2007-12-22 2211 EST
+Last Modified: 2007-12-26 2233 EST
 **/
 
 /* define the page class */
@@ -146,6 +146,7 @@ if( isset( $sessionCrewid ) ) {
 
 		<? if( in_array( "p_mission", $sessionAccess ) ) { ?>
 		<li><a href="<?=$webLocation;?>admin.php?page=post&sub=mission">Write a mission entry</a></li>
+		<li><a href="<?=$webLocation;?>admin.php?page=post&sub=jp">Start a joint post</a></li>
 		<? } ?>
 
 		<? if( in_array( "p_log", $sessionAccess ) ) { ?>
@@ -155,7 +156,7 @@ if( isset( $sessionCrewid ) ) {
 		<? } /* close the check for if they're using the posting features */ ?>
 
 		<? if( in_array( "u_account1", $sessionAccess ) || in_array( "u_account2", $sessionAccess ) ) { ?>
-		<li><a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$sessionCrewid;?>">Update your profile or change your password</a></li>
+		<li><a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$sessionCrewid;?>">Update your account information or change your password</a></li>
 		<? } ?>
 
 		<? if( in_array( "u_bio1", $sessionAccess ) || in_array( "u_bio2", $sessionAccess ) || in_array( "u_bio3", $sessionAccess ) ) { ?>
@@ -163,7 +164,8 @@ if( isset( $sessionCrewid ) ) {
 		<? } ?>
 
 		<? if( in_array( "u_options", $sessionAccess ) ) { ?>
-		<li><a href="<?=$webLocation;?>admin.php?page=user&sub=site">Change the way the site looks when you're logged in</a></li>
+		<li><a href="<?=$webLocation;?>admin.php?page=user&sub=site">Change your site options</a></li>
+		<li><a href="<?=$webLocation;?>admin.php?page=user&sub=site&sec=2">Change your personalized menu</a></li>
 		<? } ?>
 	</ul></p>
 	
