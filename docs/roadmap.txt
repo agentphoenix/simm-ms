@@ -1,4 +1,4 @@
-Last Updated: 2007.12.06 1600 EST
+Last Updated: 2008.01.09 2246 EST
 
 2.6
 CODENAME: Eclipse
@@ -84,6 +84,7 @@ LAUNCH: Q1 2008
 			AGMs, so the various XO functions will need to be updated accordingly
 #	Update system queries
 		*	System queries should be safe from SQL injection; see join page for example
+#	[BUG] Player stats page doesn't have any logic for a zero or blank UNIX timestamp
 
 2.7
 CODENAME: Babylon
