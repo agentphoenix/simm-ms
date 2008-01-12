@@ -10,7 +10,7 @@ File: admin/manage/add.php
 Purpose: Page to add a player or NPC
 
 System Version: 2.6.0
-Last Modified: 2007-11-13 2106 EST
+Last Modified: 2008-01-12 1419 EST
 **/
 
 /* access check */
@@ -58,25 +58,21 @@ if( in_array( "m_createcrew", $sessionAccess ) ) {
 				$getPosTypeResult = mysql_query( $getPosType );
 				$positionType = mysql_fetch_row( $getPosTypeResult );
 				
-				/* if the position is a department head, set the access levels to DH */
-				/* otherwise, set it to standard player */
+				/* set the access levels accordingly */
 				if( $positionType[0] == "senior" ) {
-					$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-					$levelsManage = "manage,m_createcrew,m_npcs1,m_newscat2";
-					$levelsReports = "reports,r_count,r_strikes,r_activity,r_progress,r_milestones";
-					$levelsUser = "user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2";
-					$levelsOther = "";
+					$accessID = 3;
 				} else {
-					$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-					$levelsManage = "";
-					$levelsReports = "reports,r_progress,r_milestones";
-					$levelsUser = "user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options";
-					$levelsOther = "";
+					$accessID = 4;
 				}
+				
+				/* pull the default access levels from the db */
+				$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = $accessID LIMIT 1";
+				$getGroupLevelsResult = mysql_query( $getGroupLevels );
+				$groups = mysql_fetch_array( $getGroupLevelsResult );
 			
 				/* do the insert query */
 				$query = "INSERT INTO sms_crew ( crewid, crewType, username, password, email, firstName, middleName, lastName, gender, species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, accessOthers ) ";
-				$query.= "VALUES ( '', '$crewType', '$username', '$password', '$email', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position', UNIX_TIMESTAMP(), '$levelsPost', '$levelsManage', '$levelsReports', '$levelsUser', '$levelsOther' )";
+				$query.= "VALUES ( '', '$crewType', '$username', '$password', '$email', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position', UNIX_TIMESTAMP(), '$groups[1]', '$groups[2]', '$groups[3]', '$groups[4]', '$groups[5]' )";
 				$result = mysql_query( $query );
 				
 				/* optimize the table */
