@@ -8,7 +8,7 @@ File: skins/default/style/main.css
 Purpose: Stylesheet that controls the look and feel of the site
 
 Skin Version: 2.1
-Last Modified: 2007-10-20 1104 EST
+Last Modified: 2008-01-12 1749 EST
 **/
 
 /*
@@ -37,17 +37,17 @@ body {
 }
 
 /* styles that control the top and bottom spacers */
-#headerTopSpacer { height: 25px; }
-#container .footerBottomSpacer { height: 25px; }
+#headerTopSpacer { height: 20px; }
+#container .footerBottomSpacer { height: 30px; }
 
 /* the template header */
 #header {
 	width: 100%;
-	height: 150px;
+	height: 110px;
 	margin: auto;
-	border-top: 2px solid #111;
-	border-bottom: 2px solid #111;
-	background: #0d0d0d url( 'images/bg.jpg' ) no-repeat top right;
+	border-top: 1px solid #111;
+	border-bottom: 1px solid #111;
+	background: #090909 url( 'images/bg.jpg' ) no-repeat top left;
 }
 
 
@@ -137,8 +137,8 @@ body {
 /* the footer */
 #container .footer {
 	background: #090909;
-	border-top: 2px solid #111;
-	border-bottom: 2px solid #111;
+	border-top: 1px solid #111;
+	border-bottom: 1px solid #111;
 	text-align: center;
 	clear: both;
 	font-size: .8em;
