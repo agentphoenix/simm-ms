@@ -7,14 +7,10 @@
 
 #	Add CC ability for private messages
 
-#	Threaded PM messages
-
-#	SMS Toolbar
+#	SMS Personalized Menu
 		*	Development: 	COMPLETED
 		*	Landing:		COMPLETED
 		*	Testing:		IN PROGRESS
-
-#	Global preference for displaying text or images on the manifest
 
 X	Customizable message subject lines
 		*	Development: 	COMPLETED
@@ -32,8 +28,8 @@ X	Customizable message subject lines
 		*	Testing:		IN PROGRESS
 
 #	Global setting for default access levels
-		*	Development:	IN PROGRESS
-		*	Landing:		COMPLETED
+		*	Development:	COMPLETED
+		*	Landing:		IN PROGRESS
 		*	Testing:		IN PROGRESS
 
 #	Starbase menu items in place during install, but turned off
@@ -50,10 +46,8 @@ X	Add cadet ranks (off by default)
 
 #	SMS Update options
 		*	Development: 	IN PROGRESS
-		*	Landing: 		COMPLETED
+		*	Landing: 		IN PROGRESS
 		*	Testing: 		IN PROGRESS
-
-#	Joint posting upper limit set by admin
 
 X	"Private" news messages
 		*	Development:	COMPLETED
@@ -75,12 +69,20 @@ X	[BUG] Rank drop down menus need to respect the rankDisplay flag
 		*	Landing:		IN PROGRESS
 		*	Testing:		COMPLETED
 
-#	Single posting page with the option to add more participants
-
 #	[BUG] If the large version of an award image doesn't exist, it won't fall back
 	to the small version
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
 		*	Testing:		IN PROGRESS
 
-#	Install file cleanup
+#	[BUG] Player stats page doesn't have logic against blank timestamps
+
+#	Update system queries to protect against SQL injection
+
+#	Award categories (in character, out of character)
+
+#	Extra information on award (id, timestamp: reason;)
+
+#	Nominated awards to queue for CO approval
+
+#	Specs and join built dynamically
