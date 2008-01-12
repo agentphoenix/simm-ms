@@ -18,7 +18,7 @@ class Menu
 {
 	
 	/* function that builds the mainNav */
-	function main( $sessionCrewid ) {
+	function main() {
 
 		/* get the mainNav items from the DB */
 		$getMenu = "SELECT * FROM sms_menu_items WHERE menuCat = 'main' ";
@@ -71,7 +71,7 @@ class Menu
 				echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . ">" . $value['title'] . "</a></li>";
 				
 			} else {
-				if( isset( $sessionCrewid ) ) {
+				if( isset( $_SESSION['sessionCrewid'] ) ) {
 					
 					if( $key != 0 ) {
 						echo "<li class='spacer'>&nbsp;</li>";
