@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2007-12-20 1333 EST
+Last Modified: 2008-01-12 1454 EST
 **/
 
 /* query the database for the mysql version */
@@ -204,7 +204,6 @@ mysql_query( "CREATE TABLE `sms_globals` (
   `emailSubject` varchar(75) NOT NULL default '',
   `stardateDisplaySD` enum('y','n') NOT NULL default 'y',
   `stardateDisplayDate` enum('y','n') NOT NULL default 'y',
-  `maxJPAuthors` varchar(3) NOT NULL default '6',
   PRIMARY KEY  (`globalid`)
 ) " . $tail . " ;" );
 
@@ -222,7 +221,7 @@ mysql_query( "CREATE TABLE `sms_menu_items` (
 	`menuCat` enum('main','general','admin') NOT NULL default 'general',
 	`menuAvailability` enum('on','off') NOT NULL default 'on',
 	PRIMARY KEY  (`menuid`)
-) " . $tail . " AUTO_INCREMENT=87;" );
+) " . $tail . " AUTO_INCREMENT=88;" );
 
 /* create the messages table */
 mysql_query( "CREATE TABLE `sms_messages` (
@@ -266,6 +265,7 @@ mysql_query( "CREATE TABLE `sms_news` (
   `newsTitle` varchar(100) NOT NULL default '',
   `newsContent` text NOT NULL,
   `newsStatus` enum( 'pending','saved','activated' ) NOT NULL default 'activated',
+  `newsPrivate` enum( 'y', 'n' ) NOT NULL default 'n',
   PRIMARY KEY  (`newsid`)
 ) " . $tail . " ;" );
 
@@ -344,17 +344,6 @@ mysql_query( "CREATE TABLE `sms_ranks` (
   `rankClass` int(3) NOT NULL default '0',
   PRIMARY KEY  (`rankid`)
 ) " . $tail . " AUTO_INCREMENT=185 ;" );
-
-/* create the security table */
-mysql_query( "CREATE TABLE `sms_security` (
-  `id` int(5) NOT NULL auto_increment,
-  `page` varchar(100) NOT NULL,
-  `reason` text NOT NULL,
-  `ip_address` varchar(50) NOT NULL,
-  `crew` int(4) NOT NULL,
-  `time` varchar(50) NOT NULL,
-  PRIMARY KEY  (`id`)
-) " . $tail . " ;" );
 
 /* create the specs table */
 mysql_query( "CREATE TABLE `sms_specs` (

@@ -3,8 +3,8 @@
 /**
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
-Purpose: Update page - 2.5.3 => Latest
-Last Modified: 2007-12-20 1333 EST
+Purpose: Update to 2.6.0
+Last Modified: 2008-01-12 1455 EST
 **/
 
 /* add the email subject field */
@@ -12,7 +12,6 @@ mysql_query( "ALTER TABLE `sms_globals` ADD `emailSubject` varchar(75) not null 
 mysql_query( "ALTER TABLE `sms_globals` ADD `updateNotify` enum('all','major','none') not null default 'all'" );
 mysql_query( "ALTER TABLE `sms_globals` ADD `stardateDisplaySD` enum('y','n') not null default 'y'" );
 mysql_query( "ALTER TABLE `sms_globals` ADD `stardateDisplayDate` enum('y','n') not null default 'y'" );
-mysql_query( "ALTER TABLE `sms_globals` ADD `maxJPAuthors` varchar(3) not null default '6'" );
 
 /* change compliments fields to accept characters like commas */
 mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentEmergency` `complimentEmergency` varchar(20) NOT NULL default ''" );
@@ -20,9 +19,6 @@ mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentOfficers` `complimentOff
 mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentEnlisted` `complimentEnlisted` varchar(20) NOT NULL default ''" );
 mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentMarines` `complimentMarines` varchar(20) NOT NULL default ''" );
 mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentCivilians` `complimentCivilians` varchar(20) NOT NULL default ''" );
-
-/* add the conversation id field */
-mysql_query( "ALTER TABLE `sms_privatemessages` ADD `conversationId` int(6) not null" );
 
 /* find the blank ranks and reset their ordering */
 $get1 = "SELECT * FROM sms_ranks WHERE rankName = '' ORDER BY rankOrder ASC";
@@ -126,21 +122,9 @@ VALUES (1, 'post,p_addjp,p_missionnotes,p_jp,p_addlog,p_pm,p_log,p_addmission,p_
 (3, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', 'manage,m_createcrew,m_npcs1,m_newscat2', 'reports,r_count,r_strikes,r_activity,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2', ''),
 (4, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', '', 'reports,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options', '');" );
 
-/* create the security table */
-mysql_query( "CREATE TABLE `sms_security` (
-  `id` int(5) NOT NULL auto_increment,
-  `page` varchar(100) NOT NULL,
-  `reason` text NOT NULL,
-  `ip_address` varchar(50) NOT NULL,
-  `crew` int(4) NOT NULL,
-  `time` varchar(50) NOT NULL,
-  PRIMARY KEY  (`id`)
-) " . $tail . " ;" );
-
 /* add the necessary menu items */
 mysql_query( "INSERT INTO sms_menu_items ( menuGroup, menuOrder, menuTitle, menuLinkType, menuLink, menuAccess, menuMainSec, menuLogin, menuCat )
-VALUES ( 0, 4, 'Security Report', 'onsite', 'admin.php?page=reports&sub=security', 'r_security', 'reports', 'y', 'admin' ), 
-( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin' )" );
+VALUES ( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin' )" );
 
 /* add the private news item field */
 mysql_query( "ALTER TABLE `sms_news` ADD `newsPrivate` ENUM( 'y', 'n' ) NOT NULL DEFAULT 'n'" );
