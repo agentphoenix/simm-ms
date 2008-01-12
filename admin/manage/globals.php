@@ -10,7 +10,7 @@ File: admin/manage/globals.php
 Purpose: Page that moderates the site globals
 
 System Version: 2.6.0
-Last Modified: 2007-10-11 0836 EST
+Last Modified: 2008-01-12 1354 EST
 **/
 
 /* access check */
@@ -19,16 +19,27 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action_simm = $_POST['action_update_simm_x'];
-	$action_fleet = $_POST['action_update_fleet_x'];
-	$action_options = $_POST['action_update_options_x'];
-	$action_presentation = $_POST['action_update_presentation_x'];
-	$action_positions = $_POST['action_update_positions_x'];
-	$sec = $_GET['sec'];
 	
-	if( !isset( $sec ) ) {
+	if( isset( $_POST['action_update_simm_x'] ) ) {
+		$action_simm = $_POST['action_update_simm_x'];
+	} if( isset( $_POST['action_update_fleet_x'] ) ) {
+		$action_fleet = $_POST['action_update_fleet_x'];
+	} if( isset( $_POST['action_update_options_x'] ) ) {
+		$action_options = $_POST['action_update_options_x'];
+	} if( isset( $_POST['action_update_presentation_x'] ) ) {
+		$action_presentation = $_POST['action_update_presentation_x'];
+	} if( isset( $_POST['action_update_positions_x'] ) ) {
+		$action_positions = $_POST['action_update_positions_x'];
+	}
+	
+	if( isset( $_GET['sec'] ) && is_numeric( $_GET['sec'] ) ) {
+		$sec = $_GET['sec'];
+	} else {
 		$sec = 1;
 	}
+	
+	$result = "";
+	$updateGlobals = "";
 	
 	/* crew count for the options section */
 	$crewCountRaw = "SELECT count(crewid) FROM sms_crew WHERE crewType = 'active'";
