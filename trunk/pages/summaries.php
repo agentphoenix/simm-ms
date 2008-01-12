@@ -42,8 +42,14 @@ $completedCount = mysql_num_rows( $getmissionCompletedResult );
 
 if( $currentCount == 0 ) {
 	$disableCurrent = "1, ";
-} if( $completedCount == 0 ) {
+} else {
+	$disableCurrent = "";
+}
+
+if( $completedCount == 0 ) {
 	$disableCompleted = "2 ";
+} else {
+	$disableCompleted = "";
 }
 
 $disable = $disableCurrent . $disableCompleted;
