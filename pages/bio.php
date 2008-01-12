@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2007-10-12 1703 EST
+Last Modified: 2008-01-12 1635 EST
 **/
 
 /* define the page class and set the vars */
@@ -58,6 +58,19 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	$NumPosts = mysql_num_rows( $getPostsResult );
 
 ?>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('a#togglePosting').click(function() {
+			$('#posting').toggle(75);
+			return false;
+		});
+		$('a#toggleAwards').click(function() {
+			$('#awards').toggle(75);
+			return false;
+		});
+	});
+</script>
 
 <div class="body">
 	<span class="fontTitle">
@@ -113,7 +126,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		<tr>
 			<td colspan="2">&nbsp;</td>
 			<td class="fontNormal">
-				<a href="<?=$webLocation;?>admin.php?page=post&sub=message&id=<?=$crewid;?>">
+				<a href="<?=$webLocation;?>admin.php?page=user&sub=inbox&crew=<?=$sessionCrewid;?>&tab=3&id=<?=$crewid;?>">
 					Send a Private Message
 				</a>
 			</td>
@@ -209,7 +222,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		<tr>
 			<td class="tableCellLabel">Height</td>
 			<td>&nbsp;</td>
-			<td><?=$heightFeet;?>' <?=$heightInches;?>"</td>
+			<td><?=$heightFeet;?>&rsquo; <?=$heightInches;?>&rdquo;</td>
 		</tr>
 		<tr>
 			<td class="tableCellLabel">Weight</td>
@@ -235,6 +248,8 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<td><? printText( $physicalDesc ); ?></td>
 		</tr>
 	</table>
+	
+	<div style="clear:both;"></div>
 	
 	<table>
 		<tr>
@@ -329,241 +344,225 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		<tr>
 			<td colspan="3" height="15"></td>
 		</tr>
+	</table>
+	
+	<div align="center">
+		<b class="fontLarge">History</b>
+	</div>
+	<? printText( $history ); ?>
+	
+	<p>&nbsp;</p>
+	
+	<div align="center">
+		<b class="fontLarge">Service Record</b>
+	</div>
+	<? printText( $serviceRecord ); ?>
+	
+	<? if( $fetchCrew['crewType'] != "npc" ) { ?>
+		<p>&nbsp;</p>
 		
-		<tr>
-			<td colspan="3" align="center" class="fontLarge"><b>History</b></td>
-		</tr>
-		<tr>
-			<td colspan="3"><? printText( $history ); ?></td>
-		</tr>
-		<tr>
-			<td colspan="3" height="15"></td>
-		</tr>
+		<div align="center">
+			<b class="fontLarge">Awards</b>
+			<a href="#" id="toggleAwards" class="fontSmall">[ Hide/Show ]</a>
+			
+			<? if( in_array( "m_giveaward", $sessionAccess ) || in_array( "m_removeaward", $sessionAccess ) ) { ?>
+			<br />
+			<span class="fontSmall">
+				<? if( in_array( "m_giveaward", $sessionAccess ) ) { ?>
+				<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward">Add Award</a>
+				<? } ?>
+				
+				<? if( in_array( "m_giveaward", $sessionAccess ) && in_array( "m_removeaward", $sessionAccess ) ) { ?>
+				&nbsp; &middot &nbsp;
+				<? } ?>
+				
+				<? if( in_array( "m_removeaward", $sessionAccess ) ) { ?>
+				<a href="<?=$webLocation;?>admin.php?page=manage&sub=removeaward&crew=<?=$crew;?>">Remove Award</a>
+				<? } ?>
+			</span>
+			<? } ?>
+		</div>
 		
-		<tr>
-			<td colspan="3" align="center" class="fontLarge"><b>Service Record</b></td>
-		</tr>
-		<tr>
-			<td colspan="3"><? printText( $serviceRecord ); ?></td>
-		</tr>
-		<tr>
-			<td colspan="3" height="15"></td>
-		</tr>
+		<div id="awards" style="display:none;width:97%;">
+			<table>
+				<?php
+			
+				/* do the database query */
+				$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$_GET[crew]'";
+				$getAwardsResult = mysql_query( $getAwards );
+				$fetchAwards = mysql_fetch_array( $getAwardsResult );
 		
-		<? if( $fetchCrew['crewType'] != "npc" ) { ?>
+				/* if there are awards, continue */
+				if( !empty( $fetchAwards[0] ) ) {
 		
-		<tr>
-			<td colspan="3" align="center">
-				<span class="fontLarge"><b>Awards</b></span>
+					/* explode the string at the comma */
+					$awardsRaw = explode( ",", $fetchAwards[0] );
+			
+					foreach($awardsRaw as $key => $value) {
+				
+						/* do the database query */
+						$pullAward = "SELECT * FROM sms_awards WHERE awardid = '$value'";
+						$pullAwardResult = mysql_query( $pullAward );
+
+						while( $awardArray = mysql_fetch_array( $pullAwardResult ) ) {
+							extract( $awardArray, EXTR_OVERWRITE );
+			
+				?>	
+		
+				<tr>	
+					<td width="70"><img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
+					<td><i><? printText( $awardName ); ?></i></td>
+					<td><? printText( $awardDesc );?></td>
+				</tr>				
+		
+				<?
+		
+						}	/* close the while loop */
+					}	/* close the foreach loop */
+				} else { /* if there's nothing in the awards field */
+		
+				?>
+		
+				<tr>
+					<td colspan="3" class="fontMedium"><b>No Awards</b></td>
+				</tr>
+		
+				<? } ?>
+			</table>
+		</div>
+	
+		<? if( $bioShowPosts == "y" || $bioShowLogs == "y" ) { ?>
+			<p>&nbsp;</p>
+			
+			<div align="center">
+				<b class="fontLarge">Posting Activity</b>
+				<a href="#" id="togglePosting" class="fontSmall">[ Hide/Show ]</a>
+
 				<? if( in_array( "m_giveaward", $sessionAccess ) || in_array( "m_removeaward", $sessionAccess ) ) { ?>
 				<br />
 				<span class="fontSmall">
 					<? if( in_array( "m_giveaward", $sessionAccess ) ) { ?>
 					<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward">Add Award</a>
 					<? } ?>
-					
+
 					<? if( in_array( "m_giveaward", $sessionAccess ) && in_array( "m_removeaward", $sessionAccess ) ) { ?>
 					&nbsp; &middot &nbsp;
 					<? } ?>
-					
+
 					<? if( in_array( "m_removeaward", $sessionAccess ) ) { ?>
 					<a href="<?=$webLocation;?>admin.php?page=manage&sub=removeaward&crew=<?=$crew;?>">Remove Award</a>
 					<? } ?>
 				</span>
 				<? } ?>
-			</td>
-		</tr>
-		<tr>
-			<?php
-
-			/* do the database query */
-			$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$_GET[crew]'";
-			$getAwardsResult = mysql_query( $getAwards );
-			$fetchAwards = mysql_fetch_array( $getAwardsResult );
+			</div>
 			
-			/* if $myrow isn't empty, continue */
-			if( !empty( $fetchAwards['0'] ) ) {
-			
-				/* explode the string at the comma */
-				$awardsRaw = explode( ",", $fetchAwards['0'] );
-				
-				/* html to start the table */
-				echo "<td colspan='3' class='fontSmall'><table>";
-				
-				/*
-					Start the loop based on whether there are key/value pairs
-					and keep doing 'something' until you run out of pairs
-				*/
-				foreach($awardsRaw as $key => $value) {
-					
-					/* do the database query */
-					$pullAward = "SELECT * FROM sms_awards WHERE awardid = '$value'";
-					$pullAwardResult = mysql_query( $pullAward );
-
-					while( $awardArray = mysql_fetch_array( $pullAwardResult ) ) {
-						extract( $awardArray, EXTR_OVERWRITE );
-				
-			?>	
-			
-			<tr>	
-				<td width="70"><img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
-				<td><i><? printText( $awardName ); ?></i></td>
-				<td><? printText( $awardDesc );?></td>
-			</tr>				
-			
-			<?
-			
-					}	/* close the while loop */
-				}	/* close the foreach loop */
-
-			/* close the table */
-			echo "</table></td>";
-
-			} else {
-			
-			?>
-			
-			<td colspan="3">No Awards</td>
-			
-			<? } ?>
-		</tr>
-		
-		<? if( $bioShowPosts == "y" || $bioShowLogs == "y" ) { ?>
-		<tr>
-			<td colspan="3" height="15"></td>
-		</tr>
-		<tr>
-			<td colspan="3" align="center" class="fontLarge"><b>Posting Activity</b></td>
-		</tr>
-		<? } ?>
-		
-		<? if ( $bioShowPosts == "y" ) { ?>
-		<tr>
-			<td colspan="3" height="10">&nbsp;</td>
-		</tr>
-		<tr>
-			<td colspan="3" class="fontMedium">
-				<b>Recent Posts</b>
-				&nbsp;
-				<span class="fontSmall">
-					<a href="<?=$webLocation;?>index.php?page=userpostlist&crew=<?=$crew;?>&t=1">[ Show All Posts ]</a>
-				</span>
-			</td>
-		</tr>
-		
-		<? if( $NumPosts == "0" ) { ?>
-		<tr>
-			<td colspan="3">No Posts Recorded</td>
-		</tr>
-		<? } else { ?>
-		<tr>
-			<td colspan="3">
+			<div id="posting" style="display:none;width:97%;">
 				<table>
-					<tr>
-						<td colspan="4" height="5">&nbsp;</td>
-					</tr>
-					<tr class="fontSmall">
-						<td width="30%"><b>Date</b></td> 
-						<td width="25%"><b>Title</b></td>
-						<td width="20%"><b>Location</b></td>
-						<td width="20%"><b>Timeline</b></td>
-					</tr>
-	
-					<?
-					
-					while( $postinfo = mysql_fetch_array( $getPostsResult ) ) {
-						extract( $postinfo, EXTR_OVERWRITE );
-						
-						/* define title when no title was entered */
-						if ( $postTitle == "" ) {
-							$postTitle = "[ Untitled ]";
-						}
-						
-					?>
-					
-					<tr class="fontSmall">
-						<td><?=dateFormat( "medium", $postPosted );?></td> 
-						<td><a href="<?=$webLocation;?>index.php?page=post&id=<?=$postid;?>"><? printText( $postTitle ); ?></a></td> 
-						<td><? printText( $postLocation ); ?></td>
-						<td><? printText( $postTimeline ); ?></td>
-					</tr>
-					<? } /* close the while statement */ ?>
-				</table>
-			</td>
-		</tr>
-	
-	<?
+					<? if ( $bioShowPosts == "y" ) { ?>
+						<tr>
+							<td colspan="4">
+								<b class="fontMedium">Recent Posts</b>&nbsp;
+								<span class="fontSmall">
+									<a href="<?=$webLocation;?>index.php?page=userpostlist&crew=<?=$crew;?>&t=1">[ Show All Posts ]</a>
+								</span>
+							</td>
+						</tr>
 
-		} /* close the else statement to show posts if present */
-	} if ( $bioShowLogs == "y" ) {
-	
-	?>
-		
-		<tr>
-			<td colspan="3" height="10">&nbsp;</td>
-		</tr>
-		<tr>
-			<td colspan="3" class="fontMedium">
-				<b>Recent Logs</b>
-				&nbsp;
-				<span class="fontSmall">
-					<a href="<?=$webLocation;?>index.php?page=userpostlist&crew=<?=$crew;?>&t=2">[ Show All Logs ]</a>
-				</span>
-			</td>
-		</tr>
-		
-		<? if( $NumLogs == "0" ) { ?>
-		<tr>
-			<td colspan="3">No Logs Recorded</td>
-		</tr>
-		<? } else { ?>
-		<tr>
-			<td colspan="3">
-				<table>
+						<? if( $NumPosts == 0 ) { ?>
+						<tr>
+							<td colspan="4"><b class="fontMedium">No Posts Recorded</b></td>
+						</tr>
+						<? } else { ?>
+						<tr class="fontNormal">
+							<td width="30%"><b>Date</b></td> 
+							<td width="30%"><b>Title</b></td>
+							<td width="20%"><b>Location</b></td>
+							<td width="20%"><b>Timeline</b></td>
+						</tr>
+
+						<?
+
+						while( $postinfo = mysql_fetch_array( $getPostsResult ) ) {
+							extract( $postinfo, EXTR_OVERWRITE );
+
+							/* define title when no title was entered */
+							if ( $postTitle == "" ) {
+								$postTitle = "[ Untitled ]";
+							}
+
+						?>
+
+						<tr class="fontNormal">
+							<td><?=dateFormat( "medium", $postPosted );?></td> 
+							<td><a href="<?=$webLocation;?>index.php?page=post&id=<?=$postid;?>"><? printText( $postTitle ); ?></a></td> 
+							<td><? printText( $postLocation ); ?></td>
+							<td><? printText( $postTimeline ); ?></td>
+						</tr>
+						<? } /* close the while statement */ ?>
+						<tr>
+							<td colspan="4" height="20"></td>
+						</tr>
+					</table>
+				
+				<?
+
+					} /* close the else statement to show posts if present */
+				
+				} if ( $bioShowLogs == "y" ) {
+
+				?>
+					<table>
 					<tr>
-						<td colspan="4" height="5">&nbsp;</td>
+						<td colspan="4">
+							<b class="fontMedium">Recent Logs</b>&nbsp;
+							<span class="fontSmall">
+								<a href="<?=$webLocation;?>index.php?page=userpostlist&crew=<?=$crew;?>&t=2">[ Show All Logs ]</a>
+							</span>
+						</td>
 					</tr>
-					<tr class="fontSmall">
+
+					<? if( $NumLogs == 0 ) { ?>
+					<tr>
+						<td colspan="4"><b class="fontMedium">No Logs Recorded</b></td>
+					</tr>
+					<? } else { ?>
+					<tr class="fontNormal">
 						<td width="30%"><b>Date</b></td>
 						<td><b>Title</b></td> 
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
 					</tr>
-	
+
 					<?
-					
+
 					while( $loginfo = mysql_fetch_array( $getLogsResult ) ) {
 						extract( $loginfo, EXTR_OVERWRITE );
-						
+
 						/* define title when no title was entered */
 						if( $logTitle == "" ) {
 							$logTitle = "[ Untitled ]";
 						}
-						
+
 					?>
-	
-					<tr class="fontSmall">
+
+					<tr class="fontNormal">
 						<td><?=dateFormat( "medium", $logPosted );?></td>
 						<td><a href="<?=$webLocation;?>index.php?page=log&id=<?=$logid;?>"><? printText( $logTitle ); ?></a></td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
 					</tr>
+
+			<?
 					
-					<? } /* close the while statement */ ?>
+					} /* close the while statement */
+
+				} /* close the else statement to show logs if present */
+					
+			} /* close the full if statement to view logs */
+				
+			?>
 				
 				</table>
-			</td>
-		</tr>
-<?
-
-		} /* close the else statement to show logs if present */
-	} /* close the full if statement to view logs */
-	
-	} /* close the if not NPC */
-
-?>
-
-	</table>
+			</div>
+			<? } /* close the check on if posting should be shown or not */ ?>
+		
+		<? } /* close the if not NPC */ ?>
 	
 </div>
 <? } ?>
