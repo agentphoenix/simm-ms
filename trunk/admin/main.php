@@ -10,7 +10,7 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2007-12-27 0942 EST
+Last Modified: 2008-01-12 1456 EST
 **/
 
 /* define the page class */
@@ -101,7 +101,7 @@ if( isset( $sessionCrewid ) ) {
 	
 	/* output the checks */
 	$system_check->output();
-	/*
+	
 	?>
 	
 	<span class="fontTitle"><b><? printCrewName( $sessionCrewid, "rank", "noLink" ); ?></b></span>
@@ -109,16 +109,16 @@ if( isset( $sessionCrewid ) ) {
 	<span class="fontMedium">
 		<?
 		
-		/* spit out the player position for position #1 /
+		/* spit out the player position for position #1 */
 		printPlayerPosition( $sessionCrewid, $positionid, "" );
 		
-		/* if there's a second position, spit that out as well /
+		/* if there's a second position, spit that out as well */
 		if( !empty( $positionid2 ) ) {
 			echo " &amp; ";
 			printPlayerPosition( $sessionCrewid, $positionid2, "2" );
 		}
 		
-		/* finally, print the ship name /
+		/* finally, print the ship name */
 		printText( ", " . $shipPrefix . " " . $shipName );
 		
 		if( $loa == "1" || $loa == "2" ) {
@@ -131,8 +131,8 @@ if( isset( $sessionCrewid ) ) {
 					echo "<b class='orange'>[ On Extended Leave of Absence ]</b>";
 					break;
 			}
-		}		
-		*/
+		}
+		
 		?>
 	</span>
 	<p><? printText( $cpMessage ); ?></p>
