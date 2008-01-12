@@ -10,7 +10,7 @@ File: admin/manage/accesslevels.php
 Purpose: Page to set access levels for the different groups
 
 System Version: 2.6.0
-Last Modified: 2007-11-04 2001 EST
+Last Modified: 2008-01-12 1410 EST
 **/
 
 /* access check */
@@ -47,6 +47,8 @@ if( in_array( "x_access", $sessionAccess ) ) {
 		case 'pl':
 			$id = 4;
 			break;
+		default:
+			$id = 0;
 	}	
 	
 	/* if update has been hit, continue */
@@ -277,22 +279,22 @@ if( in_array( "x_access", $sessionAccess ) ) {
 				<div class="pmHeader">
 				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=accesslevels&sec=<?=$sec;?>&tab=3">
 					<input type="checkbox" id="reports" name="reports" value="reports" <? if( in_array( "reports", $crewAccess ) ) { echo "checked"; } ?>/>
-					<label for="reports"">Reports</label>
+					<label for="reports">Reports</label>
 				</div>
 				<table>
 					<tr>
 						<td width="30%"><input type="checkbox" id="r_about" name="r_about" value="r_about" <? if( in_array( "r_about", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_about">About SMS</label></td>
 						<td width="30%"><input type="checkbox" id="r_count" name="r_count" value="r_count" <? if( in_array( "r_count", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_count">Post Count</label></td>
-						<td width="30%"><input type="checkbox" id="r_strikes" name="r_strikes" value="r_strikes" <? if( in_array( "r_strikes", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_strikes">Strike List</label></td>
-					</tr>
-					<tr>
-						<td width="30%"><input type="checkbox" id="r_activity" name="r_activity" value="r_activity" <? if( in_array( "r_activity", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_activity">Crew Activity</label></td>
-						<td width="30%"><input type="checkbox" id="r_security" name="r_security" value="r_security" <? if( in_array( "r_security", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_security">Security Report</label></td>
 						<td width="30%"><input type="checkbox" id="r_versions" name="r_versions" value="r_versions" <? if( in_array( "r_versions", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_versions">Version History</label></td>
 					</tr>
 					<tr>
-						<td width="30%"><input type="checkbox" id="r_milestones" name="r_milestones" value="r_milestones" <? if( in_array( "r_milestones", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_milestones">Crew Milestones</label></td>
+						<td width="30%"><input type="checkbox" id="r_activity" name="r_activity" value="r_activity" <? if( in_array( "r_activity", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_activity">Crew Activity</label></td>
 						<td width="30%"><input type="checkbox" id="r_progress" name="r_progress" value="r_progress" <? if( in_array( "r_progress", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_progress">Sim Progress</label></td>
+						<td width="30%"></td>
+					</tr>
+					<tr>
+						<td width="30%"><input type="checkbox" id="r_milestones" name="r_milestones" value="r_milestones" <? if( in_array( "r_milestones", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_milestones">Crew Milestones</label></td>
+						<td width="30%"><input type="checkbox" id="r_strikes" name="r_strikes" value="r_strikes" <? if( in_array( "r_strikes", $crewAccess ) ) { echo "checked"; } ?>/> <label for="r_strikes">Strike List</label></td>
 						<td width="30%"></td>
 					</tr>
 					<tr>
