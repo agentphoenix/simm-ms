@@ -362,7 +362,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		<p>&nbsp;</p>
 		
 		<div align="center">
-			<b class="fontLarge">Awards</b>
+			<b class="fontLarge">Awards</b>&nbsp;
 			<a href="#" id="toggleAwards" class="fontSmall">[ Hide/Show ]</a>
 			
 			<? if( in_array( "m_giveaward", $sessionAccess ) || in_array( "m_removeaward", $sessionAccess ) ) { ?>
@@ -435,7 +435,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<p>&nbsp;</p>
 			
 			<div align="center">
-				<b class="fontLarge">Posting Activity</b>
+				<b class="fontLarge">Posting Activity</b>&nbsp;
 				<a href="#" id="togglePosting" class="fontSmall">[ Hide/Show ]</a>
 
 				<? if( in_array( "m_giveaward", $sessionAccess ) || in_array( "m_removeaward", $sessionAccess ) ) { ?>
