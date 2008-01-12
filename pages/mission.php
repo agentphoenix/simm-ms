@@ -9,13 +9,17 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/mission.php
 Purpose: Page to show the mission information based on an id from the URL
 
-System Version: 2.5.0
-Last Modified: 2007-06-11 1207 EST
+System Version: 2.6.0
+Last Modified: 2008-01-12 1342 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "simm";
-$mid = $_GET['id'];
+
+/* set the mission id if the id is numeric */
+if( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) {
+	$mid = $_GET['id'];
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -25,7 +29,7 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* get mission id for individual mission display */
-if( $mid ) {
+if( isset( $mid ) ) {
 
 	/* pull all info based on mission id */
 	$getMission = "SELECT * FROM sms_missions WHERE missionid = '$mid' LIMIT 1";

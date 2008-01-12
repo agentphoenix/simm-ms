@@ -10,7 +10,7 @@ File: index.php
 Purpose: The main file that pulls in the requested page
 
 System Version: 2.6.0
-Last Modified: 2007-12-27 0934 EST
+Last Modified: 2008-01-12 1457 EST
 **/
 
 /* start the session */
@@ -47,13 +47,19 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 	require_once( 'framework/classMenu.php' );
 
 	/* get the referenced page from the URL */
-	$page = $_GET['page'];
-
-	/* define the session variables */
-	$sessionCrewid = $_SESSION['sessionCrewid'];
-	$sessionAccessLevel = $_SESSION['sessionAccess'];
-	$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
-	$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
+	if( isset( $_GET['page'] ) ) {
+		$page = $_GET['page'];
+	} else {
+		$page = "main";
+	}
+	
+	/* if there's a session set, define the session variables */
+	if( isset( $_SESSION['sessionCrewid'] ) ) {
+		$sessionCrewid = $_SESSION['sessionCrewid'];
+		$sessionAccessLevel = $_SESSION['sessionAccess'];
+		$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
+		$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
+	}
 	
 	/* fixes a PHP warning with an undefined variable */
 	if( !isset( $sessionAccess ) ) {
@@ -64,13 +70,8 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 		check to see if the session access variable is an array
 		and if it isn't, explode the string
 	*/
-	if( !is_array( $sessionAccess ) ) {
+	if( !empty( $sessionAccess ) && !is_array( $sessionAccess ) ) {
 		$sessionAccess = explode( ",", $_SESSION['sessionAccess'] );
-	}
-	
-	/* if there is no page set, send them to the main page */
-	if( !isset( $page ) ) {
-		$page = "main";
 	}
 	
 	/* grab the user's skin choice, otherwise, use the system default */

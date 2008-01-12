@@ -6,17 +6,21 @@ knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
 Author: Nathan Wharry [ mail@herschwolf.net ]
-File: pages/contact.php
+File: pages/departments.php
 Purpose: To display the list of departments offered by the SIMM and their
 	associated positions
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 1001 EST
+Last Modified: 2008-01-12 1341 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "ship";
-$dept = $_GET['dept'];
+
+/* set the department if it's numeric */
+if( isset( $_GET['dept'] ) && is_numeric( $_GET['dept'] ) ) {
+	$dept = $_GET['dept'];
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
