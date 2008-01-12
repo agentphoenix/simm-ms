@@ -32,7 +32,7 @@ $menu = new Menu;
 <div class="mainNav">
 	<?php
 	
-	$menu->main( $sessionCrewid );
+	$menu->main();
 	
 	if( isset( $sessionCrewid ) ) {
 		$menu->user( $sessionCrewid );
