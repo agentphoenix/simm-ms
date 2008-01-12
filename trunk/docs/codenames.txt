@@ -10,8 +10,6 @@ Neptune - SMS Toolbar
 LIKELY CODENAMES
 ====
 
-Babylon - SMS 2.7
-
 Jefferson - SMS 3.0
 Meridian - SMS3 M0
 Diablo - SMS3 M1
@@ -46,6 +44,7 @@ Splinter
 Pegasus
 Defender
 Thresher
+Babylon
 
 POTENTIAL SMS3 NAMES
 ====
@@ -54,3 +53,4 @@ Paladin
 Shift
 Slipstream
 Curve
+Nova
