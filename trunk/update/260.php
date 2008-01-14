@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-01-12 1455 EST
+Last Modified: 2008-01-14 1817 EST
 **/
 
 /* add the email subject field */
@@ -128,6 +128,21 @@ VALUES ( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=acc
 
 /* add the private news item field */
 mysql_query( "ALTER TABLE `sms_news` ADD `newsPrivate` ENUM( 'y', 'n' ) NOT NULL DEFAULT 'n'" );
+
+/* add the award categories */
+mysql_query( "ALTER TABLE `sms_awards` ADD `awardCat` enum('ic','ooc','both') not null default 'both'" );
+
+/** UNTESTED!! **/
+$getAwards = "SELECT crewid, awards FROM sms_crew";
+$getAwardsR = mysql_query( $getAwardsR );
+
+while( $awardsFetch = mysql_fetch_array( $getAwardsR ) ) {
+	extract( $awardsFetch, EXTR_OVERWRITE );
+	
+	$award = str_replace( ',', ';', $awardsFetch[1] );
+	mysql_query( "UPDATE sms_crew SET awards = '$award' WHERE crewid = $awardsFetch[0]" );
+	
+}
 
 /* add the data for FirstLaunch */
 mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.0', '', '', '' )" );
