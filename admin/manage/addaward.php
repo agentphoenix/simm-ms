@@ -10,7 +10,7 @@ File: admin/manage/addaward.php
 Purpose: Page that allows an admin to add an award for a player
 
 System Version: 2.6.0
-Last Modified: 2007-11-05 1005 EST
+Last Modified: 2008-01-14 1818 EST
 **/
 
 /* access check */
@@ -19,53 +19,69 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
+	$action = $_POST['action_add_x'];
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['crew'] ) && preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
+	/* do some checking to make sure someone's not trying to do a SQL injection */
+	if( isset( $_GET['crew'] ) && !is_numeric( $_GET['crew'] ) ) {
 		errorMessageIllegal( "add award page" );
 		exit();
-	} else {
-		/* set the GET variable */
+	} elseif( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) ) {
 		$crew = $_GET['crew'];
 	}
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['award'] ) && preg_match( "/^\d+$/", $_GET['award'], $matches ) == 0 ) {
+	if( isset( $_GET['award'] ) && !is_numeric( $_GET['award'] ) ) {
 		errorMessageIllegal( "add award page" );
 		exit();
-	} else {
-		/* set the GET variable */
+	} elseif( isset( $_GET['award'] ) && is_numeric( $_GET['award'] ) ) {
 		$award = $_GET['award'];
 	}
 		
 	/* if an award key is in the URL */
-	if( $crew && $award ) {
+	if( isset( $action ) ) {
+		/* define the POST vars */
+		$giveCrew = $_POST['crew'];
+		$giveAward = $_POST['award'];
+		$giveReason = $_POST['reason'];
+		
+		if( !get_magic_quotes_gpc() ) {
+			$reason = addslashes( $giveReason );
+		} else {
+			$reason = $giveReason;
+		}
 		
 		/* fetch the awards from the db */
 		$pullAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
 		$pullAwardsResult = mysql_query( $pullAwards );
 		$stringAwards = mysql_fetch_array( $pullAwardsResult );
-		$arrayAwards = explode( ",", $stringAwards['0'] );
-
-		$arrayAwards[] = $award;
+		
+		/* don't explode the array if there's nothing there to start with */
+		if( !empty( $stringAwards[0] ) ) {
+			$arrayAwards = explode( ",", $stringAwards['0'] );
+		}
+		
+		/* get the date info from PHP */
+		$now = getdate();
+		
+		/* build the new award entry */
+		$arrayAwards[] = $giveAward . "," . $now[0] . "," . $giveReason;
 
 		/* put the string back together */
-		$joinedString = implode( ",", $arrayAwards );
+		$joinedString = implode( ";", $arrayAwards );
 		
 		/* dump the comma separated field back into the db */
-		$updateAwards = "UPDATE sms_crew SET awards = '$joinedString' WHERE crewid = '$crew' LIMIT 1";
+		$updateAwards = "UPDATE sms_crew SET awards = '$joinedString' WHERE crewid = '$giveCrew' LIMIT 1";
 		$result = mysql_query( $updateAwards );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
 			
-	} if( !$crew ) {
+	} if( !isset( $crew ) ) {
 	
 ?>
 	
 	<div class="body">
 	
-		<span class="fontTitle">Give Award To Crew Member Bio</span><br /><br />
+		<span class="fontTitle">Give Award To Crew Member</span><br /><br />
 		Please select a crew member from the list below to view and add awards.<br /><br />
 	
 		<span class="fontMedium"><b>Active Crew</b></span><br /><br />
@@ -106,7 +122,7 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		?>
 		
 	</div>
-	<? } elseif( $crew ) { ?>
+	<? } elseif( isset( $crew ) ) { ?>
 	
 	<div class="body">
 		<?
@@ -120,12 +136,61 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		}
 		
 		?>
+		
 		<span class="fontTitle">Give Award To <? printCrewName( $crew, "rank", "noLink" ); ?></span><br /><br />
 		<b class="fontMedium">
 			<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward">&laquo; Back to Crew List</a>
 		</b>
 		<br /><br />
-	
+		
+		<?php
+		
+		if( isset( $award ) ) {
+			
+			$getAward = "SELECT * FROM sms_awards WHERE awardid = $award LIMIT 1";
+			$getAwardResult = mysql_query( $getAward );
+			$awardFetch = mysql_fetch_assoc( $getAwardResult );
+		
+		?>
+		
+		<div class="update-new notify-normal">
+			<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>"><b style="float:right; padding-right:.5em;" class="fontLarge">x</b></a>
+			<b class="fontLarge">Confirm Giving Award</b><br />
+			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>">
+				<table>
+					<tr>
+						<td class="tableCellLabel">Recipient</td>
+						<td></td>
+						<td>
+							<? printCrewName( $crew, "rank", "noLink" ); ?>
+							<input type="hidden" name="crew" value="<?=$crew;?>" />
+						</td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Award</td>
+						<td></td>
+						<td>
+							<? printText( $awardFetch['awardName'] ); ?>
+							<input type="hidden" name="award" value="<?=$awardFetch['awardid'];?>" />
+						</td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Reason</td>
+						<td></td>
+						<td><textarea name="reason" rows="5"></textarea></td>
+					</tr>
+					<tr>
+						<td colspan="3" height="15"></td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td><input type="image" src="<?=path_userskin;?>buttons/add.png" name="action_add" value="Add" class="button" /></td>
+				</table>
+			</form>
+		</div><br />
+			
+		<? } ?>
+		
 		<table>
 		<?
 	
