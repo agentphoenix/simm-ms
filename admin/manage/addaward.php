@@ -10,7 +10,7 @@ File: admin/manage/addaward.php
 Purpose: Page that allows an admin to add an award for a player
 
 System Version: 2.6.0
-Last Modified: 2008-01-14 1818 EST
+Last Modified: 2008-01-15 1816 EST
 **/
 
 /* access check */
@@ -82,9 +82,11 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 	<div class="body">
 	
 		<span class="fontTitle">Give Award To Crew Member</span><br /><br />
-		Please select a crew member from the list below to view and add awards.<br /><br />
+		Awards are broken into three categories: <b>in character</b>, <b>out of character</b>, and <b>both</b>. Playing characters
+		can be given awards from any of those three categories. Non-playing characters can only be given in character awards. To
+		begin, please select a crew member from the list below to give them an award.<br /><br />
 	
-		<span class="fontMedium"><b>Active Crew</b></span><br /><br />
+		<b class="fontLarge">Active Crew</b>
 		<?
 		
 		$getCrew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
@@ -92,18 +94,26 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		$getCrew.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'active' ";
 		$getCrew.= "ORDER BY crew.rankid ASC";
 		$getCrewResult = mysql_query( $getCrew );
+		$crewCount = mysql_num_rows( $getCrewResult );
 		
-		while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
-			extract( $userFetch, EXTR_OVERWRITE );
+		if( $crewCount < 1 ) {
+			echo "<br /><br /><span class='fontNormal orange'>No active crew found</span><br /><br />";
+		} else {
 			
-			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=addaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a><br />";
+			echo "<ul class='list-dark'>";
+			while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
+				extract( $userFetch, EXTR_OVERWRITE );
 			
-		}
+				echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=addaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a></li>";
+			
+			}
+			echo "</ul>";
+			
+		} /* close the else */
 		
 		?>
 	
-		<br /><br />
-		<span class="fontMedium"><b>Inactive Crew</b></span><br /><br />
+		<b class="fontLarge">Inactive Crew</b>
 		<?
 		
 		$getCrew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
@@ -111,13 +121,49 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		$getCrew.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'inactive' ";
 		$getCrew.= "ORDER BY crew.rankid ASC";
 		$getCrewResult = mysql_query( $getCrew );
+		$crewCount = mysql_num_rows( $getCrewResult );
 		
-		while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
-			extract( $userFetch, EXTR_OVERWRITE );
+		if( $crewCount < 1 ) {
+			echo "<br /><br /><span class='fontNormal orange'>No inactive crew found</span><br /><br />";
+		} else {
 			
-			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=addaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a><br />";
+			echo "<ul class='list-dark'>";
+			while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
+				extract( $userFetch, EXTR_OVERWRITE );
 			
-		}
+				echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=addaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a></li>";
+			
+			}
+			echo "</ul>";
+			
+		} /* close the else */
+		
+		?>
+		
+		<b class="fontLarge">Non-Playing Characters</b>
+		<?
+		
+		$getCrew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
+		$getCrew.= "FROM sms_crew AS crew, sms_ranks AS rank ";
+		$getCrew.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'npc' ";
+		$getCrew.= "ORDER BY crew.rankid ASC";
+		$getCrewResult = mysql_query( $getCrew );
+		$crewCount = mysql_num_rows( $getCrewResult );
+		
+		if( $crewCount < 1 ) {
+			echo "<br /><br /><span class='fontNormal orange'>No non-playing characters found</span>";
+		} else {
+			
+			echo "<ul class='list-dark'>";
+			while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
+				extract( $userFetch, EXTR_OVERWRITE );
+			
+				echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=addaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a></li>";
+			
+			}
+			echo "</ul>";
+			
+		} /* close the else */
 		
 		?>
 		
@@ -150,6 +196,10 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 			$getAward = "SELECT * FROM sms_awards WHERE awardid = $award LIMIT 1";
 			$getAwardResult = mysql_query( $getAward );
 			$awardFetch = mysql_fetch_assoc( $getAwardResult );
+			
+			$getCrew = "SELECT crewType FROM sms_crew WHERE crewid = $crew LIMIT 1";
+			$getCrewResult = mysql_query( $getCrew );
+			$crewFetch = mysql_fetch_array( $getCrewResult );
 		
 		?>
 		
@@ -162,7 +212,26 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 						<td class="tableCellLabel">Recipient</td>
 						<td></td>
 						<td>
-							<? printCrewName( $crew, "rank", "noLink" ); ?>
+							<?
+							
+							printCrewName( $crew, "rank", "noLink" );
+							
+							switch( $crewFetch[0] )
+							{
+								case 'inactive':
+									echo " <b class='orange'>[ Inactive ]";
+									break;
+								case 'pending':
+									echo " <b class='yellow'>[ Pending ]";
+									break;
+								case 'npc':
+									echo " <b class='blue'>[ NPC ]";
+									break;
+								default:
+									echo "";
+							}
+							
+							?>
 							<input type="hidden" name="crew" value="<?=$crew;?>" />
 						</td>
 					</tr>
@@ -193,8 +262,18 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		
 		<table>
 		<?
-	
-		$getAwards = "SELECT * FROM sms_awards ORDER BY awardid ASC";
+		
+		$getCrew = "SELECT crewType FROM sms_crew WHERE crewid = $crew LIMIT 1";
+		$getCrewResult = mysql_query( $getCrew );
+		$crewFetch = mysql_fetch_array( $getCrewResult );
+		
+		if( $crewFetch[0] == "npc" ) {
+			$tail = "WHERE awardCat = 'ic' ORDER BY awardOrder ASC";
+		} else {
+			$tail = "ORDER BY awardOrder ASC";
+		}
+		
+		$getAwards = "SELECT * FROM sms_awards $tail";
 		$getAwardsResult = mysql_query( $getAwards );
 	
 		/* Start pulling the array and populate the variables */
