@@ -8,7 +8,7 @@ File: skins/default/style/main.css
 Purpose: Stylesheet that controls the look and feel of the site
 
 Skin Version: 2.1
-Last Modified: 2008-01-12 1749 EST
+Last Modified: 2008-01-18 1139 EST
 **/
 
 /*
@@ -16,14 +16,13 @@ Last Modified: 2008-01-12 1749 EST
 	these imports are ESSENTIAL for the system to be displayed correctly
 */
 @import url( "style-login.css" ); /* the login styles */
-/* @import url( "style-subnav.css" ); /* the sub-navigation tab styles */
 @import url( "style-ui.tabs.css" ); /* jQuery-UI tabs stylesheet */
 @import url( "style-neptune.css" );
 @import url( "style-misc.css" ); /* miscellaneous styles */
 
 body {
 	background-color: #000;
-	font-family: "Lucida Grande", "Verdana", Arial, sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 	font-size: .8em;
 	color: #fff;
 	margin: 0;
