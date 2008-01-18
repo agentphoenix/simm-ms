@@ -1,4 +1,4 @@
-Last Updated: 2008.01.12 1104 EST
+Last Updated: 2008.01.18 1640 EST
 
 2.6
 CODENAME: Eclipse
@@ -119,7 +119,7 @@ CODENAME: Jefferson
 		*	Skinning documentation
 				@	Full-fledged documentation for how to skin the system, including
 					reference for every piece and a step-by-step tutorial
-#	Smart installation (knows when system isn't install or needs to be updated)
+#	Smart installation (knows when system isn't installed or needs to be updated)
 #	User-defined table prefixes (default: sms_)
 #	Global icons stored in skins
 #	Use sha1() for password hashing (requires PHP 4.3.0 and later)
@@ -127,20 +127,15 @@ CODENAME: Jefferson
 		*	System should be tested with all the error testing turned on
 		*	Making sure variables are set instead of not there
 				@	if( isset(var) ) and if( !isset(var) ) instead of if( var ) or if( !var )
+		*	Making sure arrays are set before defining something from them
+				@	if(isset($_POST['var'])) { $var = $_POST['var']; }
+				@	if(isset($_GET['var'])) { $var = $_GET['var']; }
 #	More options for simm type
 		*	Ship
 		*	Base
 		*	Colony
 		*	Unit
 		*	Planet
-#	Add rich text composition and editing
-		*	Likely will use a 3rd party application - will require a function to translate the
-			code to HTML as it's being pulled (?)
-				@	FCKeditor [ http://www.fckeditor.net/ ]
-				@	TinyMCE [ http://tinymce.moxiecode.com/index.php ]
-				@	Xinha [ http://xinha.python-hosting.com/ ]
-				@	Full Listing [ http://www.geniisoft.com/showcase.nsf/WebEditors ]
-				@	Live Pipe Control Suite [ http://livepipe.net/projects/control_suite/ ]
 #	Smarter variable definition
 		*	Using a foreach() loop on the POST variables will allow variables to be defined on
 			the fly instead of having to define them one by one
@@ -150,24 +145,16 @@ CODENAME: Jefferson
 #	System-wide email shut off
 		*	Option to turn system emails off for people who are on a server that has problems
 			with the PHP mail() function
-#	HTML emails from the system?
 #	Notepad
 		*	Sometimes you just need to jot something down, whether that's character information
 			for an NPC or an idea you had for a mission.  SMS Notes will let you do just that
 			with a system similar to the posting system.  Only you can see your notes.
-#	Basic forum
-		*	There probably should be some kind of very basic forum system for helping with
-			team-building
-		*	In theory, someone could use a system like that for posting their missions
-		*	No email support
-		*	No attachments
-#	Creating/storing pages in database
-		*	An expansion of the database entry feature that lets admins create pages that can
-			be viewed from anywhere in the system
 #	Joint posting upper limit set by admin
 		*	Site globals should include an option for the admin to set how many possible
 			people can be in a joint post. Lower limit is 2, upper limit is the number of
 			crew the sim has.
+		*	Single page for posting
+		*	Start typing a character name and it generates a drop down list
 #	Threaded PM messages
 		*	Like Gmail, we'll be threading messages to save space and provide a "conversation" type
 			interface
@@ -195,12 +182,40 @@ CODENAME: Jefferson
 			email that player notifying them
 		*	Message should be added for adding and removing strikes
 
+#	Basic forum
+		*	There probably should be some kind of very basic forum system for helping with
+			team-building
+		*	In theory, someone could use a system like that for posting their missions (but it
+			won't be supported in the first version ... 1.1 will make the forum system more
+			robust and able to handle mission posting)
+		*	No email support
+		*	No attachments
+		*	Signatures automatically generated
+		*	No images
+#	Basic wiki
+		*	The database feature is going away since it is, in essence, a really bad wiki
+		*	Creating pages
+		*	Editing pages
+		*	Deleting pages
+		*	Versioning
+		*	Basic page conversation
+		*	Automatically generated crew bios in the wiki too?
+
 MAYBE
 ==
 #	Require MySQL 4
-#	Email posts to the system
+#	Email posts to the system (requires server stuff and a cron job)
 #	Manual entry of post counts for sims not using the posting features
-#	Inline help
+#	HTML emails from the system?
+#	Add rich text composition and editing
+		*	Likely will use a 3rd party application - will require a function to translate the
+			code to HTML as it's being pulled (?)
+				@	FCKeditor [ http://www.fckeditor.net/ ]
+				@	TinyMCE [ http://tinymce.moxiecode.com/index.php ]
+				@	Xinha [ http://xinha.python-hosting.com/ ]
+				@	Full Listing [ http://www.geniisoft.com/showcase.nsf/WebEditors ]
+				@	Live Pipe Control Suite [ http://livepipe.net/projects/control_suite/ ]
+					-	!! Uses Prototype !!
 
 JEFFERSON MILESTONES
 =====
@@ -211,7 +226,8 @@ M3	-	non-authenticated pieces
 M4	-	authenticated management
 M5	-	authenticated reporting/posting
 M6	-	user system
-M7	-	basic forum system for community building (?)
+M7	-	basic wiki
+M8	-	basic forum system for community building (?)
 
 [ OLD ]
 M0 (Meridian) - non-public milestone aimed at putting the necessary framework pieces into place
