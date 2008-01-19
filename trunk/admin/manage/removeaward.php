@@ -10,7 +10,7 @@ File: admin/manage/removeaward.php
 Purpose: Page that allows an admin to remove an award from a player
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1435 EST
+Last Modified: 2008-01-19 1450 EST
 **/
 
 /* access check */
@@ -70,94 +70,106 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 	}
 
 	if( !isset($crew) ) {
+		
+		/* active crew */
+		$getActive = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
+		$getActive.= "FROM sms_crew AS crew, sms_ranks AS rank ";
+		$getActive.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'active' ";
+		$getActive.= "ORDER BY crew.rankid ASC";
+		$getActiveResult = mysql_query( $getActive );
+		$activeCount = mysql_num_rows( $getActiveResult );
+		
+		/* inactive crew */
+		$getInactive = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
+		$getInactive.= "FROM sms_crew AS crew, sms_ranks AS rank ";
+		$getInactive.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'inactive' ";
+		$getInactive.= "ORDER BY crew.rankid ASC";
+		$getInactiveResult = mysql_query( $getInactive );
+		$inactiveCount = mysql_num_rows( $getInactiveResult );
+		
+		/* npcs */
+		$getNPC = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
+		$getNPC.= "FROM sms_crew AS crew, sms_ranks AS rank ";
+		$getNPC.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'npc' ";
+		$getNPC.= "ORDER BY crew.rankid ASC";
+		$getNPCResult = mysql_query( $getNPC );
+		$npcCount = mysql_num_rows( $getNPCResult );
+		
+		if( $inactiveCount == 0 ) {
+			$disableInactive = "2, ";
+		} if( $npcCount == 0 ) {
+			$disableNPC = "3";
+		}
+
+		$disable = $disableInactive . $disableNPC;
 	
 ?>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable; ?>] });
+		});
+	</script>
 	
 	<div class="body">
 	
 		<span class="fontTitle">Remove Award From Crew Member</span><br /><br />
 		To begin, please select a crew member from the list below to view and remove their awards.<br /><br />
-	
-		<b class="fontLarge">Active Crew</b>
-		<?
 		
-		$getCrew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
-		$getCrew.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$getCrew.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'active' ";
-		$getCrew.= "ORDER BY crew.rankid ASC";
-		$getCrewResult = mysql_query( $getCrew );
-		$crewCount = mysql_num_rows( $getCrewResult );
-		
-		if( $crewCount < 1 ) {
-			echo "<br /><br /><span class='fontNormal orange'>No active crew found</span><br /><br />";
-		} else {
+		<div id="container-1">
+			<ul>
+				<li><a href="#one"><span>Active Crew (<?php echo $activeCount;?>)</span></a></li>
+				<li><a href="#two"><span>Inactive Crew (<?php echo $inactiveCount;?>)</span></a></li>
+				<li><a href="#three"><span>Non-Playing Characters (<?php echo $npcCount;?>)</span></a></li>
+			</ul>
 			
-			echo "<ul class='list-dark'>";
-			while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
-				extract( $userFetch, EXTR_OVERWRITE );
+			<div id="one" class="ui-tabs-container ui-tabs-hide">
+				<b class="fontLarge">Active Crew</b>
+				<ul class="list-dark">
+					<?
+
+					while( $userFetch = mysql_fetch_assoc( $getActiveResult ) ) {
+						extract( $userFetch, EXTR_OVERWRITE );
+
+						echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a></li>";
+
+						}
+
+					?>
+				</ul>
+			</div>
 			
-				echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a></li>";
-			
-			}
-			echo "</ul>";
-			
-		} /* close the else */
-		
-		?>
-	
-		<b class="fontLarge">Inactive Crew</b>
-		<?
-		
-		$getCrew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
-		$getCrew.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$getCrew.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'inactive' ";
-		$getCrew.= "ORDER BY crew.rankid ASC";
-		$getCrewResult = mysql_query( $getCrew );
-		$crewCount = mysql_num_rows( $getCrewResult );
-		
-		if( $crewCount < 1 ) {
-			echo "<br /><br /><span class='fontNormal orange'>No inactive crew found</span><br /><br />";
-		} else {
-			
-			echo "<ul class='list-dark'>";
-			while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
-				extract( $userFetch, EXTR_OVERWRITE );
-			
-				echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a></li>";
-			
-			}
-			echo "</ul>";
-			
-		} /* close the else */
-		
-		?>
-		
-		<b class="fontLarge">Non-Playing Characters</b>
-		<?
-		
-		$getCrew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
-		$getCrew.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$getCrew.= "WHERE crew.rankid = rank.rankid AND crew.crewType = 'npc' ";
-		$getCrew.= "ORDER BY crew.rankid ASC";
-		$getCrewResult = mysql_query( $getCrew );
-		$crewCount = mysql_num_rows( $getCrewResult );
-		
-		if( $crewCount < 1 ) {
-			echo "<br /><br /><span class='fontNormal orange'>No non-playing characters found</span>";
-		} else {
-			
-			echo "<ul class='list-dark'>";
-			while( $userFetch = mysql_fetch_assoc( $getCrewResult ) ) {
-				extract( $userFetch, EXTR_OVERWRITE );
-			
-				echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $userFetch['crewid'] . "'>" . stripslashes( $userFetch['rankName'] . " " . $userFetch['firstName'] . " " . $userFetch['lastName'] ) . "</a></li>";
-			
-			}
-			echo "</ul>";
-			
-		} /* close the else */
-		
-		?>
+			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<b class="fontLarge">Inactive Crew</b>
+				<ul class="list-dark">
+					<?
+
+					while( $inactiveFetch = mysql_fetch_assoc( $getInactiveResult ) ) {
+						extract( $inactiveFetch, EXTR_OVERWRITE );
+
+						echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $inactiveFetch['crewid'] . "'>" . stripslashes( $inactiveFetch['rankName'] . " " . $inactiveFetch['firstName'] . " " . $inactiveFetch['lastName'] ) . "</a></li>";
+
+						}
+
+					?>
+				</ul>
+			</div>
+			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<b class="fontLarge">Non-Playing Characters</b>
+				<ul class="list-dark">
+					<?
+
+					while( $npcFetch = mysql_fetch_assoc( $getNPCResult ) ) {
+						extract( $npcFetch, EXTR_OVERWRITE );
+
+						echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $npcFetch['crewid'] . "'>" . stripslashes( $npcFetch['rankName'] . " " . $npcFetch['firstName'] . " " . $npcFetch['lastName'] ) . "</a></li>";
+
+						}
+
+					?>
+				</ul>
+			</div>
+		</div>
 		
 	</div>
 	<? } elseif( isset($crew) ) { ?>
