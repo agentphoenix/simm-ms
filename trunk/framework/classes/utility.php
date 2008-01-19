@@ -12,7 +12,7 @@ Purpose: Page with the class that is called by the system to check for the
 	messages
 
 System Version: 2.6.0
-Last Modified: 2007-08-21 0941 EST
+Last Modified: 2008-01-19 1536 EST
 
 Included Classes:
 	QueryCheck
@@ -145,8 +145,7 @@ class QueryCheck
 	/* display all the information */
 	function display() {
 
-		echo "<div class='update-new'>";
-			//echo "<img src='" . $this->image . "' border='0' alt='' style='float:left; padding: 0 6px 0 0;' />";
+		echo "<div class='update'>";
 			
 			switch( $this->result )
 			{
@@ -204,14 +203,14 @@ class FirstLaunch
 	/* print out the info */
 	function display() {
 		
-		echo "<br /><br />";
 		echo "<div class='update'>";
-			echo "<img src='images/launch.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
-			echo "<span class='fontTitle'>SMS First Launch</span><br /><br />";
-			echo "Congratulations, this is your first time launching SMS " . $this->version . "! " . $this->summary;
-			echo "<br /><br />";
-			echo "For a complete listing of new features and bug fixes, please view the <a href='admin.php?page=reports&sub=history'>version history</a>.";
-		echo "</div>";
+			echo "<div class='notify-blue'>";
+				echo "<b class='blue case'>SMS First Launch</b> &mdash; ";
+				echo "Congratulations, this is your first time launching SMS " . $this->version . "! " . $this->summary;
+				echo "<br />";
+				echo "For a complete listing of new features and bug fixes, please view the <a href='admin.php?page=reports&sub=history'>version history</a>.";
+			echo "</div>";
+		echo "</div><br />";
 	
 	} /* close display() */
 	
