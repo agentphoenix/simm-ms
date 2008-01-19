@@ -4,8 +4,20 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-01-14 1817 EST
+Last Modified: 2008-01-19 1601 EST
 **/
+
+/* query the database for the mysql version */
+$t = mysql_query("select version() as ve");
+echo mysql_error();
+$r = mysql_fetch_object( $t );
+
+/* if the server is running mysql 4 and higher, set the default character set */
+if( $r->ve >= 4 ) {
+	$tail = "CHARACTER SET utf8";
+} else {
+	$tail = "";
+}
 
 /* add the email subject field */
 mysql_query( "ALTER TABLE `sms_globals` ADD `emailSubject` varchar(75) not null default '[" . SHIP_PREFIX . " " . SHIP_NAME . "]'" );
@@ -143,6 +155,17 @@ while( $awardsFetch = mysql_fetch_array( $getAwardsR ) ) {
 	mysql_query( "UPDATE sms_crew SET awards = '$award' WHERE crewid = $awardsFetch[0]" );
 	
 }
+
+/* create the awards queue table */
+mysql_query( "CREATE TABLE `sms_awards_queue` (
+  `id` int(6) NOT NULL auto_increment,
+  `crew` int(6) NOT NULL default '0',
+  `nominated` int(6) NOT NULL default '0',
+  `award` int(6) NOT NULL default '0',
+  `reason` text NOT NULL,
+  `status` enum('approved','pending') NOT NULL default 'pending',
+  PRIMARY KEY  (`id`)
+) " . $tail . " ;" );
 
 /* add the data for FirstLaunch */
 mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.0', '', '', '' )" );
