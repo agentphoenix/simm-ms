@@ -10,7 +10,7 @@ File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 1342 EST
+Last Modified: 2008-01-19 1553 EST
 **/
 
 /* access check */
@@ -217,20 +217,20 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 			});
 		</script>
 
-		<div class="update">
-			<a href="#" id="toggle" style="float:right;">Show/Hide</a>
+		<div class="update notify-normal">
+			<a href="#" id="toggle" class="fontNormal" style="float:right;margin-right:.5em;">Show/Hide</a>
 			<img src="<?=$webLocation;?>images/notes.png" style="float:left; padding-right: 12px;" border="0" />
 			<span class="fontTitle">Mission Notes</span>
 			<div id="notes" style="display:none;clear:left;">
 				<br />
 				<?
-	
+
 				$getNotes = "SELECT missionNotes FROM sms_missions WHERE missionStatus = 'current' LIMIT 1";
 				$getNotesResult = mysql_query( $getNotes );
 				$notes = mysql_fetch_array( $getNotesResult );
-	
+
 				printText( $notes['0'] );
-	
+
 				?>
 			</div>
 		</div><br />

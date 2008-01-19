@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2007-09-17 0909 EST
+Last Modified: 2008-01-19 1553 EST
 **/
 
 /* access check */
@@ -575,8 +575,8 @@ Tag: " . $postTag . "
 			});
 		</script>
 		
-		<div class="update">
-			<a href="#" id="toggle" style="float:right;">Show/Hide</a>
+		<div class="update notify-normal">
+			<a href="#" id="toggle" class="fontNormal" style="float:right;margin-right:.5em;">Show/Hide</a>
 			<img src="<?=$webLocation;?>images/notes.png" style="float:left; padding-right: 12px;" border="0" />
 			<span class="fontTitle">Mission Notes</span>
 			<div id="notes" style="display:none;clear:left;">
