@@ -10,12 +10,19 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-01-12 1635 EST
+Last Modified: 2008-01-19 1318 EST
 **/
 
 /* define the page class and set the vars */
 $pageClass = "personnel";
-$crew = $_GET['crew'];
+
+/* make sure the crew id is legit */
+if( isset( $_GET['crew'] ) && !is_numeric($_GET['crew'] ) ) {
+	errorMessageIllegal( "bio page" );
+	exit;
+} else {
+	$crew = $_GET['crew'];
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -369,7 +376,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<br />
 			<span class="fontSmall">
 				<? if( in_array( "m_giveaward", $sessionAccess ) ) { ?>
-				<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward">Add Award</a>
+				<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>">Add Award</a>
 				<? } ?>
 				
 				<? if( in_array( "m_giveaward", $sessionAccess ) && in_array( "m_removeaward", $sessionAccess ) ) { ?>
@@ -384,39 +391,56 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		</div>
 		
 		<div id="awards" style="display:none;width:97%;">
-			<table>
+			<table cellspacing="0" cellpadding="5">
 				<?php
 			
 				/* do the database query */
-				$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$_GET[crew]'";
+				$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew'";
 				$getAwardsResult = mysql_query( $getAwards );
 				$fetchAwards = mysql_fetch_array( $getAwardsResult );
 		
 				/* if there are awards, continue */
 				if( !empty( $fetchAwards[0] ) ) {
 		
-					/* explode the string at the comma */
-					$awardsRaw = explode( ",", $fetchAwards[0] );
+					/* explode the string at the semicolon */
+					$awardsRaw = explode( ";", $fetchAwards[0] );
+					
+					/* explode the array again */
+					foreach($awardsRaw as $a => $b)
+					{
+						$awardsRaw[$a] = explode( ",", $b );
+					}
+					
+					$rowCount = 0;
+					$color1 = "rowColor1";
+					$color2 = "rowColor2";
 			
 					foreach($awardsRaw as $key => $value) {
 				
 						/* do the database query */
-						$pullAward = "SELECT * FROM sms_awards WHERE awardid = '$value'";
+						$pullAward = "SELECT * FROM sms_awards WHERE awardid = '$value[0]'";
 						$pullAwardResult = mysql_query( $pullAward );
 
 						while( $awardArray = mysql_fetch_array( $pullAwardResult ) ) {
 							extract( $awardArray, EXTR_OVERWRITE );
+							
+							$rowColor = ( $rowCount % 2 ) ? $color1 : $color2;
 			
 				?>	
 		
-				<tr>	
+				<tr class="fontNormal <?=$rowColor;?>">	
 					<td width="70"><img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
-					<td><i><? printText( $awardName ); ?></i></td>
-					<td><? printText( $awardDesc );?></td>
-				</tr>				
+					<td>
+						<b><? printText( $awardName ); ?></b><br />
+						<span class="fontNormal">Awarded: <?=dateFormat( "short2", $value[1] );?></span>
+					</td>
+					<td><? printText( $value[2] );?></td>
+				</tr>
 		
 				<?
 		
+						$rowCount++;
+						
 						}	/* close the while loop */
 					}	/* close the foreach loop */
 				} else { /* if there's nothing in the awards field */
