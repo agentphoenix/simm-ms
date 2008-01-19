@@ -10,7 +10,7 @@ File: index.php
 Purpose: The main file that pulls in the requested page
 
 System Version: 2.6.0
-Last Modified: 2008-01-12 1457 EST
+Last Modified: 2008-01-19 1227 EST
 **/
 
 /* start the session */
@@ -56,7 +56,6 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 	/* if there's a session set, define the session variables */
 	if( isset( $_SESSION['sessionCrewid'] ) ) {
 		$sessionCrewid = $_SESSION['sessionCrewid'];
-		$sessionAccessLevel = $_SESSION['sessionAccess'];
 		$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
 		$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
 	}
@@ -66,11 +65,8 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 		$sessionAccess = "";
 	}
 	
-	/*
-		check to see if the session access variable is an array
-		and if it isn't, explode the string
-	*/
-	if( !empty( $sessionAccess ) && !is_array( $sessionAccess ) ) {
+	/* if the sessionAccess isn't an array, make it one */
+	if( !is_array( $sessionAccess ) ) {
 		$sessionAccess = explode( ",", $_SESSION['sessionAccess'] );
 	}
 	
