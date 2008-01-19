@@ -11,7 +11,7 @@ Purpose: Page with the class that is called by the system to check for
 	ACP items liked saved posts, pending items, SMS updates and PMs
 
 System Version: 2.6.0
-Last Modified: 2007-12-27 0939 EST
+Last Modified: 2008-01-19 1535 EST
 
 Included Classes:
 	SystemCheck
@@ -432,7 +432,7 @@ class SystemCheck
 		
 		/* if the array isn't empty, show the output */
 		if( !empty( $this->output_array ) ) {
-			echo "<div class='update-new'>";
+			echo "<div class='update'>";
 				foreach( $this->output_array as $k => $v )
 				{
 					if( ( $keyCount > 0 && $k == 0 ) || ( $keyCount == 0 ) )
