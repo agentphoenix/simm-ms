@@ -56,7 +56,7 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		
 		/* don't explode the array if there's nothing there to start with */
 		if( !empty( $stringAwards[0] ) ) {
-			$arrayAwards = explode( ",", $stringAwards['0'] );
+			$arrayAwards = explode( ";", $stringAwards[0] );
 		}
 		
 		/* get the date info from PHP */
