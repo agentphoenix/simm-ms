@@ -11,7 +11,7 @@ Purpose: Page with the class that is called by the system to check for
 	ACP items liked saved posts, pending items, SMS updates and PMs
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1535 EST
+Last Modified: 2008-01-19 1623 EST
 
 Included Classes:
 	SystemCheck
@@ -97,6 +97,7 @@ class SystemCheck
 		$pendingLogs = "";
 		$pendingNews = "";
 		$pendingDockings = "";
+		$pendingAwards = "";
 		
 		if( in_array( "x_approve_users", $this->access ) ) {
 			/* check for pending users */
@@ -133,10 +134,19 @@ class SystemCheck
 			$checkDockingsResult = mysql_query( $checkDockings );
 			$pendingDockings = mysql_num_rows( $checkDockingsResult );
 			
-		}		
+		}
+		
+		if( in_array( "m_giveaward", $this->access ) ) {
+		
+			/* check for pending docking requests */
+			$checkAwards = "SELECT id FROM sms_awards_queue WHERE status = 'pending'";
+			$checkAwardsResult = mysql_query( $checkAwards );
+			$pendingAwards = mysql_num_rows( $checkAwardsResult );
+			
+		}
 		
 		/* compile the pending count */
-		$pendingCount = ( $pendingUsers + $pendingPosts + $pendingLogs + $pendingNews + $pendingDockings );
+		$pendingCount = ( $pendingUsers + $pendingPosts + $pendingLogs + $pendingNews + $pendingDockings + $pendingAwards );
 		
 		/* do some logic to make sure the notification is using the right verb tenses */
 		if( $pendingCount == 1 ) {
@@ -159,6 +169,8 @@ class SystemCheck
 			$pendingArray[] = array( "news items", $pendingNews );
 		} if( in_array( "x_approve_docking", $this->access ) ) {
 			$pendingArray[] = array( "docking requests", $pendingDockings );
+		} if( in_array( "m_giveaward", $this->access ) ) {
+			$pendingArray[] = array( "award nominations", $pendingAwards );
 		}
 		
 		foreach( $pendingArray as $k => $v )
@@ -177,11 +189,10 @@ class SystemCheck
 			( $pendingPosts > 0 && in_array( "x_approve_posts", $this->access ) ) ||
 			( $pendingLogs > 0 && in_array( "x_approve_logs", $this->access ) ) ||
 			( $pendingNews > 0 && in_array( "x_approve_news", $this->access ) ) ||
-			( $pendingDockings > 0 && in_array( "x_approve_docking", $this->access ) )
+			( $pendingDockings > 0 && in_array( "x_approve_docking", $this->access ) ) ||
+			( $pendingAwards > 0 && in_array( "m_giveaward", $this->access ) )
 		) {
 			
-			//$this->output_array[1][1] = "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='warning' style='float:left; padding: 0 12px 0 0;' />";
-			//$this->output_array[1][1].= "<span class='fontTitle'>Pending Items</span><br /><br />";
 			$this->output_array[1][1] = "<div class='notify-orange'>";
 			$this->output_array[1][1].= "<b class='orange case'>Pending Items</b> &mdash; ";
 			$this->output_array[1][1].= "There " . $pendings . " [ ";

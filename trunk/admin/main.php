@@ -10,7 +10,7 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2008-01-12 1456 EST
+Last Modified: 2008-01-19 1623 EST
 **/
 
 /* define the page class */
@@ -79,7 +79,8 @@ if( isset( $sessionCrewid ) ) {
 		in_array( "x_approve_posts", $sessionAccess ) ||
 		in_array( "x_approve_logs", $sessionAccess ) ||
 		in_array( "x_approve_news", $sessionAccess ) ||
-		in_array( "x_approve_docking", $sessionAccess )
+		in_array( "x_approve_docking", $sessionAccess ) ||
+		in_array( "m_giveaward", $sessionAccess )
 	) {
 		$system_check->pendings();
 	}

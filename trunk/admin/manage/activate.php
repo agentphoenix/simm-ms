@@ -19,7 +19,8 @@ if(
 	in_array( "x_approve_posts", $sessionAccess ) ||
 	in_array( "x_approve_logs", $sessionAccess ) ||
 	in_array( "x_approve_news", $sessionAccess ) ||
-	in_array( "x_approve_docking", $sessionAccess )
+	in_array( "x_approve_docking", $sessionAccess ) ||
+	in_array( "m_giveaward", $sessionAccess )
 ) {
 
 	/* set the page class */
@@ -791,7 +792,60 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 			</tr>
 			
 			<? } } ?>
-			<? } /* closes the if( simmType ) logic */ ?>
+			
+			<? } if( in_array( "x_approve_posts", $sessionAccess ) ) { ?>
+			
+			<tr>
+				<td colspan="6" height="30"></td>
+			</tr>
+			<tr>
+				<td colspan="6" class="fontLarge"><b>Pending Award Nominations</b></td>
+			</tr>
+			
+			<?
+			
+			$getPendingAwards = "SELECT q.*, a.* FROM sms_awards_queue AS q, sms_awards AS a ";
+			$getPendingAwards.= "WHERE q.status = 'pending' AND q.award = a.awardid";
+			$getPendingAwardsResult = mysql_query( $getPendingAwards );
+			$countPendingAwards = mysql_num_rows( $getPendingAwardsResult );
+			
+			if( $countPendingAwards == 0 ) {
+			
+			?>
+			
+			<tr class="fontNormal">
+				<td colspan="6">There are currently no pending award nominations</td>
+			</tr>
+			
+			<?
+			
+			} elseif( $countPendingAwards > 0 ) {
+			
+				/* loop through the results and fill the form */
+				while( $pendingAwards = mysql_fetch_assoc( $getPendingAwardsResult ) ) {
+					extract( $pendingAwards, EXTR_OVERWRITE );
+			
+			?>
+			
+			<tr class="fontNormal">
+				<td><? printCrewName( $pendingAwards['nominated'], "rank", "noLink" ); ?></td>
+				<td><? printText( $pendingAwards['awardName'] ); ?></td>
+				<td>&nbsp;</td>
+				<td align="center"><a href="<?=$webLocation;?>index.php?page=news">View News</a></td>
+				<td align="center">
+					<script type="text/javascript">
+						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this pending news item?')\">Delete</a>" );
+					</script>
+					<noscript>
+						<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=delete">Delete</a>
+					</noscript>
+				</td>
+				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=approve">Approve</a></td>
+			</tr>
+			
+			<? } } ?>
+			
+			<?php } ?>
 		</table>
 		
 	</div>
