@@ -109,19 +109,14 @@ textarea.desc {}
 table { width: 100%; }
 .narrowTable { width: 75%; }
 
-/* style that controls the update panel */
-.update {
-	width: 98%;
+/* styles that control the update panel */
+.update { width: 98%; }
+.update a {
+	border-bottom: 1px dotted;
 	color: #fff;
 	font-weight: bold;
-	padding: .5em;
-	background-color: #090909;
-	border: 1px solid #111;
 }
-
-.update-new { width: 98%; }
-.update-new a { border-bottom: 1px dotted; color: #fff; font-weight: bold; }
-.update-new a:hover { border-bottom: 1px solid; }
+.update a:hover { border-bottom: 1px solid; }
 
 /* notification styles */
 .notify-orange {
