@@ -1,4 +1,4 @@
-Last Updated: 2008.01.18 1640 EST
+Last Updated: 2008.01.26 1232 EST
 
 2.6
 CODENAME: Eclipse
@@ -81,6 +81,8 @@ LAUNCH: Q1 2008
 			pages
 		*	Tough part will be the join page and getting things to be spit out in an email
 			the way they should be
+#	List all steps in installation and updating
+		*	All the steps should be listed with each step being highlighted as it's active
 
 3.0
 CODENAME: Jefferson
