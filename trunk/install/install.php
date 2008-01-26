@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2007-12-11 1338 EST
+Last Modified: 2008-01-26 1241 EST
 **/
 
 session_start();
@@ -265,8 +265,8 @@ switch( $step ) {
 							your site is and where it should be pointing users. We have done our best
 							to determine what your web location is, but please verify that the value
 							in the text box below is accurate. To verify this, please look at the URL
-							in your address bar and make sure it matches up to the <i>install/install.php</i>
-							portion.
+							in your address bar and make sure it matches (up to, but not including the
+							<i>install/install.php</i> portion).
 						</td>
 					</tr>
 					<tr>
