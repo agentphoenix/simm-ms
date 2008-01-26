@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause the system to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install.php
 Purpose: Main page to direct users to one of three installation options
 
 System Version: 2.6.0
-Last Modified: 2007-08-22 1700 EST
+Last Modified: 2008-01-26 1235 EST
 **/
 
 if( $_GET['type'] == "update" ) {
@@ -45,7 +45,7 @@ if( $_GET['type'] == "update" ) {
 	<link rel="stylesheet" type="text/css" href="install/install.css" />
 </head>
 <body>
-	<div id="install">	#427ef4
+	<div id="install">
 		<div class="header">
 			<img src="install/install.jpg" alt="" border="0" />
 		</div> <!-- close .header -->
