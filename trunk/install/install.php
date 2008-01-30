@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-01-26 1241 EST
+Last Modified: 2008-01-30 1157 EST
 **/
 
 session_start();
@@ -30,8 +30,8 @@ if( !isset( $step ) ) {
 some error checking in case someone hasn't taken care of
 the variables.php stuff
 */
-if( $step > 3 && !isset( $webLocation ) ) {
-	$step = 3;
+if( $step > 2 && !isset( $webLocation ) ) {
+	$step = 2;
 	$varError = 1;
 }
 
@@ -41,7 +41,7 @@ switch( $step ) {
 		step 3 attempts to write the variables file that the admin provided
 		all the information for in the previous step
 	*/
-	case 3:
+	case 2:
 		/** ERROR CHECKING FOR USER INPUT FROM STEP 1 **/
 		
 		/* make sure the web location has a trailing slash */
@@ -116,7 +116,7 @@ switch( $step ) {
 		break;
 	
 	/* step 4 handles creating the database structure */
-	case 4:
+	case 3:
 		/* pull in the DB connection variables */
 		require_once( '../framework/dbconnect.php' );
 		
@@ -128,7 +128,7 @@ switch( $step ) {
 		step 5 handles inserting the necessary data into the database that lines up
 		with the tables created in step 3
 	*/
-	case 5:
+	case 4:
 		/* pull in the DB connection variables */
 		require_once( '../framework/dbconnect.php' );
 		
@@ -140,7 +140,7 @@ switch( $step ) {
 		step 6 handles inserting the admin's character into the database, setting their
 		access level, and adjusting the position they chose in step 4
 	*/
-	case 6:
+	case 5:
 		/* pull in the DB connection variables */
 		require_once( '../framework/dbconnect.php' );
 		
@@ -175,7 +175,7 @@ switch( $step ) {
 		step 7 handles updating the globals that are set during step 5, including ship name,
 		ship prefix, and ship registry
 	*/
-	case 7:
+	case 6:
 		/* pull in the DB connection variables */
 		require_once( '../framework/dbconnect.php' );
 		
@@ -186,6 +186,15 @@ switch( $step ) {
 
 } /* close the switch */
 
+$installSteps = array(
+	1	=>	array('Basic Information', 'step-1.png', 'step-1-active.png'),
+	2	=>	array('Build the Database', 'step-2.png', 'step-2-active.png'),
+	3	=>	array('Populate the Database', 'step-3.png', 'step-3-active.png'),
+	4	=>	array('Create Your Character', 'step-4.png', 'step-4-active.png'),
+	5	=>	array('Simm Information', 'step-5.png', 'step-5-active.png'),
+	6	=>	array('Finalize Installation', 'step-6.png', 'step-6-active.png'),
+);
+
 ?>
 
 <html>
@@ -194,63 +203,63 @@ switch( $step ) {
 	<link rel="stylesheet" type="text/css" href="install.css" />
 </head>
 <body>
+	<div class="header-install">
+		<h1>SMS 2.6 Fresh Install</h1>
+	</div> <!-- close .header -->
+	
 	<div id="install">	
-		<div class="header">
-			<img src="install.jpg" alt="SMS 2.6 Fresh Install" border="0" />
-		</div> <!-- close .header -->
-		<div class="content">
+		
+		<div class="left">
+			<ul>
+				<?php
+				
+				foreach($installSteps as $a => $b)
+				{
+					if($a == $step)
+					{
+						echo "<li class='active'>";
+						echo "<img src='" . $b[2] . "' alt='' border='0' class='step-image' />";
+					}
+					else
+					{
+						echo "<li>";
+						echo "<img src='" . $b[1] . "' alt='' border='0' class='step-image' />";
+					}
+					
+					echo $b[0];
+					echo "</li>";
+				}
+				
+				?>
+			</ul>
+		</div>
+		
+		<div class="right">
+			<h1>Step <?=$step . " &ndash; " . $installSteps[$step][0];?></h1>
 			
 		<?php
 		
 		switch( $step )
 		{
 			case 1:
-		
-		?>
-		
-			<div align="center"><b>Installation Progress</b><br /></div>
-			<div class="status">
-			</div>
-			<br /><br />
 			
-			Thank you for choosing the SIMM Management System by Anodyne Productions. We have
-			worked hard to build the best possible product for you to manage your Star Trek simm
-			online. If you have questions, please refer to the documentation on the Anodyne site or our 
-			<a href="http://forums.anodyne-productions.com/" target="_blank">support forums</a> 
-			to get help.<br /><br />
+			/* start to build the url */
+			$url = $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
 			
-			This installer will guide you through the clean install process for SMS 2.6. Once the 
-			installation is complete, you will be able to use SMS for your simm. Before you begin,
-			please make sure you have read the readme file included with SMS in its entirety. The
-			readme contains important information about setting up SMS on your server.<br /><br />
+			/* toss the url into an array and split at the slashes */
+			$urlArray = explode("/", $url);
 			
-			In order to proceed, you will need the following information:
-			<ul>
-				<li>The URL of your website</li>
-				<li>Your database connection parameters (database location, database name, database
-				username, and database password) which you likely received from your host when you
-				opened your account</li>
-				<li>Character information for the character you will be playing</li>
-				<li>Ship information for your sim</li>
-			</ul>
-			<br />
+			/* drop the last 2 items off the array (install.php and install/) */
+			array_pop($urlArray);
+			array_pop($urlArray);
 			
-			<form method="post" action="install.php?step=2">
-				<input type="submit" name="submit" class="installButton" value="Begin Installation &raquo;" />
-			</form>
-		
-		<?php
-		
-			break;
-			case 2:
+			/* put the url back together */
+			$url = implode("/", $urlArray);
+			
+			/* append the http and trailing slash */
+			$url = "http://" . $url . "/";
 			
 		?>
-			
-			<div align="center"><b>Installation Progress</b><br /></div>
-			<div class="status">
-				<div class="step1">&nbsp;</div>
-			</div>
-			<br /><br />
 			
 			Please provide the following information to continue with the installation.<br /><br />
 			
@@ -271,7 +280,7 @@ switch( $step ) {
 					</tr>
 					<tr>
 						<td colspan="3">
-							<input type="text" name="webLocation" size="45" value="http://<?=$_SERVER['SERVER_NAME'];?>/" />
+							<input type="text" name="webLocation" size="45" value="<?php echo $url; ?>" />
 						</td>
 					</tr>
 					<tr>
@@ -389,7 +398,7 @@ switch( $step ) {
 		<?php
 		
 			break;
-			case 3:
+			case 2:
 		
 		?>
 			
@@ -471,7 +480,7 @@ switch( $step ) {
 		<?php
 			
 			break;
-			case 4:
+			case 3:
 		
 		?>
 			
@@ -490,7 +499,7 @@ switch( $step ) {
 		<?php
 		
 			break;
-			case 5:
+			case 4:
 		
 		?>
 			
@@ -624,7 +633,7 @@ switch( $step ) {
 		<?php
 		
 			break;
-			case 6:
+			case 5:
 			
 		?>
 					
@@ -666,7 +675,7 @@ switch( $step ) {
 		<?php
 		
 			break;
-			case 7:
+			case 6:
 		
 		?>
 			
@@ -697,9 +706,11 @@ switch( $step ) {
 		?>
 		
 		</div>
-		<div class="footer">
-			Copyright &copy; 2005-<?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a>
-		</div> <!-- close .footer -->
+		
 	</div> <!-- close #install -->
+	
+	<div class="footer">
+		Copyright &copy; 2005-<?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a>
+	</div> <!-- close .footer -->
 </body>
 </html>
