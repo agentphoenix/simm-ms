@@ -1,16 +1,14 @@
 <?php
 
 /**
-This skin is the property of its owner and should not be duplicated or
-reproduced with the express written consent of the author. Edits to this skin
-are permissible if the original credits stay intact.
+Edits to this skin are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/default/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
-Skin Version: 2.1
-Last Modified: 2007-12-20 1303 EST
+Skin Version: 2.5
+Last Modified: 2008-01-30 1050 EST
 **/
 
 ?>
