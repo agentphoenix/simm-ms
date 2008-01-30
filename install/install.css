@@ -1,18 +1,27 @@
+/**
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: install/install.css
+Purpose: Stylesheet that controls the look and feel of the install pages
+Last Modified: 2008-01-30 1602 EST
+**/
+
 body {
-	background-color: #000;
-	color: #efefef;
+	background-color: #f1f1f1;
+	color: #444;
 	font-family: "Lucida Grande", "Lucida Console Sans", sans-serif;
 	font-size: 11px;
 }
 
 #install {
-	background-color: #090909;
+	background-color: #d1d1d1;
 	width: 90%;
 	margin: 0 auto;
-	border: 1px solid #111;
+	border: 1px solid #a2a2a2;
 }
 
-/* header styles */
+a { color: #3478ae; }
+a:hover { color: #ab1b00; }
+
 .header { text-align: center; }
 .header-install {
 	width: 90%;
@@ -20,9 +29,9 @@ body {
 	text-align: center;
 	height: 70px;
 	line-height: 70px;
-	border-top: 1px solid #111;
-	border-left: 1px solid #111;
-	border-right: 1px solid #111;
+	border-top: 1px solid #a2a2a2;
+	border-left: 1px solid #a2a2a2;
+	border-right: 1px solid #a2a2a2;
 }
 .header-install h1 {
 	font-size: 30px;
@@ -39,10 +48,10 @@ body {
 }
 #install .right {
 	margin-left: 20%;
-	background-color: #000;
+	background-color: #f1f1f1;
 	padding: 1em 1em 1em 3em;
 	min-height: 230px;
-	border-left: 1px solid #111;
+	border-left: 1px solid #a2a2a2;
 }
 
 #install ul {}
@@ -58,14 +67,15 @@ body {
 	padding: 10px 15px;
 	clear: both;
 	line-height: 32px;
-	color: #333;
+	color: #777;
 }
 #install .left ul li.active {
-	background-color: #000;
-	color: #fff;
-	border-top: 1px solid #111;
-	border-bottom: 1px solid #111;
-	border-left: 1px solid #111;
+	background-color: #f1f1f1;
+	color: #444;
+	font-weight: bold;
+	border-top: 1px solid #a2a2a2;
+	border-bottom: 1px solid #a2a2a2;
+	border-left: 1px solid #a2a2a2;
 	margin-right: -1px;
 }
 
@@ -74,34 +84,37 @@ body {
 	padding-right: 10px;
 }
 
-/* footer styles */
 .footer {
 	text-align: center;
 	font-size: 80%;
 	padding: 2em 0;
 }
 
-.installButton {
-	font-size: 1.8em;
-	background: #000;
-	border: 1px solid #888;
+input[type=submit] {
+	font-size: 20px;
+	background: #f1f1f1;
+	border: 1px solid #999;
+}
+input[type=submit]:hover {
+	background-color: #f9f9f9;
+	border: 1px solid #444;
 }
 
 input, textarea {
-	background: #000;
-	border: 1px solid #686868;
-	color: #999;
+	background: #f1f1f1;
+	border: 1px solid #999;
+	color: #444;
 	margin: 1px;
 	padding: 3px;
 }
 input:focus, textarea:focus {
-	background: #000;
-	border: 1px solid #b2b2b2;
-	color: #fff;
+	background: #f9f9f9;
+	border: 1px solid #444;
+	color: #000;
 }
 textarea {
-	font-family: "Lucida Grande", "Verdana", sans-serif;
-	font-size: .8em;
+	font-family: "Lucida Grande", "Lucida Console Sans", sans-serif;
+	font-size: 100%;
 }
 .text {
 	font-size: .8em;
@@ -123,8 +136,8 @@ select {
 	color: #fff;
 	font-weight: bold;
 	padding: .5em;
-	background-color: #0d0d0d;
-	border: 1px solid #222;
+	background-color: #090909;
+	border: 1px solid #a2a2a2;
 }
 .red { color: #cc0000; }
 .red b { color: #fff; }
@@ -137,4 +150,4 @@ table { font-size: 100%; }
 }
 
 .bold { font-weight: bold; }
-.yellow { color: yellow; }
+.yellow { color: #c00; }

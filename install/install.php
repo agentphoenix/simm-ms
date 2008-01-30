@@ -263,7 +263,7 @@ $installSteps = array(
 			
 			Please provide the following information to continue with the installation.<br /><br />
 			
-			<form method="post" action="install.php?step=3">
+			<form method="post" action="install.php?step=2">
 				<table width="100%">
 					<tr>
 						<td colspan="3" class="fontLarge">Website URL</td>
@@ -388,8 +388,8 @@ $installSteps = array(
 					</tr>
 
 					<tr>
-						<td colspan="3">
-							<input type="submit" name="submit" class="installButton" value="Next Step &raquo;" />
+						<td colspan="3" align="right">
+							<input type="submit" name="submit" value="Next Step &raquo;" />
 						</td>
 					</tr>
 				</table>
@@ -473,8 +473,8 @@ $installSteps = array(
 			Please proceed to the next step to build the SMS 2 database and create your character
 			which you'll use to administer SMS.<br /><br /><br />
 			
-			<form method="post" action="install.php?step=4">
-				<input type="submit" name="submit" class="installButton" value="Next Step &raquo;" />
+			<form method="post" action="install.php?step=3">
+				<input type="submit" name="submit" value="Next Step &raquo;" />
 			</form>
 			
 		<?php
@@ -492,8 +492,8 @@ $installSteps = array(
 			
 			You have successfully created the SMS database that will drive the site!<br /><br /><br />
 			
-			<form method="post" action="install.php?step=5">
-				<input type="submit" name="submit" class="installButton" value="Next Step &raquo;" />
+			<form method="post" action="install.php?step=4">
+				<input type="submit" name="submit" value="Next Step &raquo;" />
 			</form>
 			
 		<?php
@@ -516,7 +516,7 @@ $installSteps = array(
 			
 			<br /><br />
 			
-			<form method="post" action="install.php?step=6">
+			<form method="post" action="install.php?step=5">
 				<table width="100%">
 					<tr>
 						<td class="label">Username</td>
@@ -624,7 +624,7 @@ $installSteps = array(
 					<tr>
 						<td colspan="2"></td>
 						<td>
-							<input type="submit" name="submit" class="installButton" value="Next Step &raquo;" />
+							<input type="submit" name="submit" value="Next Step &raquo;" />
 						</td>
 					</tr>
 				</table>
@@ -643,7 +643,7 @@ $installSteps = array(
 			</div>
 			<br /><br />
 			
-			<form method="post" action="install.php?step=7">
+			<form method="post" action="install.php?step=6">
 				<table width="100%">
 					<tr>
 						<td class="label">Ship Prefix</td>
@@ -666,7 +666,7 @@ $installSteps = array(
 					<tr>
 						<td colspan="2"></td>
 						<td>
-							<input type="submit" name="submit" class="installButton" value="Next Step &raquo;" />
+							<input type="submit" name="submit" value="Next Step &raquo;" />
 						</td>
 					</tr>
 				</table>
@@ -687,7 +687,7 @@ $installSteps = array(
 			
 			<h1>Installation Complete!</h1>
 			
-			Congratulations, you have successfully installed SMS 2. If the install worked properly, you 
+			Congratulations, you have successfully installed SMS 2.6. If the install worked properly, you 
 			should now be able to see SMS running on your site. If you need technical support, please 
 			visit the <a href="http://forums.anodyne-productions.com" target="_blank">Anodyne support forums</a>.
 			<br /><br />

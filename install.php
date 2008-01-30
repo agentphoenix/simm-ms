@@ -86,7 +86,7 @@ if( $_GET['type'] == "update" ) {
 					<li>Ship information for your sim</li>
 				</ul>
 			</p>
-			<h3><a href="install.php">Go to fresh install &raquo;</a></h3>
+			<h3><a href="install/install.php">Go to fresh install &raquo;</a></h3>
 			
 			<h2>Upgrade</h2>
 			<p>The upgrade option will guide you through upgrading your current version of SMS to the
