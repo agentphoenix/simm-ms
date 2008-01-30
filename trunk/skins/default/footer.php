@@ -1,16 +1,14 @@
 <?php
 
 /**
-This skin is the property of its owner and should not be duplicated or
-reproduced with the express written consent of the author. Edits to this skin
-are permissible if the original credits stay intact.
+Edits to this skin are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/default/footer.php
 Purpose: The footer file that the system calls in for the template
 
-Skin Version: 2.1
-Last Modified: 2007-12-22 2214 EST
+Skin Version: 2.5
+Last Modified: 2008-01-30 1049 EST
 **/
 
 ?>
