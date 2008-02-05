@@ -49,8 +49,8 @@ include_dom( 'js', 'framework/js/shadowbox-jquery.js' );
 include_dom( 'js', 'framework/js/shadowbox.js' );
 
 /** pull in the CSS files **/
-include_dom( 'css', 'framework/js/clickmenu.css' );
-include_dom( 'css', 'framework/js/shadowbox.css' );
+include_dom( 'css', 'framework/css/clickmenu.css' );
+include_dom( 'css', 'framework/css/shadowbox.css' );
 
 /**
 	Function that toggles checkboxes
