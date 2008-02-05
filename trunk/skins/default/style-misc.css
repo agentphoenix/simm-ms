@@ -18,22 +18,14 @@ a {
 	color: #a7a590;
 }
 a:hover { color: #5b5a4f; }
-a.delete {
-	font-weight: bold;
-	text-decoration: none;
-	padding: .3em;
-}
+
+a.delete { text-decoration: none; }
 a:hover.delete { color: #cc0000; }
-a.edit {
-	font-weight: bold;
-	text-decoration: none;
-	padding: .3em;
-}
+
+a.edit { text-decoration: none; }
 a:hover.edit { color: #d8eb52; }
-a.add {
-	font-weight: bold;
-	text-decoration: none;
-}
+
+a.add { text-decoration: none; }
 a:hover.add { color: #70c16e; }
 
 /* special font classes */
