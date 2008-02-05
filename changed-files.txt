@@ -1,3 +1,29 @@
+### SMS 2.5.6 ###
+
+update.php
+
+update/255.php
+update/254.php
+update/253.php
+update/252.php
+update/2511.php
+update/251.php
+update/250.php
+update/244.php
+update/243.php
+update/242.php
+update/241.php
+update/240.php
+update/231.php
+update/230.php
+
+framework/functionsGlobal.php
+framework/functionsAdmin.php
+
+pages/join.php
+pages/log.php
+pages/post.php
+
 ### SMS 2.5.5 ###
 
 update.php

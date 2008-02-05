@@ -9,12 +9,13 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/log.php
 Purpose: To display the individual personal logs
 
-System Version: 2.5.0
-Last Modified: 2007-04-24 1829 EST
+System Version: 2.5.6
+Last Modified: 2008-02-04 1747 EST
 **/
 
 /* define the page class */
 $pageClass = "simm";
+$pl_id = $_GET['id'];
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -23,13 +24,9 @@ if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $skin . '/menu.php' );
 }
 
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['position'] ) && preg_match( "/^\d+$/", $_GET['position'], $matches ) == 0 ) {
-	errorMessageIllegal( "activation page" );
+if( isset( $pl_id ) && !is_numeric( $pl_id ) ) {
+	errorMessageIllegal( "view personal log page" );
 	exit();
-} else {
-	/* set the GET variable */
-	$pl_id = $_GET['id'];
 }
 
 /* get post id for individual message display */

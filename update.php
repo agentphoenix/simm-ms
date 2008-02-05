@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.5.5
-Last Modified: 2007-11-07 0840 EST
+System Version: 2.5.6
+Last Modified: 2008-02-04 1751 EST
 **/
 
 /* define the step var */
@@ -73,8 +73,8 @@ if( $step == "2" ) {
 	require_once( "update/" . $urlVersion . ".php" );
 
 	/** UPDATE THE VERSION IN THE DATABASE **/
-	$updateVersion = "UPDATE sms_system SET sysVersion = '2.5.5', sysBaseVersion = '2.5', ";
-	$updateVersion.= "sysIncrementVersion = '.5', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+	$updateVersion = "UPDATE sms_system SET sysVersion = '2.5.6', sysBaseVersion = '2.5', ";
+	$updateVersion.= "sysIncrementVersion = '.6', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 	$updateVersionResult = mysql_query( $updateVersion );
 
 } if( $step == "3" ) {
@@ -88,7 +88,7 @@ if( $step == "2" ) {
 
 <html>
 <head>
-	<title>SMS 2.5.5 :: Update</title>
+	<title>SMS 2.5.6 :: Update</title>
 	<link rel="stylesheet" href="update/update.css" type="text/css" />
 </head>
 <body>
@@ -100,9 +100,9 @@ if( $step == "2" ) {
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.5.5 patches a critical security hole found in SMS as well as fixes a known issue
-			where newly created players with standard access levels don&rsquo;t have the proper
-			permissions to send news items with a category.
+			SMS 2.5.6 fixes an annoying bug where illegal inputs on un-authenticated pages would
+			generate an email. The email has been turned off since the content was blocked before
+			anything could happen.
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
 			
