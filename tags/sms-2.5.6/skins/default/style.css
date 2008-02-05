@@ -1,0 +1,145 @@
+/**
+This skin is the property of its owner and should not be duplicated or
+reproduced with the express written consent of the author. Edits to this skin
+are permissible if the original credits stay intact.
+
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: skins/default/style.css
+Purpose: Stylesheet that controls the look and feel of the site
+
+Skin Version: 2.0
+Last Modified: 2007-08-13 1158 EST
+**/
+
+/*
+	import the different other stylesheets
+	these imports are ESSENTIAL for the system to be displayed correctly
+*/
+@import url( "style-login.css" ); /* the login styles */
+@import url( "style-subnav.css" ); /* the sub-navigation tab styles */
+@import url( "style-misc.css" ); /* miscellaneous styles */
+
+body {
+	background-color: #000;
+	font-family: "Lucida Grande", "Verdana", Arial, sans-serif;
+	font-size: .8em;
+	color: #fff;
+	margin: 0;
+	padding: 0;
+}
+
+/* styles that control the main block containing the rest of the system */
+#container {
+	width: 100%;
+	margin: auto;
+}
+
+/* styles that control the top and bottom spacers */
+#headerTopSpacer {
+	height: 25px;
+}
+#container .footerBottomSpacer {
+	height: 25px;
+}
+
+/* the template header */
+#header {
+	width: 100%;
+	height: 150px;
+	margin: auto;
+	border-top: 2px solid #222;
+	border-bottom: 2px solid #222;
+	background: #0d0d0d url( 'images/bg.jpg' ) no-repeat top right;
+}
+
+/* the main navigation section */
+#container .mainNav {
+	background: #000;
+	text-align: center;
+	height: 25px;
+	line-height: 25px;
+	width: 100%;
+}
+#container .mainNav ul {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+#container .mainNav ul li {
+	display: inline;
+	list-style-type: none;
+}
+#container .mainNav ul li.spacer {
+	padding-top: 2px;
+}
+#container .mainNav a {
+	font-weight: bold;
+	color: #fff;
+	padding: 0 1em 0 1em;
+}
+#container .mainNav a:hover {
+	color: #5b5a4f;
+}
+
+/* the content of the template */
+#container .content {
+	padding: 0 2em 0 2em;
+}
+
+/* the body of the content class where the text is found */
+#container .content .body {
+	margin-right: 20%;
+	padding: 1em 0 1em 1em;
+}
+
+/* the side navigation menu */
+#container .content .nav {
+	float: right;
+	width: 18%;
+	font-size: 8.5pt;
+	padding: 1.5em 0 1em 0;
+	text-align: right;
+}
+#container .content .nav ul {
+	display: block;
+	margin: 0;
+	padding: .5em .2em 1em 0;
+}
+#container .content .nav ul li {
+	list-style-type: none;
+}
+#container .content .nav a {
+	padding: 0 .5em 0 0;
+}
+
+/* part of the nav menu ... controls the login display */
+#container .content .nav .login a {
+	padding: 0;
+}
+
+/*
+	part of the nav menu ... controls the info below the menu
+	that's shown in the main section (latest posts, mission, etc.)
+*/
+#container .content .nav .info {
+	padding: 0 1em 0 2em;
+}
+#container .content .nav .info .fontLarge {
+	margin: 0 -.5em 0 0;
+}
+#container .content .nav .info a {
+	margin: 0 -.5em 0 0;
+}
+
+/* the footer */
+#container .footer {
+	background: #0d0d0d;
+	border-top: 2px solid #222;
+	border-bottom: 2px solid #222;
+	text-align: center;
+	clear: both;
+	font-size: .8em;
+	height: 25px;
+	line-height: 25px;
+	color: #fff;
+}
