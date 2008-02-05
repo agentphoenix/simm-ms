@@ -24,6 +24,8 @@ pages/join.php
 pages/log.php
 pages/post.php
 
+install/install.php
+
 ### SMS 2.5.5 ###
 
 update.php
