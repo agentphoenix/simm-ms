@@ -5,28 +5,18 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/database.php
 Purpose: Page to display the database entries
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 0958 EST
+System Version: 2.5.0
+Last Modified: 2007-04-05 2350 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "simm";
-
-if( isset( $_GET['entry'] ) ) {
-	$entry = $_GET['entry'];
-} else {
-	$entry = "";
-}
-
-if( isset( $_GET['sort'] ) ) {
-	$sort = $_GET['sort'];
-} else {
-	$sort = "";
-}
+$entry = $_GET['entry'];
+$sort = $_GET['sort'];
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -64,7 +54,7 @@ if( !$entry ) {
 	if( isset( $sessionCrewid ) && in_array( "m_database", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 	
@@ -127,7 +117,7 @@ if( !$entry ) {
 	if( isset( $sessionCrewid ) && in_array( "m_database", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database&entry=" . $dbid . "'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 		

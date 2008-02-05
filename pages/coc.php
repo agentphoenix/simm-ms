@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/coc.php
 Purpose: Page to display the chain of command
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 0955 EST
+System Version: 2.5.0
+Last Modified: 2007-04-05 2352 EST
 **/
 
 /* define the page class */
@@ -40,7 +40,7 @@ if( isset( $sessionCrewid ) ) {
 	if( isset( $sessionCrewid ) && in_array( "m_coc", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=coc'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 	
@@ -77,11 +77,11 @@ if( isset( $sessionCrewid ) ) {
 			<td width="37" align="center">
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$crewid;?>">
 				<? if($loa == 1) { ?>
-					<img src="images/combadge-loa.jpg" border="0" alt="loa" class="image" />
+					<img src="images/combadge-loa.jpg" border="0" alt="loa" />
 				<? } elseif($loa == 0) { ?>
-					<img src="images/combadge.jpg" border="0" alt="combadge" class="image" />
+					<img src="images/combadge.jpg" border="0" alt="combadge" />
 				<? } elseif($loa == 2) { ?>
-					<img src="images/combadge-eloa.jpg" border="0" alt="combadge" class="image" />
+					<img src="images/combadge-eloa.jpg" border="0" alt="combadge" />
 				<? } ?>
 				</a>
 			</td>

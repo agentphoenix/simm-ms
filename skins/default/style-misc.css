@@ -8,8 +8,8 @@ File: skins/default/style-misc.css
 Purpose: Stylesheet that controls several of the miscellaneous items throughout
 	the system
 
-Skin Version: 2.1
-Last Modified: 2008-01-21 1138 EST
+Skin Version: 2.0
+Last Modified: 2007-08-13 1157 EST
 **/
 
 /* styles for anchors throughout the system */
@@ -17,34 +17,50 @@ a {
 	text-decoration: none;
 	color: #a7a590;
 }
-a:hover { color: #5b5a4f; }
+a:hover {
+	color: #5b5a4f;
+}
 a.delete {
 	font-weight: bold;
 	text-decoration: none;
 	padding: .3em;
 }
-a:hover.delete { color: #cc0000; }
+a:hover.delete {
+	color: #cc0000;
+}
 a.edit {
 	font-weight: bold;
 	text-decoration: none;
 	padding: .3em;
 }
-a:hover.edit { color: #d8eb52; }
+a:hover.edit {
+	color: #d8eb52;
+}
 a.add {
 	font-weight: bold;
 	text-decoration: none;
 }
-a:hover.add { color: #70c16e; }
+a:hover.add {
+	color: #70c16e;
+}
 
 /* special font classes */
 .fontTitle {
 	font-size: 2em;
 	font-weight: bold;
 }
-.fontLarge { font-size: 1.4em; }
-.fontMedium { font-size: 1.2em; }
-.fontNormal { font-size: .9em; }
-.fontSmall { font-size: .75em; }
+.fontLarge {
+	font-size: 1.4em;
+}
+.fontMedium {
+	font-size: 1.2em;
+}
+.fontNormal {
+	font-size: .9em;
+}
+.fontSmall {
+	font-size: .75em;
+}
 
 /* styles for select boxes */
 select {
@@ -55,7 +71,7 @@ select {
 	font-size: 8.5pt;
 }
 
-/* styles for the input boxes */
+/* styles for the input boxes and buttons */
 input[type=text] {
 	background-color: #000;
 	border: 1px solid #888;
@@ -71,9 +87,7 @@ input[type=password] {
 	font-size: 8.5pt;
 	font-family: "Lucida Grande", "Verdana", sans-serif;
 	padding: 3px;
-}
-
-/* button classes */
+} 
 input.button {
 	padding: 0;
 	background: url( 'buttons/button-off.png' ) no-repeat;
@@ -81,13 +95,21 @@ input.button {
 input.button:hover {
 	background: url( 'buttons/button-hover.png' ) no-repeat;
 }
-
-/* input classes */
-input.class, input.order { width:25px; }
-input.name { width:329px; }
-input.image { width:225px; }
-input.color { width:60px; }
-input.date { width:125px; }
+input.class, input.order {
+	width:25px;
+}
+input.name {
+	width:329px;
+}
+input.image {
+	width:225px;
+}
+input.color {
+	width:60px;
+}
+input.date {
+	width:125px;
+}
 
 /* styles for text areas */
 textarea {
@@ -99,81 +121,57 @@ textarea {
 	padding: .2em;
 	width: 90%;
 }
-textarea.desc {}
-.wideTextArea { width: 99%; }
+textarea.desc {
+	/*width: 97%;*/
+}
+.wideTextArea {
+	width: 99%;
+}
 
 /* class for the specs text areas */
-.specsText { width: 85%; }
+.specsText {
+	width: 85%;
+}
 
 /* classes for the tables */
-table { width: 100%; }
-.narrowTable { width: 75%; }
+table {
+	width: 100%;
+}
+.narrowTable {
+	width: 75%;
+}
 
-/* styles that control the update panel */
-.update { width: 98%; }
-.update a {
-	border-bottom: 1px dotted;
+/* style that controls the update panel */
+.update {
+	width: 98%;
 	color: #fff;
 	font-weight: bold;
+	padding: .5em;
+	background-color: #0d0d0d;
+	border: 1px solid #222;
 }
-.update a:hover { border-bottom: 1px solid; }
-
-/* notification styles */
-.notify-orange {
-	background-color: #231804;
-	border: 1px solid #e99e1c;
-	border-left: 4px solid #e99e1c;
-	padding: .2em 0 .3em 1em;
-	line-height: 1.5;
-}
-.notify-red {
-	background-color: #170707;
-	border: 1px solid #9c2c2c;
-	border-left: 4px solid #9c2c2c;
-	padding: .2em 0 .3em 1em;
-	line-height: 1.5;
-}
-.notify-green {
-	background-color: #0b170b;
-	border: 1px solid #4b994b;
-	border-left: 4px solid #4b994b;
-	padding: .2em 0 .3em 1em;
-	line-height: 1.5;
-}
-.notify-blue {
-	background-color: #0a1023;
-	border: 1px solid #406ceb;
-	border-left: 4px solid #406ceb;
-	padding: .2em 0 .3em 1em;
-	line-height: 1.5;
-}
-.notify-yellow {
-	background-color: #212007;
-	border: 1px solid #dfd530;
-	border-left: 4px solid #dfd530;
-	padding: .2em 0 .3em 1em;
-	line-height: 1.5;
-}
-.notify-normal {
-	background-color: #090909;
-	border: 1px solid #111;
-	padding: .2em 0 .3em 1em;
-	line-height: 1.5;
-}
-
-/* a few font styles */
-.case { text-transform: uppercase; }
-.bold { font-weight: bold; }
 
 /* various color classes */
-.red { color: #9c2c2c; }
-.green { color: #008000; }
-.yellow { color: #dfd530; }
-.blue { color: #416eba; }
-.orange { color: #e99e1c; }
+.red {
+	color: #9c2c2c;
+}
+.green {
+	color: #008000;
+}
+.yellow { 
+	color: #dfd530;
+}
+.blue {
+	color: #0a6fd9;
+}
+.orange { 
+	color: #e99e1c;
+}
 
 /* style used on the count page to put a vertical line in the table */
-.countTableBorder { border-right: 1px solid white; }
+.countTableBorder {
+	border-right: 1px solid white;
+}
 
 /* if there's an error, use this class */
 .error {
@@ -201,25 +199,32 @@ table { width: 100%; }
 	float: right;
 	width: 35%;
 	padding: 5px 1em 1em 1em;
-	border: 1px solid #111;
-	background-color: #090909;
+	border: 1px solid #222;
+	background-color: #0d0d0d;
 	margin: 0 0 1em 2em;
 }
 
-/* styles for alternating row colors */
-.rowColor1 { background-color: #090909; }
-.rowColor2 { background-color: #000; }
+/* honestly, i'm not sure why i put this in here... */
+.buttonSpacer {
+	height: 1px;
+}
 
 /* styles for alternating row colors */
-tr.alt td { background: #090909; }
-tr.over td { background: #111; }
+.rowColor1 {
+	background-color: #0d0d0d;
+}
+.rowColor2 {
+	background-color: #000;
+}
 
 /* styles for the various ULs throughout the system */
 ul.list-dark {
 	list-style-type: square;
 	color: #222;
 }
-ul.version { list-style-type: square; }
+ul.version {
+	list-style-type: square;
+}
 
 /* class that controls the PM headers in the inbox */
 .pmHeader {
@@ -230,6 +235,14 @@ ul.version { list-style-type: square; }
 	font-weight: bold;
 }
 
+/* class that controls the PM reply button */
+.imageButton {
+	background-color: #0d0d0d;
+	border: 1px solid #0d0d0d;
+}
+
 /* special padding number 1 */
 /* this padding is used on the mission summaries page */
-.specialPadding1 { padding: 1em 0 1em 1em; }
+.specialPadding1 {
+	padding: 1em 0 1em 1em;
+}

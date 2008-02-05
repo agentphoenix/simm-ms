@@ -9,8 +9,8 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/log.php
 Purpose: To display the individual personal logs
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 1004 EST
+System Version: 2.5.0
+Last Modified: 2007-04-24 1829 EST
 **/
 
 /* define the page class */
@@ -86,11 +86,11 @@ if( isset( $pl_id ) ) {
 			
 				/* display the previous and next links in the post details box */
 				if( $idNumbers[$prevKey] != '' ) {
-						printText ( "<a href='$webLocation/index.php?page=log&id=$idNumbers[$prevKey]'><img src='$webLocation/images/previous.png' alt='Previous Entry' border='0' class='image' /></a>" );
+						printText ( "<a href='$webLocation/index.php?page=log&id=$idNumbers[$prevKey]'><img src='$webLocation/images/previous.png' alt='Previous Entry' border='0' /></a>" );
 					} if( ($idNumbers[$prevKey] != '') && ($idNumbers[$nextKey] != '') ) {
 						echo "&nbsp;";
 					} if( $idNumbers[$nextKey] != '' ) {
-						printText ( "<a href='$webLocation/index.php?page=log&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' class='image' /></a>" );
+						printText ( "<a href='$webLocation/index.php?page=log&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' /></a>" );
 					}
 				}
 			}

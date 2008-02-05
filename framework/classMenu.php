@@ -5,20 +5,20 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
-File: framework/classMenu.php
+Author: David VanScott [ anodyne.sms@gmail.com ]
+File: framework/menu.php
 Purpose: Page with the menu class that is called by the skin to build the various
 	menus used throughout SMS
 
-System Version: 2.6.0
-Last Modified: 2007-12-27 0949 EST
+System Version: 2.5.2
+Last Modified: 2007-08-01 1132 EST
 **/
 
 class Menu
 {
 	
 	/* function that builds the mainNav */
-	function main() {
+	function main( $sessionCrewid ) {
 
 		/* get the mainNav items from the DB */
 		$getMenu = "SELECT * FROM sms_menu_items WHERE menuCat = 'main' ";
@@ -46,14 +46,14 @@ class Menu
 		}
 		
 		/* open the unordered list */
-		echo "<ul id='nav-main'>";
+		echo "<ul>";
 		
 		/* loop through each key of the array, evaluate it, then spit it out */
 		foreach( $menuArray as $key => $value ) {
 			
 			/* check the link type and then set the prefix and target */
 			if( $value['linkType'] == "onsite" ) {
-				$prefix = WEBLOC;
+				$prefix = $webLocation;
 				$target = "";
 			} else {
 				$prefix = "";
@@ -71,7 +71,7 @@ class Menu
 				echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . ">" . $value['title'] . "</a></li>";
 				
 			} else {
-				if( isset( $_SESSION['sessionCrewid'] ) ) {
+				if( isset( $sessionCrewid ) ) {
 					
 					if( $key != 0 ) {
 						echo "<li class='spacer'>&nbsp;</li>";
@@ -84,109 +84,6 @@ class Menu
 			} /* close the if/else logic */
 
 		} /* close the foreach loop */
-		/*
-		echo "<li class='spacer'>&nbsp;</li>";
-		echo "<li>&nbsp;";
-			$this->user( $sessionCrew );
-		echo "</li>";
-		*/
-		/* close the unordered list */
-		echo "</ul>";
-
-	} /* close the function */
-	
-	/* function that builds the mainNav */
-	function user( $sessionCrewid ) {
-		
-		/* get the items from the user's prefs */
-		$getPrefs = "SELECT menu1, menu2, menu3, menu4, menu5, menu6, menu7, menu8, menu9, menu10 FROM sms_crew ";
-		$getPrefs.= "WHERE crewid = '$sessionCrewid' LIMIT 1";
-		$getPrefsResult = mysql_query( $getPrefs );
-		$prefs = mysql_fetch_array( $getPrefsResult );
-		$prefs = array_unique( $prefs );
-		
-		/* loop through and build an array of the user's items */
-		foreach( $prefs as $key => $value )
-		{
-
-			/* get the mainNav items from the DB */
-			$getMenu = "SELECT * FROM sms_menu_items WHERE menuid = '$value' LIMIT 1";
-			$getMenuResult = mysql_query( $getMenu );
-			
-			/* loop through whatever comes out of the database */
-			while( $fetchMenu = mysql_fetch_array( $getMenuResult ) ) {
-				extract( $fetchMenu, EXTR_OVERWRITE );
-				
-				/* create a multi-dimensional array with the data
-					[x] => array
-					[x]['title'] => title
-					[x]['link'] => link
-					[x]['login'] => login
-					[x]['linkType'] => link type
-					[x]['access'] => menu access
-				*/
-				$menuArray[] = array(
-					'title' => $menuTitle,
-					'link' => $menuLink,
-					'login' => $menuLogin,
-					'linkType' => $menuLinkType,
-					'access' => $menuAccess,
-					'section' => $menuMainSec
-				);
-				
-			} /* close the while loop */
-			
-		} /* close the foreach */
-		
-		/* open the unordered list */
-		echo "<ul id='list'>";
-			echo "<li><img src='dev/arrow.png' alt='>>' border='0' />";
-				echo "<ul class='hidemenu'>";
-		
-				/* loop through each key of the array, evaluate it, then spit it out */
-				foreach( $menuArray as $key => $value ) {
-			
-					/* check the link type and then set the prefix and target */
-					if( $value['linkType'] == "onsite" ) {
-						$prefix = WEBLOC;
-						$target = "";
-						
-						if( 
-							$value['section'] == "user" && (
-								substr( $value['access'], -1, 1 == "1" ) ||
-								substr( $value['access'], -1, 1 == "2" ) ||
-								substr( $value['access'], -1, 1 == "3" )
-							)
-						) {
-							$crew = "&crew=" . $sessionCrewid;
-						} else {
-							$crew = "";
-						}
-						
-					} else {
-						$prefix = "";
-						$target = " target='_blank'";
-					}
-				
-					/* if the item doesn't require a login, display it */
-					if( $value['login'] == "n" ) {
-				
-						/* print out the item */
-						echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
-				
-					} else {
-						if( isset( $sessionCrewid ) ) {
-					
-							/* print out the item */
-							echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
-					
-						}	/* close the if */
-					} /* close the if/else logic */
-
-				} /* close the foreach loop */
-		
-				echo "</ul>";
-			echo "</li>";
 		
 		/* close the unordered list */
 		echo "</ul>";
@@ -234,12 +131,7 @@ class Menu
 					within that group
 				*/
 				if( in_array( $menuAccess, $access ) ) {
-					
-					/* fixes a PHP warning */
-					if( !isset( $groupArray ) ) {
-						$groupArray = "";
-					}
-					
+				
 					/* set up the group array */
 					if( !is_array( $groupArray ) ) {
 						$groupArray = array( $menuGroup );
@@ -270,7 +162,7 @@ class Menu
 					
 						/* check the link type and then set the prefix and target */
 						if( $value['linkType'] == "onsite" ) {
-							$prefix = WEBLOC;
+							$prefix = $webLocation;
 							$target = "";
 							
 							if( 
@@ -370,11 +262,6 @@ class Menu
 				'group' => $menuGroup
 			);
 			
-			/* fixes a PHP warning */
-			if( !isset( $groupArray ) ) {
-				$groupArray = "";
-			}
-			
 			/* set up the group array */
 			if( !is_array( $groupArray ) ) {
 				$groupArray = array( $menuGroup );
@@ -403,7 +290,7 @@ class Menu
 				
 					/* check the link type and then set the prefix and target */
 					if( $value['linkType'] == "onsite" ) {
-						$prefix = WEBLOC;
+						$prefix = $webLocation;
 						$target = "";
 					} else {
 						$prefix = "";

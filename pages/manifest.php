@@ -5,14 +5,14 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/manifest.php
 Purpose: Provides a listing from the database of either the active crew, the 
 	inactive crew (departed players), available positions, or non-playing characters 
 	on the simm.
 
-System Version: 2.6.0
-Last Modified: 2007-12-27 0950 EST
+System Version: 2.5.0
+Last Modified: 2007-05-01 1221 EST
 **/
 
 if( $manifestDisplay == "full" && $_GET['disp'] == "crew" ) {
@@ -21,12 +21,7 @@ if( $manifestDisplay == "full" && $_GET['disp'] == "crew" ) {
 
 /* define the page class and set vars */
 $pageClass = "personnel";
-
-if( isset( $_GET['disp'] ) ) {
-	$display = $_GET['disp'];
-} else {
-	$display = "";
-}
+$display = $_GET['disp'];
 
 /* pull in the main navigation */
 if( isset( $sessionCrewid ) ) {
@@ -209,19 +204,19 @@ $deptResults = mysql_query( $departments );
 			<td width="10%" valign="middle">
 				<?
 					if( $display == "npcs" ) {
-						echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-npc.jpg' border='0' class='image' /></a>";
+						echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-npc.jpg' border='0' /></a>";
 					} elseif( $display == "open" ) {
 						echo "";
 					} elseif( $display == "crew" ) {
 						if( $loa == "1" ) {
-							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-loa.jpg' border='0' class='image' /></a>";
+							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-loa.jpg' border='0' /></a>";
 						} elseif( $loa == "2" ) {
-							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-eloa.jpg' border='0' class='image' /></a>";
+							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-eloa.jpg' border='0' /></a>";
 						} elseif( $loa == "0" ) {
-							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge.jpg' border='0' class='image' /></a>";
+							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge.jpg' border='0' /></a>";
 						}
 					} elseif( $display == "past" ) {
-						echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge.jpg' border='0' class='image' /></a>";
+						echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge.jpg' border='0' /></a>";
 					}
 				?>
 			</td>

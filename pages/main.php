@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/main.php
 Purpose: The main file that the system defaults to on the user side
 
-System Version: 2.6.0
-Last Modified: 2007-11-12 1504 EST
+System Version: 2.5.0
+Last Modified: 2007-04-24 1822 EST
 **/
 
 /* define the page class */
@@ -61,9 +61,6 @@ if( isset( $sessionCrewid ) ) {
 		/* set the author var w/ link */
 		$author = "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'>" . $rankName . " " . $firstName . " " . $lastName . "</a>";
 		
-		/* if the news item is set to private and the person isn't logged in, don't show them anything */
-		if( $newsPrivate == 'y' && !isset( $sessionCrewid ) ) {} else {
-		
 	?>
 	
 	<span class="fontMedium"><b><? printText( $newsTitle ); ?></b></span><br />
@@ -75,6 +72,6 @@ if( isset( $sessionCrewid ) ) {
 		<? printText( $newsContent ); ?>
 	</div>
 	
-	<? } } } ?>
+	<? } } ?>
 	
 </div>

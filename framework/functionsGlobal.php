@@ -6,16 +6,17 @@ knowledgeable as to the structure of the system. Modification of this file may
 cause the system to no longer function.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: framework/functionsGlobal.php
+File: [ framework/functionsGlobal.php ]
 Purpose: File that holds all the necessary global function files for JP author printing,
 	database connection, and error catching
 	
-System Version: 2.6.0
-Last Modified: 2007-12-27 1005 EST
+System Version: 2.5.5
+Last Modified: 2007-11-07 0823 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
 	print_active_crew_select_menu( $type, $author, $id, $section, $sub )
+	printText( $object )
 	printCO()
 	printXO()
 	printCOEmail()
@@ -29,14 +30,14 @@ Included Functions:
 **/
 
 /* pull in the DB connection variables */
-include_once( 'variables.php' );
+require_once( 'variables.php' );
 
 /* database connection */
-$db = @mysql_connect( $dbServer, $dbUser, $dbPassword ) or die ( "<b>" . $dbErrorMessage . "</b>" );
-mysql_select_db( $dbName, $db ) or die ( "<b>Unable to select the appropriate database.  Please try again later.</b>" );
+$db = @mysql_connect( "$dbServer", "$dbUser", "$dbPassword" ) or die ( "<b>$dbErrorMessage</b>" );
+mysql_select_db( "$dbTable",$db ) or die ( "<b>Unable to select the appropriate database.  Please try again later.</b>" );
 
 /* query the globals table */
-$globals = "SELECT globals.*, messages.*, sys.sysuid, sys.sysVersion FROM sms_globals AS globals, sms_messages AS messages, ";
+$globals = "SELECT globals.*, messages.*, sys.sysuid FROM sms_globals AS globals, sms_messages AS messages, ";
 $globals.= "sms_system AS sys WHERE globals.globalid = '1' AND messages.messageid = '1' AND sys.sysid = '1'";
 $globalsResult = mysql_query( $globals );
 
@@ -45,20 +46,8 @@ while( $global = mysql_fetch_assoc( $globalsResult ) ) {
 }
 
 /* define the version number */
-$version = "2.6.0";
+$version = "2.5.5";
 $code = $sysuid;
-
-/* define web location, file version, and db version constants */
-define( 'WEBLOC', $webLocation );
-define( 'VER_FILES', $version );
-define( 'VER_DB', $sysVersion );
-define( 'SHIP_NAME', $shipName );
-define( 'SHIP_PREFIX', $shipPrefix );
-define( 'SHIP_REG', $shipRegistry );
-define( 'SIM_YEAR', $simmYear );
-
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
 
 /**
 	JP Author Function
@@ -92,7 +81,7 @@ function displayAuthors( $missionID, $link ) {
 			
 			if( $link == "link" ) {
 				$authors = array(
-					"<a href='" . WEBLOC . "index.php?page=bio&crew=" . $authorsStart['crewid'] . "'>" . $rankName . " " . $firstName . " " . $lastName . "</a>"
+					"<a href='" . $webLocation . "index.php?page=bio&crew=" . $authorsStart['crewid'] . "'>" . $rankName . " " . $firstName . " " . $lastName . "</a>"
 				);
 			} else {
 				$authors = array(
@@ -181,16 +170,16 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 			if( $i < 7 ) {
 				echo "&nbsp;";
 				if( $_GET['id'] ) {
-					echo "<a href='" . WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&add=1&postid=" . $id . "'><img src='" . WEBLOC . "images/add.png' border='0' alt='Add' /></a>";
+					echo "<a href='" . $webLocation . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&add=1&postid=" . $id . "'><img src='" . $webLocation . "images/add.png' border='0' alt='Add' /></a>";
 				} else {
-					echo "<a href='" . WEBLOC . "admin.php?page=manage&sub=posts&add=1&postid=" . $id . "'><img src='" . WEBLOC . "images/add.png' border='0' alt='Add' /></a>";
+					echo "<a href='" . $webLocation . "admin.php?page=manage&sub=posts&add=1&postid=" . $id . "'><img src='" . $webLocation . "images/add.png' border='0' alt='Add' /></a>";
 				}
 			} if( array_key_exists( "1", $authorArray ) ) {
 				echo "&nbsp;&nbsp;";
 				if( $_GET['id'] ) {
-					echo "<a href='" . WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&delete=" . $i . "&postid=" . $id . "'><img src='" . WEBLOC . "images/remove.png' border='0' alt='Delete' /></a>";
+					echo "<a href='" . $webLocation . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&delete=" . $i . "&postid=" . $id . "'><img src='" . $webLocation . "images/remove.png' border='0' alt='Delete' /></a>";
 				} else {
-					echo "<a href='" . WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&delete=" . $i . "&postid=" . $id . "'><img src='" . WEBLOC . "images/remove.png' border='0' alt='Delete' /></a>";
+					echo "<a href='" . $webLocation . "admin.php?page=" . $section . "&sub=" . $sub . "&delete=" . $i . "&postid=" . $id . "'><img src='" . $webLocation . "images/remove.png' border='0' alt='Delete' /></a>";
 				}
 			}
 			
@@ -221,12 +210,15 @@ function printCO() {
 	
 	$getCO = "SELECT crew.firstName, crew.lastName, rank.rankName ";
 	$getCO.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-	$getCO.= "WHERE crew.positionid = 1 AND crew.crewType = 'active' ";
+	$getCO.= "WHERE crew.positionid = '1' AND crew.crewType = 'active' ";
 	$getCO.= "AND crew.rankid = rank.rankid LIMIT 1";
 	$getCOResult = mysql_query( $getCO );
-	$coFetch = mysql_fetch_array( $getCOResult );
 	
-	return $coFetch[2] . " " . $coFetch[0] . " " . $coFetch[1];
+	while( $coFetch = mysql_fetch_assoc( $getCOResult ) ) {
+		extract( $coFetch, EXTR_OVERWRITE );
+	}
+	
+	return $rankName . " " . $firstName . " " . $lastName;
 
 }
 /* END FUNCTION */
@@ -238,12 +230,15 @@ function printXO() {
 	
 	$getXO = "SELECT crew.firstName, crew.lastName, rank.rankName ";
 	$getXO.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-	$getXO.= "WHERE crew.positionid = 2 AND crew.rankid = rank.rankid ";
+	$getXO.= "WHERE crew.positionid = '2' AND crew.rankid = rank.rankid ";
 	$getXO.= "AND crew.crewType = 'active' LIMIT 1";
 	$getXOResult = mysql_query( $getXO );
-	$xoFetch = mysql_fetch_array( $getXOResult );
 	
-	return $xoFetch[2] . " " . $xoFetch[0] . " " . $xoFetch[1];
+	while( $xoFetch = mysql_fetch_assoc( $getXOResult ) ) {
+		extract( $xoFetch, EXTR_OVERWRITE );
+	}
+	
+	return $rankName . " " . $firstName . " " . $lastName;
 
 }
 /* END FUNCTION */
@@ -330,7 +325,7 @@ function displayEmailAuthors( $authors, $link ) {
 			
 			if( $link == "link" ) {
 				$authors = array(
-					"<a href='" . WEBLOC . "index.php?page=bio&crew=" . $authorsStart['crewid'] . "'>" . $rankName . " " . $firstName . " " . $lastName . "</a>"
+					"<a href='" . $webLocation . "index.php?page=bio&crew=" . $authorsStart['crewid'] . "'>" . $rankName . " " . $firstName . " " . $lastName . "</a>"
 				);
 			} else {
 				$authors = array(

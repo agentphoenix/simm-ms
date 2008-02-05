@@ -9,8 +9,8 @@ Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin.php
 Purpose: The main file that pulls in the requested administration page
 
-System Version: 2.6.0
-Last Modified: 2007-12-27 0934 EST
+System Version: 2.5.0
+Last Modified: 2007-07-09 1312 EST
 **/
 
 /* start the session */
@@ -18,7 +18,10 @@ session_start();
 
 /* pull in the DB connection variables */
 require_once( 'framework/variables.php' );
-require_once( 'framework/dbconnect.php' );
+
+/* database connection */
+$db = @mysql_connect( "$dbServer", "$dbUser", "$dbPassword" ) or die ( "<b>$dbErrorMessage</b>" );
+mysql_select_db( "$dbTable",$db ) or die ( "<b>Unable to select the appropriate database.  Please try again later.</b>" );
 
 /* query the db for the system information */
 $getVer = "SELECT sysVersion FROM sms_system WHERE sysid = 1";
@@ -40,26 +43,42 @@ if( $updateVersion[0] < "2.5.0" ) {
 	require_once( 'framework/functionsGlobal.php' );
 	require_once( 'framework/functionsAdmin.php' );
 	require_once( 'framework/functionsUtility.php' );
-	require_once( 'framework/classes/utility.php' );
+	require_once( 'framework/classUtility.php' );
 	require_once( 'framework/classMenu.php' );
-	require_once( 'framework/classes/check.php' );
+	
+	/* Bring in the required files to check browser compatability */
+	require_once( 'framework/phpsniff/phpSniff.class.php' );
+	require_once( 'framework/phpsniff/phpTimer.class.php' );
+	
+	/* initialize some vars */
+	$GET_VARS = isset( $_GET ) ? $_GET : $HTTP_GET_VARS;
+	$POST_VARS = isset( $_POST ) ? $_GET : $HTTP_POST_VARS;
+	if( !isset( $GET_VARS['UA'] ) ) $GET_VARS['UA'] = '';
+	if( !isset( $GET_VARS['cc'] ) ) $GET_VARS['cc'] = '';
+	if( !isset( $GET_VARS['dl'] ) ) $GET_VARS['dl'] = '';
+	if( !isset( $GET_VARS['am'] ) ) $GET_VARS['am'] = '';
+	
+	$timer =& new phpTimer();
+	$timer->start( 'main' );
+	$timer->start( 'client1' );
+	$sniffer_settings = array( 'check_cookies'=>$GET_VARS['cc'],
+							  'default_language'=>$GET_VARS['dl'],
+							  'allow_masquerading'=>$GET_VARS['am'] );
+	$client =& new phpSniff( $GET_VARS['UA'],$sniffer_settings );
+	
+	$timer->stop( 'client1' );
 	
 	/* set the variables */
 	$page = $_GET['page'];
 
 	/* define the session variables */
 	$sessionCrewid = $_SESSION['sessionCrewid'];
-	$sessionAccessLevel = $_SESSION['sessionAccess'];
+	$sessionAccessLevel = $_SESSION['sessionAccessLevel'];
 	$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
 	$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
 	
 	/* define some path variables */
 	define( 'path_userskin', $webLocation . 'skins/' . $sessionDisplaySkin . '/' );
-	
-	/* fixes a PHP warning with an undefined variable */
-	if( !isset( $sessionAccess ) ) {
-		$sessionAccess = "";
-	}
 	
 	/*
 		check to see if the session access variable is an array
@@ -83,7 +102,7 @@ if( $updateVersion[0] < "2.5.0" ) {
 		} else {
 			include_once( 'skins/' . $skin . '/header.php' );
 		}
-		
+			
 		/* pull in the page referenced in the URL */
 		include_once( 'admin/' . $page . '.php' );
 		

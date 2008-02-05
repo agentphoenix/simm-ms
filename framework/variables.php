@@ -1,11 +1,11 @@
 <?php
 	
-$webLocation = "http://eclipse.anodyne-productions.com/";
+$webLocation = "http://localhost:8888/palantir/";
 
-$dbServer = "localhost:/tmp/mysql5.sock";
-$dbName = "anodyne_trunk";
-$dbUser = "trunkuser";
-$dbPassword = "alpha312";
-$dbErrorMessage = "There was an error connecting to the database, please try again later!";
+$dbServer = "localhost";
+$dbTable = "sms_branch";
+$dbUser = "root";
+$dbPassword = "root";
+$dbErrorMessage = "Error!";
 
 ?>

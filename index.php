@@ -9,15 +9,19 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: index.php
 Purpose: The main file that pulls in the requested page
 
-System Version: 2.6.0
-Last Modified: 2008-01-19 1227 EST
+System Version: 2.5.0
+Last Modified: 2007-07-16 1655 EST
 **/
 
 /* start the session */
 session_start();
 
 /* pull in the DB connection variables */
-require_once( 'framework/dbconnect.php' );
+require_once( 'framework/variables.php' );
+
+/* database connection */
+$db = @mysql_connect( "$dbServer", "$dbUser", "$dbPassword" ) or die ( "<b>$dbErrorMessage</b>" );
+mysql_select_db( "$dbTable",$db ) or die ( "<b>Unable to select the appropriate database.  Please try again later.</b>" );
 
 /* query the db for the system information */
 $getVer = "SELECT sysVersion FROM sms_system WHERE sysid = 1";
@@ -31,9 +35,11 @@ if( !empty( $getVerResult ) ) {
 make sure the user is running 2.5, and if not, push them
 to the install page to update from the earlier version
 */
-if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
+if(
+	$updateVersion[0] < "2.5.0" || 
+	empty( $webLocation )
+) {
 	header( 'Location: install.php' );
-	exit;
 } else {
 	
 	/* close the db connection to avoid any problems */
@@ -43,31 +49,51 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 	require_once( 'framework/functionsGlobal.php' );
 	require_once( 'framework/functionsAdmin.php' );
 	require_once( 'framework/functionsUtility.php' );
-	require_once( 'framework/classes/utility.php' );
+	require_once( 'framework/classUtility.php' );
 	require_once( 'framework/classMenu.php' );
-
+	
+	/* Bring in the required files to check browser compatability */
+	require_once( 'framework/phpsniff/phpSniff.class.php' );
+	require_once( 'framework/phpsniff/phpTimer.class.php' );
+	
+	/* initialize some vars */
+	$GET_VARS = isset( $_GET ) ? $_GET : $HTTP_GET_VARS;
+	$POST_VARS = isset( $_POST ) ? $_GET : $HTTP_POST_VARS;
+	if( !isset( $GET_VARS['UA'] ) ) $GET_VARS['UA'] = '';
+	if( !isset( $GET_VARS['cc'] ) ) $GET_VARS['cc'] = '';
+	if( !isset( $GET_VARS['dl'] ) ) $GET_VARS['dl'] = '';
+	if( !isset( $GET_VARS['am'] ) ) $GET_VARS['am'] = '';
+	
+	$timer =& new phpTimer();
+	$timer->start( 'main' );
+	$timer->start( 'client1' );
+	$sniffer_settings = array( 'check_cookies'=>$GET_VARS['cc'],
+							  'default_language'=>$GET_VARS['dl'],
+							  'allow_masquerading'=>$GET_VARS['am'] );
+	$client =& new phpSniff( $GET_VARS['UA'],$sniffer_settings );
+	
+	$timer->stop( 'client1' );
+	
 	/* get the referenced page from the URL */
-	if( isset( $_GET['page'] ) ) {
-		$page = $_GET['page'];
-	} else {
-		$page = "main";
-	}
+	$page = $_GET['page'];
+
+	/* define the session variables */
+	$sessionCrewid = $_SESSION['sessionCrewid'];
+	$sessionAccessLevel = $_SESSION['sessionAccessLevel'];
+	$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
+	$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
 	
-	/* if there's a session set, define the session variables */
-	if( isset( $_SESSION['sessionCrewid'] ) ) {
-		$sessionCrewid = $_SESSION['sessionCrewid'];
-		$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
-		$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
-	}
-	
-	/* fixes a PHP warning with an undefined variable */
-	if( !isset( $sessionAccess ) ) {
-		$sessionAccess = "";
-	}
-	
-	/* if the sessionAccess isn't an array, make it one */
+	/*
+		check to see if the session access variable is an array
+		and if it isn't, explode the string
+	*/
 	if( !is_array( $sessionAccess ) ) {
 		$sessionAccess = explode( ",", $_SESSION['sessionAccess'] );
+	}
+	
+	/* if there is no page set, send them to the main page */
+	if( !$page ) {
+		$page = "main";
 	}
 	
 	/* grab the user's skin choice, otherwise, use the system default */
@@ -76,13 +102,9 @@ if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
 	} else {
 		include_once( 'skins/' . $skin . '/header.php' );
 	}
-	
+		
 	/* pull in the page referenced in the URL */
-	if( file_exists( 'pages/' . $page . '.php' ) ) {	
-		include_once( 'pages/' . $page . '.php' );
-	} else {
-		include_once( 'pages/error.php' );
-	}
+	include_once( 'pages/' . $page . '.php' );
 	
 	/* grab the user's skin choice, otherwise, use the system default */
 	if( isset( $sessionDisplaySkin ) && $code == $_SESSION['systemUID'] ) {

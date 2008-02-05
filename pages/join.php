@@ -9,29 +9,18 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/join.php
 Purpose: To display the join application and submit it
 
-System Version: 2.6.0
-Last Modified: 2007-12-22 2227 EST
+System Version: 2.5.5
+Last Modified: 2007-11-07 0852 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "simm";
-$query = "";
-$result = "";
-
-if( isset( $_GET['agree'] ) ) {
-	$agree = $_GET['agree'];
-}
-
-if( isset( $_POST['action_x'] ) ) {
-	$action = $_POST['action_x'];
-}
-
-if( isset( $_GET['position'] ) ) {
-	$pid = $_GET['position'];
-}
+$agree = $_GET['agree'];
+$action = $_POST['action_x'];
+$pid = $_GET['position'];
 
 if( isset( $pid ) && !is_numeric( $pid ) ) {
-	errorMessageIllegal( __FILE__, $sessionCrewid, 'number', $pid );
+	errorMessageIllegal( "activation page" );
 	exit();
 }
 
@@ -45,18 +34,18 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* submit the application */
-if( isset( $action ) ) {
-	
+if( $action ) {
+
 	/* get today's date */
 	$today = getdate();
 	
 	/* build the insert query that's going to be used */
 	$join = "INSERT INTO sms_crew ( username, password, crewType, email, realName, aim, msn, yim, icq, ";
-	$join.= "positionid, rankid, firstName, middleName, lastName, gender, species, heightFeet, heightInches, ";
+	$join.= "positionid, firstName, middleName, lastName, gender, species, heightFeet, heightInches, ";
 	$join.= "weight, eyeColor, hairColor, age, physicalDesc, personalityOverview, strengths, ambitions, hobbies, ";
 	$join.= "languages, history, serviceRecord, father, mother, brothers, sisters, spouse, children, ";
 	$join.= "otherFamily, image, joinDate ) ";
-	$join.= "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ";
+	$join.= "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ";
 	$join.= "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d )";
 	
 	/* run the query through sprintf and the safety function to scrub for security issues */
@@ -66,13 +55,12 @@ if( isset( $action ) ) {
 		escape_string( md5( $_POST['password'] ) ),
 		escape_string( 'pending' ),
 		escape_string( $_POST['email'] ),
-		escape_string( $_POST['realName'] ),
+		escape_string( $_POST['realname'] ),
 		escape_string( $_POST['aim'] ),
 		escape_string( $_POST['msn'] ),
 		escape_string( $_POST['yim'] ),
 		escape_string( $_POST['icq'] ),
-		escape_string( $_POST['positionid'] ),
-		escape_string( $_POST['rankid'] ),
+		escape_string( $_POST['position'] ),
 		escape_string( $_POST['firstName'] ),
 		escape_string( $_POST['middleName'] ),
 		escape_string( $_POST['lastName'] ),
@@ -106,37 +94,38 @@ if( isset( $action ) ) {
 	/* run the query */
 	$result = mysql_query( $query );
 	
-	/* if there's a positive result from the query, send the emails */
+	/* if statement to send emails */
 	if ( $result != "" ) {
-	
+		
 		/* loop through the POST array and dynamically assign variables */
 		foreach( $_POST as $key => $value )
 		{
 			$$key = stripslashes( $value );
 		}
-	
+		
 		/* set variables and send email to User */
-		$subject = $emailSubject . " Application Submitted";
+		$subject = "[" . $shipPrefix . " " . $shipName . "] Application Submitted";
 		$to = $email;
 		$from = printCO() . " <" . printCOEmail() . ">";
-		$message = "Greetings $realName,
+		$message = "Greetings $realname,
 	
 You have recently submitted an application to join the $shipPrefix $shipName.  The CO has been informed of this and should be looking over you application.  Expect an answer within the next few days on whether or not you are accepted. 
 	
 Thank you for your interest.
 
 This is an automatically generated message, please do not respond.";
-		
-		/* send the email */
-		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
 
+		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+	
 		/* get the position name of the application */
-		$getPositionName = "SELECT positionName FROM sms_positions WHERE positionid = '$position'";
+		$getPositionName = "SELECT positionName ";
+		$getPositionName.= "FROM sms_positions ";
+		$getPositionName.= "WHERE positionid = '$position'";
 		$getPositionNameResult = mysql_query( $getPositionName );
 		$positioninfo = mysql_fetch_array( $getPositionNameResult );
 		
 		/* set the subject */
-		$subject = $emailSubject . " Character Awaiting Approval";
+		$subject = "[" . $shipPrefix . " " . $shipName . "] Character Awaiting Approval";
 		
 		/* set the to field */
 		$to = printCOEmail();
@@ -145,6 +134,9 @@ This is an automatically generated message, please do not respond.";
 		if( $xoCrewApps == "y" ) {
 			$to.= "," . printXOEmail();
 		}
+		
+		/* set new from */
+		$from = $realName . " <" . $email . ">";
 	
 		$message = "A new user has applied to join the " . $shipName . ".  Below you will find the information along with the link to the site to login and approve or deny the application.
 
@@ -217,7 +209,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 	<?
 	
 	$check = new QueryCheck;
-	$check->checkQuery( $result, $query );
+	$check->checkQuery( $result, $join );
 			
 	if( !empty( $check->query ) ) {
 		$check->message( "application", "submit" );
@@ -229,12 +221,12 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 	<span class="fontTitle">Join the <i><? printText( $shipPrefix . " " . $shipName ); ?></i></span>
 	<br /><br />
 
-	<? if( !isset( $agree ) ) { ?>
+	<? if( !$agree ) { ?>
 
 	<div style="padding: 1em;">Before continuing, you must agree to the following disclaimer:</div>
 	<div style="padding: 2em;"><i><? printText( $joinDisclaimer ); ?></i></div>
 	<div style="padding: 1em;">
-		<? if( isset( $pid ) ) { ?>
+		<? if( $pid ) { ?>
 		<a href="<?=$webLocation;?>index.php?page=join&position=<?=$pid;?>&agree=yes" class="fontMedium"><b>Agree</b></a>
 		<? } else { ?>
 		<a href="<?=$webLocation;?>index.php?page=join&agree=yes" class="fontMedium"><b>Agree</b></a>

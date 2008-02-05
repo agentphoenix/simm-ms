@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/decklisting.php
 Purpose: Page to display the deck listing
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 0959 EST
+System Version: 2.5.0
+Last Modified: 2007-04-05 2340 EST
 **/
 
 /* define the page class */
@@ -36,7 +36,7 @@ if( isset( $sessionCrewid ) ) {
 	if( isset( $sessionCrewid ) && in_array( "m_decks", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=decklisting'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 

@@ -5,13 +5,13 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/manifestFull.php
 Purpose: Provides a full listing from the database of the active crew, available 
 	positions, and non-playing characters on the simm.
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 1009 EST
+System Version: 2.5.0
+Last Modified: 2007-04-30 2005 EST
 **/
 
 /* define the page class and vars */
@@ -158,11 +158,11 @@ if( !$display ) {
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$u_id;?>">
 				
 				<? if($u_loa == 1) { ?>
-					<img src="images/combadge-loa.jpg" border="0" class="image" />
+					<img src="images/combadge-loa.jpg" border="0" />
 				<? } elseif($u_loa == 2) { ?>
-					<img src="images/combadge-eloa.jpg" border="0" class="image" />
+					<img src="images/combadge-eloa.jpg" border="0" />
 				<? } else { ?>
-					<img src="images/combadge.jpg" border="0" class="image" />
+					<img src="images/combadge.jpg" border="0" />
 				<? } ?>
 				</a>
 			</td>
@@ -210,7 +210,7 @@ if( !$display ) {
 			</td>
 			<td width="10%" valign="middle">
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$n_id;?>">
-					<img src="images/combadge-npc.jpg" border="0" class="image" />
+					<img src="images/combadge-npc.jpg" border="0" />
 				</a>
 			</td>
 		</tr>
