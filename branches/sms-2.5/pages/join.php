@@ -9,8 +9,8 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/join.php
 Purpose: To display the join application and submit it
 
-System Version: 2.5.5
-Last Modified: 2007-11-07 0852 EST
+System Version: 2.5.6
+Last Modified: 2008-02-04 1746 EST
 **/
 
 /* define the page class and vars */
@@ -20,7 +20,7 @@ $action = $_POST['action_x'];
 $pid = $_GET['position'];
 
 if( isset( $pid ) && !is_numeric( $pid ) ) {
-	errorMessageIllegal( "activation page" );
+	errorMessageIllegal( "join page" );
 	exit();
 }
 
