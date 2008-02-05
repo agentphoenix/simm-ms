@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/tour.php
 Purpose: Page to display the tour items
 
-System Version: 2.6.0
-Last Modified: 2007-10-12 1643 EST
+System Version: 2.5.0
+Last Modified: 2007-04-05 2334 EST
 **/
 
 /* define the page class and vars */
@@ -38,7 +38,8 @@ if( !empty( $tour ) ) {
 		extract( $tour, EXTR_OVERWRITE );
 	}
 
-	echo "<span class='fontTitle'>Tour of ";
+	echo "<span class='fontTitle'>";
+	echo "Tour of ";
 	printText( $tourName );
 	echo "</span>";
 
@@ -49,62 +50,40 @@ if( !empty( $tour ) ) {
 	if( isset( $sessionCrewid ) && in_array( "m_tour", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour&entry=" . $tourid . "'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
-	
-	if( !empty( $tourPicture1 ) || !empty( $tourPicture2 ) || !empty( $tourPicture3 ) ) {
-	
-	?>
-	
-	<script type="text/javascript">
-		$(function() {
-			$('#gallery a').lightBox();
-		});
-	</script>
+
+?>
 	
 	<br /><br />
-	<div id="gallery">
-		<table>
-			<tr height="110">
-			<? if( !empty( $tourPicture1 ) ) { ?>
-				<td valign="top" width="10%">
-					<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
-					</a>
-				</td>
-			<? } ?>
-		
-			<? if( !empty( $tourPicture2 ) ) { ?>
-				<td width="10">&nbsp;</td>
-				<td valign="top" width="10%">
-					<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
-					</a>
-				</td>
-			<? } ?>
-		
-			<? if( !empty( $tourPicture3 ) ) { ?>
-				<td width="10">&nbsp;</td>
-				<td valign="top" width="10%">
-					<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
-					</a>
-				</td>
-			<? } ?>
-				<td width="70%"></td>
-			</tr>
-		</table>
+
+	<? if( !empty( $tourPicture1 ) || !empty( $tourPicture2 ) || !empty( $tourPicture3 ) ) { ?>
+	<div style="float:left; padding:0 1em 1em 0;">
+		<? if( !empty( $tourPicture1 ) ) { ?>
+		<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>" target="_blank">
+			<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" />
+		</a><br />
+		<? } ?>
+		<? if( !empty( $tourPicture2 ) ) { ?>
+		<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>" target="_blank">
+			<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" />
+		</a>
+		<? } ?>
+		<? if( !empty( $tourPicture3 ) ) { ?>
+		<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>" target="_blank">
+			<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" />
+		</a>
+		<? } ?>
 	</div>
 	<? } ?>
-	
-	<br />
 
-	<b class="fontMedium">Location: <? printText( $tourLocation ); ?></b><br />
+	<b>Location: <? printText( $tourLocation ); ?></b><br />
 	<? printText( $tourDesc ); ?>
-	
-	<br /><br />
-	<b class="fontMedium"><a href="<?=$webLocation;?>index.php?page=tour">&laquo; Back to Tour Index</a></b>
+
+	<div style="clear:both;">
+		<b class="fontMedium"><a href="<?=$webLocation;?>index.php?page=tour">&laquo; Back to Tour Index</a></b>
+	</div>
 
 	<?
 
@@ -121,7 +100,7 @@ if( !empty( $tour ) ) {
 		if( isset( $sessionCrewid ) && in_array( "m_tour", $sessionAccess ) ) {
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour'>";
-			echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+			echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 			echo "</a>";
 		}
 

@@ -9,8 +9,8 @@ Author: David VanScott, Justin Chow [ anodyne.sms@gmail.com ]
 File: skins/SMS_Lcars/footer.php
 Purpose: The footer file that the system calls in for the template
 
-System Version: 2.6.0
-Last Modified: 2007-08-22 1005 EST
+System Version: 2.5.0
+Last Modified: 2007-03-21 2310 EST
 **/
 
 ?>
@@ -19,7 +19,7 @@ Last Modified: 2007-08-22 1005 EST
 
 	<!-- Please do not edit this. If you wish to add credits, you can do so through the Site Messages panel -->
 	<div class="footer">
-		Powered by SMS 2 &nbsp; | &nbsp;
+		Simm Management System (SMS 2) &nbsp; | &nbsp;
 		Copyright &copy; Anodyne Productions 2005 - <?=date('Y');?> &nbsp; | &nbsp;
 		<a href="<?=$webLocation;?>index.php?page=credits">Site Credits</a>
 	</div>

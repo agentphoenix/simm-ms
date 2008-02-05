@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/post/log.php
 Purpose: Page to post a personal log
 
-System Version: 2.6.0
-Last Modified: 2007-08-21 0910 EST
+System Version: 2.5.0
+Last Modified: 2007-06-18 1311 EST
 **/
 
 /* access check */
@@ -110,7 +110,7 @@ if( in_array( "p_log", $sessionAccess ) ) {
 		
 			/* define the variables */
 			$to = getCrewEmails( "emailLogs" );
-			$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $logTitle );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . $name . "'s Personal Log - " . stripslashes( $logTitle );
 			$message = stripslashes( $logContent );
 			
 			/* send the email */
@@ -120,7 +120,7 @@ if( in_array( "p_log", $sessionAccess ) ) {
 		
 			/* define the variables */
 			$to = printCOEmail();
-			$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $logTitle ) . " (Awaiting Approval)";
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . $name . "'s Personal Log - " . stripslashes( $logTitle ) . " (Awaiting Approval)";
 			$message = stripslashes( $logContent ) . "
 	
 Please log in to approve this log.  " . $webLocation . "login.php?action=login";

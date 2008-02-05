@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: framework/functionsAdmin.php
 Purpose: List of functions specific to the administration control panel
 
-System Version: 2.6.0
-Last Modified: 2007-11-06 2117 EST
+System Version: 2.5.6
+Last Modified: 2008-02-05 1104 EST
 
 Included Functions:
 	printCrewName( $crewid, $rank, $link )
@@ -20,7 +20,7 @@ Included Functions:
 	checkSavedPosts( $crew, $access )
 	aboutSMS( $version )
 	checkUnreadMessages( $crew )
-	errorMessageIllegal( $page, $crewid, $expected, $actual )
+	errorMessageIllegal( $page )
 	accessControls( $webLocation, $skin )
 **/
 
@@ -124,9 +124,9 @@ function checkPendings( $accessLevel, $simmType ) {
 	}
 	
 	/* do some logic to make sure the notification is using the right verb tenses */
-	if( $pendingCount == 1 ) {
+	if( $pendingCount == "1" ) {
 		$pendings = "is 1 item";
-	} elseif( $pendingCount > 1 ) {
+	} elseif( $pendingCount > "1" ) {
 		$pendings = "are " . $pendingCount . " items";
 	}
 	
@@ -151,72 +151,67 @@ function checkPendings( $accessLevel, $simmType ) {
 		$pendingArray = array();
 		
 		/* figure out what should and shouldn't be in the array */
-		if( in_array( "x_approve_users", $accessLevel ) && ( $pendingUsers > 0 ) ) {
-			$pendingArray[] = array( "users", $pendingUsers );
-		} if( in_array( "x_approve_posts", $accessLevel ) && ( $pendingPosts > 0 ) ) {
-			$pendingArray[] = array( "posts", $pendingPosts );
-		} if( in_array( "x_approve_logs", $accessLevel ) && ( $pendingLogs > 0 ) ) {
-			$pendingArray[] = array( "logs", $pendingLogs );
-		} if( in_array( "x_approve_news", $accessLevel ) && ( $pendingNews > 0 ) ) {
-			$pendingArray[] = array( "news items", $pendingNews );
+		if( in_array( "x_approve_users", $accessLevel ) ) {
+			$pendingArray['users'] = $pendingUsers;
+		} if( in_array( "x_approve_posts", $accessLevel ) ) {
+			$pendingArray['posts'] = $pendingPosts;
+		} if( in_array( "x_approve_logs", $accessLevel ) ) {
+			$pendingArray['logs'] = $pendingLogs;
+		} if( in_array( "x_approve_news", $accessLevel ) ) {
+			$pendingArray['news'] = $pendingNews;
 		}
-		
 	}
 	
 	/* display the message if one of the 4 have pendings */
 	if(
-		( $pendingUsers > 0 && in_array( "x_approve_users", $accessLevel ) ) ||
-		( $pendingPosts > 0 && in_array( "x_approve_posts", $accessLevel ) ) ||
-		( $pendingLogs > 0 && in_array( "x_approve_logs", $accessLevel ) ) ||
-		( $pendingNews > 0 && in_array( "x_approve_news", $accessLevel ) ) ||
-		( $pendingDockings > 0 && in_array( "x_approve_docking", $accessLevel ) )
+		( $pendingUsers > "0" && in_array( "x_approve_users", $accessLevel ) ) ||
+		( $pendingPosts > "0" && in_array( "x_approve_posts", $accessLevel ) ) ||
+		( $pendingLogs > "0" && in_array( "x_approve_logs", $accessLevel ) ) ||
+		( $pendingNews > "0" && in_array( "x_approve_news", $accessLevel ) ) ||
+		( $pendingDockings > "0" && in_array( "x_approve_docking", $accessLevel ) )
 	) {
-		
+		echo "<br /><br />";
 		echo "<div class='update'>";
-		echo "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='warning' style='float:left; padding: 0 6px 0 0;' />";
-		echo "<span class='fontTitle'>Pending Items</span><br /><br />";
+		
+		echo "<img src='" . $webLocation . "images/warning.png' border='0' alt='warning' style='float:left; padding: 0 6px 0 0;' />";
 		echo "There " . $pendings . " [ ";
 		
-		/* get a count of the number of items in the array and subtract one to give us a pointer to the last key */
-		$keyCount = count( $pendingArray ) - 1;
+		/* get the last key in the array */
+		$lastkey = end( array_keys( $pendingArray ) );
 		
 		/* loop through the array and act on each key */
 		foreach( $pendingArray as $key => $value ) {
-			
+		
 			/* if it's the last key of the array, display the AND */
-			if( $key == $keyCount ) {
+			if( $key == $lastkey ) {
 				
-				echo " &amp; ";
+				echo "and ";
 				
 				/* make sure the docking stuff is set up right */
-				if( $value[0] == "docking" ) {
-					$value[0] = "docking requests";
+				if( $key == "docking" ) {
+					$key = "docking requests";
 				}
 				
 				/* do some logic to make sure the plurality of the word is right */
-				if( $value[1] == 1 ) {
-					$value[0] = substr_replace( $value[0], '', -1 );
+				if( $value == 1 ) {
+					$key = substr_replace( $key, '', -1 );
 				}
 				
-				echo $value[1] . " " . $value[0];
+				echo $value . " " . $key;
 				
 			} else {
-				
-				if( $key == 0 ) {} else {
-					echo ", ";
-				}
 			
 				/* make sure the docking stuff is set up right */
-				if( $value[0] == "docking" ) {
-					$value[0] = "docking requests";
+				if( $key == "docking" ) {
+					$key = "docking requests";
 				}
 				
 				/* do some logic to make sure the plurality of the word is right */
-				if( $value[1] == 1 ) {
-					$value[0] = substr_replace( $value[0], '', -1 );
+				if( $value == 1 ) {
+					$key = substr_replace( $key, '', -1 );
 				}
 				
-				echo $value[1] . " " . $value[0];
+				echo $value . " " . $key . ", ";
 				
 			}
 			
@@ -275,6 +270,7 @@ function checkSMSVersion( $version ) {
 	
 	/* if the version the user has and the version from the XML file are different, display the notice */
 	if( $version < $rssVersion && $dbVersion['sysVersion'] < $rssVersion ) {
+		echo "<br /><br />";
 		echo "<div class='update'>";
 		
 		echo "<img src='" . $webLocation . "images/feed.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
@@ -286,8 +282,8 @@ function checkSMSVersion( $version ) {
 		echo "Go to the <a href='http://www.anodyne-productions.com/index.php?cat=sms&page=downloads' target='_blank'>Anodyne SMS Site</a> to download this update.";
 		
 		echo "</div>";
-		echo "<br />";
 	} if( $dbVersion['sysVersion'] > $version && $dbVersion['sysVersion'] == $rssVersion ) {
+		echo "<br /><br />";
 		echo "<div class='update'>";
 		
 		echo "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
@@ -295,17 +291,17 @@ function checkSMSVersion( $version ) {
 		echo "Your database is running SMS version " . $dbVersion['sysVersion'] . ", however, your SMS files are running version " . $version . " and need to be updated. Please upload the correct files before continuing. If you do not update your files and database, the new version of SMS will not work correctly!<br /><br />";
 		
 		echo "</div>";
-		echo "<br />";
 	} if( $version > $dbVersion['sysVersion'] && $version == $rssVersion ) {
 
 		/* format the version right for the URL pass */
 		$urlVersion = str_replace( ".", "", $dbVersion['sysVersion'] );
 
 		/* do some logic to make sure that the urlVersion var is right */
-		if( $urlVersion == "20" || $urlVersion == "21" || $urlVersion == "22" || $urlVersion == "23" || $urlVersion == "24" || $urlVersion == "25" || $urlVersion == "26" ) {
+		if( $urlVersion == "20" || $urlVersion == "21" || $urlVersion == "22" || $urlVersion == "23" || $urlVersion == "24" ) {
 			$urlVersion = $urlVersion . "0";
 		}
 		
+		echo "<br /><br />";
 		echo "<div class='update'>";
 		
 		echo "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
@@ -314,7 +310,6 @@ function checkSMSVersion( $version ) {
 		echo "<a href='" . $webLocation . "update.php?version=" . $urlVersion . "'>Update SMS Database</a>";
 		
 		echo "</div>";
-		echo "<br />";
 	}
 
 }
@@ -564,26 +559,16 @@ function checkUnreadMessages( $crew ) {
 /**
 	Display error message if someone tries a SQL injection
 **/
-function errorMessageIllegal( $page, $crewid, $expected, $actual ) {
+function errorMessageIllegal( $page ) {
 
 	/* get the IP address */
 	$ipaddr = $_SERVER['REMOTE_ADDR'];
 	
-	/* build the page dynamically */
-	$page = str_replace( $_SERVER['DOCUMENT_ROOT'], '', $page );
+	/* set the time variable */
+	$today = getdate();
 	
-	/* build the reason for the illegal operation */
-	$reason = "An illegal operation was attempted. The system expected a " . $expected . ", but the actual input was " . $actual . ".";
-	
-	/* insert a record into the security table */
-	$insert = "INSERT INTO sms_security ( page, reason, ip_address, crew, time ) VALUES ( '" . $page . "', '" . $reason . "', '" . $ipaddr . "', '" . $crewid . "', UNIX_TIMESTAMP() )";
-	$result = mysql_query( $insert );
-	
-	/* optimize the table */
-	optimizeSQLTable( "sms_security" );
-	
-	/* get the CO email address */
-	$getCOEmail = "SELECT email FROM sms_crew WHERE positionid = '1' and crewType = 'active' LIMIT 1";
+	/* get the CO email address /
+	$getCOEmail = "SELECT email FROM sms_crew WHERE positionid = '1' LIMIT 1";
 	$getCOEmailResult = mysql_query( $getCOEmail );
 	
 	while( $coEmailFetch = mysql_fetch_assoc( $getCOEmailResult ) ) {
@@ -591,17 +576,17 @@ function errorMessageIllegal( $page, $crewid, $expected, $actual ) {
 	}
 	
 	/* set the email variables */
-	$to = $email;
+	/*$to = $email;
 	$from = "SMS System < " . $email . " >";
-	$subject = "[SMS Warning] Illegal Operation Attempted!";
-	$message = "WARNING!  A user has attempted an illegal operation on your SMS website.  More information is available in the Security report found within the SMS Administration Control Panel.";
+	$subject = "[SMS Warning] Illegal and Malicious Operation Attempted!";
+	$message = "WARNING!  A user has attempted an illegal and malicious operation on your SMS website.  The user attempted to gain access to your SQL database by means of a SQL injection.  This attack ocurred on the " . $page . " from the IP Address " . $ipaddr . " at " . $now . ".  Please contact your host immediately with this information to notify them of the breach.";
 	
 	/* email the message to the CO */
-	mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+	/* mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() ); */
 	
 	echo "<div class='body'>";
 		echo "<span class='fontTitle'>Warning!</span><br /><br />";
-		echo "You have attempted an illegal operation!  Your IP address and a timestamp have been logged and emailed to the sim administrator.";
+		echo "You have attempted an illegal operation!";
 	echo "</div>";
 
 }

@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
-System Version: 2.6.0
-Last Modified: 2008-01-19 1617 EST
+System Version: 2.5.0
+Last Modified: 2007-07-10 1104 EST
 **/
 
 /* access check */
@@ -21,23 +21,13 @@ if( in_array( "u_nominate", $sessionAccess ) ) {
 	$subMenuClass = "user";
 	$action = $_POST['action_x'];
 
-	if( isset($action) ) {
+	if( $action ) {
 		
-		$insert = "INSERT INTO sms_awards_queue ( crew, nominated, award, reason ) VALUES ( %d, %d, %d, %s )";
-		
-		/* run the query through sprintf and the safety function to scrub for security issues */
-		$query = sprintf(
-			$insert,
-			escape_string( $_POST['nominator'] ),
-			escape_string( $_POST['crew'] ),
-			escape_string( $_POST['award'] ),
-			escape_string( $_POST['reason'] )
-		);
-
-		/* run the query */
-		$result = mysql_query( $query );
-		
-		optimizeSQLTable( "sms_awards_queue" );
+		/* define the POST vars */
+		$award = $_POST['award'];
+		$crew = $_POST['crew'];
+		$nominator = $_POST['nominator'];
+		$reason = stripslashes( $_POST['reason'] );
 	
 		/* set the email author */
 		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
@@ -56,13 +46,17 @@ if( in_array( "u_nominate", $sessionAccess ) ) {
 		
 		/* define the email variables */
 		$to = printCOEmail() . ", " . printXOEmail();
-		$subject = $emailSubject . " Crew Award Nomination";
-		$message = "A member of your crew has nominated a player for an award. The award has been added to the queue and is available for review and activation.
+		$subject = "[" . $shipPrefix . " " . $shipName . "] Crew Award Nomination";
+		$message = "Crew Member: $crew
+Nominated By: $nominator
+Award: $award
 
-Login to your control panel at " . $webLocation . "login.php?action=login to approve or deny this award.";
+Reason: $reason";
 		
 		/* send the nomination email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+		
+		$result = "true";
 	
 	}
 
@@ -100,7 +94,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 						<?
 						
 						/* query the users database */
-						$getCrew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
+						$getCrew = "SELECT crew.firstName, crew.lastName, rank.rankName ";
 						$getCrew.= "FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
 						$getCrew.= "crew.crewType = 'active' AND crew.rankid = rank.rankid AND ";
 						$getCrew.= "crew.crewid != '$sessionCrewid' ORDER BY crew.rankid ASC";
@@ -115,7 +109,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 						
 						?>
 					
-						<option value="<?=$crewid;?>"><? printText( $rankName . " " . $firstName . " " . $lastName ); ?></option>
+						<option value="<? printText( $rankName . ' ' . $firstName . ' ' . $lastName ); ?>"><? printText( $rankName . " " . $firstName . " " . $lastName ); ?></option>
 					
 						<?php } ?>
 					
@@ -127,7 +121,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 				<td>&nbsp;</td>
 				<td>
 					<? printCrewName( $sessionCrewid, "rank", "noLink" ); ?>
-					<input type="hidden" name="nominator" value="<?=$sessionCrewid;?>" />
+					<input type="hidden" name="nominator" value="<? printCrewName( $sessionCrewid, 'rank', 'noLink' ); ?>" />
 				</td>
 			</tr>
 			<tr>
@@ -139,7 +133,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 						<?
 						
 						/* query the awards database */
-						$pullAwards = "SELECT awardid, awardName FROM sms_awards ORDER BY awardOrder ASC";
+						$pullAwards = "SELECT awardName FROM sms_awards ORDER BY awardOrder ASC";
 						$pullAwardsResult = mysql_query( $pullAwards );
 						
 						/* start looping through what the query returns until it runs out of records */
@@ -148,7 +142,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 						
 						?>
 			
-						<option value="<?=$awardid;?>"><? printText( $awardName ); ?></option>
+						<option value="<?=$awardName;?>"><? printText( $awardName ); ?></option>
 						
 						<? } ?>
 		

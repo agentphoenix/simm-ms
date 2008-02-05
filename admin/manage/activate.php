@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
-System Version: 2.6.0
-Last Modified: 2007-11-13 2107 EST
+System Version: 2.5.5
+Last Modified: 2007-11-07 0834 EST
 **/
 
 /* access check */
@@ -19,8 +19,7 @@ if(
 	in_array( "x_approve_posts", $sessionAccess ) ||
 	in_array( "x_approve_logs", $sessionAccess ) ||
 	in_array( "x_approve_news", $sessionAccess ) ||
-	in_array( "x_approve_docking", $sessionAccess ) ||
-	in_array( "m_giveaward", $sessionAccess )
+	in_array( "x_approve_docking", $sessionAccess )
 ) {
 
 	/* set the page class */
@@ -62,7 +61,7 @@ if(
 				$levelsOther = "";
 			} else {
 				$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-				$levelsManage = "";
+				$levelsManage = "m_newscat1";
 				$levelsReports = "reports,r_progress,r_milestones";
 				$levelsUser = "user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options";
 				$levelsOther = "";
@@ -102,20 +101,10 @@ if(
 			/* define the variables */
 			$to = $userEmail[0] . ", " . printCOEmail();
 			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Application";
-			
-			/* new instance of the replacement class */
-			$message = new MessageReplace;
-			$message->message = $acceptMessage;
-			$message->shipName = $shipPrefix . " " . $shipName;
-			$message->player = $activate;
-			$message->rank = $rank;
-			$message->position = $position;
-			$message->setArray();
-			$accept = nl2br( stripslashes( $message->changeMessage() ) );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] Your Application";
 			
 			/* send the email */
-			mail( $to, $subject, $accept, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
 		
 		} elseif( $action == "activate" && isset( $_POST['rejectid'] ) ) {
 
@@ -125,26 +114,17 @@ if(
 			/** EMAIL THE DENIAL **/
 	
 			/* set the email author */
-			$userFetch = "SELECT email, positionid FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
+			$userFetch = "SELECT email FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
 			$userFetchResult = mysql_query( $userFetch );
 			$userEmail = mysql_fetch_row( $userFetchResult );
 			
 			/* define the variables */
 			$to = $userEmail[0] . ", " . printCOEmail();
 			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Application";
-			
-			/* new instance of the replacement class */
-			$message = new MessageReplace;
-			$message->message = $rejectMessage;
-			$message->shipName = $shipPrefix . " " . $shipName;
-			$message->player = $actionid;
-			$message->position = $userEmail[1];
-			$message->setArray();
-			$reject = nl2br( stripslashes( $message->changeMessage() ) );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] Your Application";
 			
 			/* send the email */
-			mail( $to, $subject, $reject, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
 
 			$action = "reject";
 			
@@ -189,7 +169,7 @@ if(
 			
 			/* define the variables */
 			$to = getCrewEmails( "emailPosts" );
-			$subject = $emailSubject . " " . printMissionTitle( $fetchPost['postMission'] ) . " - " . $fetchPost['postTitle'];
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . printMissionTitle( $fetchPost['postMission'] ) . " - " . $fetchPost['postTitle'];
 			$message = "A Post By " . displayEmailAuthors( $fetchPost['postAuthor'], 'noLink' ) . "
 Location: " . $fetchPost['postLocation'] . "
 Timeline: " . $fetchPost['postTimeline'] . "
@@ -244,7 +224,7 @@ Tag: " . $fetchPost['postTag'] . "
 			
 			/* define the variables */
 			$to = getCrewEmails( "emailLogs" );
-			$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $fetchLog['logTitle'] );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . $name . "'s Personal Log - " . stripslashes( $fetchLog['logTitle'] );
 			$message = stripslashes( $fetchLog['logContent'] );
 		
 			/* send the email */
@@ -298,7 +278,7 @@ Tag: " . $fetchPost['postTag'] . "
 			
 			/* define the variables */
 			$to = getCrewEmails( "emailNews" );
-			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $fetchNews['newsTitle'] );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . stripslashes( $category['catName'] ) . " - " . stripslashes( $fetchNews['newsTitle'] );
 			$message = "A News Item Posted By " . printCrewNameEmail( $fetchNews['newsAuthor'] ) . "
 			
 " . stripslashes( $fetchNews['newsContent'] );
@@ -336,7 +316,7 @@ Tag: " . $fetchPost['postTag'] . "
 			/* define the variables */
 			$to = $coEmail['email'] . ", " . printCOEmail();
 			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Docking Request";
+			$subject = "[" . $shipPrefix . " " . $shipName . "] Your Docking Request";
 			$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we are pleased to inform you that your request to dock with our starbase has been approved!
 
 The CO of the station will be in contact with you shortly.  Thank you for interest in docking with us.";
@@ -362,7 +342,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 			/* define the variables */
 			$to = $coEmail['email'] . ", " . printCOEmail();
 			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Docking Request";
+			$subject = "[" . $shipPrefix . " " . $shipName . "] Your Docking Request";
 			$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we regret to inform you that your request to dock with our starbase has been denied.  There can be many reasons for this.  If you would like clarification, please contact the CO.";
 		
 			/* send the email */
@@ -414,7 +394,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 					
 					$ranks = "SELECT rank.rankid, rank.rankName, rank.rankImage, dept.deptColor FROM sms_ranks AS rank, ";
 					$ranks.= "sms_departments AS dept WHERE dept.deptClass = rank.rankClass AND dept.deptDisplay = 'y' ";
-					$ranks.= "AND rank.rankDisplay = 'y' GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
+					$ranks.= "GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
 					$ranksResult = mysql_query( $ranks );
 					
 					$positions = "SELECT position.positionid, position.positionName, dept.deptName, ";
@@ -463,10 +443,18 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 							while( $rank = mysql_fetch_array( $ranksResult ) ) {
 								extract( $rank, EXTR_OVERWRITE );
 								
-								if( $pendingArray['rankid'] == $rank['rankid'] ) {
-									echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+								if( $client->property('browser') == "ie" ) {
+									if( $pendingArray['rankid'] == $rank['rankid'] ) {
+										echo "<option value='" . $rankid . "' style='color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+									} else {
+										echo "<option value='" . $rankid . "' style='color:#" . $deptColor . ";'>" . $rankName . "</option>";
+									}
 								} else {
-									echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
+									if( $pendingArray['rankid'] == $rank['rankid'] ) {
+										echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+									} else {
+										echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
+									}
 								}
 								
 							}
@@ -792,60 +780,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 			</tr>
 			
 			<? } } ?>
-			
-			<? } if( in_array( "x_approve_posts", $sessionAccess ) ) { ?>
-			
-			<tr>
-				<td colspan="6" height="30"></td>
-			</tr>
-			<tr>
-				<td colspan="6" class="fontLarge"><b>Pending Award Nominations</b></td>
-			</tr>
-			
-			<?
-			
-			$getPendingAwards = "SELECT q.*, a.* FROM sms_awards_queue AS q, sms_awards AS a ";
-			$getPendingAwards.= "WHERE q.status = 'pending' AND q.award = a.awardid";
-			$getPendingAwardsResult = mysql_query( $getPendingAwards );
-			$countPendingAwards = mysql_num_rows( $getPendingAwardsResult );
-			
-			if( $countPendingAwards == 0 ) {
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td colspan="6">There are currently no pending award nominations</td>
-			</tr>
-			
-			<?
-			
-			} elseif( $countPendingAwards > 0 ) {
-			
-				/* loop through the results and fill the form */
-				while( $pendingAwards = mysql_fetch_assoc( $getPendingAwardsResult ) ) {
-					extract( $pendingAwards, EXTR_OVERWRITE );
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td><? printCrewName( $pendingAwards['nominated'], "rank", "noLink" ); ?></td>
-				<td><? printText( $pendingAwards['awardName'] ); ?></td>
-				<td>&nbsp;</td>
-				<td align="center"><a href="<?=$webLocation;?>index.php?page=news">View News</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this pending news item?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=delete">Delete</a>
-					</noscript>
-				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=approve">Approve</a></td>
-			</tr>
-			
-			<? } } ?>
-			
-			<?php } ?>
+			<? } /* closes the if( simmType ) logic */ ?>
 		</table>
 		
 	</div>

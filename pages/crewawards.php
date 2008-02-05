@@ -9,8 +9,8 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/crewawards.php
 Purpose: To display the list of crew awards currently entered
 
-System Version: 2.6.0
-Last Modified: 2007-11-29 0926 EST
+System Version: 2.5.0
+Last Modified: 2007-04-05 2349 EST
 **/
 
 /* define the page class */
@@ -41,7 +41,7 @@ $getAwardsResult = mysql_query ( $getAwards );
 	if( isset( $sessionCrewid ) && in_array( "m_awards", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=awards'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 	
@@ -66,27 +66,8 @@ $getAwardsResult = mysql_query ( $getAwards );
 		
 		<tr>
 			<td align="center">
-				<?php
-				
-				/* award name */
-				printText( $awardName );
-				
-				echo "<br />";
-				
-				/*
-					if the large version of the award image exists, then show that
-					otherwise, show the small version
-				*/
-				if( file_exists( 'images/awards/large/' . $awardImage ) ) {
-					$image = $webLocation . 'images/awards/large/' . $awardImage;
-				} else {
-					$image = $webLocation . 'images/awards/' . $awardImage;
-				}
-				
-				/* award image */
-				echo "<img src='" . $image . "' alt='" . printText( $awardName ) . "' border='0' />";
-				
-				?>
+				<? printText( $awardName ); ?><br />
+				<img src="<?=$webLocation;?>images/awards/large/<?=$awardImage;?>" alt="<? printText( $awardName ); ?>" />
 			</td>
 			<td>&nbsp;</td>
 			<td><? printText( $awardDesc ); ?></td>

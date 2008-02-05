@@ -5,14 +5,14 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/manage/news.php
 Purpose: If there is an ID in the URL, it will pull the corresponding news item
 	for editing, otherwise, it'll just show a list of the last 4 news items for
 	moderation
 
-System Version: 2.6.0
-Last Modified: 2007-11-12 1525 EST
+System Version: 2.5.0
+Last Modified: 2007-06-18 1148 EST
 **/
 
 /* access check */
@@ -26,7 +26,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 	
 	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
 	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( __FILE__, $sessionCrewid, "numerical value", $_GET['id'] );
+		errorMessageIllegal( "news moderation page" );
 		exit();
 	} else {
 		/* set the GET variable */
@@ -40,14 +40,13 @@ if( in_array( "m_news", $sessionAccess ) ) {
 	$newsContent = addslashes( $_POST['newsContent'] );
 	$newsid = $_POST['newsid'];
 	$newsStatus = $_POST['newsStatus'];
-	$newsPrivate = $_POST['newsPrivate'];
 	
 	if( $actionUpdate ) {
 		
 		$query = "UPDATE sms_news SET newsCat = '$newsCat', ";
 		$query.= "newsAuthor = '$newsAuthor', newsTitle = '$newsTitle', ";
-		$query.= "newsContent = '$newsContent', newsStatus = '$newsStatus', ";
-		$query.= "newsPrivate = '$newsPrivate' WHERE newsid = '$newsid' LIMIT 1";
+		$query.= "newsContent = '$newsContent', newsStatus = '$newsStatus' ";
+		$query.= "WHERE newsid = '$newsid' LIMIT 1";
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
@@ -72,7 +71,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 	$newsContent = stripslashes( $newsContent );
 	
 	/* if there's an id in the URL, proceed */
-	if( isset( $id ) ) {
+	if( $id ) {
 
 ?>
 
@@ -108,7 +107,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 					<b>Title</b><br />
 					<input type="text" class="name" name="newsTitle" maxlength="100" value="<?=stripslashes( $newsTitle );?>" />
 				</td>
-				<td colspan="2">
+				<td>
 					<b>Category</b><br />
 					<select name="newsCat">
 					<?
@@ -143,22 +142,15 @@ if( in_array( "m_news", $sessionAccess ) ) {
 						<option value="activated"<? if( $newsStatus == "activated" ) { echo " selected"; } ?>>Activated</option>
 					</select>
 				</td>
-				<td>
-					<b>Privacy Status</b><br />
-					<select name="newsPrivate">
-						<option value="n"<? if( $newsPrivate == "n" ) { echo " selected"; } ?>>Public</option>
-						<option value="y"<? if( $newsPrivate == "y" ) { echo " selected"; } ?>>Private</option>
-					</select>
-				</td>
 			</tr>
 			<tr>
-				<td colspan="3">
+				<td colspan="2">
 					<b>Content</b><br />
 					<textarea name="newsContent" class="wideTextArea" rows="15"><?=stripslashes( $newsContent );?></textarea>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3" align="right">
+				<td colspan="2" align="right">
 					<input type="hidden" name="newsid" value="<?=$newsid;?>" />
 	
 					<script type="text/javascript">
@@ -178,7 +170,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 	</div>
 		<?
 	
-		} elseif( !isset( $id ) ) {
+		} elseif( !$id ) {
 		
 		$getNewsItems = "SELECT * FROM sms_news ORDER BY newsPosted DESC LIMIT 5";
 		$getNewsItemsResult = mysql_query( $getNewsItems );
@@ -210,7 +202,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 			?>
 			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=news&action=update">
 			<tr>
-				<td colspan="2" valign="top">
+				<td valign="top">
 					<b class="fontNormal">Title</b><br />
 					<input type="text" class="name" maxlength="100" name="newsTitle" value="<?=stripslashes( $newsTitle );?>" />
 				</td>
@@ -220,7 +212,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" valign="top">
+				<td valign="top">
 					<b class="fontNormal">Category</b><br />
 					<select name="newsCat">
 					<?
@@ -243,7 +235,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
+				<td>
 					<span class="fontNormal"><b>Author</b></span><br />
 					<? print_active_crew_select_menu( "news", $newsAuthor, "", "", "" ); ?>
 				</td>
@@ -257,16 +249,9 @@ if( in_array( "m_news", $sessionAccess ) ) {
 						<option value="activated"<? if( $newsStatus == "activated" ) { echo " selected"; } ?>>Activated</option>
 					</select>
 				</td>
-				<td>
-					<span class="fontNormal"><b>Privacy Status</b></span><br />
-					<select name="newsPrivate">
-						<option value="n"<? if( $newsPrivate == "n" ) { echo " selected"; } ?>>Public</option>
-						<option value="y"<? if( $newsPrivate == "y" ) { echo " selected"; } ?>>Private</option>
-					</select>
-				</td>
 			</tr>
 			<tr>
-				<td colspan="2"></td>
+				<td></td>
 				<td valign="top" align="center">
 					<input type="hidden" name="newsid" value="<?=$newsid;?>" />
 	
@@ -282,7 +267,7 @@ if( in_array( "m_news", $sessionAccess ) ) {
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3" height="25"></td>
+				<td colspan="2" height="25"></td>
 			</tr>
 			</form>
 			<? } ?>

@@ -5,24 +5,18 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/news.php
 Purpose: Page to display the news items
 
-System Version: 2.6.0
-Last Modified: 2007-12-27 0957 EST
+System Version: 2.5.0
+Last Modified: 2007-04-24 1829 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "main";
-
-if( isset( $_GET['disp'] ) ) {
-	$display = $_GET['disp'];
-}
-
-if( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) {
-	$id = $_GET['id'];
-}
+$display = $_GET['disp'];
+$id = $_GET['id'];
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -35,7 +29,7 @@ if( isset( $sessionCrewid ) ) {
 
 <div class="body">
 	
-	<? if( !isset( $id ) ) { ?>
+	<? if( !$id ) { ?>
 	<div align="center">
 	<span class="fontNormal">
 		<a href="<?=$webLocation;?>index.php?page=news">All News</a>
@@ -58,7 +52,7 @@ if( isset( $sessionCrewid ) ) {
 		
 		}
 		
-		if( isset( $display ) ) {
+		if( $display ) {
 			
 			$newsCatTitle = "SELECT catName FROM sms_news_categories WHERE catid = '$display'";
 			$newsCatTitleResult = mysql_query( $newsCatTitle );
@@ -75,7 +69,7 @@ if( isset( $sessionCrewid ) ) {
 	<span class="fontTitle">
 	<?
 	
-	if( !isset( $display ) ) {
+	if( !$display ) {
 		echo "All News";
 	} else {
 		echo $category['catName'];
@@ -86,7 +80,7 @@ if( isset( $sessionCrewid ) ) {
 	
 	<?
 		
-		if( !isset( $display ) ) {
+		if( !$display ) {
 		
 			$news = "SELECT news.*, cat.* FROM sms_news AS news, sms_news_categories AS cat ";
 			$news.= "WHERE news.newsCat = cat.catid AND news.newsStatus = 'activated' ";
@@ -110,8 +104,6 @@ if( isset( $sessionCrewid ) ) {
 			$words = array_slice($words, 0, $length); /* Slices the array */
 			$text = implode(' ', $words); /* Grabs only the specified number of words */
 			
-			if( $newsPrivate == 'y' && !isset( $sessionCrewid ) ) {} else {
-			
 		?>
 		
 		<span class="fontMedium"><b><? printText( $newsTitle ); ?></b></span><br />
@@ -129,7 +121,7 @@ if( isset( $sessionCrewid ) ) {
 			?>
 		</div>
 		
-		<? } } ?>
+		<? } ?>
 		
 		<?
 		
@@ -145,8 +137,6 @@ if( isset( $sessionCrewid ) ) {
 			
 			while ( $newsList = mysql_fetch_assoc( $newsResults ) ) {
 				extract( $newsList, EXTR_OVERWRITE );
-				
-				if( $newsPrivate == 'y' && !isset( $sessionCrewid ) ) {} else {
 		
 		?>
 		
@@ -173,11 +163,11 @@ if( isset( $sessionCrewid ) ) {
 			
 				/* display the previous and next links in the post details box */
 				if( $idNumbers[$prevKey] != '' ) {
-						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$prevKey]'><img src='" . $webLocation . "images/previous.png' alt='Previous Entry' border='0' class='image' /></a>" );
+						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$prevKey]'><img src='" . $webLocation . "images/previous.png' alt='Previous Entry' border='0' /></a>" );
 					} if( ($idNumbers[$prevKey] != '') && ($idNumbers[$nextKey] != '') ) {
 						echo "&nbsp;";
 					} if( $idNumbers[$nextKey] != '' ) {
-						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$nextKey]'><img src='" . $webLocation . "images/next.png' alt='Next Entry' border='0' class='image' /></a>" );
+						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$nextKey]'><img src='" . $webLocation . "images/next.png' alt='Next Entry' border='0' /></a>" );
 					}
 				}
 			}
@@ -245,6 +235,6 @@ if( isset( $sessionCrewid ) ) {
 		<? printText( $newsContent );?>
 		
 		
-	<? } } } ?>
+	<? } } ?>
 	
 </div>

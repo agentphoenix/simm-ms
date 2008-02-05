@@ -67,7 +67,7 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 		</span><br /><br />
 		
 		<div class="fontNormal postDetails">
-		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=message&id=<?=$pmAuthor;?>&reply=<?=$message;?>">
+		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=message&id=<?=$pmAuthor;?>&reply">
 			<div align="center">
 				<input type="image" src="<?=$webLocation;?>images/messages-reply.png" class="imageButton" /><br />
 				<b>Private Message Details</b><br /><br />	

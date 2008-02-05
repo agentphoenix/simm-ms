@@ -9,18 +9,14 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/contact.php
 Purpose: Page used to contact the CO, XO, or Webmaster of a simm for any user
 
-System Version: 2.6.0
-Last Modified: 2007-08-21 0933 EST
+System Version: 2.5.0
+Last Modified: 2007-07-10 1108 EST
 **/
 
 /* define the page class and set the vars */
 $pageClass = "main";
+$send = $_POST['action_x'];
 $query = "";
-$result = "";
-
-if( isset( $_POST['action_x'] ) ) {
-	$send = $_POST['action_x'];
-}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -32,7 +28,7 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* check action and send email if needed */
-if ( isset( $send ) ) {
+if ( $send ) {
 
 	/* strip the slashes */
 	$message = stripslashes( $_POST['message'] );
@@ -41,9 +37,9 @@ if ( isset( $send ) ) {
 		
 	/* define the subject */
 	if( !empty( $title ) ) {
-		$subject = $emailSubject . " " . $subject . "";
+		$subject = "[" . $shipPrefix . " " . $shipName . "] " . $subject . "";
 	} else {
-		$subject = $emailSubject . " Information Request";
+		$subject = "[" . $shipPrefix . " " . $shipName . "] Information Request";
 	}
 
 	/* determine who to send the email to */
@@ -91,12 +87,12 @@ if ( isset( $send ) ) {
 		<tr>
 			<td class="tableCellLabel">Commanding Officer</td>
 			<td>&nbsp;</td>
-			<td><?php echo printCO();?></td>
+			<td><?=printCO(); ?></td>
 		</tr>
 		<tr>
 			<td class="tableCellLabel">Executive Officer</td>
 			<td>&nbsp;</td>
-			<td><?php echo printXO();?></td>
+			<td><?=printXO(); ?></td>
 		</tr>
 		
 		<? if ( $hasWebmaster == "y" ) { ?>

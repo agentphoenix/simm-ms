@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/post/addlog.php
 Purpose: Page to add a personal log
 
-System Version: 2.6.0
-Last Modified: 2007-08-21 0905 EST
+System Version: 2.5.0
+Last Modified: 2007-06-18 1306 EST
 **/
 
 /* access check */
@@ -79,7 +79,7 @@ if( in_array( "p_addlog", $sessionAccess ) ) {
 			
 			/* define the variables */
 			$to = getCrewEmails( "emailLogs" );
-			$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $logTitle );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . $name . "'s Personal Log - " . stripslashes( $logTitle );
 			$message = stripslashes( $logContent );
 			
 			/* send the email */

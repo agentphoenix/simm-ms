@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/bio.php
 Purpose: Page to display the requested bio
 
-System Version: 2.6.0
-Last Modified: 2007-11-13 2109 EST
+System Version: 2.5.2
+Last Modified: 2007-08-09 0002 EST
 **/
 
 /* do some advanced checking to make sure someone's not trying to do a SQL injection */
@@ -191,7 +191,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	
 		$ranks = "SELECT rank.rankid, rank.rankName, rank.rankImage, dept.deptColor FROM sms_ranks AS rank, ";
 		$ranks.= "sms_departments AS dept WHERE dept.deptClass = rank.rankClass AND dept.deptDisplay = 'y' ";
-		$ranks.= "AND rank.rankDisplay = 'y' GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
+		$ranks.= "GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
 		$ranksResult = mysql_query( $ranks );
 		
 		$positions = "SELECT position.positionid, position.positionName, dept.deptName, ";
@@ -213,7 +213,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		$ranks.= "FROM sms_ranks AS rank, sms_departments AS dept ";
 		$ranks.= "WHERE dept.deptid = '$userDept[2]' AND dept.deptClass = rank.rankClass ";
 		$ranks.= "AND rank.rankOrder >= '$userDept[3]' AND dept.deptDisplay = 'y' ";
-		$ranks.= "AND rank.rankDisplay = 'y' GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
+		$ranks.= "GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
 		$ranksResult = mysql_query( $ranks );
 		
 		$positions = "SELECT position.positionid, position.positionName, dept.deptName, dept.deptColor ";
@@ -308,10 +308,18 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 						while( $rank = mysql_fetch_array( $ranksResult ) ) {
 							extract( $rank, EXTR_OVERWRITE );
 							
-							if( $fetchCrew['rankid'] == $rankid ) {
-								echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+							if( $client->property('browser') == "ie" || in_array( "u_bio2", $sessionAccess ) ) {
+								if( $fetchCrew['rankid'] == $rankid ) {
+									echo "<option value='" . $rankid . "' style='color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+								} else {
+									echo "<option value='" . $rankid . "' style='color:#" . $deptColor . ";'>" . $rankName . "</option>";
+								}
 							} else {
-								echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
+								if( $fetchCrew['rankid'] == $rankid ) {
+									echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+								} else {
+									echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
+								}
 							}
 						}
 						

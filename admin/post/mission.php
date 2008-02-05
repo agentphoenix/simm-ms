@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
-System Version: 2.6.0
-Last Modified: 2008-01-19 1553 EST
+System Version: 2.5.2
+Last Modified: 2007-08-07 1038 EST
 **/
 
 /* access check */
@@ -22,12 +22,14 @@ if( in_array( "p_mission", $sessionAccess ) ) {
 	$actionPost = $_POST['action_post_x'];
 	$actionSave = $_POST['action_save_x'];
 	$actionDelete = $_POST['action_delete_x'];
-	$id = $_GET['id'];
 	
-	/* check to make sure the id is legit */
-	if( isset( $id ) && !is_numeric( $id ) ) {
+	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
+	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
 		errorMessageIllegal( "post mission entry page" );
 		exit();
+	} else {
+		/* set the GET variable */
+		$id = $_GET['id'];
 	}
 	
 	if( $actionPost ) {
@@ -114,7 +116,7 @@ if( in_array( "p_mission", $sessionAccess ) ) {
 		
 			/* define the variables */
 			$to = getCrewEmails( "emailPosts" );
-			$subject = $emailSubject . " " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle;
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle;
 			$message = "A Post By " . printCrewNameEmail( $sessionCrewid ) . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
@@ -129,7 +131,7 @@ Tag: " . $postTag . "
 		
 			/* define the variables */
 			$to = printCOEmail();
-			$subject = $emailSubject . " " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle . " (Awaiting Approval)";
+			$subject = "[" . $shipName . "] " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle . " (Awaiting Approval)";
 			$message = "A Post By " . printCrewNameEmail( $sessionCrewid ) . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
@@ -207,30 +209,20 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 		?>
 	
 		<? if( $useMissionNotes == "y" && $action != "Delete" ) { ?>
-		
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('a#toggle').click(function() {
-					$('#notes').toggle(75);
-					return false;
-				});
-			});
-		</script>
-
-		<div class="update notify-normal">
-			<a href="#" id="toggle" class="fontNormal" style="float:right;margin-right:.5em;">Show/Hide</a>
+		<div class="update">
+			<a href="javascript:toggleLayer('notes')" style="float:right;">Show/Hide</a>
 			<img src="<?=$webLocation;?>images/notes.png" style="float:left; padding-right: 12px;" border="0" />
 			<span class="fontTitle">Mission Notes</span>
-			<div id="notes" style="display:none;clear:left;">
+			<div id="notes" style="display:none;">
 				<br />
 				<?
-
+	
 				$getNotes = "SELECT missionNotes FROM sms_missions WHERE missionStatus = 'current' LIMIT 1";
 				$getNotesResult = mysql_query( $getNotes );
 				$notes = mysql_fetch_array( $getNotesResult );
-
+	
 				printText( $notes['0'] );
-
+	
 				?>
 			</div>
 		</div><br />

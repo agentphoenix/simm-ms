@@ -12,8 +12,8 @@ Purpose: The file that controls logging in, logging out, and checking the
 	SESSION variables that are used through the system: crewid, access levels, and 
 	displaySkin.
 
-System Version: 2.6.0
-Last Modified: 2007-11-13 1547 EST
+System Version: 2.5.2
+Last Modified: 2007-08-02 1442 EST
 **/
 
 /* start the session */
@@ -24,7 +24,7 @@ $action = $_GET['action'];
 $error = $_GET['error'];
 
 /* if there is no action set, set it to login */
-if( !isset( $action ) ) {
+if( !$action ) {
 	$action = "login";
 }
 
@@ -34,13 +34,13 @@ include_once( 'framework/functionsAdmin.php' );
 include_once( 'framework/functionsUtility.php' );
 
 if( $action == "checkLogin" ) {
-	if( !isset( $_POST['username'] ) ) {
+	if( !$_POST['username'] ) {
 		$login = "false";
 		$error = "0";
-	} elseif( !isset( $_POST['password'] ) ) {
+	} elseif( !$_POST['password'] ) {
 		$login = "false";
 		$error = "1";
-	} elseif( !isset( $_POST['username'] ) && !isset( $_POST['password'] ) ) {
+	} elseif( !$_POST['username'] && !$_POST['password'] ) {
 		$login = "false";
 		$error = "2";
 	} else {
@@ -54,7 +54,7 @@ if( $action == "checkLogin" ) {
 		$users = mysql_num_rows( $userLoginResult );
 
 		/* if the number of users returned is 1, continue */
-		if( $users == 1 ) {
+		if( $users == "1" ) {
 			
 			/* pull the system UID information from the database */
 			$systemUID = "SELECT sysuid FROM sms_system WHERE sysid = '1' LIMIT 1";
@@ -95,16 +95,16 @@ if( $action == "checkLogin" ) {
 	$emailCount = mysql_num_rows( $checkEmailResult );
 	
 	/* pull variables for sql password update code */
-	if ( $emailCount != 0 ) {
+	if ( $emailCount != '0' ) {
 		$variableSet = mysql_fetch_array( $checkEmailResult );
 		extract( $variableSet, EXTR_OVERWRITE );
 	}
 	
 	/* determine temporary password */
-	if( $emailCount == 1 ) {
+	if( $emailCount == "1" ) {
 	
 		/* define the length */
-		$length = 8;
+		$length = "8";
 		
 		/* start with a blank password */
 		$password = "";

@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/post/addnews.php
 Purpose: Page to add a news item
 
-System Version: 2.6.0
-Last Modified: 2007-11-12 1533 EST
+System Version: 2.5.0
+Last Modified: 2007-06-18 1307 EST
 **/
 
 /* access check */
@@ -37,10 +37,9 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 		$newsContent = addslashes( $_POST['newsContent'] );
 		$newsCat = $_POST['newsCat'];
 		$newsAuthor = $_POST['newsAuthor'];
-		$newsPrivate = $_POST['newsPrivate'];
 	
-		$postNews = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate ) ";
-		$postNews.= "VALUES ( '', '$newsCat', '$newsAuthor', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', 'activated', '$newsPrivate' )";
+		$postNews = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus ) ";
+		$postNews.= "VALUES ( '', '$newsCat', '$newsAuthor', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', 'activated' )";
 		$result = mysql_query( $postNews );
 		
 		/* optimize the table */
@@ -78,7 +77,7 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 		
 			/* define the variables */
 			$to = getCrewEmails( "emailNews" );
-			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle );
 			$message = "A News Item Posted By " . printCrewNameEmail( $newsAuthor ) . "
 				
 " . stripslashes( $newsContent );
@@ -183,14 +182,6 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 				<td class="narrowLabel tableCellLabel">Title</td>
 				<td>&nbsp;</td>
 				<td><input type="text" class="name"  name="newsTitle" style="font-weight:bold;" length="100" /></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel"><b>Privacy</b></td>
-				<td>&nbsp;</td>
-				<td>
-					<input type="radio" id="newsPrivateN" name="newsPrivate" value="n" checked="yes" /><label for="newsPrivateN">Public</label>
-					<input type="radio" id="newsPrivateY" name="newsPrivate" value="y" /><label for="newsPrivateY">Private</label>
-				</td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Send Email?</td>

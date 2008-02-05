@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/manage/addpost.php
 Purpose: Page to add a mission post
 
-System Version: 2.6.0
-Last Modified: 2007-08-21 0907 EST
+System Version: 2.5.0
+Last Modified: 2007-06-18 1308 EST
 **/
 
 /* access check */
@@ -74,7 +74,7 @@ if( in_array( "p_addmission", $sessionAccess ) ) {
 			
 			/* define the variables */
 			$to = getCrewEmails( "emailPosts" );
-			$subject = $emailSubject . " " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle;
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle;
 			$message = "A Post By " . printCrewNameEmail( $postAuthor ) . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "

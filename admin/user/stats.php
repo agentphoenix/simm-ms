@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/stats.php
 Purpose: Page to display a user's statistics
 
-System Version: 2.6.0
-Last Modified: 2008-01-14 1730 EST
+System Version: 2.5.0
+Last Modified: 2007-08-08 2151 EST
 **/
 
 /* set the page class */
@@ -81,7 +81,7 @@ if( $sessionCrewid == $crew || in_array( "u_stats", $sessionAccess ) ) {
 				<td>
 					<?
 										
-					if( empty( $joinDate ) || $joinDate == 0 ) {
+					if( empty( $joinDate ) ) {
 						echo "<span class='orange'>No Data Available</span>";
 					} else {
 						
@@ -122,7 +122,7 @@ if( $sessionCrewid == $crew || in_array( "u_stats", $sessionAccess ) ) {
 				<td>
 					<?
 					
-					if( empty( $lastLogin ) || $lastLogin == 0 ) {
+					if( empty( $lastLogin ) ) {
 						echo "<span class='orange'>No Login Recorded</span>";
 					} else {
 						
@@ -163,7 +163,7 @@ if( $sessionCrewid == $crew || in_array( "u_stats", $sessionAccess ) ) {
 				<td>
 					<?
 					
-					if( empty( $lastPost ) || $lastPost == 0 ) {
+					if( empty( $lastPost ) ) {
 						echo "<span class='orange'>No Posts Recorded</span>";
 					} else {
 						

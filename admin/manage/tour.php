@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/tour.php
 Purpose: Page that moderates the ship tour pages
 
-System Version: 2.6.0
-Last Modified: 2008-01-21 1139 EST
+System Version: 2.5.0
+Last Modified: 2007-07-10 1012 EST
 **/
 
 /* access check */
@@ -110,19 +110,7 @@ if( in_array( "m_tour", $sessionAccess ) ) {
 	$tourSummary = stripslashes( $tourSummary );
 
 ?>
-	
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$(".zebra tr").mouseover(function() {
-				$(this).addClass("over");
-			})
-			.mouseout(function() {
-				$(this).removeClass("over");
-			});
-			$(".zebra tr:even").addClass("alt");
-		});
-	</script>
-	
+
 	<div class="body">
 	
 		<?
@@ -214,7 +202,14 @@ if( in_array( "m_tour", $sessionAccess ) ) {
 		<br /><br />
 		
 		<span class="fontTitle">Manage Existing Tour Items</span><br /><br />
-			<table class="zebra" cellpadding="3" cellspacing="0">
+			<?
+	
+			$rowCount = "0";
+			$color1 = "rowColor1";
+			$color2 = "rowColor2";
+				
+			?>
+			<table cellpadding="3" cellspacing="0">
 	
 			<?
 			
@@ -226,9 +221,11 @@ if( in_array( "m_tour", $sessionAccess ) ) {
 			while( $tourFetch = mysql_fetch_assoc( $getTourResult ) ) {
 				extract( $tourFetch, EXTR_OVERWRITE );
 	
+				$rowColor = ( $rowCount % 2 ) ? $color1 : $color2;
+	
 			?>
 			
-				<tr>
+				<tr class="<?=$rowColor;?>">
 					<td><? printText( $tourName ); ?></td>
 					<td align="center" width="10%"><b><a href="<?=$webLocation;?>index.php?page=tour&id=<?=$tourid;?>">View</a></b></td>
 					<td align="center" width="10%"><b><a href="<?=$webLocation;?>admin.php?page=manage&sub=tour&entry=<?=$tourid;?>" class="edit" >Edit</a></b></td>
@@ -242,7 +239,7 @@ if( in_array( "m_tour", $sessionAccess ) ) {
 					</td>
 				</tr>
 		
-			<? } ?>
+			<? $rowCount++; } ?>
 	
 			</table>
 	

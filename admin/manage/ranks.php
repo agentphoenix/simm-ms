@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/ranks.php
 Purpose: Page that moderates the ranks
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 1023 EST
+System Version: 2.5.0
+Last Modified: 2007-07-10 1010 EST
 **/
 
 /* access check */
@@ -26,12 +26,12 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 	$actionDelete = $_POST['action_delete_x'];
 	
 	/* if there is no rank specified, set it to 1 */
-	if( !isset( $rank ) ) {
+	if( !$rank ) {
 		$rank = "1";
 	}
 	
 	/* if there is no rank set specified, set it to the system default */
-	if( !isset( $set ) ) {
+	if( !$set ) {
 		$set = $rankSet;
 	}
 	
@@ -46,38 +46,12 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 	/* if the POST action is update */
 	if( $actionUpdate ) {
 		
-		$rankArray = array();
-		
-		foreach( $_POST as $key => $value )
-		{
-			if( substr( $key, 0, 2 ) == "x_" )
-			{
-				/* strip the x_ from the key */
-				$key = substr_replace( $key, '', 0, 2 );
-				
-				/* get the id of the rank */
-				$offset = strpos( $key, "_" );
-				$id = substr( $key, 0, $offset );
-				$key = substr_replace( $key, '', 0, ($offset+1) );
-				
-				if( !array_key_exists( $id ) ) {
-					$rankArray[$id] = array();
-				}
-				
-				$rankArray[$id][$key] = $value;
-				
-				echo "<pre>";
-				print_r( $rankArray );
-				echo "</pre>";
-			}
-		}
-		
 		/* do the update query */
 		$query = "UPDATE sms_ranks SET ";
 		$query.= "rankName = '$rankName', rankClass = '$rankClass', rankOrder = '$rankOrder', ";
 		$query.= "rankImage = '$rankImage', rankDisplay = '$rankDisplay' ";
 		$query.= "WHERE rankid = '$rankid' LIMIT 1";
-		//$result = mysql_query( $query );
+		$result = mysql_query( $query );
 		
 		/* optimize table */
 		optimizeSQLTable( "sms_ranks" );
@@ -132,7 +106,7 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 			?>
 	
 			<a href="<?=$webLocation;?>admin.php?page=manage&sub=ranks&set=<?=trim( $value );?>">
-				<img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" border="0" alt="" class="image" />
+				<img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" border="0" alt="" />
 			</a>
 			
 			<? } ?>
@@ -156,7 +130,7 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 			?>
 			
 			<a href="<?=$webLocation;?>admin.php?page=manage&sub=ranks&set=<?=trim( $set );?>&rank=<?=$rankClass;?>">
-				<img src="<?=$webLocation;?>images/ranks/<?=trim( $set );?>/<?=$rankImage;?>" border="0" alt="Rank Class <?=$rankClass;?>" class="image" />
+				<img src="<?=$webLocation;?>images/ranks/<?=trim( $set );?>/<?=$rankImage;?>" border="0" alt="Rank Class <?=$rankClass;?>" />
 			</a>
 			
 			<? } ?>
@@ -226,21 +200,21 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 			<tr>
 				<td width="40">
 					<span class="fontNormal"><b>Class</b></span><br />
-					<input type="text" class="class" name="x_<?=$rankid;?>_rankClass"  maxlength="3" value="<?=$rankClass;?>" />
+					<input type="text" class="class" name="rankClass"  maxlength="3" value="<?=$rankClass;?>" />
 				</td>
 				<td width="40">
 					<span class="fontNormal"><b>Order</b></span><br />
-					<input type="text" class="order" name="x_<?=$rankid;?>_rankOrder" maxlength="3" value="<?=$rankOrder;?>" />
+					<input type="text" class="order" name="rankOrder" maxlength="3" value="<?=$rankOrder;?>" />
 				</td>
 				<td>
 					<span class="fontNormal"><b>Rank</b></span><br />
-					<input type="text" class="name" name="x_<?=$rankid;?>_rankName" value="<?=stripslashes( $rankName );?>" />
+					<input type="text" class="name" name="rankName" value="<?=stripslashes( $rankName );?>" />
 				</td>
 				<td width="150" align="center" valign="bottom">
 					<img src="<?=$webLocation . 'images/ranks/' . trim( $set ) . '/' . $rankImage;?>" alt="<?=$rankName;?>" border="0" />
 				</td>
 				<td rowspan="2" align="center" valign="middle">
-					<input type="hidden" name="x_<?=$rankid;?>_rankid" value="<?=$rankid;?>" />
+					<input type="hidden" name="rankid" value="<?=$rankid;?>" />
 					<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="Update" /><br />
 					<script type="text/javascript">
 						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this rank?')\" />" );
@@ -253,14 +227,14 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 			<tr>
 				<td colspan="2">
 					<span class="fontNormal"><b>Display?</b></span><br />
-					<select name="x_<?=$rankid;?>_rankDisplay">
+					<select name="rankDisplay">
 						<option value="y"<? if( $rankDisplay == "y" ) { echo " selected"; } ?>>Yes</option>
 						<option value="n"<? if( $rankDisplay == "n" ) { echo " selected"; } ?>>No</option>
 					</select>
 				</td>
 				<td>
 					<span class="fontNormal"><b>Image</b></span><br />
-					<span class="fontSmall">images/ranks/<?=trim( $set );?>/</span><input type="text" class="image" name="x_<?=$rankid;?>_rankImage" value="<?=$rankImage;?>" />
+					<span class="fontSmall">images/ranks/<?=trim( $set );?>/</span><input type="text" class="image" name="rankImage" value="<?=$rankImage;?>" />
 				</td>
 			    <td></td>
 			</tr>

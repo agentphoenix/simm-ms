@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/awards.php
 Purpose: Page that moderates the awards
 
-System Version: 2.6.0
-Last Modified: 2008-01-15 1747 EST
+System Version: 2.5.0
+Last Modified: 2007-07-10 0958 EST
 **/
 
 /* access check */
@@ -23,22 +23,20 @@ if( in_array( "m_awards", $sessionAccess ) ) {
 	$create = $_POST['action_create_x'];
 	$delete = $_POST['action_delete_x'];
 
+	/* define the POST variables */
+	$awardid = $_POST['awardid'];
+	$awardName = addslashes( $_POST['awardName'] );
+	$awardDesc = addslashes( $_POST['awardDesc'] );
+	$awardOrder = $_POST['awardOrder'];
+	$awardImage = $_POST['awardImage'];
+	
 	/* if the POST action is update */
-	if( isset( $update ) ) {
-		
-		/* define the POST variables */
-		$awardid = $_POST['awardid'];
-		$awardName = addslashes( $_POST['awardName'] );
-		$awardDesc = addslashes( $_POST['awardDesc'] );
-		$awardOrder = $_POST['awardOrder'];
-		$awardImage = $_POST['awardImage'];
-		$awardCat = $_POST['awardCat'];
+	if( $update ) {
 		
 		/* do the update query */
 		$query = "UPDATE sms_awards SET ";
 		$query.= "awardName = '$awardName', awardOrder = '$awardOrder', ";
-		$query.= "awardImage = '$awardImage', awardDesc = '$awardDesc', ";
-		$query.= "awardOrder = '$awardOrder', awardCat = '$awardCat' ";
+		$query.= "awardImage = '$awardImage', awardDesc = '$awardDesc', awardOrder = '$awardOrder' ";
 		$query.= "WHERE awardid = '$awardid' LIMIT 1";
 		$result = mysql_query( $query );
 		
@@ -48,23 +46,11 @@ if( in_array( "m_awards", $sessionAccess ) ) {
 		$action = "update";
 	
 	/* if the POST action is create */
-	} elseif( isset( $create ) ) {
+	} elseif( $create ) {
 		
-		/* build the insert query */
-		$insert = "INSERT INTO sms_awards ( awardName, awardImage, awardDesc, awardOrder, awardCat ) ";
-		$insert.= "VALUES ( %s, %s, %s, %d, %s )";
-
-		/* run the query through sprintf and the safety function to scrub for security issues */
-		$query = sprintf(
-			$insert,
-			escape_string( $_POST['awardName'] ),
-			escape_string( $_POST['awardImage'] ),
-			escape_string( $_POST['awardDesc'] ),
-			escape_string( $_POST['awardOrder'] ),
-			escape_string( $_POST['awardCat'] )
-		);
-
-		/* run the query */
+		/* do the create query */
+		$query = "INSERT INTO sms_awards ( awardid, awardName, awardImage, awardDesc, awardOrder ) ";
+		$query.= "VALUES ( '', '$awardName', '$awardImage', '$awardDesc', '$awardOrder' )";
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
@@ -74,8 +60,6 @@ if( in_array( "m_awards", $sessionAccess ) ) {
 	
 	/* if the POST action is delete */
 	} elseif( $delete ) {
-		
-		$awardid = $_POST['awardid'];
 		
 		/* do the delete query */
 		$query = "DELETE FROM sms_awards WHERE awardid = '$awardid' LIMIT 1";
@@ -117,27 +101,17 @@ if( in_array( "m_awards", $sessionAccess ) ) {
 		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=awards">
 		<table cellpadding="0" cellspacing="3">
 			<tr>
-				<td colspan="2">
-					<span class="fontNormal"><b>Award</b></span><br />
-					<input type="text" class="name" name="awardName" maxlength="100" />
-				</td>
-				<td rowspan="3" valign="top" align="center" width="55%">
-					<span class="fontNormal"><b>Description</b></span><br />
-					<textarea name="awardDesc" class="desc" rows="6"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td width="50">
+				<td>
 					<span class="fontNormal"><b>Order</b></span><br />
 					<input type="text" class="order" name="awardOrder" maxlength="3" />
 				</td>
 				<td>
-					<span class="fontNormal"><b>Category</b></span><br />
-					<select name="awardCat">
-						<option value="ic">In character</option>
-						<option value="ooc">Out of character</option>
-						<option value="both">Both</option>
-					</select>
+					<span class="fontNormal"><b>Award</b></span><br />
+					<input type="text" class="name" name="awardName" maxlength="100" />
+				</td>
+				<td rowspan="2" valign="top" align="center" width="55%">
+					<span class="fontNormal"><b>Description</b></span><br />
+					<textarea name="awardDesc" class="desc" rows="4"></textarea>
 				</td>
 			</tr>
 			<tr>
@@ -172,27 +146,17 @@ if( in_array( "m_awards", $sessionAccess ) ) {
 			?>
 			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=awards">
 			<tr>
-				<td colspan="2">
-					<span class="fontNormal"><b>Award</b></span><br />
-					<input type="text" class="name" name="awardName" maxlength="100" value="<?=stripslashes( $awardName );?>" />
-				</td>
-				<td rowspan="3" valign="top" align="center" width="55%">
-					<span class="fontNormal"><b>Description</b></span><br />
-					<textarea name="awardDesc" class="desc" rows="6"><?=stripslashes( $awardDesc );?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td width="50">
+				<td>
 					<span class="fontNormal"><b>Order</b></span><br />
 					<input type="text" class="order" name="awardOrder" maxlength="3" value="<?=$awardOrder;?>" />
 				</td>
 				<td>
-					<span class="fontNormal"><b>Category</b></span><br />
-					<select name="awardCat">
-						<option value="ic"<?php if( $awardCat == "ic" ) { echo " selected"; } ?>>In character</option>
-						<option value="ooc"<?php if( $awardCat == "ooc" ) { echo " selected"; } ?>>Out of character</option>
-						<option value="both"<?php if( $awardCat == "both" ) { echo " selected"; } ?>>Both</option>
-					</select>
+					<span class="fontNormal"><b>Award</b></span><br />
+					<input type="text" class="name" name="awardName" maxlength="100" value="<?=stripslashes( $awardName );?>" />
+				</td>
+				<td rowspan="2" valign="top" align="center" width="55%">
+					<span class="fontNormal"><b>Description</b></span><br />
+					<textarea name="awardDesc" class="desc" rows="4"><?=stripslashes( $awardDesc );?></textarea>
 				</td>
 			</tr>
 			<tr>

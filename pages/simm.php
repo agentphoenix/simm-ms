@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: pages/simm.php
 Purpose: Main page for the simm section
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 1016 EST
+System Version: 2.5.0
+Last Modified: 2007-03-21 2343 EST
 **/
 
 /* define the page class and vars */
@@ -28,24 +28,8 @@ if( isset( $sessionCrewid ) ) {
 
 <div class="body">
 	<span class="fontTitle">Welcome to the Simm</span>
-	<?
-
-	/*
-		if the person is logged in and has level 5 access, display an icon
-		that will take them to edit the entry
-	*/
-	if( isset( $sessionCrewid ) && in_array( "m_messages", $sessionAccess ) ) {
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=messages'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
-		echo "</a>";
-	}
-	
-	?>
-	<br /><br />
-	
-	<? printText( $simmMessage ); ?>
-	<br /><br />
+	<p><? printText( $simmMessage ); ?></p>
+	<br />
 	
 	<p>
 		<b><? printText( $co ); ?><br />

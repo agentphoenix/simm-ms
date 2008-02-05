@@ -1,26 +1,17 @@
 <?php
 
 /**
-Edits to this skin are permissible if the original credits stay intact.
+This skin is the property of its owner and should not be duplicated or
+reproduced with the express written consent of the author. Edits to this skin
+are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/default/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
-Skin Version: 2.5
-Last Modified: 2008-01-30 1050 EST
+Skin Version: 2.0
+Last Modified: 2007-08-13 1156 EST
 **/
-
-?>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#list').clickMenu();
-		$('ul.hidemenu').show();
-	});
-</script>
-
-<?php
 
 /* create a new instance of the menu class */
 $menu = new Menu;
@@ -28,16 +19,8 @@ $menu = new Menu;
 ?>
 
 <div class="mainNav">
-	<?php
-	
-	$menu->main();
-	
-	if( isset( $sessionCrewid ) ) {
-		$menu->user( $sessionCrewid );
-	}
-	
-	?>
-</div><br />
+	<? $menu->main( $sessionCrewid ); ?>
+</div>
 
 <div class="content">
 	<div class="nav">
@@ -53,13 +36,11 @@ $menu = new Menu;
 				<b>Password</b><br />
 				<input type="password" name="password" size="12" class="text" /><br /><br />
 				
-				<input type="image" src="<?=SKIN_PATH;?>buttons/login-small.png" name="submit" class="buttonSmall" value="Login" />
+				<input type="image" src="skins/default/buttons/login-small.png" name="submit" class="buttonSmall" value="Login" />
 			</form>
 			<br />
 			<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
 		<? } ?>
-		<br /><br />
-		<? include_once( 'framework/stardate.php' ); ?>
 		</div> <!-- close the .login layer -->
 		<br />
 

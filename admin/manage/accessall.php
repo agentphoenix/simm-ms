@@ -83,11 +83,10 @@ if( in_array( "x_access", $sessionAccess ) ) {
 			0 => array( "r_about", "About SMS" ),
 			1 => array( "r_activity", "Crew Activity" ),
 			2 => array( "r_count", "Post Count" ),
-			3 => array( "r_milestones", "Crew Milestones" ),
+			3 => array( "r_milestones", "r_milestones" ),
 			4 => array( "r_progress", "Sim Progress" ),
-			5 => array( "r_security", "Security Report" ),
-			6 => array( "r_strikes", "Strike List" ),
-			7 => array( "r_versions", "Version History" )
+			5 => array( "r_strikes", "Strike List" ),
+			6 => array( "r_versions", "Version History" )
 		),
 		"user" => array(
 			0 => array( "u_account1", "User Account 1" ),

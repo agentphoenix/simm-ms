@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/post/news.php
 Purpose: Page to post a news item
 
-System Version: 2.6.0
-Last Modified: 2007-11-12 1525 EST
+System Version: 2.5.0
+Last Modified: 2007-06-18 1314 EST
 **/
 
 /* access check */
@@ -37,7 +37,6 @@ if( in_array( "p_news", $sessionAccess ) ) {
 		$newsTitle = addslashes( $_POST['newsTitle'] );
 		$newsContent = addslashes( $_POST['newsContent'] );
 		$newsCat = $_POST['newsCat'];
-		$newsPrivate = $_POST['newsPrivate'];
 	
 		/* check to see if the user is moderated */
 		$getModerated = "SELECT crewid FROM sms_crew WHERE moderateNews = 'y'";
@@ -63,13 +62,13 @@ if( in_array( "p_news", $sessionAccess ) ) {
 			$newsStatus = "pending";
 		}
 	
-		if( !isset( $id ) ) {
-			$query = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate ) ";
-			$query.= "VALUES ( '', '$newsCat', '$sessionCrewid', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', '$newsStatus', '$newsPrivate' )";
+		if( !$id ) {
+			$query = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus ) ";
+			$query.= "VALUES ( '', '$newsCat', '$sessionCrewid', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', '$newsStatus' )";
 		} else {
 			$query = "UPDATE sms_news SET newsCat = '$newsCat', newsTitle = '$newsTitle', ";
 			$query.= "newsContent = '$newsContent', newsStatus = '$newsStatus', ";
-			$query.= "newsPrivate = '$newsPrivate', newsPosted = UNIX_TIMESTAMP() WHERE newsid = '$id' LIMIT 1";
+			$query.= "newsPosted = UNIX_TIMESTAMP() WHERE newsid = '$id' LIMIT 1";
 		}
 		
 		$result = mysql_query( $query );
@@ -110,7 +109,7 @@ if( in_array( "p_news", $sessionAccess ) ) {
 		
 			/* define the variables */
 			$to = getCrewEmails( "emailNews" );
-			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle );
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle );
 			$message = "A News Item Posted By " . printCrewNameEmail( $sessionCrewid ) . "
 			
 " . stripslashes( $newsContent );
@@ -122,7 +121,7 @@ if( in_array( "p_news", $sessionAccess ) ) {
 	
 			/* define the variables  */
 			$to = printCOEmail();
-			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle ) . " (Awaiting Approval)";
+			$subject = "[" . $shipPrefix . " " . $shipName . "] " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle ) . " (Awaiting Approval)";
 			$message = "A News Item Posted By " . printCrewNameEmail( $sessionCrewid ) . "
 			
 " . stripslashes( $newsContent ) . "
@@ -140,15 +139,14 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 		$newsTitle = addslashes( $_POST['newsTitle'] );
 		$newsContent = addslashes( $_POST['newsContent'] );
 		$newsCat = $_POST['newsCat'];
-		$newsPrivate = $_POST['newsPrivate'];
 	
-		if( !isset( $id ) ) {
-			$query = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate ) ";
-			$query.= "VALUES ( '', '$newsCat', '$sessionCrewid', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', 'saved', '$newsPrivate' )";
+		if( !$id ) {
+			$query = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus ) ";
+			$query.= "VALUES ( '', '$newsCat', '$sessionCrewid', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', 'saved' )";
 		} else {
 			$query = "UPDATE sms_news SET newsCat = '$newsCat', newsTitle = '$newsTitle', ";
 			$query.= "newsContent = '$newsContent', newsStatus = 'saved', ";
-			$query.= "newsPrivate = '$newsPrivate', newsPosted = UNIX_TIMESTAMP() WHERE newsid = '$id' LIMIT 1";
+			$query.= "newsPosted = UNIX_TIMESTAMP() WHERE newsid = '$id' LIMIT 1";
 		}
 	
 		$result = mysql_query( $query );
@@ -237,14 +235,6 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 				<td><input type="text" class="name" name="newsTitle" style="font-weight:bold;" length="100" /></td>
 			</tr>
 			<tr>
-				<td class="tableCellLabel"><b>Privacy</b></td>
-				<td>&nbsp;</td>
-				<td>
-					<input type="radio" id="newsPrivateN" name="newsPrivate" value="n" checked="yes" /><label for="newsPrivateN">Public</label>
-					<input type="radio" id="newsPrivateY" name="newsPrivate" value="y" /><label for="newsPrivateY">Private</label>
-				</td>
-			</tr>
-			<tr>
 				<td class="tableCellLabel"><b>Content</b></td>
 				<td>&nbsp;</td>
 				<td><textarea name="newsContent" rows="15" class="desc"></textarea></td>
@@ -316,14 +306,6 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 				<td class="tableCellLabel"><b>Title</b></td>
 				<td>&nbsp;</td>
 				<td><input type="text" class="name" name="newsTitle" style="font-weight:bold;" length="100" value="<?=stripslashes( $newsTitle );?>" /></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel"><b>Privacy</b></td>
-				<td>&nbsp;</td>
-				<td>
-					<input type="radio" id="newsPrivateN" name="newsPrivate" value="n" checked="yes" /><label for="newsPrivateN">Public</label>
-					<input type="radio" id="newsPrivateY" name="newsPrivate" value="y"<? if( $newsPrivate == 'y' ) { echo " checked='yes'"; } ?> /><label for="newsPrivateY">Private</label>
-				</td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel"><b>Content</b></td>

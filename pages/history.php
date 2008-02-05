@@ -9,8 +9,8 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/history.php
 Purpose: To display the history of the ship/starbase
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 1003 EST
+System Version: 2.5.0
+Last Modified: 2007-02-08 1332 EST
 **/
 
 /* define the page class */
@@ -26,21 +26,6 @@ if( isset( $sessionCrewid ) ) {
 ?>
 
 <div class="body">
-	<span class="fontTitle">History of the <? printText( $shipPrefix . " " . $shipName ); ?></span>
-	<?
-
-	/*
-		if the person is logged in and has level 5 access, display an icon
-		that will take them to edit the entry
-	*/
-	if( isset( $sessionCrewid ) && in_array( "m_messages", $sessionAccess ) ) {
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=messages'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
-		echo "</a>";
-	}
-	
-	?>
-	<br /><br />
+	<span class="fontTitle">History of the <? printText( $shipPrefix . " " . $shipName ); ?></span><br /><br />
 	<? printText( $shipHistory );?>
 </div>

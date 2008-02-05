@@ -9,8 +9,8 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/dockingrequest.php
 Purpose: To display the form for ships to request docking permission at the starbase
 
-System Version: 2.6.0
-Last Modified: 2007-08-21 0935 EST
+System Version: 2.5.0
+Last Modified: 2007-04-27 0350 EST
 **/
 
 /* check the simm type */
@@ -67,7 +67,7 @@ if( $simmType == "starbase" ) {
 		
 		if( !empty( $result ) ) {
 			/* email the ship CO */
-			$subject1 = $emailSubject . " Docking Request";
+			$subject1 = "[" . $shipPrefix . " " . $shipName . "] Docking Request";
 			$to1 = $dockingShipCOEmail;
 			$message1 = $dockingShipCO . ", thank you for submitting a request to dock with " . $shipPrefix . " " . $shipName . ".  The CO has been sent a copy of your request and will be reviewing it shortly.  In the meantime, please feel free to browse our site (" . $webLocation . ") until the CO reviews your request.
 	
@@ -76,7 +76,7 @@ This is an automatically generated message, please do not respond.";
 			mail( $to1, $subject1, $message1, "From: " . $shipPrefix . " " . $shipName . "< donotreply >\nX-Mailer: PHP/" . phpversion() );
 			
 			/* email the CO */
-			$subject2 = $emailSubject . " Docking Request";
+			$subject2 = "[" . $shipPrefix . " " . $shipName . "] Docking Request";
 			$to2 = printCOEmail();
 			$message2 = "Greetings " . printCO() . ",
 		

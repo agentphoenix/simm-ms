@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/manage.php
 Purpose: Page to pull in the necessary manage page
 
-System Version: 2.6.0
-Last Modified: 2007-11-08 1103 EST
+System Version: 2.5.0
+Last Modified: 2007-03-17 1921 EST
 **/
 
 /* define the page class and the vars */
@@ -25,11 +25,7 @@ if( isset( $sessionCrewid ) && in_array( "manage", $sessionAccess ) ) {
 	include_once( 'skins/' . $sessionDisplaySkin . '/menu.php' );
 	
 	/* pull in the requested page */
-	if( file_exists( $pageClass . '/' . $subMenuClass . '/' . $sub . '.php' ) ) {
-		include_once( $subMenuClass . '/' . $sub . '.php' );
-	} else {
-		include_once( 'error.php' );
-	}
+	include_once( 'manage/' . $sub . '.php' );
 
 }
 

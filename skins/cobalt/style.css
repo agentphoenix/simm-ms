@@ -16,12 +16,11 @@ Last Modified: 2007-06-11 2141 EST
 	these imports are ESSENTIAL for the system to be displayed correctly
 */
 @import url( "style-login.css" ); /* the login styles */
-@import url( "style-ui.tabs.css" ); /* jQuery-UI tabs stylesheet */
-@import url( "style-neptune.css" );
+@import url( "style-subnav.css" ); /* the sub-navigation tab styles */
 @import url( "style-misc.css" ); /* miscellaneous styles */
 
 body {
-	background-color: #090909;
+	background-color: #0d0d0d;
 	font-family: "Lucida Grande", "Verdana", sans-serif;
 	font-size: .8em;
 	color: #fff;
@@ -34,42 +33,39 @@ body {
 	width: 90%;
 	margin: auto;
 	background-color: #000;
-	border-left: 1px solid #111;
-	border-right: 1px solid #111;
-	border-bottom: 1px solid #111;
+	border-left: 1px solid #222;
+	border-right: 1px solid #222;
+	border-bottom: 1px solid #222;
 }
 
 /* styles that control the top and bottom spacers */
 #headerTopSpacer {
 	height: 25px;
-	background-color: #090909;
+	background-color: #0d0d0d;
 	margin: 0 -1px 0 -1px;
 }
 #container .footerBottomSpacer {
 	height: 25px;
-	background-color: #090909;
+	background-color: #0d0d0d;
 	margin: 0 -1px 0 -1px;
 }
 
 /* the template header */
 #header {
-	height: 92px;
-	background: url( 'images/mainnav-bg.jpg' ) repeat-x top left;
+	height: 100px;
+	background: url( 'images/bg.jpg' ) repeat-x top left;
 	margin-top: -5px;
 	margin-left: -1px;
 	margin-right: -1px;
 }
 
-/* special class used for this skin alone */
-.headerTitle {
-	padding: 15px 0;
-}
-
 /* the main navigation section */
 #mainNav {
-	text-align: left;
+	background: #0d0d0d;
+	text-align: right;
 	height: 25px;
 	line-height: 25px;
+	margin: 0 -1px .5em -1px;
 }
 #mainNav ul {
 	display: inline;
@@ -85,10 +81,11 @@ body {
 }
 #mainNav a {
 	font-weight: bold;
-	color: #2954b2;
-	padding: 0 2em 0 0;
+	color: #fff;
+	padding: 0 1em 0 1em;
 }
 #mainNav a:hover {
+	color: #679ef1;
 }
 
 /* the content of the template */
@@ -144,7 +141,7 @@ body {
 /* the footer */
 #container .footer {
 	position: relative;
-	background: #090909;
+	background: #0d0d0d;
 	text-align: center;
 	clear: both;
 	font-size: .8em;
@@ -153,5 +150,5 @@ body {
 	color: #fff;
 	padding: 1em 0;
 	margin: 0 -1px -3em -1px;
-	border-top: 1px solid #111;
+	border-top: 1px solid #222;
 }

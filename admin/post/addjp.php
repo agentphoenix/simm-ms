@@ -9,7 +9,7 @@ Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/post/addjp.php
 Purpose: Page to add a joint post
 
-System Version: 2.6.0
+System Version: 2.5.4
 Last Modified: 2007-09-17 0911 EST
 **/
 

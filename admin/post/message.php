@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ davidv@anodyne-productions.com ]
+Author: David VanScott [ anodyne.sms@gmail.com ]
 File: admin/post/message.php
 Purpose: Page to send a private message
 
-System Version: 2.6.0
-Last Modified: 2007-08-21 0911 EST
+System Version: 2.5.2
+Last Modified: 2007-08-02 1155 EST
 **/
 
 /* access check */
@@ -40,23 +40,9 @@ if( in_array( "p_pm", $sessionAccess ) ) {
 		$pmSubject = addslashes( $_POST['pmSubject'] );
 		$pmContent = addslashes( $_POST['pmContent'] );
 		$pmRecipient = $_POST['pmRecipient'];
-		
-		if( !isset( $_GET['reply'] ) ) {
-			$getLastConvo = "SELECT conversationId from sms_privatemessages ORDER BY conversationId DESC";
-			$getLastConvoR = mysql_query( $getLastConvo );
-			$lastConvo = mysql_fetch_array( $getLastConvoR );
-			$conversation = $lastConvo[0] + 1;
-		} else {
-			$getLastConvo = "SELECT conversationId from sms_privatemessages WHERE pmid = '$reply'";
-			$getLastConvoR = mysql_query( $getLastConvo );
-			$lastConvo = mysql_fetch_array( $getLastConvoR );
-			$conversation = $lastConvo[0];
-		}
-		
-		echo $getLastConvo;
 	
-		$insertPM = "INSERT INTO sms_privatemessages ( pmid, pmRecipient, pmAuthor, pmContent, pmDate, pmSubject, pmStatus, conversationId ) ";
-		$insertPM.= "VALUES ( '', '$pmRecipient', '$sessionCrewid', '$pmContent', UNIX_TIMESTAMP(), '$pmSubject', 'unread', '$conversation' )";
+		$insertPM = "INSERT INTO sms_privatemessages ( pmid, pmRecipient, pmAuthor, pmContent, pmDate, pmSubject, pmStatus ) ";
+		$insertPM.= "VALUES ( '', '$pmRecipient', '$sessionCrewid', '$pmContent', UNIX_TIMESTAMP(), '$pmSubject', 'unread' )";
 		$result = mysql_query( $insertPM );
 		
 		/* optimize the table */
@@ -92,7 +78,7 @@ if( in_array( "p_pm", $sessionAccess ) ) {
 		
 		/* define the variables */
 		$to = $toEmail['0'];
-		$subject = $emailSubject . " Private Message - " . $pmSubject;
+		$subject = "[" . $shipPrefix . " " . $shipName . "] Private Message - " . $pmSubject;
 		$message = stripslashes( $pmContent ) . "
 	
 This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".  Please log in to view your Private Message Inbox and reply to this message.  " . $webLocation . "login.php?action=login";

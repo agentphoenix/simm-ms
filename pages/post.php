@@ -9,12 +9,13 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/post.php
 Purpose: To display the individual posts to a mission
 
-System Version: 2.6.0
-Last Modified: 2007-10-10 1012 EST
+System Version: 2.5.6
+Last Modified: 2008-02-04 1749 EST
 **/
 
 /* define the page class */
 $pageClass = "simm";
+$mp_id = $_GET['id'];
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -23,17 +24,13 @@ if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $skin . '/menu.php' );
 }
 
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['position'] ) && preg_match( "/^\d+$/", $_GET['position'], $matches ) == 0 ) {
-	errorMessageIllegal( "activation page" );
+if( isset( $mp_id ) && !is_numeric( $mp_id ) ) {
+	errorMessageIllegal( "view mission post page" );
 	exit();
-} else {
-	/* set the GET variable */
-	$mp_id = $_GET['id'];
 }
 
 /* get post id for individual message display */
-if( $mp_id ) {
+if( isset( $mp_id ) ) {
 
 	/* pull all the information relating to the post */
 	$getpost = "SELECT * FROM sms_posts ";
@@ -94,11 +91,11 @@ if( $mp_id ) {
 		
 			/* display the previous and next links in the post details box */
 			if( $idNumbers[$prevKey] != '' ) {
-					printText ( "<a href='$webLocation/index.php?page=post&id=$idNumbers[$prevKey]'><img src='$webLocation/images/previous.png' alt='Previous Entry' border='0' class='image' /></a>" );
+					printText ( "<a href='$webLocation/index.php?page=post&id=$idNumbers[$prevKey]'><img src='$webLocation/images/previous.png' alt='Previous Entry' border='0' /></a>" );
 				} if( ($idNumbers[$prevKey] != '') && ($idNumbers[$nextKey] != '') ) {
 					echo "&nbsp;";
 				} if( $idNumbers[$nextKey] != '' ) {
-					printText ( "<a href='$webLocation/index.php?page=post&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' class='image' /></a>" );
+					printText ( "<a href='$webLocation/index.php?page=post&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' /></a>" );
 				}
 			}
 		}

@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/add.php
 Purpose: Page to add a player or NPC
 
-System Version: 2.6.0
-Last Modified: 2008-01-12 1419 EST
+System Version: 2.5.5
+Last Modified: 2007-11-07 0834 EST
 **/
 
 /* access check */
@@ -58,21 +58,25 @@ if( in_array( "m_createcrew", $sessionAccess ) ) {
 				$getPosTypeResult = mysql_query( $getPosType );
 				$positionType = mysql_fetch_row( $getPosTypeResult );
 				
-				/* set the access levels accordingly */
+				/* if the position is a department head, set the access levels to DH */
+				/* otherwise, set it to standard player */
 				if( $positionType[0] == "senior" ) {
-					$accessID = 3;
+					$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
+					$levelsManage = "manage,m_createcrew,m_npcs1,m_newscat2";
+					$levelsReports = "reports,r_count,r_strikes,r_activity,r_progress,r_milestones";
+					$levelsUser = "user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2";
+					$levelsOther = "";
 				} else {
-					$accessID = 4;
+					$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
+					$levelsManage = "m_newscat1";
+					$levelsReports = "reports,r_progress,r_milestones";
+					$levelsUser = "user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options";
+					$levelsOther = "";
 				}
-				
-				/* pull the default access levels from the db */
-				$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = $accessID LIMIT 1";
-				$getGroupLevelsResult = mysql_query( $getGroupLevels );
-				$groups = mysql_fetch_array( $getGroupLevelsResult );
 			
 				/* do the insert query */
 				$query = "INSERT INTO sms_crew ( crewid, crewType, username, password, email, firstName, middleName, lastName, gender, species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, accessOthers ) ";
-				$query.= "VALUES ( '', '$crewType', '$username', '$password', '$email', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position', UNIX_TIMESTAMP(), '$groups[1]', '$groups[2]', '$groups[3]', '$groups[4]', '$groups[5]' )";
+				$query.= "VALUES ( '', '$crewType', '$username', '$password', '$email', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position', UNIX_TIMESTAMP(), '$levelsPost', '$levelsManage', '$levelsReports', '$levelsUser', '$levelsOther' )";
 				$result = mysql_query( $query );
 				
 				/* optimize the table */
@@ -97,7 +101,7 @@ if( in_array( "m_createcrew", $sessionAccess ) ) {
 				/* define the variables */
 				$to = $email . ", " . printCOEmail();
 				$from = printCO() . " < " . printCOEmail() . " >";
-				$subject = $emailSubject . " New Character Created";
+				$subject = "[" . $shipPrefix . " " . $shipName . "] New Character Created";
 				$message = "This is an automatic email to notify you that your new character has been created.  Please log in to the site (" . $webLocation . ") using the username and password below to update your biography.  If you have any questions, please contact the CO.
 
 USERNAME: " . $_POST['username'] . "
@@ -233,7 +237,7 @@ PASSWORD: " . $_POST['password'] . "";
 			if( in_array( "m_npcs2", $sessionAccess ) ) {
 				$ranks = "SELECT rank.rankid, rank.rankName, rank.rankImage, dept.deptColor FROM sms_ranks AS rank, ";
 				$ranks.= "sms_departments AS dept WHERE dept.deptClass = rank.rankClass AND dept.deptDisplay = 'y' ";
-				$ranks.= "AND rank.rankDisplay = 'y' GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
+				$ranks.= "GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
 				$ranksResult = mysql_query( $ranks );
 				
 				$positions = "SELECT position.positionid, position.positionName, dept.deptName, ";
@@ -254,7 +258,7 @@ PASSWORD: " . $_POST['password'] . "";
 				$ranks.= "FROM sms_ranks AS rank, sms_departments AS dept ";
 				$ranks.= "WHERE dept.deptid = '$userDept[2]' AND dept.deptClass = rank.rankClass ";
 				$ranks.= "AND rank.rankOrder >= '$userDept[3]' AND dept.deptDisplay = 'y' ";
-				$ranks.= "AND rank.rankDisplay = 'y' GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
+				$ranks.= "GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
 				$ranksResult = mysql_query( $ranks );
 				
 				$positions = "SELECT position.positionid, position.positionName, dept.deptName, dept.deptColor ";
@@ -276,7 +280,11 @@ PASSWORD: " . $_POST['password'] . "";
 						while( $rank = mysql_fetch_assoc( $ranksResult ) ) {
 							extract( $rank, EXTR_OVERWRITE );
 							
-							echo "<option value='" . $rank['rankid'] . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rank['rankImage'] . " ) no-repeat 0 100%; height:40px; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
+							if( $client->property('browser') == "ie" ) {
+								echo "<option value='" . $rank['rankid'] . "' style='color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
+							} else {
+								echo "<option value='" . $rank['rankid'] . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rank['rankImage'] . " ) no-repeat 0 100%; height:40px; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
+							}
 						
 						}
 						

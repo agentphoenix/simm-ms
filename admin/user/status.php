@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/status.php
 Purpose: Page to request a change of status to LOA or ELOA
 
-System Version: 2.6.0
-Last Modified: 2007-08-21 0918 EST
+System Version: 2.5.0
+Last Modified: 2007-07-10 1101 EST
 **/
 
 /* access check */
@@ -62,7 +62,7 @@ if( in_array( "u_status", $sessionAccess ) ) {
 		
 		/* define the email variables */
 		$to = printCOEmail() . ", " . printXOEmail();
-		$subject = $emailSubject . " Status Change Request";
+		$subject = "[" . $shipPrefix . " " . $shipName . "] Status Change Request";
 		$message = "$crewMember has requested that their status be changed to $newStatus.
 
 Duration: $duration

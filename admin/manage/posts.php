@@ -9,7 +9,7 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
-System Version: 2.6.0
+System Version: 2.5.4
 Last Modified: 2007-09-17 0913 EST
 **/
 
