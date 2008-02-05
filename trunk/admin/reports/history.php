@@ -10,7 +10,7 @@ File: admin/reports/history.php
 Purpose: Page to show the version history of SMS
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1528 EST
+Last Modified: 2008-02-05 1425 EST
 **/
 
 /* access check */
@@ -30,7 +30,7 @@ if( in_array( "r_versions", $sessionAccess ) ) {
 		
 		$ver = substr( $version, 0, 3);
 		
-		$versions[$ver][$version] = array( $versionDate, $versionDesc );
+		$versions[$ver][$version] = array( $versionDate, $versionDesc, $versionRev );
 		
 	}
 	
@@ -77,6 +77,10 @@ if( in_array( "r_versions", $sessionAccess ) ) {
 					$desc = explode( ";", $value[1] );
 
 					echo "<b class='fontMedium'>" . $key;
+					if( !empty( $value[2] ) )
+					{
+						echo " [r" . $value[2] . "]";
+					}
 					echo "&nbsp;&nbsp;&nbsp;";
 					echo "<span class='fontSmall blue'>[ " . dateFormat( 'short2', $value[0] ) . " ]</span></b>";
 					echo "<ul class='version'>";
