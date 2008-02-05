@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: framework/functionsAdmin.php
 Purpose: List of functions specific to the administration control panel
 
-System Version: 2.5.0
-Last Modified: 2007-06-23 1508 EST
+System Version: 2.5.6
+Last Modified: 2008-02-05 1104 EST
 
 Included Functions:
 	printCrewName( $crewid, $rank, $link )
@@ -567,30 +567,7 @@ function errorMessageIllegal( $page ) {
 	/* set the time variable */
 	$today = getdate();
 	
-	/* define the variables */
-	$hours = $today['hours'];
-	$minutes = $today['minutes'];
-	$seconds = $today['seconds'];
-	
-	/* do some logic to make sure the hours are displaying right */
-	if( $hours < "10" ) {
-		$hours = "0" . $today['hours'];
-	}
-	
-	/* do some logic to make sure the minutes are displaying right */
-	if( $minutes < "10" ) {
-		$minutes = "0" . $today['minutes'];
-	}
-	
-	/* do some logic to make sure the seconds are displaying right */
-	if( $seconds < "10" ) {
-		$seconds = "0" . $today['seconds'];
-	}
-	
-	/* set the NOW variable */
-	$now = $hours . ":" . $minutes . ":" . $seconds . " on " . $today['month'] . " " . $today['mday'] . ", " . $today['year'];
-	
-	/* get the CO email address */
+	/* get the CO email address /
 	$getCOEmail = "SELECT email FROM sms_crew WHERE positionid = '1' LIMIT 1";
 	$getCOEmailResult = mysql_query( $getCOEmail );
 	
@@ -599,17 +576,17 @@ function errorMessageIllegal( $page ) {
 	}
 	
 	/* set the email variables */
-	$to = $email;
+	/*$to = $email;
 	$from = "SMS System < " . $email . " >";
 	$subject = "[SMS Warning] Illegal and Malicious Operation Attempted!";
 	$message = "WARNING!  A user has attempted an illegal and malicious operation on your SMS website.  The user attempted to gain access to your SQL database by means of a SQL injection.  This attack ocurred on the " . $page . " from the IP Address " . $ipaddr . " at " . $now . ".  Please contact your host immediately with this information to notify them of the breach.";
 	
 	/* email the message to the CO */
-	mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+	/* mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() ); */
 	
 	echo "<div class='body'>";
 		echo "<span class='fontTitle'>Warning!</span><br /><br />";
-		echo "You have attempted an illegal and malicious SQL injection operation.  Your IP address and a timestamp have been emailed to the sim administrator to pass on to the host.";
+		echo "You have attempted an illegal operation!";
 	echo "</div>";
 
 }

@@ -10,8 +10,8 @@ File: [ framework/functionsGlobal.php ]
 Purpose: File that holds all the necessary global function files for JP author printing,
 	database connection, and error catching
 	
-System Version: 2.5.5
-Last Modified: 2007-11-07 0823 EST
+System Version: 2.5.6
+Last Modified: 2008-02-05 1104 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -46,7 +46,7 @@ while( $global = mysql_fetch_assoc( $globalsResult ) ) {
 }
 
 /* define the version number */
-$version = "2.5.5";
+$version = "2.5.6";
 $code = $sysuid;
 
 /**
