@@ -1,12 +1,12 @@
-#facebox .b { background:url(images/facebox/b.png); }
-#facebox .tl { background:url(images/facebox/tl.png); }
-#facebox .tr { background:url(images/facebox/tr.png); }
-#facebox .bl { background:url(images/facebox/bl.png); }
-#facebox .br { background:url(images/facebox/br.png); }
+#facebox .b { background:url(../../images/facebox_b.png); }
+#facebox .tl { background:url(../../images/facebox_tl.png); }
+#facebox .tr { background:url(../../images/facebox_tr.png); }
+#facebox .bl { background:url(../../images/facebox_bl.png); }
+#facebox .br { background:url(../../images/facebox_br.png); }
 
 #facebox {
 	position: absolute;
-	width: 100%;
+	width: auto;
 	top: 0;
 	left: 0;
 	z-index: 100;
@@ -24,7 +24,6 @@
 	padding: 10px;
 	background: #fff;
 	width: 700px;
-	
 	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 	font-size: 12px;
 	color: #444;
@@ -48,4 +47,13 @@
 	width: 10px;
 	overflow: hidden;
 	padding: 0;
+}
+
+#facebox input[type=text] {
+	background-color: #fcfcfc;
+	color: #444;
+}
+#facebox input[type=text]:focus {
+	background-color: #f1f1f1;
+	color: #000;
 }
