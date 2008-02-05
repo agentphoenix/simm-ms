@@ -1,0 +1,80 @@
+/**
+This is a necessary system file. Do not modify this page unless you are highly
+knowledgeable as to the structure of the system. Modification of this file may
+cause SMS to no longer function.
+
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: skins/cobalt/style-subnav.css
+Purpose: Stylesheet that controls the tabs and sub-navigation of SMS
+
+System Version: 2.5.0
+Last Modified: 2007-07-18 0957 EST
+**/
+
+#subnav {
+	float: left;
+	width: 100%;
+	background-color: #000;
+	line-height: normal;
+	position: relative;
+}
+#subnav ul {
+	margin: 0;
+	padding: 10px 10px 0;
+	list-style: none;
+}
+#subnav li {
+	float: left;
+	background: url( "images/tabs/left.jpg" ) no-repeat left top;
+	margin: 0 0 0 -1px;
+	padding: 0 0 0 6px;
+	font-size: 90%;
+}
+#subnav a {
+	float: left;
+	display: block;
+	background: url( "images/tabs/right.jpg" ) no-repeat right top;
+	padding: 5px 15px 15px 8px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #f1f1f1;
+}
+#subnav a:hover {
+	color: #9ea3ad;
+}
+
+#subnav #current {
+	background-image: url( "images/tabs/left_on.jpg" );
+}
+#subnav #current a {
+	background-image: url( "images/tabs/right_on.jpg" );
+	color: #f1f1f1;
+}
+
+.tabcontainer {
+	clear: left;
+	margin-top: 5px;
+	padding: 0 1em 1em 1em;
+}
+
+.subMenu {
+	height: 20px;
+	line-height: 20px;
+	margin: -1em -1.1em 1em -1.15em;
+	font-size: 90%;
+}
+.subMenu ul {
+	margin: 0;
+	padding: 0;
+}
+.subMenu ul li {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	float: left;
+}
+.subMenu ul li a {
+	display: block;
+	padding: 0 1em 0 1em;
+	font-weight: bold;
+}
