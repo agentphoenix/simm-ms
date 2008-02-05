@@ -73,7 +73,7 @@ if( $updateVersion[0] < "2.5.0" ) {
 
 	/* define the session variables */
 	$sessionCrewid = $_SESSION['sessionCrewid'];
-	$sessionAccessLevel = $_SESSION['sessionAccessLevel'];
+	$sessionAccessLevel = $_SESSION['sessionAccess'];
 	$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
 	$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
 	
