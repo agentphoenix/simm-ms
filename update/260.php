@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-01-19 1601 EST
+Last Modified: 2008-02-05 1418 EST
 **/
 
 /* query the database for the mysql version */
@@ -166,6 +166,9 @@ mysql_query( "CREATE TABLE `sms_awards_queue` (
   `status` enum('approved','pending') NOT NULL default 'pending',
   PRIMARY KEY  (`id`)
 ) " . $tail . " ;" );
+
+/* add the revision field */
+mysql_query( "ALTER TABLE `sms_system_versions` ADD `versionRev` INT( 5 ) NOT NULL AFTER `version`" );
 
 /* add the data for FirstLaunch */
 mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.0', '', '', '' )" );
