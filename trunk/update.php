@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.0
-Last Modified: 2007-09-17 1349 EST
+Last Modified: 2008-02-05 1415 EST
 **/
 
 /* define the step var */
@@ -185,7 +185,7 @@ switch( $step ) {
 			to go to the Control Panel. To correct this, please log back in to your site.
 
 			<h1>
-				<a href="<?=$webLocation;?>">Return to your site &raquo;</a>
+				<a href="<?=$webLocation;?>index.php?page=main">Return to your site &raquo;</a>
 			</h1>
 			
 			If your simm is a starbase, you can use this additional step to change the necessary menu items for a starbase setup.
@@ -197,14 +197,13 @@ switch( $step ) {
 			The menu changes have been made to your system. Additional changes can be made to the menus through the Menu Management page.
 			
 			<h1>
-				<a href="<?=$webLocation;?>">Return to your site &raquo;</a>
+				<a href="<?=$webLocation;?>index.php?page=main">Return to your site &raquo;</a>
 			</h1>
 			
 			<? } ?>
 		</div>
 		<div class="footer">
-			Copyright &copy; 2005-<?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a><br />
-			SMS 2 designed by <a href="mailto:anodyne.sms@gmail.com">David VanScott</a>
+			Copyright &copy; 2005-<?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a>
 		</div> <!-- close .footer -->
 	</div> <!-- close #install -->
 </body>
