@@ -1,4 +1,4 @@
-Last Updated: 2008.01.26 1232 EST
+Last Updated: 2008.02.06 1417 EST
 
 2.6
 CODENAME: Eclipse
@@ -83,6 +83,25 @@ LAUNCH: Q1 2008
 			the way they should be
 #	List all steps in installation and updating
 		*	All the steps should be listed with each step being highlighted as it's active
+#	Clean up icons included with SMS
+		*	Remove icons
+				@	update.png
+				@	warning.png
+				@	warning-large.png
+				@	update.png
+				@	fail.png
+				@	feed.png
+				@	launch.png
+				@	messages-unread.png
+				@	saved.png
+				@	notes.png
+		*	Update icons
+				@	combadge.jpg (should be PNG)
+				@	combadge-loa.jpg (should be PNG)
+				@	combadge-eloa.jpg (should be PNG)
+				@	combadge-npc.jpg (should be PNG)
+				@	add.png (gray + color)
+				@	remove.png (gray + color)
 
 3.0
 CODENAME: Jefferson
