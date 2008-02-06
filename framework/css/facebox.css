@@ -49,11 +49,19 @@
 	padding: 0;
 }
 
-#facebox input[type=text] {
+#facebox input[type=text],
+#facebox textarea,
+#facebox select {
 	background-color: #fcfcfc;
 	color: #444;
 }
-#facebox input[type=text]:focus {
+
+#facebox input[type=text]:focus,
+#facebox textarea:focus {
+	background-color: #f9f9f9;
+	color: #000;
+}
+#facebox select:hover {
 	background-color: #f1f1f1;
 	color: #000;
 }
