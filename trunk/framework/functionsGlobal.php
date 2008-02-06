@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2007-12-27 1005 EST
+Last Modified: 2008-02-06 1145 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -26,6 +26,7 @@ Included Functions:
 	getCrewEmails( $type )
 	printCrewNameEmail( $id )
 	escape_string( $value )
+	update_position( $position )
 **/
 
 /* pull in the DB connection variables */
@@ -431,6 +432,25 @@ function escape_string( $value )
 	
 	return $value;
 	
+}
+/** END FUNCTION **/
+
+/**
+	Function to update the open positions number
+**/
+function update_position( $position )
+{
+	$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
+	$positionFetch.= "WHERE positionid = '$position' LIMIT 1";
+	$positionFetchResult = mysql_query( $positionFetch );
+	$positionX = mysql_fetch_row( $positionFetchResult );
+	
+	$open = $positionX[1];
+	$revised = ( $open - 1 );
+	
+	$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
+	$updatePosition.= "WHERE positionid = '$position' LIMIT 1";
+	$updatePositionResult = mysql_query( $updatePosition );
 }
 /** END FUNCTION **/
 
