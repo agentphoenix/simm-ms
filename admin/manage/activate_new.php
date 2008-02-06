@@ -1,11 +1,136 @@
 <?php
 
-/* get pending users */
-$getPendingUsers = "SELECT crew.crewid, crew.firstName, crew.lastName, position.positionName ";
-$getPendingUsers.= "FROM sms_crew AS crew, sms_positions AS position WHERE ";
-$getPendingUsers.= "crew.positionid = position.positionid AND crewType = 'pending'";
-$getPendingUsersResult = mysql_query( $getPendingUsers );
-$countPendingUsers = mysql_num_rows( $getPendingUsersResult );
+/**
+This is a necessary system file. Do not modify this page unless you are highly
+knowledgeable as to the structure of the system. Modification of this file may
+cause SMS to no longer function.
+
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: admin/manage/activate.php
+Purpose: Page to manage pending users, posts, logs, and docking requests
+
+System Version: 2.6.0
+Last Modified: 2008-02-06 1156 EST
+**/
+
+$debug = 0;
+
+/* access check */
+if(
+	in_array( "x_approve_users", $sessionAccess ) ||
+	in_array( "x_approve_posts", $sessionAccess ) ||
+	in_array( "x_approve_logs", $sessionAccess ) ||
+	in_array( "x_approve_news", $sessionAccess ) ||
+	in_array( "x_approve_docking", $sessionAccess ) ||
+	in_array( "m_giveaward", $sessionAccess )
+) {
+
+	/* set the page class */
+	$pageClass = "admin";
+	$subMenuClass = "manage";
+	
+	if( isset( $_POST ) )
+	{
+		/* define the POST variables */
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
+		
+		if($action_category == 'user' && in_array('x_approve_users', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'accept':
+					
+					/* get the position type from the database */
+					$getPosType = "SELECT positionType FROM sms_positions WHERE positionid = '$position' LIMIT 1";
+					$getPosTypeResult = mysql_query( $getPosType );
+					$positionType = mysql_fetch_row( $getPosTypeResult );
+
+					/* set the access levels accordingly */
+					if( $positionType[0] == "senior" ) {
+						$accessID = 3;
+					} else {
+						$accessID = 4;
+					}
+
+					/* pull the default access levels from the db */
+					$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = $accessID LIMIT 1";
+					$getGroupLevelsResult = mysql_query( $getGroupLevels );
+					$groups = mysql_fetch_array( $getGroupLevelsResult );
+					
+					$update = "UPDATE sms_crew SET positionid = %d, crewType = %s, accessPost = %s, ";
+					$update.= "accessManage = %s, accessReports = %s, accessUser = %s, accessOthers = %s, ";
+					$update.= "rankid = %d, leaveDate = %s WHERE crewid = $action_id LIMIT 1";
+					
+					$query = sprintf(
+						$update,
+						escape_string( $position ),
+						escape_string( 'active' ),
+						escape_string( $groups[1] ),
+						escape_string( $groups[2] ),
+						escape_string( $groups[3] ),
+						escape_string( $groups[4] ),
+						escape_string( $groups[5] ),
+						escape_string( $rank ),
+						escape_string( '' )
+					);
+
+					//$result = mysql_query( $query );
+
+					/* update the position they're being given */
+					//update_position( $position );
+
+					/** EMAIL THE APPROVAL **/
+
+					/* set the email author */
+					$userFetch = "SELECT email FROM sms_crew WHERE crewid = '$action_id' LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+					$userEmail = mysql_fetch_row( $userFetchResult );
+
+					/* define the variables */
+					$to = $userEmail[0] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Application";
+
+					/* new instance of the replacement class */
+					$message = new MessageReplace;
+					$message->message = $acceptMessage;
+					$message->shipName = $shipPrefix . " " . $shipName;
+					$message->player = $action_id;
+					$message->rank = $rank;
+					$message->position = $position;
+					$message->setArray();
+					$accept = nl2br( stripslashes( $message->changeMessage() ) );
+
+					/* send the email */
+					//mail( $to, $subject, $accept, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					/* optimize the tables */
+					optimizeSQLTable( "sms_crew" );
+					optimizeSQLTable( "sms_positions" );
+					
+					break;
+				case 'reject':
+					break;
+			}
+		}
+	}
+
+	/* get pending users */
+	$getPendingUsers = "SELECT crew.crewid, crew.firstName, crew.lastName, position.positionName ";
+	$getPendingUsers.= "FROM sms_crew AS crew, sms_positions AS position WHERE ";
+	$getPendingUsers.= "crew.positionid = position.positionid AND crewType = 'pending'";
+	$getPendingUsersResult = mysql_query( $getPendingUsers );
+	$countPendingUsers = mysql_num_rows( $getPendingUsersResult );
+	
+	if($debug == 1)
+	{
+		echo "<pre>";
+		print_r($_POST);
+		echo "</pre>";
+	}
 
 ?>
 
@@ -82,3 +207,5 @@ $countPendingUsers = mysql_num_rows( $getPendingUsersResult );
 	</div>
 
 </div>
+
+<?php } ?>
