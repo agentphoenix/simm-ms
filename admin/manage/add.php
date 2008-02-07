@@ -10,7 +10,7 @@ File: admin/manage/add.php
 Purpose: Page to add a player or NPC
 
 System Version: 2.6.0
-Last Modified: 2008-01-12 1419 EST
+Last Modified: 2008-02-07 1140 EST
 **/
 
 /* access check */
@@ -41,17 +41,17 @@ if( in_array( "m_createcrew", $sessionAccess ) ) {
 	} else {
 		if( $create ) {
 		
-			if( $crewType == "npc" ) {
+			if( $crewType == "npc" && ( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess ) ) ) {
 				
 				/* do the insert query */
 				$query = "INSERT INTO sms_crew ( crewid, crewType, firstName, middleName, lastName, gender, species, rankid, positionid ) ";
-				$query.= "VALUES ( '', '$crewType', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position' )";
+				$query.= "VALUES ( '', 'npc', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position' )";
 				$result = mysql_query( $query );
 				
 				/* optimize the table */
 				optimizeSQLTable( "sms_crew" );
 			
-			} elseif( $crewType == "active" ) {
+			} elseif( $crewType == "active" && in_array( "m_crew", $sessionAccess ) ) {
 				
 				/* get the position type from the database */
 				$getPosType = "SELECT positionType FROM sms_positions WHERE positionid = '$position' LIMIT 1";
@@ -72,7 +72,7 @@ if( in_array( "m_createcrew", $sessionAccess ) ) {
 			
 				/* do the insert query */
 				$query = "INSERT INTO sms_crew ( crewid, crewType, username, password, email, firstName, middleName, lastName, gender, species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, accessOthers ) ";
-				$query.= "VALUES ( '', '$crewType', '$username', '$password', '$email', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position', UNIX_TIMESTAMP(), '$groups[1]', '$groups[2]', '$groups[3]', '$groups[4]', '$groups[5]' )";
+				$query.= "VALUES ( '', 'active', '$username', '$password', '$email', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position', UNIX_TIMESTAMP(), '$groups[1]', '$groups[2]', '$groups[3]', '$groups[4]', '$groups[5]' )";
 				$result = mysql_query( $query );
 				
 				/* optimize the table */
