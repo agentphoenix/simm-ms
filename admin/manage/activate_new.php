@@ -10,10 +10,16 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-02-06 1156 EST
+Last Modified: 2008-02-07 1805 EST
 **/
 
 $debug = 0;
+
+if($debug == 1)
+{
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+}
 
 /* access check */
 if(
@@ -116,6 +122,16 @@ if(
 					break;
 			}
 		}
+		if($action_category == 'post' && in_array('x_approve_posts', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'activate':
+					break;
+				case 'delete':
+					break;
+			}
+		}
 	}
 
 	/* get pending users */
@@ -124,6 +140,11 @@ if(
 	$getPendingUsers.= "crew.positionid = position.positionid AND crewType = 'pending'";
 	$getPendingUsersResult = mysql_query( $getPendingUsers );
 	$countPendingUsers = mysql_num_rows( $getPendingUsersResult );
+	
+	/* get pending mission posts */
+	$getPendingPosts = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'pending'";
+	$getPendingPostsResult = mysql_query( $getPendingPosts );
+	$countPendingPosts = mysql_num_rows( $getPendingPostsResult );
 	
 	if($debug == 1)
 	{
@@ -160,7 +181,7 @@ if(
 	<div id="container-1">
 		<ul>
 			<li><a href="#one"><span>Users (<?=$countPendingUsers;?>)</span></a></li>
-			<li><a href="#two"><span>Mission Posts</span></a></li>
+			<li><a href="#two"><span>Mission Posts (<?=$countPendingPosts;?>)</span></a></li>
 			<li><a href="#three"><span>Personal Logs</span></a></li>
 			<li><a href="#four"><span>News Items</span></a></li>
 			<li><a href="#five"><span>Awards</span></a></li>
@@ -199,7 +220,37 @@ if(
 			</table>
 		</div>
 		
-		<div id="two" class="ui-tabs-container ui-tabs-hide"></div>
+		<div id="two" class="ui-tabs-container ui-tabs-hide">
+			<b class="fontLarge">Pending Mission Posts</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="35%">Title</th>
+						<th width="35%">Author</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
+				/* loop through the results and fill the form */
+				while( $pendingPosts = mysql_fetch_assoc( $getPendingPostsResult ) ) {
+					extract( $pendingPosts, EXTR_OVERWRITE );
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingPosts['postTitle'] ); ?></td>
+					<td><? displayAuthors( $pendingPosts['postid'], 'noLink' ); ?></td>
+					<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$pendingPosts['postid'];?>"><b>View Post</b></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingPosts['postid'];?>" myType="post" myAction="delete"><b>Delete</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingPosts['postid'];?>" myType="post" myAction="activate"><b>Activate</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+		</div>
 		<div id="three" class="ui-tabs-container ui-tabs-hide"></div>
 		<div id="four" class="ui-tabs-container ui-tabs-hide"></div>
 		<div id="five" class="ui-tabs-container ui-tabs-hide"></div>
