@@ -4,11 +4,11 @@ reproduced with the express written consent of the author. Edits to this skin
 are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: skins/default/style/main.css
+File: skins/default/style.css
 Purpose: Stylesheet that controls the look and feel of the site
 
-Skin Version: 2.1
-Last Modified: 2008-01-18 1139 EST
+Skin Version: 2.5
+Last Modified: 2008-02-07 1151 EST
 **/
 
 /*
@@ -17,7 +17,7 @@ Last Modified: 2008-01-18 1139 EST
 */
 @import url( "style-login.css" ); /* the login styles */
 @import url( "style-ui.tabs.css" ); /* jQuery-UI tabs stylesheet */
-@import url( "style-neptune.css" );
+@import url( "style-clickmenu.css" ); /* personalized menu styles */
 @import url( "style-misc.css" ); /* miscellaneous styles */
 
 body {
