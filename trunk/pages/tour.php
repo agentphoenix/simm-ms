@@ -60,6 +60,8 @@ if( !empty( $tour ) ) {
 	<script type="text/javascript">
 		$(document).ready(function(){
 
+			$('img.reflect').reflect({height: 0.3, opacity: 0.3});
+			
 			var options = {
 				resizeLgImages:     true,
 				displayNav:         true,
@@ -79,7 +81,7 @@ if( !empty( $tour ) ) {
 			<? if( !empty( $tourPicture1 ) ) { ?>
 				<td valign="top" width="10%">
 					<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>" rel="shadowbox[Tour]">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="image reflect" />
 					</a>
 				</td>
 			<? } ?>
@@ -88,7 +90,7 @@ if( !empty( $tour ) ) {
 				<td width="10">&nbsp;</td>
 				<td valign="top" width="10%">
 					<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>" rel="shadowbox[Tour]">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="image reflect" />
 					</a>
 				</td>
 			<? } ?>
@@ -97,7 +99,7 @@ if( !empty( $tour ) ) {
 				<td width="10">&nbsp;</td>
 				<td valign="top" width="10%">
 					<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>" rel="shadowbox[Tour]">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity30" />
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="image reflect" />
 					</a>
 				</td>
 			<? } ?>
