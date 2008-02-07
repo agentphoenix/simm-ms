@@ -8,7 +8,7 @@ File: skins/default/style-clickmenu.css
 Purpose: Stylesheet that controls the look and feel of the site
 
 Skin Version: 2.5
-Last Modified: 2008-02-07 1151 EST
+Last Modified: 2008-02-07 1204 EST
 **/
 
 span.cmDiv
@@ -54,8 +54,14 @@ span.cmDiv
 .clickMenu div.inner
 {
 	//top: 20px; /* for ie */
-	left: 0;
 	margin: 0;
+	
+	/* ### START EDIT ### */
+	/* changing which direction the menu flies out at */
+	/* if you want the menu to fly out to the right (arrow at the upper left corner), use LEFT */
+	/* if you want the menu to fly out to the left (arrow at the upper right corner), use RIGHT */
+	left: 0;
+	/* ### START EDIT ### */
 }
 .clickMenu div.inner div.outerbox
 {
