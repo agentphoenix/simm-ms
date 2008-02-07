@@ -44,7 +44,7 @@ include_dom( 'js', 'framework/js/jquery.js' );
 include_dom( 'js', 'framework/js/ui.tabs.js' );
 include_dom( 'js', 'framework/js/clickmenu.js' );
 include_dom( 'js', 'framework/js/linkscrubber.js' );
-include_dom( 'js', 'framework/js/reflection.js' );
+include_dom( 'js', 'framework/js/reflect.js' );
 include_dom( 'js', 'framework/js/shadowbox-jquery.js' );
 include_dom( 'js', 'framework/js/shadowbox.js' );
 include_dom( 'js', 'framework/js/facebox.js' );
