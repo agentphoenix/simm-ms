@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-02-07 0928 EST
+Last Modified: 2008-02-07 1707 EST
 **/
 
 /* query the database for the mysql version */
@@ -185,7 +185,7 @@ VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library u
 ( '4', 'Link Scrubber', '1.0', 'http://www.crismancich.de/jquery/plugins/linkscrubber/', 'Remove dotted border around clicked links in Firefox', 'framework/js/linkscrubber.js' ),
 ( '5', 'Shadowbox', '1.0b4', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
 ( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs on the activation page', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
-( '7', 'Reflection', '1.7', 'http://cow.neondragon.net/stuff/reflection/', 'Dynamic image reflection on tour pages', 'framework/js/reflection.js' )" );
+( '7', 'Reflect jQuery', '1.0', 'http://plugins.jquery.com/project/reflect', 'Dynamic image reflection on tour pages', 'framework/js/reflect.js' )" );
 
 /* add the revision field */
 mysql_query( "ALTER TABLE `sms_system_versions` ADD `versionRev` INT( 5 ) NOT NULL AFTER `version`" );
