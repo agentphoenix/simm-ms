@@ -10,7 +10,7 @@ File: framework/functionsAdmin.php
 Purpose: List of functions specific to the administration control panel
 
 System Version: 2.6.0
-Last Modified: 2007-11-06 2117 EST
+Last Modified: 2008-02-07 0934 EST
 
 Included Functions:
 	printCrewName( $crewid, $rank, $link )
@@ -493,12 +493,12 @@ function aboutSMS( $version, $location ) {
 	$system = mysql_fetch_assoc( $getSysResult );
 
 	/* spit the information out */
-	echo "<ul>";
+	echo "<ul class='version'>";
 		echo "<li><b>File Version</b>: " . $version . "</li>";
 		echo "<li><b>Database Version</b>: " . $system['sysVersion'] . "</li>";
 	echo "</ul>";
 
-	echo "<ul>";
+	echo "<ul class='version'>";
 		echo "<li><b>Web Location:</b> " . $location . "</li>";
 	echo "</ul>";
 	
