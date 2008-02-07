@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-01-12 1454 EST
+Last Modified: 2008-02-07 0928 EST
 **/
 
 /* insert data into the access levels table */
@@ -436,6 +436,16 @@ while( $i < $length ) {
 
 /* populate the system table with data */
 mysql_query( "INSERT INTO sms_system ( sysid, sysuid, sysVersion, sysBaseVersion, sysIncrementVersion ) VALUES ( '1', '$string', '2.6.0', '2.6', '.0' )" );
+
+/* populate the system plugins with data */
+mysql_query( "INSERT INTO sms_system_plugins ( pid, plugin, pluginVersion, pluginSite, pluginUse, pluginFiles ) 
+VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library used throughout SMS', 'framework/js/jquery.js' ),
+( '2', 'jQuery UI', '1.0', 'http://ui.jquery.com/', 'Tabs throughout the system', 'framework/js/ui.tabs.js;skins/[your skin]/style-ui.tabs.css' ),
+( '3', 'clickMenu', '0.1.6', 'http://p.sohei.org/jquery-plugins/clickmenu/', 'Customizable user menu', 'framework/js/clickmenu.js;skins/[your skin]/style-clickmenu.css' ),
+( '4', 'Link Scrubber', '1.0', 'http://www.crismancich.de/jquery/plugins/linkscrubber/', 'Remove dotted border around clicked links in Firefox', 'framework/js/linkscrubber.js' ),
+( '5', 'Shadowbox', '1.0b4', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
+( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs on the activation page', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
+( '7', 'Reflection', '1.7', 'http://cow.neondragon.net/stuff/reflection/', 'Dynamic image reflection on tour pages', 'framework/js/reflection.js' )" );
 
 /* populate the versions table with data */
 mysql_query( "INSERT INTO `sms_system_versions` ( `versionid`, `version`, `versionDate`, `versionShortDesc`, `versionDesc` )
