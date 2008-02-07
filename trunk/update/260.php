@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-02-05 1418 EST
+Last Modified: 2008-02-07 0928 EST
 **/
 
 /* query the database for the mysql version */
@@ -166,6 +166,26 @@ mysql_query( "CREATE TABLE `sms_awards_queue` (
   `status` enum('approved','pending') NOT NULL default 'pending',
   PRIMARY KEY  (`id`)
 ) " . $tail . " ;" );
+
+/* add the system plugins table */
+mysql_query( "CREATE TABLE `sms_system_plugins` (
+	`pid` int(4) NOT NULL auto_increment,
+	`plugin` varchar(255) NOT NULL default '',
+	`pluginVersion` varchar(15) NOT NULL default '',
+	`pluginSite` varchar(200) NOT NULL default '',
+	`pluginUse` text NOT NULL,
+	PRIMARY KEY  (`pid`)
+) " . $tail . " ;" );
+
+/* populate the system plugins with data */
+mysql_query( "INSERT INTO sms_system_plugins ( pid, plugin, pluginVersion, pluginSite, pluginUse, pluginFiles ) 
+VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library used throughout SMS', 'framework/js/jquery.js' ),
+( '2', 'jQuery UI', '1.0', 'http://ui.jquery.com/', 'Tabs throughout the system', 'framework/js/ui.tabs.js;skins/[your skin]/style-ui.tabs.css' ),
+( '3', 'clickMenu', '0.1.6', 'http://p.sohei.org/jquery-plugins/clickmenu/', 'Customizable user menu', 'framework/js/clickmenu.js;skins/[your skin]/style-clickmenu.css' ),
+( '4', 'Link Scrubber', '1.0', 'http://www.crismancich.de/jquery/plugins/linkscrubber/', 'Remove dotted border around clicked links in Firefox', 'framework/js/linkscrubber.js' ),
+( '5', 'Shadowbox', '1.0b4', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
+( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs on the activation page', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
+( '7', 'Reflection', '1.7', 'http://cow.neondragon.net/stuff/reflection/', 'Dynamic image reflection on tour pages', 'framework/js/reflection.js' )" );
 
 /* add the revision field */
 mysql_query( "ALTER TABLE `sms_system_versions` ADD `versionRev` INT( 5 ) NOT NULL AFTER `version`" );
