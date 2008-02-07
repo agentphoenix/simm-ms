@@ -1,13 +1,28 @@
 SMS 2.6 is going to use the following jQuery pieces:
 
-jQuery 1.2.1 (http://www.jquery.com/)
+jQuery 1.2.3 (http://www.jquery.com/)
 UI Tabs 3 (http://docs.jquery.com/UI/Tabs) [Part of jQuery UI 1.0]
-Lightbox 0.4 (http://leandrovieira.com/projects/jquery/lightbox/)
 clickMenu 0.1.6 (http://p.sohei.org/jquery-plugins/clickmenu/)
 Link Scrubber 1.0 (http://www.crismancich.de/jquery/plugins/linkscrubber/)
+Shadowbox 1.0b4 (http://mjijackson.com/shadowbox/)
+Facebox 1.0 (http://famspam.com/facebox)
 
 SMS 2.6 also uses the following scripts:
 
 Reflection JS 1.7 (http://cow.neondragon.net/stuff/reflection/)
 Magpie RSS 0.72 (http://magpierss.sourceforge.net/)
 phpSniff 2.1.3 (http://phpsniff.sourceforge.net/)
+
+====
+
+Editing or removal of the following credits constitutes a material breach of the SMS Terms of Use outlined at the [SMS ToU] page.
+
+SMS 2 makes extensive use of the [jQuery] Javascript library as well as multiple jQuery plugins. By default, SMS includes the [jQuery UI], [clickMenu], [Link Scrubber], [Shadowbox], [Facebox], and [Reflection]. More information about the versions and uses of the plugins can be obtained from the simm's webmaster.
+
+SMS 2 uses the open source browser detection library [phpSniff] to check for various versions of browsers for maximum compatibility.
+
+The SMS 2 Update notification system uses [MagpieRSS] to parse the necessary XML file. Magpie is distributed under the GPL license. Questions and suggestions about MagpieRSS should be sent to magpierss-general@lists.sf.net.
+
+SMS 2 uses icons from the open source [Tango Icon Library].
+
+The rank insignias packaged with SMS (DS9 Era Duty Uniform Style #2 and DS9 Era Dress Uniform Style #2) were created by Kuro-chan of Kuro-RPG. Please do not copy the images. If you wish to obtain them and an up-to-date copy access the [Kuro-RPG] website.
