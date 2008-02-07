@@ -50,7 +50,6 @@ include_dom( 'js', 'framework/js/shadowbox.js' );
 include_dom( 'js', 'framework/js/facebox.js' );
 
 /** pull in the CSS files **/
-include_dom( 'css', 'framework/css/clickmenu.css' );
 include_dom( 'css', 'framework/css/shadowbox.css' );
 include_dom( 'css', 'framework/css/facebox.css' );
 
