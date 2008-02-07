@@ -43,8 +43,18 @@ if( $_GET['type'] == "update" ) {
 <head>
 	<title>SMS 2.6 Install</title>
 	<link rel="stylesheet" type="text/css" href="install/install.css" />
+	<script type="text/javascript" src="framework/js/jquery.js"></script>
 </head>
 <body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#readme').click( function() {
+				$('.readme').toggle();
+				return false;
+			});
+		});
+		
+	</script>
 	<div id="install">
 		<div class="header">
 			<h1>SMS 2.6 Installation Center</h1>
@@ -69,9 +79,13 @@ if( $_GET['type'] == "update" ) {
 				</ul>
 			</p>
 			
-			<p class="bold yellow">Before you begin, please make sure you have read the readme file included 
+			<p class="bold red">Before you begin, please make sure you have read the readme file included 
 				with SMS in its entirety. The readme contains important information about setting up SMS
-				on your server.</p>
+				on your server. You can view the readme file by <a href="#" id="readme">clicking here</a>.</p>
+			
+			<div class="readme" style="display:none;">
+				<? include_once('install/readme.html');?>
+			</div>
 			
 			<h2>Fresh Install</h2>
 			<p>The fresh install option will guide you through the clean install process for SMS 2.6.

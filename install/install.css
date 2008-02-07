@@ -150,4 +150,11 @@ table { font-size: 100%; }
 }
 
 .bold { font-weight: bold; }
-.yellow { color: #c00; }
+.red { color: #c00; }
+
+.readme {
+	border: 1px solid #a2a2a2;
+	margin: 1em;
+	padding: 1em;
+	background-color: #f1f1f1;
+}
