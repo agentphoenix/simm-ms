@@ -26,3 +26,8 @@ The SMS 2 Update notification system uses [MagpieRSS] to parse the necessary XML
 SMS 2 uses icons from the open source [Tango Icon Library].
 
 The rank insignias packaged with SMS (DS9 Era Duty Uniform Style #2 and DS9 Era Dress Uniform Style #2) were created by Kuro-chan of Kuro-RPG. Please do not copy the images. If you wish to obtain them and an up-to-date copy access the [Kuro-RPG] website.
+
+====
+
+Rank Info:
+http://www.defenselink.mil/specials/insignias/
