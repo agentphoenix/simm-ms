@@ -10,98 +10,155 @@ File: admin/user/site.php
 Purpose: Page that allows a user to various site options
 
 System Version: 2.6.0
-Last Modified: 2007-12-26 2233 EST
+Last Modified: 2008-02-08 1816 EST
 **/
 
 /* access check */
 if( in_array( "u_options", $sessionAccess ) ) {
 	
-	$sec = $_GET['sec'];
+	/* set the page variables */
+	$pageClass = "admin";
+	$subMenuClass = "user";
 	
-	if( !isset( $sec ) ) {
+	if( isset( $_GET['crew'] ) && !is_numeric( $_GET['crew'] ) ) {
+		//errorMessageIllegal( 'site options' );
+		exit;
+	} elseif( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) ) {
+		$crew = $_GET['crew'];
+	}
+	
+	if( isset($_GET['sec']) && is_numeric($_GET['sec']) ) {
+		$sec = $_GET['sec'];
+	} else {
 		$sec = 1;
 	}
 	
-	if( !is_numeric( $sec ) ) {
-		$sec = 1;
-	}
+	if( isset( $_POST ) )
+	{
+		foreach( $_POST as $key0 => $value0 )
+		{
+			$$key0 = $value0;
+		}
+		
+		if( isset( $options ) )
+		{
+			/* build the query */
+			$update = "UPDATE sms_crew SET cpShowPosts = %s, cpShowLogs = %s, cpShowNews = %s, ";
+			$update.= "cpShowPostsNum = %d, cpShowLogsNum = %d, cpShowNewsNum = %d WHERE crewid = '$sessionCrewid' LIMIT 1";
+			
+			/* escape the strings into the query */
+			$query = sprintf(
+				$update,
+				escape_string( $cpShowPosts ),
+				escape_string( $cpShowLogs ),
+				escape_string( $cpShowNews ),
+				escape_string( $cpShowPostsNum ),
+				escape_string( $cpShowLogsNum ),
+				escape_string( $cpShowNewsNum )
+			);
+			
+			/* execute the query */
+			$result = mysql_query( $query );
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+			
+			/* set the type */
+			$type = "site options";
+			
+		} /* close OPTIONS section */
+		if( isset( $menu_update ) )
+		{
+			/* build the query */
+			$update = "UPDATE sms_crew SET menu1 = %d, menu2 = %d, menu3 = %d, menu4 = %d, menu5 = %d, ";
+			$update.= "menu6 = %d, menu7 = %d, menu8 = %d, menu9 = %d, menu10 = %d WHERE crewid = '$sessionCrewid' LIMIT 1";
+			
+			/* escape the strings into the query */
+			$query = sprintf(
+				$update,
+				escape_string( $menu1 ),
+				escape_string( $menu2 ),
+				escape_string( $menu3 ),
+				escape_string( $menu4 ),
+				escape_string( $menu5 ),
+				escape_string( $menu6 ),
+				escape_string( $menu7 ),
+				escape_string( $menu8 ),
+				escape_string( $menu9 ),
+				escape_string( $menu10 )
+			);
+			
+			/* execute the query */
+			$result = mysql_query( $query );
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+			
+			/* set the type */
+			$type = "personalized menu";
+			
+		} /* close MENU section */
+		if( isset( $rank_update ) )
+		{
+			/* build the query */
+			$update = "UPDATE sms_crew SET displayRank = %s WHERE crewid = '$sessionCrewid' LIMIT 1";
+			
+			/* escape the strings into the query */
+			$query = sprintf(
+				$update,
+				escape_string( $rankSet )
+			);
+			
+			/* execute the query */
+			$result = mysql_query( $query );
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+			
+			/* set the type */
+			$type = "rank set";
+			
+			/* set a new session variable */
+			$_SESSION['sessionDisplayRank'] = $rankSet;
+			$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
+			
+		} /* close RANK section */
+		if( isset( $skin_update ) )
+		{
+			/* build the query */
+			$update = "UPDATE sms_crew SET displaySkin = %s WHERE crewid = '$sessionCrewid' LIMIT 1";
+			
+			/* escape the strings into the query */
+			$query = sprintf(
+				$update,
+				escape_string( $changeSkin )
+			);
+			
+			/* execute the query */
+			$result = mysql_query( $query );
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+			
+			/* set the type */
+			$type = "skin";
+			
+			/* set a new session variable */
+			$_SESSION['sessionDisplaySkin'] = $changeSkin;
+			$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
+			
+		} /* close RANK section */
+	} /* close if(isset($_POST)) */
 
 ?>
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#container-1 > ul').tabs(<?php echo $sec; ?>);
+			$('#container-1 > ul').tabs(<?=$sec;?>);
 		});
 	</script>
 	
 <?php
-
-	/* set the page variables */
-	$pageClass = "admin";
-	$subMenuClass = "user";
-	$options = $_POST['options_x'];
-	$actionSkin = $_POST['action_skin_x'];
-	$actionRank = $_POST['action_rank_x'];
-	
-	if( isset( $actionSkin ) ) {
-		/* define the POST variables */
-		$changeskin = $_POST['changeskin'];
-		
-		/* do the update query */
-		$query = "UPDATE sms_crew SET displaySkin = '$changeskin' WHERE crewid = '$sessionCrewid' LIMIT 1";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_crew" );
-		
-		/* set a new session variable */
-		$_SESSION['sessionDisplaySkin'] = $changeskin;
-		$sessionDisplaySkin = $_SESSION['sessionDisplaySkin'];
-		
-		/* set the type for the query check */
-		$type = "skin";
-		
-	} if( isset( $actionRank ) ) {
-		/* define the POST variables */
-		$rankSet = $_POST['rankSet'];
-		
-		/* do the update query */
-		$query = "UPDATE sms_crew SET displayRank = '$rankSet' WHERE crewid = '$sessionCrewid' LIMIT 1";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_crew" );
-		
-		/* set a new session variable */
-		$_SESSION['sessionDisplayRank'] = $rankSet;
-		$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
-		
-		/* set the type for the query check */
-		$type = "rank set";
-		
-	} if( isset( $options ) ) {
-	
-		/* set the variables */
-		foreach( $_POST as $k => $v )
-		{
-			$$k = $v;
-		}
-		
-		/* run the update */
-		$query = "UPDATE sms_crew SET cpShowPosts = '$cpShowPosts', cpShowLogs = '$cpShowLogs', ";
-		$query.= "cpShowNews = '$cpShowNews', cpShowPostsNum = '$cpShowPostsNum', ";
-		$query.= "cpShowLogsNum = '$cpShowLogsNum', cpShowNewsNum = '$cpShowNewsNum', menu1 = '$menu1', ";
-		$query.= "menu2 = '$menu2', menu3 = '$menu3', menu4 = '$menu4', menu5 = '$menu5', menu6 = '$menu6', ";
-		$query.= "menu7 = '$menu7', menu8 = '$menu8', menu9 = '$menu9', menu10 = '$menu10' WHERE ";
-		$query.= "crewid = '$sessionCrewid' LIMIT 1";
-		$result = mysql_query( $query );
-	
-		/* optimize the table */
-		optimizeSQLTable( "sms_crew" );
-	
-		$type = "site options";
-	
-	}
 	
 	/* query the database for the general items */
 	$query1 = "SELECT * FROM sms_menu_items WHERE menuAvailability = 'on' AND menuCat = 'general' ";
@@ -266,7 +323,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 			</div>
 			
 			<div id="two" class="ui-tabs-container ui-tabs-hide">
-				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=3">
+				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=2">
 				<table>
 					<tr>
 						<td colspan="3">Neptune description and instructions here</td>
@@ -327,7 +384,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 					</tr>
 					<tr>
 						<td colspan="3">
-							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="options" value="Update" class="button" />
+							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="menu_update" value="Update" class="button" />
 						</td>
 					</tr>
 				</table>
@@ -338,8 +395,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=3">
 				<table>
 					<tr>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
+						<td colspan="2"></td>
 						<td>
 							<?php
 		
@@ -351,8 +407,8 @@ if( in_array( "u_options", $sessionAccess ) ) {
 		
 							?>
 							
-								<input type="radio" id="<?=$value;?>" name="rankSet" value="<?=$value;?>"<? if( $sessionDisplayRank == trim( $value ) ) { echo " checked"; } ?> />
-								<label for="<?=$value;?>"><img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" alt="" border="0" /></label><br />
+								<input type="radio" id="rank_<?=$value;?>" name="rankSet" value="<?=$value;?>"<? if( $sessionDisplayRank == trim( $value ) ) { echo " checked"; } ?> />
+								<label for="rank_<?=$value;?>"><img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" alt="" border="0" class="image" /></label><br />
 		
 							<?php } ?>
 							
@@ -363,7 +419,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 					</tr>
 					<tr>
 						<td colspan="3">
-							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_rank" value="Update" class="button" />
+							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="rank_update" value="Update" class="button" />
 						</td>
 					</tr>
 				</table>
@@ -374,8 +430,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=4">
 				<table>
 					<tr>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
+						<td colspan="2"></td>
 						<td>
 							<?php
 		
@@ -383,12 +438,12 @@ if( in_array( "u_options", $sessionAccess ) ) {
 							$skinArray = explode( ",", $allowedSkins );
 		
 							/* loop through the array */
-							foreach( $skinArray as $key => $value ) {
+							foreach( $skinArray as $key1 => $value1 ) {
 		
 							?>
 							
-								<input type="radio" id="<?=$value;?>" name="changeskin" value="<?=$value;?>"<? if( $sessionDisplaySkin == trim( $value ) ) { echo " checked"; } ?> />
-								<label for="<?=$value;?>"><img src="<?=$webLocation;?>skins/<?=trim( $value );?>/preview.jpg" alt="" border="0" style="border: 2px solid #efefef" class="image" /></label><br /><br />
+								<input type="radio" id="skin_<?=$value1;?>" name="changeSkin" value="<?=$value1;?>"<? if( $sessionDisplaySkin == trim($value1) ) { echo " checked='yes'"; } ?> />
+								<label for="skin_<?=$value1;?>"><img src="<?=$webLocation;?>skins/<?=trim( $value1 );?>/preview.jpg" alt="" border="0" style="border:1px solid #efefef;" class="image" /></label><br /><br />
 		
 							<?php } ?>
 							
@@ -399,7 +454,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 					</tr>
 					<tr>
 						<td colspan="3">
-							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_skin" value="Update" class="button" />
+							<input type="image" src="<?=path_userskin;?>buttons/update.png" name="skin_update" value="Update" class="button" />
 						</td>
 					</tr>
 				</table>
