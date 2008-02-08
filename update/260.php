@@ -47,6 +47,8 @@ if( $count1 > 0 ) {
 	}
 }
 
+/** DEPRACATED NOW!! **/
+
 /* add the cadet ranks */
 mysql_query( "INSERT INTO `sms_ranks` ( rankOrder, rankClass, rankName, rankImage, rankDisplay ) VALUES ( '26', '1', 'Cadet, Senior Grade', 'Starfleet/r-c4.png', 'n' ) " );
 mysql_query( "INSERT INTO `sms_ranks` ( rankOrder, rankClass, rankName, rankImage, rankDisplay ) VALUES ( '26', '2', 'Cadet, Senior Grade', 'Starfleet/y-c4.png', 'n' ) " );
