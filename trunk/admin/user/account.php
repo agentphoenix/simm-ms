@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/account.php
 Purpose: Page with the account settings for a user
 
-System Version: 2.5.3
-Last Modified: 2007-08-11 1250 EST
+System Version: 2.6.0
+Last Modified: 2008-02-09 2350 EST
 **/
 
 /* set the page class */
@@ -32,29 +32,6 @@ if(
 			errorMessageIllegal( "crew account page" );
 			exit();
 		} else {
-		
-			/* define the variables */
-			$username = addslashes( $_POST['username'] );
-			$currentPassword = md5( $_POST['currentPassword'] );
-			$newPassword = md5( $_POST['newPassword'] );
-			$passwordConfirm = md5( $_POST['passwordConfirm'] );
-			$realName = addslashes( $_POST['realName'] );
-			$email = $_POST['email'];
-			$contactInfo = $_POST['contactInfo'];
-			$emailPosts = $_POST['emailPosts'];
-			$emailLogs = $_POST['emailLogs'];
-			$emailNews = $_POST['emailNews'];
-			$aim = addslashes( $_POST['aim'] );
-			$yim = addslashes( $_POST['yim'] );
-			$msn = addslashes( $_POST['msn'] );
-			$icq = $_POST['icq'];
-			$loa = $_POST['loa'];
-			$changePass = $_POST['changePass'];
-			$crewType = $_POST['crewType'];
-			$oldCrewType = $_POST['oldCrewType'];
-			$moderatePosts = $_POST['moderatePosts'];
-			$moderateLogs = $_POST['moderateLogs'];
-			$moderateNews = $_POST['moderateNews'];
 			
 			/* pull the current password hash */
 			$getPassword = "SELECT password, username, realName, email FROM sms_crew WHERE crewid = '$_GET[crew]' LIMIT 1";
@@ -79,11 +56,28 @@ if(
 						$updateAcct = "foo email";
 						$result = "";
 					} else {
-						$updateAcct = "UPDATE sms_crew SET contactInfo = '$contactInfo', emailPosts = '$emailPosts', ";
-						$updateAcct.= "emailLogs = '$emailLogs', emailNews = '$emailNews', aim = '$aim', yim = '$yim', ";
-						$updateAcct.= "msn = '$msn', icq = '$icq', loa = '$loa', ";
-						$updateAcct.= "crewType = '$crewType', moderatePosts = '$moderatePosts', ";
-						$updateAcct.= "moderateLogs = '$moderateLogs', moderateNews = '$moderateNews' WHERE crewid = '$crew' LIMIT 1";
+						$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, ";
+						$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
+						$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
+						$update.= "WHERE crewid = '$crew' LIMIT 1";
+						
+						$updateAcct = sprintf(
+							$update,
+							escape_string( $_POST['contactInfo'] ),
+							escape_string( $_POST['emailPosts'] ),
+							escape_string( $_POST['emailLogs'] ),
+							escape_string( $_POST['emailNews'] ),
+							escape_string( $_POST['aim'] ),
+							escape_string( $_POST['msn'] ),
+							escape_string( $_POST['yim'] ),
+							escape_string( $_POST['icq'] ),
+							escape_string( $_POST['loa'] ),
+							escape_string( $_POST['crewType'] ),
+							escape_string( $_POST['moderatePosts'] ),
+							escape_string( $_POST['moderateLogs'] ),
+							escape_string( $_POST['moderateNews'] )
+						);
+						
 						$result = mysql_query( $updateAcct );
 					}
 				} elseif( $_POST['currentPassword'] > "" ) {
@@ -94,13 +88,33 @@ if(
 						either change their password (if they want that) or update their
 						personal information
 						*/
-						if( $changePass == "y" ) {
-							$updateAcct = "UPDATE sms_crew SET username = '$username', password = '$newPassword', ";
-							$updateAcct.= "realName = '$realName', email = '$email', contactInfo = '$contactInfo', ";
-							$updateAcct.= "emailPosts = '$emailPosts', emailLogs = '$emailLogs', emailNews = '$emailNews', ";
-							$updateAcct.= "aim = '$aim', yim = '$yim', msn = '$msn', icq = '$icq', ";
-							$updateAcct.= "loa = '$loa', crewType = '$crewType', moderatePosts = '$moderatePosts', ";
-							$updateAcct.= "moderateLogs = '$moderateLogs', moderateNews = '$moderateNews' WHERE crewid = '$crew' LIMIT 1";
+						if( $_POST['changePass'] == "y" ) {
+							$update = "UPDATE sms_crew SET username = %s, password = %s, contactInfo = %s, ";
+							$update.= "realName = %s, email = %s, emailPosts = %s, emailLogs = %s, ";
+							$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
+							$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
+							$update.= "WHERE crewid = '$crew' LIMIT 1";
+
+							$updateAcct = sprintf(
+								$update,
+								escape_string( $_POST['username'] ),
+								escape_string( $_POST['newPassword'] ),
+								escape_string( $_POST['contactInfo'] ),
+								escape_string( $_POST['realName'] ),
+								escape_string( $_POST['email'] ),
+								escape_string( $_POST['emailPosts'] ),
+								escape_string( $_POST['emailLogs'] ),
+								escape_string( $_POST['emailNews'] ),
+								escape_string( $_POST['aim'] ),
+								escape_string( $_POST['msn'] ),
+								escape_string( $_POST['yim'] ),
+								escape_string( $_POST['icq'] ),
+								escape_string( $_POST['loa'] ),
+								escape_string( $_POST['crewType'] ),
+								escape_string( $_POST['moderatePosts'] ),
+								escape_string( $_POST['moderateLogs'] ),
+								escape_string( $_POST['moderateNews'] )
+							);
 								
 							if( $newPassword == $passwordConfirm ) {
 								$result = mysql_query( $updateAcct );
@@ -108,12 +122,32 @@ if(
 								$result = "";
 							}
 						} if( empty( $changePass ) ) {
-							$updateAcct = "UPDATE sms_crew SET username = '$username', realName = '$realName', ";
-							$updateAcct.= "email = '$email', contactInfo = '$contactInfo', emailPosts = '$emailPosts', ";
-							$updateAcct.= "emailLogs = '$emailLogs', emailNews = '$emailNews', aim = '$aim', yim = '$yim', ";
-							$updateAcct.= "msn = '$msn', icq = '$icq', loa = '$loa', ";
-							$updateAcct.= "crewType = '$crewType', moderatePosts = '$moderatePosts', moderateLogs = '$moderateLogs', ";
-							$updateAcct.= "moderateNews = '$moderateNews' WHERE crewid = '$crew' LIMIT 1";
+							$update = "UPDATE sms_crew SET username = %s, contactInfo = %s, ";
+							$update.= "realName = %s, email = %s, emailPosts = %s, emailLogs = %s, ";
+							$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
+							$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
+							$update.= "WHERE crewid = '$crew' LIMIT 1";
+
+							$updateAcct = sprintf(
+								$update,
+								escape_string( $_POST['username'] ),
+								escape_string( $_POST['contactInfo'] ),
+								escape_string( $_POST['realName'] ),
+								escape_string( $_POST['email'] ),
+								escape_string( $_POST['emailPosts'] ),
+								escape_string( $_POST['emailLogs'] ),
+								escape_string( $_POST['emailNews'] ),
+								escape_string( $_POST['aim'] ),
+								escape_string( $_POST['msn'] ),
+								escape_string( $_POST['yim'] ),
+								escape_string( $_POST['icq'] ),
+								escape_string( $_POST['loa'] ),
+								escape_string( $_POST['crewType'] ),
+								escape_string( $_POST['moderatePosts'] ),
+								escape_string( $_POST['moderateLogs'] ),
+								escape_string( $_POST['moderateNews'] )
+							);
+							
 							$result = mysql_query( $updateAcct );
 						}
 					} else {
@@ -129,11 +163,28 @@ if(
 				
 			} else {
 				/* if someone is trying to update another person's account, then do it */
-				$updateAcct = "UPDATE sms_crew SET contactInfo = '$contactInfo', emailPosts = '$emailPosts', ";
-				$updateAcct.= "emailLogs = '$emailLogs', emailNews = '$emailNews', aim = '$aim', yim = '$yim', ";
-				$updateAcct.= "msn = '$msn', icq = '$icq', loa = '$loa', ";
-				$updateAcct.= "crewType = '$crewType', moderatePosts = '$moderatePosts', ";
-				$updateAcct.= "moderateLogs = '$moderateLogs', moderateNews = '$moderateNews' WHERE crewid = '$crew' LIMIT 1";
+				$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, ";
+				$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
+				$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
+				$update.= "WHERE crewid = '$crew' LIMIT 1";
+
+				$updateAcct = sprintf(
+					$update,
+					escape_string( $_POST['contactInfo'] ),
+					escape_string( $_POST['emailPosts'] ),
+					escape_string( $_POST['emailLogs'] ),
+					escape_string( $_POST['emailNews'] ),
+					escape_string( $_POST['aim'] ),
+					escape_string( $_POST['msn'] ),
+					escape_string( $_POST['yim'] ),
+					escape_string( $_POST['icq'] ),
+					escape_string( $_POST['loa'] ),
+					escape_string( $_POST['crewType'] ),
+					escape_string( $_POST['moderatePosts'] ),
+					escape_string( $_POST['moderateLogs'] ),
+					escape_string( $_POST['moderateNews'] )
+				);
+				
 				$result = mysql_query( $updateAcct );
 			}
 			
@@ -179,6 +230,7 @@ if(
 		
 		<? if( $sessionCrewid == $crew ) { ?>
 		<div class="update">
+			<div class="notify-normal">
 			<table>
 				<tr>
 					<td colspan="3" class="fontLarge"><b>Personal Information</b></td>
@@ -242,6 +294,7 @@ if(
 					<td><input type="text" class="image" name="realName" maxlength="32" value="<?=stripslashes( $account['realName'] );?>" /></td>
 				</tr>
 			</table>
+			</div>
 		</div>
 		<br /><br />
 		<? } /* close the section intended just if the user is trying to update their account */ ?>
