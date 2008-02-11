@@ -1,8 +1,8 @@
-Last Updated: 2008.02.06 1417 EST
+Last Updated: 2008.02.11 1407 EST
 
 2.6
 CODENAME: Eclipse
-LAUNCH: Q1 2008
+LAUNCH: Q2 2008
 =====
 
 #	Dynamic acceptance and rejection messages
@@ -218,9 +218,9 @@ CODENAME: Jefferson
 		*	Creating pages
 		*	Editing pages
 		*	Deleting pages
-		*	Versioning
+		*	Versioning (?)
 		*	Basic page conversation
-		*	Automatically generated crew bios in the wiki too?
+		*	Automatically generated crew bios in the wiki (?)
 
 MAYBE
 ==
@@ -240,23 +240,41 @@ MAYBE
 
 JEFFERSON MILESTONES
 =====
-M0	-	basics with CodeIgniter in place; jQuery in place
-M1	-	basic installation; genre pieces in place
-M2	-	dynamic installation
-M3	-	non-authenticated pieces
-M4	-	authenticated management
-M5	-	authenticated reporting/posting
-M6	-	user system
-M7	-	basic wiki
-M8	-	basic forum system for community building (?)
 
-[ OLD ]
-M0 (Meridian) - non-public milestone aimed at putting the necessary framework pieces into place
-M1 (Diablo) - milestone aimed at getting the library system up and running with a basic
-	install package so that testers can get their hands on the product early
-M2 (Sage) - milestone aimed at finalizing the dynamic install and putting the necessary genre
-	pieces into place
-M3 (Clover) - one of two milestones aimed at putting all other feature requests into place
-M4 (Aura) - one of two milestone aimed at putting all other feature requests into place
-M5 (Paradiso) - milestone aimed at retooling the templating system in the hopes of making it
-	easier to tweak SMS to ones own liking; localization
+Milestone 0
+==
+#	CodeIgniter pieces in place
+#	jQuery pieces in place and working with CI
+#	Database schema
+#	Template setup
+#	Genre pieces
+#	Installation
+#	Test data
+
+Milestone 1
+==
+#	Un-authenticated system
+
+Milestone 2
+==
+#	Admin Control Panel - Management
+
+Milestone 3
+==
+#	Admin Control Panel - Posting
+
+Milestone 4
+==
+#	Admin Control Panel - Reporting
+
+Milestone 5
+==
+#	Admin Control Panel - User
+
+Milestone 6
+==
+#	Basic wiki
+
+Milestone 7
+==
+#	Basic forum
