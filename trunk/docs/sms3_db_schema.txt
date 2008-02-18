@@ -1,0 +1,55 @@
+EXIST
+=====
+#	%prefix_accesslevels
+#	%prefix_awards
+#	%prefix_awards_queue
+#	%prefix_coc
+#	%prefix_crew
+#	%prefix_database
+#	%prefix_menu_items
+#	%prefix_messages
+#	%prefix_news
+#	%prefix_news_categories
+#	%prefix_personallogs
+#	%prefix_posts
+#	%prefix_privatemessages
+#	%prefix_security
+#	%prefix_specs
+#	%prefix_starbase_docking
+#	%prefix_strikes
+#	%prefix_system
+#	%prefix_system_plugins
+#	%prefix_system_versions
+#	%prefix_tour
+#	%prefix_tour_decks
+
+NEED
+=====
+#	%prefix_characters
+#	%prefix_players
+#	%prefix_roles
+#	%prefix_config
+
+#	%prefix_wiki_pages
+#	%prefix_wiki_changes
+#	%prefix_wiki_history
+
+#	%prefix_forum_posts
+#	%prefix_forum_config
+#	%prefix_forum_topics
+
+#	%prefix_join_fields
+#	%prefix_join_values
+#	%prefix_specs_fields
+#	%prefix_specs_values
+
+#	%prefix_%genre_departments
+#	%prefix_%genre_ranks
+#	%prefix_%genre_positions
+
+DELETE
+=====
+#	%prefix_departments (replaced by %prefix_%genre_departments)
+#	%prefix_positions (replaced by %prefix_%genre_positions)
+#	%prefix_ranks (replaced by %prefix_%genre_ranks)
+#	%prefix_globals (replaced by %prefix_config)
