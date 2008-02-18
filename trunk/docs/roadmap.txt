@@ -1,4 +1,4 @@
-Last Updated: 2008.02.11 1407 EST
+Last Updated: 2008.02.18 1146 EST
 
 2.6
 CODENAME: Eclipse
@@ -246,6 +246,12 @@ Milestone 0
 #	CodeIgniter pieces in place
 #	jQuery pieces in place and working with CI
 #	Database schema
+	*	sms3_characters
+		@	all IC data
+		@	allows for multiple characters
+		@	allows for tying NPCs to a player
+	*	sms3_players
+		@	all OOC data (site options, menus, etc.)
 #	Template setup
 #	Genre pieces
 #	Installation
@@ -257,6 +263,10 @@ Milestone 1
 
 Milestone 2
 ==
+#	Login/Sessions
+	*	Remember Me feature
+#	User Access Control
+	*	Role-based system
 #	Admin Control Panel - Management
 
 Milestone 3
@@ -267,9 +277,14 @@ Milestone 4
 ==
 #	Admin Control Panel - Reporting
 
+
 Milestone 5
 ==
 #	Admin Control Panel - User
+	*	Options for differentiating player from character
+		@	Email?
+		@	Real name?
+		@	Manual interface?
 
 Milestone 6
 ==
