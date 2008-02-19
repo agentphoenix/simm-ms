@@ -1,10 +1,8 @@
 EXIST
 =====
-#	%prefix_accesslevels
 #	%prefix_awards
 #	%prefix_awards_queue
 #	%prefix_coc
-#	%prefix_crew
 #	%prefix_database
 #	%prefix_menu_items
 #	%prefix_messages
@@ -13,30 +11,115 @@ EXIST
 #	%prefix_personallogs
 #	%prefix_posts
 #	%prefix_privatemessages
-#	%prefix_security
 #	%prefix_specs
 #	%prefix_starbase_docking
 #	%prefix_strikes
 #	%prefix_system
+		*	system_id
+		*	system_version_complete (1.3.5)
+		*	system_version_major (1)
+		*	system_version_minor (3)
+		*	system_version_increment (5)
 #	%prefix_system_plugins
 #	%prefix_system_versions
+		*	version_id
+		*	version
+		*	version_rev
+		*	version_date
+		*	version_launch
+		*	version_changes
 #	%prefix_tour
 #	%prefix_tour_decks
 
 NEED
 =====
 #	%prefix_characters
+		*	charid
+		*	first_name
+		*	middle_name
+		*	last_name
+		*	suffix (sr, jr, iii, ph.d)
+		*	height
+		*	weight
+		*	hair_color
+		*	eye_color
+		*	awards
+		*	date_activate (date the character became active)
+		*	date_deactivate (date the character became inactive)
+		*	image
+		*	rank
+		*	rank_history (EN => LTJG,000000000; LTJG => LT, 333333333)
+		*	position_1
+		*	position_2
 #	%prefix_players
+		*	name
+		*	email
+		*	instant_message (aim,the007dvs; msn,dvanscot@hotmail.com; yim,dv001m; icq,000000)
+		*	characters (1,21,98,113)
+		*	join_date
+		*	leave_date
+		*	last_post
+		*	last_login
 #	%prefix_roles
+		*	role_id
+		*	role_title
 #	%prefix_config
+		*	bio_metrics (ft/lbs, m/kg)
+#	%prefix_security
+		*	security_id
+		*	security_page (the page that triggered the alert)
+		*	security_reason (the reason the alert was triggered)
+		*	security_ip (the IP address in question)
+		*	security_severity (the severity of the alert)
+		*	security_date (when the alert happened)
 
 #	%prefix_wiki_pages
-#	%prefix_wiki_changes
+		*	page_id
+		*	page_title
+		*	page_author
+		*	page_update
+		*	page_content
 #	%prefix_wiki_history
+		*	history_id
+		*	history_date
+		*	history_page
+		*	history_content
+		*	history_author
+#	%prefix_wiki_comments
+		*	comment_id
+		*	comment_author
+		*	comment_page
+		*	comment_date
+		*	comment_content
+#	%prefix_wiki_config
 
 #	%prefix_forum_posts
-#	%prefix_forum_config
+		*	post_id
+		*	post_author
+		*	post_title
+		*	post_date
+		*	post_thread
 #	%prefix_forum_topics
+		*	topic_id
+		*	topic_title
+		*	topic_order
+		*	topic_desc
+#	%prefix_forum_threads
+		*	thread_id
+		*	thread_title (name of the thread)
+		*	thread_author (who started the thread)
+		*	thread_start (when the thread was started ... UNIX time stamp)
+		*	thread_update (last time a post was made to the thread)
+		*	thread_update_author (last author to update the thread)
+		*	thread_status (active, sticky, announcement, locked)
+		*	thread_count (how many replies there have been to the thread)
+#	%prefix_forum_config
+
+#	%prefix_logs (logging the actions of people in the ACP)
+		*	log_id
+		*	log_action
+		*	log_author
+		*	log_date
 
 #	%prefix_join_fields
 #	%prefix_join_values
@@ -53,3 +136,5 @@ DELETE
 #	%prefix_positions (replaced by %prefix_%genre_positions)
 #	%prefix_ranks (replaced by %prefix_%genre_ranks)
 #	%prefix_globals (replaced by %prefix_config)
+#	%prefix_accesslevels (replaced by %prefix_roles)
+#	%prefix_crew (replaced by %prefix_characters and %prefix_players)
