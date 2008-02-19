@@ -2,20 +2,18 @@
 
 session_start();
 
-/* get the referer */
-$ref_array = explode("/", $_SERVER['HTTP_REFERER']);
-$count = count($ref_array) -1;
-$ref = htmlspecialchars(urldecode($ref_array[$count]));
+if( !isset( $sessionAccess ) ) {
+	$sessionAccess = "";
+}
 
-/* set the page it should be coming from */
-$valid = htmlspecialchars(urldecode("admin.php?page=manage&sub=activate_new"));
+if( !is_array( $sessionAccess ) ) {
+	$sessionAccess = explode( ",", $_SESSION['sessionAccess'] );
+}
 
-if($ref == $valid)
+if(in_array("x_approve_users", $sessionAccess))
 {
 	include_once('../../framework/functionsGlobal.php');
 	include_once('../../framework/functionsUtility.php');
-	
-	define( "path_userskin", $webLocation . "skins/" . $_SESSION['sessionDisplaySkin'] . "/" );
 
 	if(isset($_GET['id']) && is_numeric($_GET['id']))
 	{
@@ -29,11 +27,6 @@ if($ref == $valid)
 	$pendingArray = mysql_fetch_assoc( $getPendingCrewResult );
 
 ?>
-	<!-- pull in the right stylesheet -->
-	<style type="text/css">
-		@import url("skins/<?=$_SESSION['sessionDisplaySkin'];?>/style-misc.css");
-	</style>
-	
 	<h2>Reject Crew Application &ndash; <? printText( $pendingArray['firstName'] . " " . $pendingArray['lastName'] );?></h2>
 	<p>Please specify message you want to be sent to the player regarding their rejection.</p>
 	<p>Rejection messages can now use wild cards for dynamic elements. For instance, using the <strong class="blue">#rank#</strong> wild card will insert the rank you give them into the email before it is sent. Available wild cards are: <strong>#ship#</strong>, <strong>#position#</strong>, <strong>#player#</strong> (character&rsquo;s name), and <strong>#rank#</strong>.</p>
@@ -57,10 +50,10 @@ if($ref == $valid)
 					<input type="hidden" name="action_category" value="user" />
 					<input type="hidden" name="action_type" value="reject" />
 					
-					<input type="image" src="<?=path_userskin;?>buttons/reject.png" name="activate" class="button" value="Reject" />
+					<input type="image" src="<?=$webLocation;?>images/hud_button_ok.png" name="activate" value="Reject" />
 				</td>
 			</tr>
 		</table>
 	</form>
 
-<?php } /* close the referer check */ ?>
+<?php } /* close the access check */ ?>

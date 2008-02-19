@@ -1,16 +1,25 @@
-#facebox .b { background:url(../../images/facebox_b.png); }
-#facebox .tl { background:url(../../images/facebox_tl.png); }
-#facebox .tr { background:url(../../images/facebox_tr.png); }
-#facebox .bl { background:url(../../images/facebox_bl.png); }
-#facebox .br { background:url(../../images/facebox_br.png); }
+/**
+This is a necessary stylesheet for system use. Deletion or modification of this file
+may cause parts of the system to fail!
+
+Author: David VanScott [ davidv@anodyne-productions.com ], Chris Wanstrath [ chris@ozmm.org ]
+File: framework/css/facebox.css
+Purpose: Stylesheet that controls the HUD display
+
+Last Modified: 2008-02-19 1434 EST
+**/
 
 #facebox {
 	position: absolute;
-	width: 700px;
+	width: 100%;
 	top: 0;
 	left: 0;
 	z-index: 100;
 	text-align: left;
+	
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+	font-size: 10px;
+	color: #fff;
 }
 
 #facebox .popup { position: relative; }
@@ -18,15 +27,62 @@
 #facebox table {
 	margin: auto;
 	border-collapse: collapse;
+	
+	/* the width has to be set explicitly here because of the table 100% rule in style-misc.css */
+	width: 700px;
+	
+	font-size: 100%;
+	color: #fff;
 }
 
-#facebox .body {
+/*----- HUD title bar -----*/
+#facebox table tr.title_bar {
+	height: 19px;
+	line-height: 19px;
+}
+#facebox table tr.title_bar td.top_left {
+	background: url('../../images/hud_tl.png') no-repeat top left;
+	width: 8px;
+}
+#facebox table tr.title_bar td.top_right {
+	background: url('../../images/hud_tr.png') no-repeat top right;
+	width: 8px;
+}
+#facebox table tr.title_bar td.top_title {
+	background: url('../../images/hud_title_bar.png') repeat-x top left;
+	text-align: center;
+	font-weight: bold;
+}
+
+/*----- side of the HUD -----*/
+#facebox table td.side {
+	background: url('../../images/hud_bg.png') repeat top left;
+}
+
+/*----- HUD footer -----*/
+#facebox table tr.footer { height: 7px; }
+#facebox table tr.footer td.bottom_left {
+	background: url('../../images/hud_bl.png') no-repeat bottom left;
+	width: 7px;
+}
+#facebox table tr.footer td.bottom_right {
+	background: url('../../images/hud_br.png') no-repeat bottom right;
+	width: 7px;
+}
+#facebox table tr.footer td.bottom {
+	background: url('../../images/hud_bg.png') repeat bottom left;
+	height: 7px;
+}
+
+/*----- body of the HUD -----*/
+#facebox .body_hud {
 	padding: 10px;
-	background: #fff;
+	background: url('../../images/hud_bg.png') repeat top left;
 	width: 700px;
+	
 	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 	font-size: 12px;
-	color: #444;
+	color: #fff;
 }
 
 #facebox .loading { text-align: center; }
@@ -35,33 +91,28 @@
 
 #facebox img { border: 0; }
 
-#facebox .footer {
-	border-top: 1px solid #ddd;
-	padding-top: 5px;
-	margin-top: 10px;
-	text-align: right;
+/*----- input classes -----*/
+#facebox input[type=text] {
+	border: 1px solid #7f8187;
+	background-color: #343434;
+	padding: 4px;
+	
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+	font-size: 11px;
+	color: #fff;
 }
-
-#facebox .tl, #facebox .tr, #facebox .bl, #facebox .br {
-	height: 10px;
-	width: 10px;
-	overflow: hidden;
-	padding: 0;
+#facebox textarea {
+	width: 80%;
+	border: 1px solid #7f8187;
+	background-color: #343434;
+	padding: 4px;
+	
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+	font-size: 11px;
+	color: #fff;
 }
-
-#facebox input[type=text],
-#facebox textarea,
 #facebox select {
-	background-color: #fcfcfc;
-	color: #444;
-}
-
-#facebox input[type=text]:focus,
-#facebox textarea:focus {
-	background-color: #f9f9f9;
-	color: #000;
-}
-#facebox select:hover {
-	background-color: #f1f1f1;
-	color: #000;
+	border: 1px solid #7f8187;
+	background-color: #343434;
+	padding: 2px;
 }

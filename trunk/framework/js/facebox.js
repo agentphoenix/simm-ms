@@ -46,32 +46,36 @@
   }
 
   $.facebox.settings = {
-    loading_image : 'images/facebox_loading.gif',
-    close_image   : 'images/facebox_closelabel.gif',
+    loading_image : 'images/hud_loading.gif',
+    close_image   : 'images/hud_close.png',
     image_types   : [ 'png', 'jpg', 'jpeg', 'gif' ],
     facebox_html  : '\
   <div id="facebox" style="display:none;"> \
     <div class="popup"> \
-      <table> \
+      <table cellpadding="0" cellspacing="0"> \
         <tbody> \
-          <tr> \
-            <td class="tl"/><td class="b"/><td class="tr"/> \
+          <tr class="title_bar"> \
+            <td class="top_left">&nbsp;</td> \
+			<td class="top_title"> \
+				<a href="#" class="close"> \
+				  <img src="" title="close" class="close_image" style="float:left; padding:3px 0 0 0;" /> \
+				</a> \
+				SIMM Management System \
+			</td> \
+			<td class="top_right">&nbsp;</td> \
           </tr> \
           <tr> \
-            <td class="b"/> \
-            <td class="body"> \
-              <div class="content"> \
-              </div> \
-              <div class="footer"> \
-                <a href="#" class="close"> \
-                  <img src="" title="close" class="close_image" /> \
-                </a> \
+            <td class="side"></td> \
+            <td class="body_hud"> \
+              <div class="content_hud"> \
               </div> \
             </td> \
-            <td class="b"/> \
+            <td class="side"></td> \
           </tr> \
-          <tr> \
-            <td class="bl"/><td class="b"/><td class="br"/> \
+          <tr class="footer"> \
+            <td class="bottom_left"></td> \
+			<td class="bottom"></td> \
+			<td class="bottom_right"></td> \
           </tr> \
         </tbody> \
       </table> \
@@ -82,8 +86,8 @@
   $.facebox.loading = function() {
     if ($('#facebox .loading').length == 1) return true
 
-    $('#facebox .content').empty()
-    $('#facebox .body').children().hide().end().
+    $('#facebox .content_hud').empty()
+    $('#facebox .body_hud').children().hide().end().
       append('<div class="loading"><img src="'+$.facebox.settings.loading_image+'"/></div>')
 
     var pageScroll = $.facebox.getPageScroll()
@@ -98,16 +102,16 @@
   }
 
   $.facebox.reveal = function(data, klass) {
-    if (klass) $('#facebox .content').addClass(klass)
-    $('#facebox .content').append(data)
+    if (klass) $('#facebox .content_hud').addClass(klass)
+    $('#facebox .content_hud').append(data)
     $('#facebox .loading').remove()
-    $('#facebox .body').children().fadeIn('normal')
+    $('#facebox .body_hud').children().fadeIn('normal')
   }
 
   $.facebox.close = function() {
     $(document).unbind('keydown.facebox')
     $('#facebox').fadeOut(function() {
-      $('#facebox .content').removeClass().addClass('content')
+      $('#facebox .content_hud').removeClass().addClass('content_hud')
     })
     return false
   }
