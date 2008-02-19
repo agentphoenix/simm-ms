@@ -123,8 +123,11 @@ NEED
 
 #	%prefix_join_fields
 #	%prefix_join_values
+#	%prefix_join_data
+
 #	%prefix_specs_fields
 #	%prefix_specs_values
+#	%prefix_specs_data
 
 #	%prefix_%genre_departments
 #	%prefix_%genre_ranks
