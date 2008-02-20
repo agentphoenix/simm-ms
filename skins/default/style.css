@@ -8,7 +8,7 @@ File: skins/default/style.css
 Purpose: Stylesheet that controls the look and feel of the site
 
 Skin Version: 2.5
-Last Modified: 2008-02-07 1151 EST
+Last Modified: 2008-02-20 1412 EST
 **/
 
 /*
@@ -46,7 +46,7 @@ body {
 	margin: auto;
 	border-top: 1px solid #111;
 	border-bottom: 1px solid #111;
-	background: #090909 url( 'images/bg.jpg' ) no-repeat top left;
+	background: #090909 url( 'images/header.png' ) no-repeat top left;
 }
 
 
