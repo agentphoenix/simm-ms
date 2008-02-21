@@ -48,7 +48,7 @@ if(in_array("x_approve_users", $sessionAccess))
 ?>
 	<h2>Accept Crew Application &ndash; <? printText( $pendingArray['firstName'] . " " . $pendingArray['lastName'] );?></h2>
 	<p>Please specify the position and rank you want <? printText( $pendingArray['firstName'] . " " . $pendingArray['lastName'] );?> to be accepted at. After that, please specify the message you want to be sent to the player regarding their acceptance.</p>
-	<p>Acceptance messages can now use wild cards for dynamic elements. For instance, using the <strong class="blue">#rank#</strong> wild card will insert the rank you give them into the email before it is sent. Available wild cards are: <strong>#ship#</strong>, <strong>#position#</strong>, <strong>#player#</strong> (character&rsquo;s name), and <strong>#rank#</strong>.</p>
+	<p>Acceptance messages can now use wild cards for dynamic elements. For instance, using the <strong class="yellow">#rank#</strong> wild card will insert the rank you give them into the email before it is sent. Available wild cards are: <strong>#ship#</strong>, <strong>#position#</strong>, <strong>#player#</strong> (character&rsquo;s name), and <strong>#rank#</strong>.</p>
 	
 	<form method="post" action="">
 		<table>
