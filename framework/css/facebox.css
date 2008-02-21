@@ -6,7 +6,7 @@ Author: David VanScott [ davidv@anodyne-productions.com ], Chris Wanstrath [ chr
 File: framework/css/facebox.css
 Purpose: Stylesheet that controls the HUD display
 
-Last Modified: 2008-02-19 1434 EST
+Last Modified: 2008-02-21 1657 EST
 **/
 
 #facebox {
@@ -28,8 +28,8 @@ Last Modified: 2008-02-19 1434 EST
 	margin: auto;
 	border-collapse: collapse;
 	
-	/* the width has to be set explicitly here because of the table 100% rule in style-misc.css */
-	width: 700px;
+	/* the width has to be set to AUTO here because of the table 100% rule in style-misc.css */
+	width: auto;
 	
 	font-size: 100%;
 	color: #fff;
@@ -63,11 +63,11 @@ Last Modified: 2008-02-19 1434 EST
 #facebox table tr.footer { height: 7px; }
 #facebox table tr.footer td.bottom_left {
 	background: url('../../images/hud_bl.png') no-repeat bottom left;
-	width: 7px;
+	width: 8px;
 }
 #facebox table tr.footer td.bottom_right {
 	background: url('../../images/hud_br.png') no-repeat bottom right;
-	width: 7px;
+	width: 8px;
 }
 #facebox table tr.footer td.bottom {
 	background: url('../../images/hud_bg.png') repeat bottom left;
