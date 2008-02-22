@@ -1,99 +1,92 @@
-#	Dynamic acceptance and rejection messages
+IN PROGRESS
+=====
+#	Tab content immediately available
 		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
-		*	Testing: 		IN PROGRESS
+		*	Landing: 		IN PROGRESS
+
+#	Global setting for default access levels
+		*	Development:	COMPLETED
+		*	Landing:		IN PROGRESS
+
+#	SMS Update options
+		*	Development: 	IN PROGRESS
+		*	Landing: 		IN PROGRESS
+
+#	Toggle boxes should use jQuery instead of the custom Javascript code
+		*	Development:	COMPLETED
+		*	Landing:		IN PROGRESS
+		
+#	Update system queries to protect against SQL injection
+		*	Development:	COMPLETED
+		*	Landing:		IN PROGRESS
+
+#	Award categories (in character, out of character, both)
+		*	Development:	IN PROGRESS
+		*	Landing:
+
+#	Extra information on award (id, timestamp, reason;)
+		*	Development:	IN PROGRESS
+		*	Landing:		IN PROGRESS
+
+#	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
+		*	Development:	IN PROGRESS
+		*	Landing:		IN PROGRESS
+
+#	Nominated awards to queue for CO approval
+		*	Development:	IN PROGRESS
+		*	Landing:		IN PROGRESS
+
+#	Re-write activation page
+		*	Development:	IN PROGRESS
+		*	Landing:		IN PROGRESS
+		
+IN QUEUE
+=====
+#	Starbase menu items in place during install, but turned off
+
+#	Add cadet ranks (off by default)
+
+#	[BUG] Player stats page doesn't have logic against blank timestamps
 
 #	Departmental databases
 
 #	Add CC ability for private messages
 
-#	SMS Personalized Menu
+COMPLETED
+=====
+X	Dynamic acceptance and rejection messages
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
+
+X	SMS Personalized Menu
 		*	Development: 	COMPLETED
 		*	Landing:		COMPLETED
-		*	Testing:		IN PROGRESS
 
 X	Customizable message subject lines
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
-		*	Testing: 		COMPLETED
 
-#	Clean-up install and update files
+X	Clean-up install and update files
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
-		*	Testing: 		IN PROGRESS
-
-#	Tab content immediately available
-		*	Development: 	COMPLETED
-		*	Landing: 		IN PROGRESS
-		*	Testing:		IN PROGRESS
-
-#	Global setting for default access levels
-		*	Development:	COMPLETED
-		*	Landing:		IN PROGRESS
-		*	Testing:		IN PROGRESS
-
-#	Starbase menu items in place during install, but turned off
 
 X	Error catching page
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
-		*	Testing: 		COMPLETED
-
-X	Add cadet ranks (off by default)
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
-		*	Testing: 		COMPLETED
-
-#	SMS Update options
-		*	Development: 	IN PROGRESS
-		*	Landing: 		IN PROGRESS
-		*	Testing: 		IN PROGRESS
 
 X	"Private" news messages
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
-		*	Testing:		COMPLETED
 
 X	[BUG] Database uses integer fields for the crew compliment section
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
-		*	Testing: 		COMPLETED
 
 X	[BUG] Rank drop down menus need to respect the rankDisplay flag
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
-		*	Testing:		COMPLETED
 
-#	Toggle boxes should use jQuery instead of the custom Javascript code
-		*	Development:	COMPLETED
-		*	Landing:		IN PROGRESS
-		*	Testing:		COMPLETED
-
-#	[BUG] If the large version of an award image doesn't exist, it won't fall back
+X	[BUG] If the large version of an award image doesn't exist, it won't fall back
 	to the small version
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
-		*	Testing:		IN PROGRESS
-
-#	[BUG] Player stats page doesn't have logic against blank timestamps
-
-#	Update system queries to protect against SQL injection
-
-#	Award categories (in character, out of character, both)
-		*	Development:	IN PROGRESS
-		*	Landing:
-		*	Testing:
-
-#	Extra information on award (id, timestamp, reason;)
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
-		*	Testing:
-
-#	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
-		*	Testing:
-
-#	Nominated awards to queue for CO approval
-
-#	Specs and join built dynamically
