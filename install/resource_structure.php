@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2008-02-08 1352 EST
+Last Modified: 2008-02-22 1157 EST
 **/
 
 /* query the database for the mysql version */
@@ -199,7 +199,7 @@ mysql_query( "CREATE TABLE `sms_globals` (
   `rankSet` varchar(50) NOT NULL default 'default',
   `simmType` enum('ship','starbase') NOT NULL default 'ship',
   `postCountDefault` int(3) NOT NULL default '14',
-  `manifestDisplay` enum('split','full') NOT NULL default 'split',
+  `manifest_defaults` text NOT NULL,
   `useSamplePost` enum('y','n') NOT NULL default 'y',
   `logList` int(4) NOT NULL default '25',
   `bioShowPosts` enum('y','n') NOT NULL default 'y',

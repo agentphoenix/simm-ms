@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-02-08 1341 EST
+Last Modified: 2008-02-22 1158 EST
 **/
 
 /* insert data into the access levels table */
@@ -40,8 +40,8 @@ VALUES (1, 1, 1, 'Command', 'The Command department is ultimately responsible fo
 (13, 13, 8, 'Civilian Affairs', 'Civilians play an important role in Starfleet. Many civilian specialists across a number of fields work on occasion with Starfleet personnel as a Mission Specialist. In other cases, extra ship and station duties, such as running the ship''s lounge, are outsourced to a civilian contract.', 'y', 'ffffff', 'playing');" );
 
 /* insert data into the globals table */
-mysql_query( "INSERT INTO `sms_globals` (`globalid`, `shipPrefix`, `shipName`, `shipRegistry`, `skin`, `allowedSkins`, `allowedRanks`, `fleet`, `fleetURL`, `tfMember`, `tfName`, `tfURL`, `tgMember`, `tgName`, `tgURL`, `hasWebmaster`, `webmasterName`, `webmasterEmail`, `showNews`, `showNewsNum`, `simmYear`, `rankSet`, `simmType`, `postCountDefault`, `manifestDisplay`, `useSamplePost`, `logList`, `bioShowPosts`, `bioShowLogs`, `bioShowPostsNum`, `bioShowLogsNum`, `jpCount`, `usePosting`, `useMissionNotes` ) 
-VALUES (1, '', '', '', 'default', 'default,cobalt,SMS_Lcars', 'default,dress', '', '', 'n', '', '', 'n', '', '', 'n', '', '', 'y', 3, '2384', 'default', 'ship', '14', 'split', 'y', 20, 'y', 'y', 5, 5, 'y', 'y', 'y' );" );
+mysql_query( "INSERT INTO `sms_globals` (`globalid`, `shipPrefix`, `shipName`, `shipRegistry`, `skin`, `allowedSkins`, `allowedRanks`, `fleet`, `fleetURL`, `tfMember`, `tfName`, `tfURL`, `tgMember`, `tgName`, `tgURL`, `hasWebmaster`, `webmasterName`, `webmasterEmail`, `showNews`, `showNewsNum`, `simmYear`, `rankSet`, `simmType`, `postCountDefault`, `manifest_defaults`, `useSamplePost`, `logList`, `bioShowPosts`, `bioShowLogs`, `bioShowPostsNum`, `bioShowLogsNum`, `jpCount`, `usePosting`, `useMissionNotes` ) 
+VALUES (1, '', '', '', 'default', 'default,cobalt,SMS_Lcars', 'default,dress', '', '', 'n', '', '', 'n', '', '', 'n', '', '', 'y', 3, '2384', 'default', 'ship', '14', '$('tr.active').show();,$('tr.npc').show();', 'y', 20, 'y', 'y', 5, 5, 'y', 'y', 'y' );" );
 
 /* populate the menu items table */
 mysql_query( "INSERT INTO `sms_menu_items` ( `menuid`, `menuGroup`, `menuOrder`, `menuTitle`, `menuLinkType`, `menuLink`, `menuAccess`, `menuMainSec`, `menuLogin`, `menuCat` )
