@@ -24,6 +24,11 @@ if(in_array("x_approve_posts", $sessionAccess))
 	$get = "SELECT * FROM sms_posts WHERE postid = '$id' LIMIT 1";
 	$getR = mysql_query( $get );
 	$pendingArray = mysql_fetch_assoc( $getR );
+	
+	$length = 100; /* The number of words you want */
+	$words = explode(' ', $pendingArray['postContent']); /* Creates an array of words */
+	$words = array_slice($words, 0, $length); /* Slices the array */
+	$text = implode(' ', $words); /* Grabs only the specified number of words */
 
 ?>
 	<h2>Delete Pending Mission Post?</h2>
@@ -40,6 +45,14 @@ if(in_array("x_approve_posts", $sessionAccess))
 				<td class="tableCellLabel">Post Author(s)</td>
 				<td></td>
 				<td><? displayAuthors( $pendingArray['postid'], 'noLink' );?></td>
+			</tr>
+			<tr>
+				<td colspan="3" height="5"></td>
+			</tr>
+			<tr>
+				<td class="tableCellLabel"></td>
+				<td></td>
+				<td><a href="<?=$webLocation;?>index.php?page=post&id=<?=$pendingArray['postid'];?>"><strong>Read Post &raquo;</strong></a></td>
 			</tr>
 			<tr>
 				<td colspan="3" height="15"></td>
