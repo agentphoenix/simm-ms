@@ -189,6 +189,9 @@ if(
 		</ul>
 	
 		<div id="one" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingUsers < 1 ) { ?>
+				<b class="fontMedium orange">No pending users found</b>
+			<?php } else { ?>
 			<b class="fontLarge">Pending Users</b><br /><br />
 			<table class="zebra" cellpadding="3" cellspacing="0">
 				<thead>
@@ -218,9 +221,13 @@ if(
 				<?php } ?>
 				
 			</table>
+			<?php } /* close counting */ ?>
 		</div>
 		
 		<div id="two" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingPosts < 1 ) { ?>
+				<b class="fontMedium orange">No pending mission posts found</b>
+			<?php } else { ?>
 			<b class="fontLarge">Pending Mission Posts</b><br /><br />
 			<table class="zebra" cellpadding="3" cellspacing="0">
 				<thead>
@@ -250,6 +257,7 @@ if(
 				<?php } ?>
 				
 			</table>
+			<?php } /* close counting */ ?>
 		</div>
 		<div id="three" class="ui-tabs-container ui-tabs-hide"></div>
 		<div id="four" class="ui-tabs-container ui-tabs-hide"></div>
