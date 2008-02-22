@@ -11,7 +11,7 @@ Purpose: Page with the menu class that is called by the skin to build the variou
 	menus used throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2007-12-27 0949 EST
+Last Modified: 2008-02-22 1729 EST
 **/
 
 class Menu
@@ -140,7 +140,7 @@ class Menu
 		
 		/* open the unordered list */
 		echo "<ul id='list'>";
-			echo "<li><img src='dev/arrow.png' alt='>>' border='0' />";
+			echo "<li><img src='images/arrow.png' alt='>>' border='0' />";
 				echo "<ul class='hidemenu'>";
 		
 				/* loop through each key of the array, evaluate it, then spit it out */
