@@ -115,7 +115,7 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		$updateGlobals.= "usePosting = '$usePosting', ";
 		$updateGlobals.= "hasWebmaster = '$hasWebmaster', webmasterName = '$webmasterName', ";
 		$updateGlobals.= "webmasterEmail = '$webmasterEmail', useMissionNotes = '$useMissionNotes', ";
-		$updateGlobals.= "emailSubject = '$emailSubject', updateNotify = '$updateNotify', maxJPAuthors = '$maxJPAuthors' ";
+		$updateGlobals.= "emailSubject = '$emailSubject', updateNotify = '$updateNotify' ";
 		$updateGlobals.= "WHERE globalid = '1' LIMIT 1";
 		$result = mysql_query( $updateGlobals );
 		
@@ -166,6 +166,21 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 				$$key = $value;
 			}
 		}
+		
+		/* build the manifest defaults array */
+		$manifest_defaults_raw = array($cb_crew, $cb_npc, $cb_open, $cb_inactive);
+		
+		/* get rid of empty items */
+		foreach($manifest_defaults_raw as $a => $b)
+		{
+			if(empty($b))
+			{
+				unset($manifest_defaults_raw[$a]);
+			}
+		}
+		
+		/* make it a string to put into the db */
+		$manifest_values = implode(',', $manifest_defaults_raw);
 
 		/* do the update query */
 		$updateGlobals = "UPDATE sms_globals SET ";
@@ -177,8 +192,8 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		$updateGlobals.= "showNewsNum = '$showNewsNum', logList = '$logList', ";
 		$updateGlobals.= "bioShowPosts = '$bioShowPosts', bioShowPostsNum = '$bioShowPostsNum', ";
 		$updateGlobals.= "bioShowLogs = '$bioShowLogs', bioShowLogsNum = '$bioShowLogsNum', ";
-		$updateGlobals.= "stardateDisplaySD = '$stardateDisplaySD', stardateDisplayDate = '$stardateDisplayDate' ";
-		$updateGlobals.= "WHERE globalid = '1' LIMIT 1";
+		$updateGlobals.= "stardateDisplaySD = '$stardateDisplaySD', stardateDisplayDate = '$stardateDisplayDate', ";
+		$updateGlobals.= "manifest_defaults = '$manifest_values' WHERE globalid = '1' LIMIT 1";
 		$result = mysql_query( $updateGlobals );
 		
 	} if( isset( $action_positions ) ) {
@@ -218,6 +233,8 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	$tfName = stripslashes( $tfName );
 	$tgName = stripslashes( $tgName );
 	$webmasterName = stripslashes( $webmasterName );
+	
+	$manifest_defaults_array = explode(',', $manifest_defaults);
 
 ?>
 
@@ -241,7 +258,7 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		
 		?>
 	
-		<span class="fontTitle">Site Globals</span>
+		<span class="fontTitle">Site Globals</span><br />
 	
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -426,22 +443,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 						<td colspan="3" height="5"></td>
 					</tr>
 					<tr>
-						<td class="tableCellLabel">
-							<b>Maximum JP Authors</b><br />
-							<span class="fontSmall">
-								This defines the maximum number of participants in a joint post. This
-								should be between 1 and <?php echo $crewCount[0];?>.
-							</span>
-						</td>
-						<td>&nbsp;</td>
-						<td>
-							<input type="text" class="order" name="maxJPAuthors" value="<?=$maxJPAuthors;?>" onChange="checkNumber(<?=$crewCount[0];?>, this.value)" />
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="5"></td>
-					</tr>
-					<tr>
 						<td class="tableCellLabel">Use Mission Notes?</td>
 						<td>&nbsp;</td>
 						<td>
@@ -617,14 +618,18 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
+					
 					<tr>
-						<td class="tableCellLabel">Manifest Display</td>
+						<td class="tableCellLabel">Manifest Defaults</td>
 						<td>&nbsp;</td>
 						<td>
-							<input type="radio" id="manifestSplit" name="manifestDisplay" value="split"<? if( $manifestDisplay == "split" ) { echo " checked"; } ?> /> <label for="manifestSplit">Split Manifest</label>
-							<input type="radio" id="manifestFull" name="manifestDisplay" value="full"<? if( $manifestDisplay == "full" ) { echo " checked"; } ?> /> <label for="manifestFull">Full Manifest</label>
+							<input type="checkbox" id="cb_crew" name="cb_crew" value="$('tr.active').show();" <? if(in_array("$('tr.active').show();", $manifest_defaults_array)) { echo "checked"; } ?>/> <label for="cb_crew">Playing Characters</label><br />
+							<input type="checkbox" id="cb_npc" name="cb_npc" value="$('tr.npc').show();" <? if(in_array("$('tr.npc').show();", $manifest_defaults_array)) { echo "checked"; } ?>/> <label for="cb_npc">Non-Playing Characters</label><br />
+							<input type="checkbox" id="cb_open" name="cb_open" value="$('tr.open').show();" <? if(in_array("$('tr.open').show();", $manifest_defaults_array)) { echo "checked"; } ?>/> <label for="cb_open">Open Positions</label><br />
+							<input type="checkbox" id="cb_inactive" name="cb_inactive" value="$('tr.inactive').show();" <? if(in_array("$('tr.inactive').show();", $manifest_defaults_array)) { echo "checked"; } ?>/> <label for="cb_inactive">Departed Characters</label>
 						</td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
