@@ -7,25 +7,19 @@ cause SMS to no longer function.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/manifest.php
-Purpose: Provides a listing from the database of either the active crew, the 
-	inactive crew (departed players), available positions, or non-playing characters 
-	on the simm.
+Purpose: Provides a full listing from the database of the active crew, available 
+	positions, and non-playing characters on the simm.
 
 System Version: 2.6.0
-Last Modified: 2007-12-27 0950 EST
+Last Modified: 2008-02-22 1122 EST
 **/
 
-if( $manifestDisplay == "full" && $_GET['disp'] == "crew" ) {
-	include_once( 'pages/manifestFull.php' );
-} else {
-
-/* define the page class and set vars */
+/* define the page class and vars */
 $pageClass = "personnel";
 
-if( isset( $_GET['disp'] ) ) {
+if(isset($_GET['disp']))
+{
 	$display = $_GET['disp'];
-} else {
-	$display = "";
 }
 
 /* pull in the main navigation */
@@ -42,191 +36,305 @@ if( isset( $sessionCrewid ) ) {
 	$rankSet = $rankSet;
 }
 
-/* if there is no GET variable, set it to the players manifest */
-if( !$display ) {
-	$display = "crew";
-}
+/* strip out the comma from the string */
+$manifest_default_values = str_replace(',', '', $manifest_defaults);
 
-if( $display == "crew" || $display == "open" ) {
-	$departments = "SELECT * FROM sms_departments WHERE deptDisplay = 'y' ";
-	$departments.= "AND deptType = 'playing' ORDER BY deptOrder ASC";
-} elseif( $display == "npcs" || $display == "past" ) {
-	$departments = "SELECT * FROM sms_departments WHERE deptDisplay = 'y' ORDER BY deptOrder ASC";
+if(isset($display))
+{
+	if($display == "crew")
+	{
+		$manifest_default_values = "$('tr.open').hide();\n";
+		$manifest_default_values.= "$('tr.npc').hide();";
+	}
+	if($display == "npcs")
+	{
+		$manifest_default_values = "$('tr.active').hide();\n";
+		$manifest_default_values.= "$('tr.npc').show();";
+	}
+	if($display == "past")
+	{
+		$manifest_default_values = "$('tr.active').hide();\n";
+		$manifest_default_values.= "$('tr.inactive').show();";
+	}
+	if($display == "open")
+	{
+		$manifest_default_values = "$('tr.active').hide();\n";
+		$manifest_default_values.= "$('tr.open').show();";
+	}
 }
-
-$deptResults = mysql_query( $departments );
 
 ?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		<?php echo $manifest_default_values; ?>
+		
+		$('#all').click(function() {
+			$('tr.inactive').hide();
+			$('tr.open').hide();
+			
+			$('tr.active').show();
+			$('tr.npc').show();
+			return false;
+		});
+		
+		$('#active').click(function() {
+			$('tr.inactive').hide();
+			$('tr.npc').hide();
+			$('tr.open').hide();
+			
+			$('tr.active').show();
+			return false;
+		});
+		
+		$('#npc').click(function() {
+			$('tr.inactive').hide();
+			$('tr.active').hide();
+			$('tr.open').hide();
+			
+			$('tr.npc').show();
+			return false;
+		});
+		
+		$('#inactive').click(function() {
+			$('tr.active').hide();
+			$('tr.npc').hide();
+			$('tr.open').hide();
+			
+			$('tr.inactive').show();
+			return false;
+		});
+		
+		$('#open').click(function() {
+			$('tr.active').hide();
+			$('tr.npc').hide();
+			$('tr.inactive').hide();
+			
+			$('tr.open').show();
+			return false;
+		});
+		
+		$('#toggle_open').click(function() {
+			$('tr.open').toggle();
+			return false;
+		});
+		
+		$('#toggle_npc').click(function() {
+			$('tr.npc').toggle();
+			return false;
+		});
+	});
+</script>
 
 <div class="body">
-	<span class="fontTitle">
-	<?
-		if( $display == "crew" ) {
-			echo "Crew Manifest";
-		} elseif( $display == "open" ) {
-			echo "Open Positions";
-		} elseif( $display == "past" ) {
-			echo "Departed Crew Manifest";
-		} elseif( $display == "npcs" ) {
-			echo "NPC Manifest";
-		}
-	?>
-	</span><br /><br />
+	<span class="fontTitle">Crew Manifest</span><br /><br />
 	
 	<!-- manifest navigation table -->
-	<div align="center">
-	<span class="fontSmall">
-		<? if( $manifestDisplay == "full" ) { ?>
-		<a href="<?=$webLocation;?>index.php?page=manifestFull&disp=crew">Crew Manifest</a>
-		&nbsp; &middot; &nbsp;
-		<? } else { ?>
-		<a href="<?=$webLocation;?>index.php?page=manifest&disp=crew">Crew Manifest</a>
-		&nbsp; &middot; &nbsp;
-		<? } if( $manifestDisplay == "split" ) { ?>
-		<a href="<?=$webLocation;?>index.php?page=manifest&disp=npcs">NPC Manifest</a>
-		&nbsp; &middot; &nbsp;
-		<? } ?>
-		<a href="<?=$webLocation;?>index.php?page=manifest&disp=open">Open Positions</a>
-		&nbsp; &middot; &nbsp;
-		<a href="<?=$webLocation;?>index.php?page=manifest&disp=past">Departed Crew</a>
+	<span class="fontNormal" style="line-height:1.8">
+		<strong>Show</strong> &mdash;
+			<a href="#" id="all">All Characters</a>
+			&nbsp; &middot; &nbsp;
+			<a href="#" id="active">Playing Characters</a>
+			&nbsp; &middot; &nbsp;
+			<a href="#" id="npc">NPCs</a>
+			&nbsp; &middot; &nbsp;
+			<a href="#" id="open">Open Positions</a>
+			&nbsp; &middot; &nbsp;
+			<a href="#" id="inactive">Departed Crew</a>
+		<br />
+		<strong>Toggle</strong> &mdash;
+			<?php if($display == "open") {} else { ?>
+			<a href="#" id="toggle_open">Open Positions</a>
+			&nbsp; &middot; &nbsp;
+			<?php } ?>
+			<a href="#" id="toggle_npc">NPCs</a>
 	</span>
-	</div>
-
-	<table>
+	
 	<?
-
-	/* pull the data out of the department query */
-	while ( $dept = mysql_fetch_array( $deptResults ) ) {
-		extract( $dept, EXTR_OVERWRITE );
-		
+	
+	$departmentsQuery = "SELECT deptid, deptName, deptColor, deptType FROM sms_departments ";
+	$departmentsQuery.= "WHERE deptDisplay = 'y' ORDER BY deptOrder ASC";
+	$departments = mysql_query( $departmentsQuery );
+	$d_num_rows = mysql_num_rows( $departments );
+	
 	?>
+	
+	<table>
+	
+	<?
+	
+	for( $i = 0; $i < $d_num_rows; $i++ ) {
+		$department = mysql_fetch_assoc( $departments );
+		/* assigning the variables */
+		$d_id = $department['deptid'];
+		$d_name = $department['deptName'];
+		$d_color = $department['deptColor'];
+		$d_type = $department['deptType'];
+	
+	?>
+	
 		<tr>
 			<td colspan="4" height="15"></td>
 		</tr>
 		<tr>
 			<td colspan="4">
-				<font class="fontMedium" color="#<?=$deptColor;?>">
-					<b><? printText( $deptName ); ?></b>
+				<font class="fontMedium" color="#<?=$d_color;?>">
+					<b><? printText( $d_name ); ?></b>
 				</font>
 			</td>
 		</tr>
-		<?
-		
-		if( $display == "crew" ) {
-		
-			$manifest = "SELECT position.positionName, position.positionDept, crew.crewid, ";
-			$manifest.= "crew.firstName, crew.lastName, crew.rankid, crew.species, crew.gender, ";
-			$manifest.= "crew.loa, rank.rankImage, rank.rankName FROM sms_positions AS position, ";
-			$manifest.= "sms_crew AS crew, sms_ranks AS rank WHERE ";
-			$manifest.= "position.positionDept = '$dept[deptid]' AND ( position.positionid = crew.positionid ";
-			$manifest.= "OR position.positionid = crew.positionid2 ) AND position.positionDisplay = 'y' AND ";
-			$manifest.= "crew.rankid = rank.rankid AND crew.crewType = 'active' ORDER BY position.positionOrder, rank.rankid ASC";
-			$manifestResults = mysql_query( $manifest );
-		
-		} elseif( $display == "open" ) {
-		
-			$manifest = "SELECT position.positionid, position.positionName, position.positionOpen, ";
-			$manifest.= "position.positionDept FROM sms_positions AS position, sms_departments AS dept ";
-			$manifest.= "WHERE position.positionDept = '$dept[deptid]' AND position.positionOpen > '0' ";
-			$manifest.= "AND position.positionDisplay = 'y' AND dept.deptid = '$dept[deptid]' AND ";
-			$manifest.= "dept.deptType = 'playing' ORDER BY position.positionOrder ASC";
-			$manifestResults = mysql_query( $manifest );
-		
-		} elseif( $display == "npcs" ) {
-		
-			$manifest = "SELECT position.positionName, position.positionid, position.positionDept, ";
-			$manifest.= "position.positionOpen, crew.gender, crew.species, ";
-			$manifest.= "crew.crewid, crew.firstName, crew.lastName, crew.rankid, crew.positionid, ";
-			$manifest.= "rank.rankid, rank.rankImage, rank.rankName, dept.deptType FROM ";
-			$manifest.= "sms_positions AS position, sms_crew AS crew, sms_ranks AS rank, ";
-			$manifest.= "sms_departments AS dept WHERE position.positionDept = '$dept[deptid]' ";
-			$manifest.= "AND ( position.positionid = crew.positionid OR position.positionid = crew.positionid2 ) ";
-			$manifest.= "AND position.positionDisplay = 'y' AND crew.rankid = rank.rankid AND ";
-			$manifest.= "crew.crewType = 'npc' AND dept.deptid = '$dept[deptid]' ";
-			$manifest.= "ORDER BY position.positionOrder, rank.rankid ASC";
-			$manifestResults = mysql_query( $manifest );
-		
-		} elseif( $display == "past" ) {
-		
-			$manifest = "SELECT position.positionName, crew.crewid, crew.firstName, crew.lastName, crew.species, ";
-			$manifest.= "crew.gender, rank.rankImage, rank.rankName FROM sms_positions AS position, ";
-			$manifest.= "sms_crew AS crew, sms_ranks AS rank WHERE position.positionDept = '$dept[deptid]' AND ";
-			$manifest.= "( position.positionid = crew.positionid OR position.positionid = crew.positionid2 ) ";
-			$manifest.= "AND position.positionDisplay = 'y' AND crew.rankid = rank.rankid ";
-			$manifest.= "AND crewType = 'inactive' ORDER BY position.positionOrder, rank.rankid ASC";
-			$manifestResults = mysql_query( $manifest );
-		
-		}
-		
-		while ( $manifestList = mysql_fetch_assoc($manifestResults) ) {
-			extract( $manifestList, EXTR_OVERWRITE );
-		
-		?>
-		<tr>
-			<td width="35%" valign="middle" style="padding-left: 1em;"><? printText( $positionName ); ?></td>
-			<td width="15%" valign="middle" align="right">
-				<?
-					if( $display == "open" ) {
-						echo "<img src='" . $webLocation . "images/ranks/" . $rankSet . "/blank.png' />";
-					} else {
-						if( !empty( $rankImage ) ) {
-							echo "<img src='" . $webLocation . "images/ranks/" . $rankSet . "/" . $rankImage . "' />";
-						} else {
-							echo "<img src='" . $webLocation . "images/ranks/" . $rankSet . "/blank.png' />";
-						}
+	
+	<?
+	
+		$positionsQuery = "SELECT positionid, positionName, positionDept, positionOpen ";
+		$positionsQuery.= "FROM sms_positions WHERE positionDept = '$d_id' AND ";
+		$positionsQuery.= "positionDisplay = 'y' ORDER BY positionOrder ASC";
+		$positions = mysql_query( $positionsQuery );
+		$p_num_rows = mysql_num_rows( $positions );
+	
+		for( $k = 0; $k < $p_num_rows; $k++ ) {
+			$positionX = mysql_fetch_assoc( $positions );
+			$p_id = $positionX['positionid'];
+			$p_position = $positionX['positionName'];
+			$p_department = $positionX['positionDept'];
+			$p_open = $positionX['positionOpen'];
+			
+			$usersQuery = "SELECT crewid, firstName, lastName, gender, species, rankid, loa, crewType ";
+			$usersQuery.= "FROM sms_crew WHERE ( crewType = 'active' OR crewType = 'inactive' ) AND ( positionid = '$p_id' ";
+			$usersQuery.= "OR positionid2 = '$p_id' ) ORDER BY rankid ASC";
+			$users = mysql_query( $usersQuery );
+			$u_num_rows = mysql_num_rows( $users );
+			
+			if( $u_num_rows > "0" ) {
+				for( $j=0; $j<$u_num_rows; $j++ ) {
+					$user = mysql_fetch_assoc( $users );
+					$u_id = $user['crewid'];
+					$u_firstname = $user['firstName'];
+					$u_lastname = $user['lastName'];
+					$u_gender = $user['gender'];
+					$u_species = $user['species'];
+					$u_rid = $user['rankid'];
+					$u_loa = $user['loa'];
+					$u_type = $user['crewType'];
+					
+					$rankQuery = "SELECT rankName, rankImage FROM sms_ranks WHERE rankid = '$u_rid'";
+					$rankfetch = mysql_query( $rankQuery );
+					$rankX = mysql_fetch_row( $rankfetch );
+					$u_rank = $rankX[0];
+					$u_rankimage = $rankX[1];
+					
+					if($u_type == 'inactive')
+					{
+						$show = "style='display:none'";
 					}
-				?>
+	
+	?>
+	
+		<tr class="<?=$u_type;?>" <?=$show;?>>
+			<td width="35%" valign="middle" style="padding-left: 1em;"><? printText( $p_position ); ?></td>
+			<td width="15%" valign="middle" align="right">
+				<? if( !empty( $u_rankimage ) ) { ?>
+					<img src="<?=$webLocation;?>images/ranks/<?=$rankSet;?>/<?=$u_rankimage;?>" />
+				<? } else { ?>
+					<img src="<?=$webLocation;?>images/ranks/<?=$rankSet;?>/blank.png" />
+				<? } ?>
 			</td>
 			<td width="40%" valign="middle">
-				<?
-					if( $display == "npcs" ) {
-						echo "<font class='fontSmall'><b>";
-						printText( $rankName . " " . $firstName . " " . $lastName );
-						echo "</b></font>";
-						echo "<br />";
-						echo "<font class='fontSmall'>";
-						printText( $species . " " . $gender );
-						echo "</font>";
-						
-						if( $deptType == "playing" && $positionOpen > "0" ) {
-							echo "<br />";
-							echo "<font class='fontSmall'><a href='" . $webLocation . "index.php?page=join&position=" . $positionid . "'>Position Available - Apply Now</a></font>";
-						}
-						
-					} elseif( $display == "open" ) {
-						echo "<font class='fontSmall'><a href='" . $webLocation . "index.php?page=join&position=" . $positionid . "'>Position Available - Apply Now</a></font>";
-					} elseif( $display =="crew" || "past" ) {
-						echo "<font class='fontSmall'><b>";
-						printText( $rankName . " " . $firstName . " " . $lastName );
-						echo "</b></font>";
-						echo "<br />";
-						echo "<font class='fontSmall'>";
-						printText( $species . " " . $gender );
-						echo "</font>";
-					}
-				?>
+				<span class="fontSmall">
+					<b><? printText( $u_rank . " " . $u_firstname . " " . $u_lastname ); ?></b><br />
+					<? printText( $u_species . " " . $u_gender ); ?>
+				</spann>
 			</td>
 			<td width="10%" valign="middle">
-				<?
-					if( $display == "npcs" ) {
-						echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-npc.jpg' border='0' class='image' /></a>";
-					} elseif( $display == "open" ) {
-						echo "";
-					} elseif( $display == "crew" ) {
-						if( $loa == "1" ) {
-							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-loa.jpg' border='0' class='image' /></a>";
-						} elseif( $loa == "2" ) {
-							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge-eloa.jpg' border='0' class='image' /></a>";
-						} elseif( $loa == "0" ) {
-							echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge.jpg' border='0' class='image' /></a>";
-						}
-					} elseif( $display == "past" ) {
-						echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $crewid . "'><img src='" . $webLocation . "images/combadge.jpg' border='0' class='image' /></a>";
-					}
-				?>
+				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$u_id;?>">
+				
+				<? if($u_loa == 1) { ?>
+					<img src="images/combadge-loa.jpg" border="0" class="image" />
+				<? } elseif($u_loa == 2) { ?>
+					<img src="images/combadge-eloa.jpg" border="0" class="image" />
+				<? } else { ?>
+					<img src="images/combadge.jpg" border="0" class="image" />
+				<? } ?>
+				</a>
 			</td>
 		</tr>
-	<? } } ?>
+	
+	<?
+	
+				} /* close the crew for loop */
+			} /* close the if( $u_num_rows ) logic */
+			
+			$npcQuery = "SELECT crewid, firstName, lastName, gender, species, rankid FROM sms_crew ";
+			$npcQuery.= "WHERE crewType = 'npc' AND ( positionid = '$p_id' OR positionid2 = '$p_id' ) ";
+			$npcQuery.= "ORDER BY rankid ASC";
+			$npcs = mysql_query( $npcQuery );
+			$n_num_rows = mysql_num_rows( $npcs );
+			
+			if( $n_num_rows > "0" ) {
+				for( $j=0; $j<$n_num_rows; $j++ ) {
+					$npc = mysql_fetch_assoc( $npcs );
+					$n_id = $npc['crewid'];
+					$n_firstname = $npc['firstName'];
+					$n_lastname = $npc['lastName'];
+					$n_gender = $npc['gender'];
+					$n_species = $npc['species'];
+					$n_rid = $npc['rankid'];
+					
+					$rankQuery = "SELECT rankName, rankImage FROM sms_ranks WHERE rankid = '$n_rid'";
+					$rankfetch = mysql_query( $rankQuery );
+					$rankX = mysql_fetch_row( $rankfetch );
+					$n_rank = $rankX[0];
+					$n_rankimage = $rankX[1];
+					
+	?>
+	
+		<tr class="npc" style="display:none">
+			<td width="35%" valign="middle" style="padding-left: 1em;"><? printText( $p_position );?></td>
+			<td width="15%" valign="middle" align="right">
+				<img src="<?=$webLocation;?>images/ranks/<?=$rankSet;?>/<?=$n_rankimage;?>" />
+			</td>
+			<td width="40%" valign="middle">
+				<span class="fontSmall">
+					<b><? printText( $n_rank . " " . $n_firstname . " " . $n_lastname ); ?></b><br />
+					<? printText( $n_species . " " . $n_gender ); ?>
+				</span>
+			</td>
+			<td width="10%" valign="middle">
+				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$n_id;?>">
+					<img src="images/combadge-npc.jpg" border="0" class="image" />
+				</a>
+			</td>
+		</tr>
+	
+	<?
+	
+				} /* close the NPC for loop */
+			} /* close the if( $n_num_row ) logic */
+			
+			if( $p_open > "0" && $d_type == "playing" ) {
+			
+	?>
+	
+		<tr class="open" style="display:none">
+			<td width="35%" valign="middle" style="padding-left: 1em;"><? printText( $p_position ); ?></td>
+			<td width="15%" valign="middle" align="right">
+				<img src="<?=$webLocation;?>images/ranks/<?=$rankSet;?>/blank.png" />
+			</td>
+			<td width="40%" valign="middle">
+				<span class="fontSmall">
+					<a href="<?=$webLocation;?>index.php?page=join&position=<?=$p_id;?>"><b>Position Available - Apply Now!</b></a>
+				</span>
+			</td>
+			<td width="10%" valign="middle">&nbsp;</td>
+		</tr>
+	
+	<?
+	
+			} /* close the if( $p_open) logic */
+		} /* close the positions for loop */
+	} /* close the departments loop */
+	
+	?>
+	
 	</table>
+	
 </div>
-<? } ?>
