@@ -43,22 +43,22 @@ if(isset($display))
 {
 	if($display == "crew")
 	{
-		$manifest_default_values = "$('tr.open').hide();\n";
+		$manifest_default_values = "$('tr.open').hide();";
 		$manifest_default_values.= "$('tr.npc').hide();";
 	}
 	if($display == "npcs")
 	{
-		$manifest_default_values = "$('tr.active').hide();\n";
+		$manifest_default_values = "$('tr.active').hide();";
 		$manifest_default_values.= "$('tr.npc').show();";
 	}
 	if($display == "past")
 	{
-		$manifest_default_values = "$('tr.active').hide();\n";
+		$manifest_default_values = "$('tr.active').hide();";
 		$manifest_default_values.= "$('tr.inactive').show();";
 	}
 	if($display == "open")
 	{
-		$manifest_default_values = "$('tr.active').hide();\n";
+		$manifest_default_values = "$('tr.active').hide();";
 		$manifest_default_values.= "$('tr.open').show();";
 	}
 }
