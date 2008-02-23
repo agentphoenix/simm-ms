@@ -1,22 +1,24 @@
 USED CODENAMES
 ====
 
-Odyssey - SMS 2.0
-Palantir - SMS 2.5
-Eclipse - SMS 2.6
+SMS 2.0 - Odyssey
+SMS 2.5 - Palantir
+SMS 2.6 - Eclipse
+SMS 3.0 - Jefferson
 
-Neptune - SMS Toolbar
+SMS Toolbar - Neptune
 
 LIKELY CODENAMES
 ====
 
-Jefferson - SMS 3.0
-Meridian - SMS3 M0
-Diablo - SMS3 M1
-Sage - SMS3 M2
-Clover - SMS3 M3
-Aura - SMS3 M4
-Paradiso - SMS3 M5
+SMS3 M0 - Meridian
+SMS3 M1
+SMS3 M2 - Diablo
+SMS3 M3
+SMS3 M4
+SMS3 M5
+SMS3 M6
+SMS3 M7
 
 Each SMS3 milestone has its own codename, then for the betas, we
 will unveil the official name of the product
@@ -24,6 +26,10 @@ will unveil the official name of the product
 UNUSED CODENAMES
 ====
 
+Sage
+Clover
+Aura
+Paradiso
 Walker
 Aurora
 Excelsior
@@ -34,7 +40,6 @@ Hyperion
 Triton
 Eris
 Deimos
-Polaris (skin)
 Omega
 Atlanta
 Merlot
@@ -45,10 +50,11 @@ Pegasus
 Defender
 Thresher
 Babylon
+Midas
+Pulse
 
 POTENTIAL SMS3 NAMES
 ====
-Pulse
 Paladin
 Shift
 Slipstream
