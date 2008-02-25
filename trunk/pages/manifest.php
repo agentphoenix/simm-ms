@@ -11,7 +11,7 @@ Purpose: Provides a full listing from the database of the active crew, available
 	positions, and non-playing characters on the simm.
 
 System Version: 2.6.0
-Last Modified: 2008-02-22 1122 EST
+Last Modified: 2008-02-25 1556 EST
 **/
 
 /* define the page class and vars */
@@ -20,6 +20,10 @@ $pageClass = "personnel";
 if(isset($_GET['disp']))
 {
 	$display = $_GET['disp'];
+}
+else
+{
+	$display = "";
 }
 
 /* pull in the main navigation */
@@ -225,6 +229,10 @@ if(isset($display))
 					if($u_type == 'inactive')
 					{
 						$show = "style='display:none'";
+					}
+					else
+					{
+						$show = "";
 					}
 	
 	?>
