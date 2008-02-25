@@ -10,7 +10,7 @@ File: pages/crewawards.php
 Purpose: To display the list of crew awards currently entered
 
 System Version: 2.6.0
-Last Modified: 2007-11-29 0926 EST
+Last Modified: 2008-02-25 1537 EST
 **/
 
 /* define the page class */
@@ -51,9 +51,9 @@ $getAwardsResult = mysql_query ( $getAwards );
 	
 	<table>
 		<tr>
-			<td width="25%" class="fontLarge" align="center"><b>Award</b></td>
-			<td>&nbsp;</td>
-			<td class="fontLarge"<b>Description</b></td>
+			<th width="25%" class="fontLarge">Award</th>
+			<th>&nbsp;</th>
+			<th class="fontLarge">Description</th>
 		</tr>
 	
 		<?
@@ -68,10 +68,9 @@ $getAwardsResult = mysql_query ( $getAwards );
 			<td align="center">
 				<?php
 				
-				/* award name */
+				echo "<b>";
 				printText( $awardName );
-				
-				echo "<br />";
+				echo "</b><br />";
 				
 				/*
 					if the large version of the award image exists, then show that
@@ -84,7 +83,7 @@ $getAwardsResult = mysql_query ( $getAwards );
 				}
 				
 				/* award image */
-				echo "<img src='" . $image . "' alt='" . printText( $awardName ) . "' border='0' />";
+				echo "<img src='" . $image . "' alt='" . $awardName . "' border='0' />";
 				
 				?>
 			</td>
