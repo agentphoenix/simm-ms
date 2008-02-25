@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/menugeneral.php
 Purpose: Page to manage the menus of SMS
 
-System Version: 2.5.2
-Last Modified: 2007-08-08 2235 EST
+System Version: 2.6.0
+Last Modified: 2008-02-25 1340 EST
 **/
 
 /* access check */
@@ -283,22 +283,6 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 						<li>Please add a menu item called DOCKED SHIPS. It should be part of group 4 and have an
 						onsite link to <i>admin.php?page=manage&sub=docking</i></li>
 					</ol>
-				</li>
-			</ul>
-			<? } if( $manifestDisplay == "full" ) { ?>
-			Your system is set up to use the full manifest instead of the split manifest. Please make the following
-			changes to your menus!
-			<ul class="version">
-				<li><b>Main Navigation</b>
-					<ul>
-						<li>Please change your PERSONNEL link to point to <i>index.php?page=manifestFull</i></li>
-					</ul>
-				</li>
-				<li><b>General Menus (Personnel)</b>
-					<ul>
-						<li>Please change the CREW MANIFEST, NPC MANIFEST, and OPEN POSITIONS links to point to
-						<i>index.php?page=manifestFull</i></li>
-					</ul>
 				</li>
 			</ul>
 			<? } if( $usePosting == "n" ) { ?>
