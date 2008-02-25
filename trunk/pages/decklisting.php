@@ -10,7 +10,7 @@ File: pages/decklisting.php
 Purpose: Page to display the deck listing
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 0959 EST
+Last Modified: 2008-02-25 1545 EST
 **/
 
 /* define the page class */
@@ -24,6 +24,11 @@ if( isset( $sessionCrewid ) ) {
 }
 
 ?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.zebra tr:even').addClass('rowColor1');
+	});
+</script>
 
 <div class="body">
 	<span class="fontTitle">Deck Listing</span>
@@ -43,7 +48,7 @@ if( isset( $sessionCrewid ) ) {
 	?>
 	<br /><br />
 
-	<table>
+	<table class="zebra" cellspacing="0" cellpadding="8">
 		<?
 
 		/* pull the number of decks the ship/starbase has from the db */
@@ -59,9 +64,6 @@ if( isset( $sessionCrewid ) ) {
 			<td class="tableCellLabel" valign="top">Deck <?=$deckFetch['deckid'];?></td>
 			<td>&nbsp;</td>
 			<td><? printText( $deckFetch['deckContent'] ); ?></td>
-		</tr>
-		<tr>
-			<td colspan="3" height="15"></td>
 		</tr>
 		<? } ?>
 	</table>
