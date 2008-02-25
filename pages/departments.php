@@ -5,22 +5,17 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: Nathan Wharry [ mail@herschwolf.net ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/departments.php
 Purpose: To display the list of departments offered by the SIMM and their
 	associated positions
 
 System Version: 2.6.0
-Last Modified: 2008-01-12 1341 EST
+Last Modified: 2008-02-25 1315 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "ship";
-
-/* set the department if it's numeric */
-if( isset( $_GET['dept'] ) && is_numeric( $_GET['dept'] ) ) {
-	$dept = $_GET['dept'];
-}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -30,35 +25,29 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* pull all the available departments that should be displayed */
-$getDept = "SELECT * FROM sms_departments ";
-$getDept.= "WHERE deptDisplay = 'y' ORDER BY deptid ASC";
+$getDept = "SELECT * FROM sms_departments WHERE deptDisplay = 'y' ORDER BY deptid ASC";
 $getDeptResult = mysql_query( $getDept );
-
-/* set colspan to 1 */
-$colspan = 1;
-
-
-/* pull the positions based on dept clicked on */
-if ( isset( $dept ) ) {
-	$getPositions = "SELECT * FROM sms_positions ";
-	$getPositions.= "WHERE positionDept = '$dept' AND positionDisplay = 'y' ORDER BY positionid ASC";
-	$getPositionsResult = mysql_query( $getPositions );
-
-
-	/* set colspan to 2 for added tabledata for position name */
-	$colspan = 2;
-}
+$positionsArray = array();
 
 ?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#toggle').click(function() {
+			var id = $(this).attr('myID');
+			var div = '#' + id;
+			$(div).toggle();
+			return false;
+		});
+		
+		$('.zebra tr:even').addClass('rowColor1');
+	});
+</script>
 
 <div class="body">
 	<span class="fontTitle">Departments &amp; Positions</span>
 	<?
 	
-	/*
-		if the person is logged in and has level 5 access, display an icon
-		that will take them to edit the entry
-	*/
+	/* if they have access, display an icon that will take them to edit the entry */
 	if( isset( $sessionCrewid ) && in_array( "m_departments", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=departments'>";
@@ -73,57 +62,51 @@ if ( isset( $dept ) ) {
 	
 	<?
 	
+	/* rip through the dept data */
 	while( $deptinfo = mysql_fetch_array( $getDeptResult ) ) {
 		extract( $deptinfo, EXTR_OVERWRITE );
 		
-	?>
-	
-	<tr>
-		<td width="20%">
-			<span class="fontMedium">
-				<b><div style="color:#<?=$deptColor;?>;"><? printText( $deptName ); ?></div></b>
-			</span>
-			
-			<a href="<?=$webLocation;?>index.php?page=departments&dept=<?=$deptid;?>">
-				<span class="fontSmall">[ Show Positions ]</span>
-			</a>
-		</td>
-		<td width="5">&nbsp;</td>
-		<td colspan="<?=$colspan;?>"><? printText( $deptDesc ); ?></td>
-	</tr>
-	
-	
-	<?
-	
-	if ( isset( $dept ) && ( $deptid == $dept ) ) { 
-	
-	/* extract the variables */
-	while( $positioninfo = mysql_fetch_array( $getPositionsResult ) ) {
-		extract( $positioninfo, EXTR_OVERWRITE );
+		/* get the positions */
+		$getPositions = "SELECT * FROM sms_positions WHERE positionDisplay = 'y' AND positionDept = '$deptid' ORDER BY positionid ASC";
+		$getPositionsResult = mysql_query( $getPositions );
+		
+		/* rip through the positions and put them into a multi-dimensional array */
+		while($posFetch = mysql_fetch_assoc($getPositionsResult)) {
+			extract($posFetch, EXTR_OVERWRITE);
+
+			$positionsArray[$deptid][] = array($positionName, $positionDesc);
+
+		}
 		
 	?>
 	
 	<tr>
-		<td colspan="4" height="3">&nbsp;</td>
+		<td width="30%" valign="top">
+			<b class="fontMedium"><span style="color:#<?=$deptColor;?>;"><?php printText( $deptName ); ?></span></b><br />
+			<a href="#" id="toggle" myID="<?=$deptid;?>" class="fontSmall">[ Toggle Positions ]</a>
+		</td>
+		<td width="5"></td>
+		<td valign="top">
+			<? printText( $deptDesc ); ?>
+			<div id="<?=$deptid;?>" style="display:none;">
+				<br />
+				<table class="fontNormal zebra" cellspacing="0" cellpadding="3">
+					<?php foreach($positionsArray[$deptid] as $key => $value) { ?>
+					<tr>
+						<td class="tableCellLabel"><b><?php printText( $value[0] );?></b></td>
+						<td width="10"></td>
+						<td><?php printText( $value[1] );?></td>
+					</tr>
+					<?php } ?>
+				</table>
+			</div>
+		</td>
 	</tr>
-	
-	
 	<tr>
-		<td colspan="2">&nbsp;</td>
-		<td class="fontNormal" width="25%"><b><? printText( $positionName ); ?></b></td>
-		<td class="fontSmall"><? printText( $positionDesc ); ?><td>
+		<td colspan="3" height="10"></td>
 	</tr>
 	
-	<? 
-		} /* close the while statement */
-	} /* close the if statement */
-	?>
-	
-	<tr>
-		<td colspan="2"></td>
-		<td colspan="<?=$colspan;?>" height="5">&nbsp;</td>
-	</tr>
-	<? } /* close the while statement */ ?>
+	<?php } /* close the while statement */ ?>
 	
 	</table>
 </div>
