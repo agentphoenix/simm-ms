@@ -39,6 +39,10 @@ IN PROGRESS
 #	Re-write activation page
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
+
+#	Clean-up install and update files
+		*	Development: 	IN PROGRESS
+		*	Landing: 		COMPLETED
 		
 IN QUEUE
 =====
@@ -66,10 +70,6 @@ X	Customizable message subject lines
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
 
-X	Clean-up install and update files
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
-
 X	Error catching page
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
@@ -88,5 +88,9 @@ X	[BUG] Rank drop down menus need to respect the rankDisplay flag
 
 X	[BUG] If the large version of an award image doesn't exist, it won't fall back
 	to the small version
+		*	Development:	COMPLETED
+		*	Landing:		COMPLETED
+
+X	JQuery-ify departments page to use toggling
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
