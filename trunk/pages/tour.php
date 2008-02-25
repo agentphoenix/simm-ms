@@ -10,12 +10,20 @@ File: pages/tour.php
 Purpose: Page to display the tour items
 
 System Version: 2.6.0
-Last Modified: 2007-10-12 1643 EST
+Last Modified: 2008-02-25 1603 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "ship";
-$tour = $_GET['id'];
+
+if(isset($_GET['id']) && is_numeric($_GET['id']))
+{
+	$tour = $_GET['id'];
+}
+else
+{
+	$tour = "";
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
