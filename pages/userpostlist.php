@@ -10,25 +10,28 @@ File: pages/userpostlist.php
 Purpose: Page to display all the posts of a specific user
 
 System Version: 2.6.0
-Last Modified: 2007-10-12 1705 EST
+Last Modified: 2008-02-25 1601 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "personnel";
-$crew = $_GET['crew'];
-$tab = $_GET['t'];
 
-if( !isset( $tab ) ) {
-	$tab = 1;
+if(isset($_GET['crew']) && is_numeric($_GET['crew']))
+{
+	$crew = $_GET['crew'];
+}
+else
+{
+	$crew = "";
 }
 
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['crew'] ) && preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
-	errorMessageIllegal( "user post list page" );
-	exit();
-} else {
-	/* set the GET variable */
-	$crew = $_GET['crew'];
+if(isset($_GET['t']) && is_numeric($_GET['t']))
+{
+	$tab = $_GET['t'];
+}
+else
+{
+	$tab = 1;
 }
 
 /* pull in the menu */
@@ -39,7 +42,7 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* get mission id for individual mission display */
-if( isset( $crew ) ) {
+if( !empty( $crew ) ) {
 
 /* pull all the posts */
 $getPosts = "SELECT post.*, mission.* ";
@@ -80,7 +83,7 @@ $logCount = @mysql_num_rows( $getLogsResult );
 			<table cellspacing="0" cellpadding="6">
 			<?php if( $postCount == 0 ) { ?>
 				<tr>
-					<td colspan="3" class="fontMedium"><b>No posts recorded</b></td> 
+					<td colspan="3" class="fontMedium"><b class="orange">No posts recorded</b></td> 
 				</tr>
 			<?php
 			
@@ -113,7 +116,7 @@ $logCount = @mysql_num_rows( $getLogsResult );
 			<table cellspacing="0" cellpadding="6">
 			<?php if( $logCount == 0 ) { ?>
 				<tr>
-					<td colspan="3" class="fontMedium"><b>No personal logs recorded</b></td> 
+					<td colspan="3" class="fontMedium"><b class="orange">No personal logs recorded</b></td> 
 				</tr>
 			<?php
 			
