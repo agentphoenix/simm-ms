@@ -16,6 +16,15 @@ Last Modified: 2008-02-25 1645 EST
 /* define the page class */
 $pageClass = "simm";
 
+if(isset($_GET['id']) && is_numeric($_GET['id']))
+{
+	$mp_id = $_GET['id'];
+}
+else
+{
+	$mp_id = "";
+}
+
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $sessionDisplaySkin . '/menu.php' );
@@ -23,17 +32,8 @@ if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $skin . '/menu.php' );
 }
 
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['position'] ) && preg_match( "/^\d+$/", $_GET['position'], $matches ) == 0 ) {
-	errorMessageIllegal( "activation page" );
-	exit();
-} else {
-	/* set the GET variable */
-	$mp_id = $_GET['id'];
-}
-
 /* get post id for individual message display */
-if( $mp_id ) {
+if( !empty($mp_id) ) {
 
 	/* pull all the information relating to the post */
 	$getpost = "SELECT * FROM sms_posts ";
