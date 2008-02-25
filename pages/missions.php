@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: Nathan Wharry [ mail@herschwolf.net ]
-File: pages/mission.php
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: pages/missions.php
 Purpose: Page to display the list of missions
 
-System Version: 2.5.0
-Last Modified: 2007-06-11 1210 EST
+System Version: 2.6.0
+Last Modified: 2008-02-25 1337 EST
 **/
 
 /* define the page class */
@@ -39,130 +39,133 @@ $missionsCompleted.= "ORDER BY missionOrder DESC";
 $missionsCompletedResult = mysql_query( $missionsCompleted );
 $completedCount = mysql_num_rows( $missionsCompletedResult );
 
+if( $currentCount == 0 ) {
+	$disableCurrent = "1, ";
+} else {
+	$disableCurrent = "";
+}
+
+if( $completedCount == 0 ) {
+	$disableCompleted = "2 ";
+} else {
+	$disableCompleted = "";
+}
+
+$disable = $disableCurrent . $disableCompleted;
+
 ?>
 
 <div class="body">
-	<span class="fontTitle">Mission Logs</span><br /><br />
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable; ?>] });
+		});
+	</script>
 	
-	<? if( $currentCount >= 1 ) { ?>
-	<span class="fontMedium"><b>Current Mission</b></span><br />
-
+	<span class="fontTitle">Mission Logs</span><br />
 	
-	<?
-	
-		while( $current = mysql_fetch_array( $missionsCurrentResult ) ) {
-			extract( $current, EXTR_OVERWRITE );
+	<div id="container-1">
+		<ul>
+			<li><a href="#one"><span>Current Mission (<?=$currentCount;?>)</span></a></li>
+			<li><a href="#two"><span>Upcoming Missions (<?=$upcomingCount;?>)</span></a></li>
+			<li><a href="#three"><span>Completed Missions (<?=$completedCount;?>)</span></a></li>
+		</ul>
 		
-			$posts = "SELECT postid FROM sms_posts WHERE postMission = '$missionid' ";
-			$posts.= "AND postStatus = 'activated' ORDER BY postid DESC";
-			$missionPosts = mysql_query ( $posts );
-			$numPosts = mysql_num_rows( $missionPosts );
-			
-			echo "<div style='padding: 1em 0 0 0;'>";
-			echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $missionid . "'><b>";
-			
-			printText( $missionTitle );
-			
-			echo "</b></a>";
-			
-			if( $usePosting == "y" ) {
-				echo "&nbsp;&nbsp; [ Posts: " . $numPosts . " ]";
-			}
-			
-			echo "</div><div style='padding: 1em 0 2em 1em;'>";
-			
-			printText( $missionDesc );
-			
-			echo "</div>";
-			
-		} /* close the while loop */
-	
-	} /* close the check for more than 1 current mission */
-	
-	/** display upcoming missions **/
-	
-	if( $upcomingCount >= 1 ) {
-	
-	?>
+		<div id="one" class="ui-tabs-container ui-tabs-hide">
+			<?
 
-	<span class="fontMedium"><b>Upcoming Missions</b></span><br />
+			while( $current = mysql_fetch_array( $missionsCurrentResult ) ) {
+				extract( $current, EXTR_OVERWRITE );
 
-	<?
-	
-		while( $upcoming = mysql_fetch_array( $missionsUpcomingResult ) ) {
-			extract( $upcoming, EXTR_OVERWRITE );
+				$posts = "SELECT postid FROM sms_posts WHERE postMission = '$missionid' ";
+				$posts.= "AND postStatus = 'activated' ORDER BY postid DESC";
+				$missionPosts = mysql_query ( $posts );
+				$numPosts = mysql_num_rows( $missionPosts );
+
+				echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $missionid . "'><b class='fontMedium'>";
+
+				printText( $missionTitle );
+
+				echo "</b></a>";
+
+				if( $usePosting == "y" ) {
+					echo "&nbsp;&nbsp; [ Posts: " . $numPosts . " ]";
+				}
+
+				echo "<div style='padding: 1em 0 2em 1em;'>";
+
+				printText( $missionDesc );
+
+				echo "</div>";
+
+			} /* close the while loop */
+				
+			?>
+		</div> <!-- close ONE -->
 		
-			$posts = "SELECT postid FROM sms_posts WHERE postMission = '$missionid' ";
-			$posts.= "AND postStatus = 'activated' ORDER BY postid DESC";
-			$missionPosts = mysql_query ( $posts );
-			$numPosts = mysql_num_rows( $missionPosts );
-			
-			if( $numPosts == "0" ) {
-				$numPosts = "N/A";
-			} else {
-				$numPosts = $numPosts;
-			}
-				
-			echo "<div style='padding: 1em 0 0 0;'>";
-			echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $missionid . "'><b>";
-			
-			printText( $missionTitle );
-			
-			echo "</b></a>";
-			
-			if( $usePosting == "y" ) {
-				echo "&nbsp;&nbsp; [ Posts: " . $numPosts . " ]";
-			}
-			
-			echo "</div><div style='padding: 1em 0 2em 1em;'>";
-			
-			printText( $missionDesc );
-			
-			echo "</div>";
-			
-		} /* close the while loop */
-	
-	} /* close the check on upcoming missions */
-	
-	/** display completed missions **/
-	
-	if( $completedCount >= 1 ) {
-	
-	?>
+		<div id="two" class="ui-tabs-container ui-tabs-hide">
+			<?
 
-	<span class="fontMedium"><b>Completed Missions</b></span><br />
+			while( $upcoming = mysql_fetch_array( $missionsUpcomingResult ) ) {
+				extract( $upcoming, EXTR_OVERWRITE );
 
-	<?	
-	
-		while( $complete = mysql_fetch_array( $missionsCompletedResult ) ) {
-			extract( $complete, EXTR_OVERWRITE );
+				$posts = "SELECT postid FROM sms_posts WHERE postMission = '$missionid' ";
+				$posts.= "AND postStatus = 'activated' ORDER BY postid DESC";
+				$missionPosts = mysql_query ( $posts );
+				$numPosts = mysql_num_rows( $missionPosts );
+
+				echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $missionid . "'><b class='fontMedium'>";
+
+				printText( $missionTitle );
+
+				echo "</b></a>";
+
+				if( $usePosting == "y" ) {
+					echo "&nbsp;&nbsp; [ Posts: " . $numPosts . " ]";
+				}
+
+				echo "<div style='padding: 1em 0 2em 1em;'>";
+
+				printText( $missionDesc );
+
+				echo "</div>";
+
+			} /* close the while loop */
+			
+			?>
+		</div> <!-- close TWO -->
 		
-			$posts = "SELECT postid FROM sms_posts WHERE postMission = '$missionid' ";
-			$posts.= "AND postStatus = 'activated' ORDER BY postid DESC";
-			$missionPosts = mysql_query ( $posts );
-			$numPosts = mysql_num_rows( $missionPosts );
-				
-			echo "<div style='padding: 1em 0 0 0;'>";
-			echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $missionid . "'><b>";
+		<div id="three" class="ui-tabs-container ui-tabs-hide">
+			<?	
+
+			while( $complete = mysql_fetch_array( $missionsCompletedResult ) ) {
+				extract( $complete, EXTR_OVERWRITE );
+
+				$posts = "SELECT postid FROM sms_posts WHERE postMission = '$missionid' ";
+				$posts.= "AND postStatus = 'activated' ORDER BY postid DESC";
+				$missionPosts = mysql_query ( $posts );
+				$numPosts = mysql_num_rows( $missionPosts );
+
+				echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $missionid . "'><b class='fontMedium'>";
+
+				printText( $missionTitle );
+
+				echo "</b></a>";
+
+				if( $usePosting == "y" ) {
+					echo "&nbsp;&nbsp; [ Posts: " . $numPosts . " ]";
+				}
+
+				echo "<div style='padding: 1em 0 2em 1em;'>";
+
+				printText( $missionDesc );
+
+				echo "</div>";
+
+			} /* close the while loop */
 			
-			printText( $missionTitle );
-			
-			echo "</b></a>";
-			
-			if( $usePosting == "y" ) {
-				echo "&nbsp;&nbsp; [ Posts: " . $numPosts . " ]";
-			}
-			
-			echo "</div><div style='padding: 1em 0 2em 1em;'>";
-			
-			printText( $missionDesc );
-			
-			echo "</div>";
-				
-		} /* close the while loop */
-	
-	} /* close the completed check */
-				
-	?>	
+			?>
+		</div> <!-- close THREE -->
+	</div> <!-- close CONTENT -->
 	
 </div> <!-- Close .body -->
