@@ -13,9 +13,6 @@ System Version: 2.6.0
 Last Modified: 2008-02-25 1657 EST
 **/
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 /* define the page class */
 $pageClass = "simm";
 
