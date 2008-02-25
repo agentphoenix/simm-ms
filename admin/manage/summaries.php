@@ -10,7 +10,7 @@ File: admin/manage/summaries.php
 Purpose: Page that moderates the various messages found throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2007-12-23 1342 EST
+Last Modified: 2008-02-25 1325 EST
 **/
 
 /* access check */
@@ -20,6 +20,15 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 	$pageClass = "admin";
 	$subMenuClass = "manage";
 	$actionUpdate = $_POST['action_update_x'];
+	
+	if(isset($_GET['t']) && is_numeric($_GET['t']))
+	{
+		$tab = $_GET['t'];
+	}
+	else
+	{
+		$tab = 1;
+	}
 	
 	/* if the POST action is update */
 	if( $actionUpdate ) {
@@ -75,7 +84,7 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 		
 		<script type="text/javascript">
 			$(document).ready(function(){
-				$('#container-1 > ul').tabs({ disabled: [<?php echo $disable; ?>] });
+				$('#container-1 > ul').tabs(<?php echo $tab; ?>, {disabled: [<?php echo $disable; ?>]});
 			});
 		</script>
 		
@@ -104,7 +113,7 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 						extract( $summary, EXTR_OVERWRITE );
 
 					?>
-					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
+					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries&t=1">
 					<tr>
 						<td class="tableCellLabel">
 							<? printText( $missionTitle );?>
@@ -143,7 +152,7 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 						extract( $summary, EXTR_OVERWRITE );
 
 					?>
-					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
+					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries&t=2">
 					<tr>
 						<td class="tableCellLabel">
 							<? printText( $missionTitle );?>
@@ -185,7 +194,7 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 						extract( $summary, EXTR_OVERWRITE );
 
 					?>
-					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries">
+					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries&t=3">
 					<tr>
 						<td class="tableCellLabel">
 							<? printText( $missionTitle );?>
