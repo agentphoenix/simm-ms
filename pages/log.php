@@ -10,11 +10,23 @@ File: pages/log.php
 Purpose: To display the individual personal logs
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 1004 EST
+Last Modified: 2008-02-25 1657 EST
 **/
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 /* define the page class */
 $pageClass = "simm";
+
+if(isset($_GET['id']) && is_numeric($_GET['id']))
+{
+	$pl_id = $_GET['id'];
+}
+else
+{
+	$pl_id = "";
+}
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -23,17 +35,8 @@ if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $skin . '/menu.php' );
 }
 
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['position'] ) && preg_match( "/^\d+$/", $_GET['position'], $matches ) == 0 ) {
-	errorMessageIllegal( "activation page" );
-	exit();
-} else {
-	/* set the GET variable */
-	$pl_id = $_GET['id'];
-}
-
 /* get post id for individual message display */
-if( isset( $pl_id ) ) {
+if( !empty( $pl_id ) ) {
 
 	/* pull all the information relating to the post */
 	$getlog = "SELECT * FROM sms_personallogs ";
@@ -61,7 +64,7 @@ if( isset( $pl_id ) ) {
 	<div class="body">
 	
 		<span class="fontTitle">
-			<? printCrewName( $loginfo['logAuthor'], "rank", "noLink" ); ?>'s Personal Log - 
+			<? printCrewName( $loginfo['logAuthor'], "rank", "noLink" ); ?>&rsquo;s Personal Log - 
 			<? printText( $logTitle ); ?>
 		</span><br /><br />
 		
@@ -76,7 +79,9 @@ if( isset( $pl_id ) ) {
 			
 			while ( $myrow = mysql_fetch_array( $getlogsResult ) ) {
 				$idNumbers[] = $myrow['logid'];
-			}	
+			}
+			
+			$arrayCount = count($idNumbers) -1;
 			
 			foreach( $idNumbers as $key => $value ) {
 				if( $pl_id == $value ) {
@@ -85,12 +90,12 @@ if( isset( $pl_id ) ) {
 					$prevKey = $key-1;
 			
 				/* display the previous and next links in the post details box */
-				if( $idNumbers[$prevKey] != '' ) {
-						printText ( "<a href='$webLocation/index.php?page=log&id=$idNumbers[$prevKey]'><img src='$webLocation/images/previous.png' alt='Previous Entry' border='0' class='image' /></a>" );
-					} if( ($idNumbers[$prevKey] != '') && ($idNumbers[$nextKey] != '') ) {
+				if( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) {
+						echo "<a href='$webLocation/index.php?page=log&id=$idNumbers[$prevKey]'><img src='$webLocation/images/previous.png' alt='Previous Entry' border='0' class='image' /></a>";
+					} if( ( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) && ( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) ) {
 						echo "&nbsp;";
-					} if( $idNumbers[$nextKey] != '' ) {
-						printText ( "<a href='$webLocation/index.php?page=log&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' class='image' /></a>" );
+					} if( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) {
+						echo "<a href='$webLocation/index.php?page=log&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' class='image' /></a>";
 					}
 				}
 			}
