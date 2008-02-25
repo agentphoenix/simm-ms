@@ -49,6 +49,11 @@ IN PROGRESS
 #	Re-build site options page
 		*	Development: 	IN PROGRESS
 		*	Landing: 		IN PROGRESS
+
+#	Take care of Apache errors throughout the system
+		*	Development: 	IN PROGRESS
+		*	Landing: 		IN PROGRESS
+				@	pages/bio.php - pages/join.php
 		
 IN QUEUE
 =====
