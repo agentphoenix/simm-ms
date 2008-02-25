@@ -9,13 +9,22 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/postlist.php
 Purpose: Page to display all the posts of a specific mission
 
-System Version: 2.5.0
-Last Modified: 2007-04-24 1833 EST
+System Version: 2.6.0
+Last Modified: 2008-02-25 1613 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "simm";
-$mid = $_GET['id'];
+
+if(isset($_GET['id']) && is_numeric($_GET['id']))
+{
+	$mid = $_GET['id'];
+}
+else
+{
+	$mid = "";
+}
+
 
 /* pull in the menu */
 if( isset( $sessionCrewid ) ) {
@@ -25,7 +34,7 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* get mission id for individual mission display */
-if( $mid ) {
+if( !empty($mid) ) {
 
 /* pull all the posts to display on page */
 $getPosts = "SELECT * FROM sms_posts ";
