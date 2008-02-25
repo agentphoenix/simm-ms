@@ -11,7 +11,7 @@ Purpose: To display the list of departments offered by the SIMM and their
 	associated positions
 
 System Version: 2.6.0
-Last Modified: 2008-02-25 1315 EST
+Last Modified: 2008-02-25 1735 EST
 **/
 
 /* define the page class and vars */
@@ -32,10 +32,11 @@ $positionsArray = array();
 ?>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#toggle').click(function() {
+		$('a.toggle').click(function() {
 			var id = $(this).attr('myID');
-			var div = '#' + id;
+			var div = "#" + id;
 			$(div).toggle();
+			
 			return false;
 		});
 		
@@ -83,7 +84,7 @@ $positionsArray = array();
 	<tr>
 		<td width="30%" valign="top">
 			<b class="fontMedium"><span style="color:#<?=$deptColor;?>;"><?php printText( $deptName ); ?></span></b><br />
-			<a href="#" id="toggle" myID="<?=$deptid;?>" class="fontSmall">[ Toggle Positions ]</a>
+			<a href="#" myID="<?=$deptid;?>" class="fontSmall toggle">[ Toggle Positions ]</a>
 		</td>
 		<td width="5"></td>
 		<td valign="top">
