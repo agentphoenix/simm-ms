@@ -10,7 +10,7 @@ File: pages/post.php
 Purpose: To display the individual posts to a mission
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 1012 EST
+Last Modified: 2008-02-25 1645 EST
 **/
 
 /* define the page class */
@@ -48,7 +48,7 @@ if( $mp_id ) {
 	
 	/* extract the post data into the MySQL field name variables */
 	$postinfo = mysql_fetch_array( $getpostResult );
-		extract( $postinfo, EXTR_OVERWRITE ); 
+		extract( $postinfo, EXTR_OVERWRITE );
 	
 	/* pull the mission title */
 	$getmission = "SELECT missionid, missionTitle ";
@@ -86,22 +86,24 @@ if( $mp_id ) {
 			$idNumbers[] = $myrow['postid'];
 		}
 		
+		$arrayCount = count($idNumbers) -1;
+		
 		foreach( $idNumbers as $key => $value ) {
 			if( $mp_id == $value ) {
 				
 				$nextKey = $key+1;
 				$prevKey = $key-1;
-		
-			/* display the previous and next links in the post details box */
-			if( $idNumbers[$prevKey] != '' ) {
-					printText ( "<a href='$webLocation/index.php?page=post&id=$idNumbers[$prevKey]'><img src='$webLocation/images/previous.png' alt='Previous Entry' border='0' class='image' /></a>" );
-				} if( ($idNumbers[$prevKey] != '') && ($idNumbers[$nextKey] != '') ) {
+				
+				/* display the previous and next links in the post details box */
+				if( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) {
+					echo "<a href='" . $webLocation . "/index.php?page=post&id=" . $idNumbers[$prevKey] . "'><img src='" . $webLocation . "/images/previous.png' alt='Previous Entry' border='0' class='image' /></a>";
+				} if( ( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) && ( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) ) {
 					echo "&nbsp;";
-				} if( $idNumbers[$nextKey] != '' ) {
-					printText ( "<a href='$webLocation/index.php?page=post&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' class='image' /></a>" );
+				} if( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) {
+					echo "<a href='$webLocation/index.php?page=post&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' class='image' /></a>";
 				}
-			}
-		}
+			} /* close if(mp_id == value) */
+		} /* close foreach loop */
 		
 	?>
 	
