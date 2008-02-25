@@ -3,6 +3,8 @@ IN PROGRESS
 #	Tab content immediately available
 		*	Development: 	COMPLETED
 		*	Landing: 		IN PROGRESS
+				@	admin/manage/menuadvanced.php
+				@	admin/manage/menugeneral.php
 
 #	Global setting for default access levels
 		*	Development:	COMPLETED
@@ -43,6 +45,10 @@ IN PROGRESS
 #	Clean-up install and update files
 		*	Development: 	IN PROGRESS
 		*	Landing: 		COMPLETED
+
+#	Re-build site options page
+		*	Development: 	IN PROGRESS
+		*	Landing: 		IN PROGRESS
 		
 IN QUEUE
 =====
