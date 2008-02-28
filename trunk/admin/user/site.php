@@ -70,8 +70,8 @@ if( in_array( "u_options", $sessionAccess ) ) {
 		if( isset( $menu_update ) )
 		{
 			/* build the query */
-			$update = "UPDATE sms_crew SET menu1 = %d, menu2 = %d, menu3 = %d, menu4 = %d, menu5 = %d, ";
-			$update.= "menu6 = %d, menu7 = %d, menu8 = %d, menu9 = %d, menu10 = %d WHERE crewid = '$sessionCrewid' LIMIT 1";
+			$update = "UPDATE sms_crew SET menu1 = %s, menu2 = %s, menu3 = %s, menu4 = %s, menu5 = %s, ";
+			$update.= "menu6 = %s, menu7 = %s, menu8 = %s, menu9 = %s, menu10 = %s WHERE crewid = '$sessionCrewid' LIMIT 1";
 			
 			/* escape the strings into the query */
 			$query = sprintf(
@@ -170,6 +170,10 @@ if( in_array( "u_options", $sessionAccess ) ) {
 	$query2.= "ORDER BY menuMainSec, menuGroup, menuOrder ASC";
 	$result2 = mysql_query( $query2 );
 	
+	/* query the database for the admin items */
+	$query3 = "SELECT * FROM sms_database WHERE dbDisplay = 'y' AND dbType != 'offsite' ORDER BY dbOrder ASC";
+	$result3 = mysql_query( $query3 );
+	
 	/* loop through the general items and put them into a 2d array */
 	while( $fetch1 = mysql_fetch_assoc( $result1 ) ) {
 		extract( $fetch1, EXTR_OVERWRITE );
@@ -202,6 +206,17 @@ if( in_array( "u_options", $sessionAccess ) ) {
 		}
 	}
 	
+	/* loop through the database items and put them into a 2d array */
+	while( $fetch3 = mysql_fetch_assoc( $result3 ) ) {
+		extract( $fetch3, EXTR_OVERWRITE );
+		
+		$array3[] = array(
+			$fetch3['dbid'],
+			$fetch3['dbTitle']
+		);
+		
+	}
+	
 ?>
 	
 	<div class="body">
@@ -220,8 +235,8 @@ if( in_array( "u_options", $sessionAccess ) ) {
 		
 		<span class="fontTitle">Site Options</span><br /><br />
 		
-		SMS gives users more control of what they see when they're logged in now. From this page,
-		you can set the skin you use when you're logged in, the rank set you see as well as control
+		SMS gives users more control of what they see when they&rsquo;re logged in now. From this page,
+		you can set the skin you use when you&rsquo;re logged in, the rank set you see as well as control
 		panel options and personalized menu items.<br />
 	
 		<?
@@ -355,6 +370,21 @@ if( in_array( "u_options", $sessionAccess ) ) {
 
 											echo "<option value='" . $value1[0] . "'" . $selected . ">";
 												echo ucwords( $value1[2] ) . " - " . $value1[1];
+											echo "</option>";
+										}
+									echo "</optgroup>";
+									
+									echo "<optgroup label='Database Items'>";
+										foreach( $array3 as $key3 => $value3 )
+										{
+											if( $$menu == 'd_' . $value3[0] ) {
+												$selected = " selected";
+											} else {
+												$selected = "";
+											}
+
+											echo "<option value='d_" . $value3[0] . "'" . $selected . ">";
+												echo $value3[1];
 											echo "</option>";
 										}
 									echo "</optgroup>";

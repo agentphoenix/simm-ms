@@ -11,7 +11,7 @@ Purpose: Page with the menu class that is called by the skin to build the variou
 	menus used throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2008-02-22 1729 EST
+Last Modified: 2008-02-28 1501 EST
 **/
 
 class Menu
@@ -104,92 +104,138 @@ class Menu
 		$getPrefsResult = mysql_query( $getPrefs );
 		$prefs = mysql_fetch_array( $getPrefsResult );
 		$prefs = array_unique( $prefs );
+		$prefsCount = count($prefs);
 		
-		/* loop through and build an array of the user's items */
-		foreach( $prefs as $key => $value )
+		if($prefsCount > 0)
 		{
+		
+			/* loop through and build an array of the user's items */
+			foreach( $prefs as $key => $value )
+			{
 
-			/* get the mainNav items from the DB */
-			$getMenu = "SELECT * FROM sms_menu_items WHERE menuid = '$value' LIMIT 1";
-			$getMenuResult = mysql_query( $getMenu );
-			
-			/* loop through whatever comes out of the database */
-			while( $fetchMenu = mysql_fetch_array( $getMenuResult ) ) {
-				extract( $fetchMenu, EXTR_OVERWRITE );
+				if( substr( $value, 0, 2 ) == "d_" )
+				{
+					$n_table = "sms_database";
+					$n_id = "dbid";
+					$n_value = substr_replace( $value, '', 0, 2 );
+				}
+				else
+				{
+					$n_table = "sms_menu_items";
+					$n_id = "menuid";
+					$n_value = $value;
+				}
 				
-				/* create a multi-dimensional array with the data
-					[x] => array
-					[x]['title'] => title
-					[x]['link'] => link
-					[x]['login'] => login
-					[x]['linkType'] => link type
-					[x]['access'] => menu access
-				*/
-				$menuArray[] = array(
-					'title' => $menuTitle,
-					'link' => $menuLink,
-					'login' => $menuLogin,
-					'linkType' => $menuLinkType,
-					'access' => $menuAccess,
-					'section' => $menuMainSec
-				);
+				/* get the mainNav items from the DB */
+				$getMenu = "SELECT * FROM $n_table WHERE $n_id = '$n_value' LIMIT 1";
+				$getMenuResult = mysql_query( $getMenu );
+			
+				/* loop through whatever comes out of the database */
+				while( $fetchMenu = mysql_fetch_array( $getMenuResult ) ) {
+					extract( $fetchMenu, EXTR_OVERWRITE );
 				
-			} /* close the while loop */
-			
-		} /* close the foreach */
-		
-		/* open the unordered list */
-		echo "<ul id='list'>";
-			echo "<li><img src='images/arrow.png' alt='>>' border='0' />";
-				echo "<ul class='hidemenu'>";
-		
-				/* loop through each key of the array, evaluate it, then spit it out */
-				foreach( $menuArray as $key => $value ) {
-			
-					/* check the link type and then set the prefix and target */
-					if( $value['linkType'] == "onsite" ) {
-						$prefix = WEBLOC;
-						$target = "";
-						
-						if( 
-							$value['section'] == "user" && (
-								substr( $value['access'], -1, 1 == "1" ) ||
-								substr( $value['access'], -1, 1 == "2" ) ||
-								substr( $value['access'], -1, 1 == "3" )
-							)
-						) {
-							$crew = "&crew=" . $sessionCrewid;
-						} else {
-							$crew = "";
-						}
-						
-					} else {
-						$prefix = "";
-						$target = " target='_blank'";
+					/* create a multi-dimensional array with the data
+						[x] => array
+						[x]['title'] => title
+						[x]['link'] => link
+						[x]['login'] => login
+						[x]['linkType'] => link type
+						[x]['access'] => menu access
+					*/
+					
+					if( $n_table == "sms_menu_items" )
+					{
+						$menuArray[] = array(
+							'title' => $menuTitle,
+							'link' => $menuLink,
+							'login' => $menuLogin,
+							'linkType' => $menuLinkType,
+							'access' => $menuAccess,
+							'section' => $menuMainSec
+						);
+					}
+					else
+					{
+						$menuArray[] = array(
+							'title' => $dbTitle,
+							'linkType' => $dbType,
+							'link' => $dbURL,
+							'id' => $dbid,
+							'login' => "n",
+							'section' => ""
+						);
 					}
 				
-					/* if the item doesn't require a login, display it */
-					if( $value['login'] == "n" ) {
+				} /* close the while loop */
+			
+			} /* close the foreach */
+		
+			/* open the unordered list */
+			echo "<ul id='list'>";
+				echo "<li><img src='images/arrow.png' alt='>>' border='0' />";
+					echo "<ul class='hidemenu'>";
+		
+					/* loop through each key of the array, evaluate it, then spit it out */
+					foreach( $menuArray as $key => $value ) {
+			
+						/* check the link type and then set the prefix and target */
+						if( $value['linkType'] == "onsite" || $value['linkType'] == "entry" ) {
+							$prefix = WEBLOC;
+							$target = "";
+						
+							if( 
+								$value['section'] == "user" && (
+									substr( $value['access'], -1, 1 == "1" ) ||
+									substr( $value['access'], -1, 1 == "2" ) ||
+									substr( $value['access'], -1, 1 == "3" )
+								)
+							) {
+								$crew = "&crew=" . $sessionCrewid;
+							} else {
+								$crew = "";
+							}
+						
+						} else {
+							$prefix = "";
+							$target = " target='_blank'";
+						}
 				
-						/* print out the item */
-						echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
-				
-					} else {
-						if( isset( $sessionCrewid ) ) {
-					
+						/* if the item doesn't require a login, display it */
+						if( $value['login'] == "n" ) {
 							/* print out the item */
-							echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
+							if( $n_table == "sms_menu_items" )
+							{
+								echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
+							}
+							else
+							{
+								if( $value['linkType'] == "entry" ) {
+									$p = WEBLOC . "index.php?page=database&entry=" . $value['id'];
+								} else {
+									$p = WEBLOC . $value['link'];
+								}
+								
+								echo "<li><a href='" . $p . "'>" . $value['title'] . "</a></li>";
+							}
+				
+						} else {
+							if( isset( $sessionCrewid ) ) {
 					
-						}	/* close the if */
-					} /* close the if/else logic */
+								/* print out the item */
+								echo "<li><a href='" . $prefix . $value['link'] . $crew . "'" . $target . ">" . $value['title'] . "</a></li>";
+					
+							}	/* close the if */
+						} /* close the if/else logic */
 
-				} /* close the foreach loop */
+					} /* close the foreach loop */
 		
-				echo "</ul>";
-			echo "</li>";
+					echo "</ul>";
+				echo "</li>";
 		
-		/* close the unordered list */
-		echo "</ul>";
+			/* close the unordered list */
+			echo "</ul>";
+			
+		} /* close the check for an array longer than 0 */
 
 	} /* close the function */
 	
