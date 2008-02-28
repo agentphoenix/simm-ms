@@ -20,10 +20,12 @@ if( in_array( "u_options", $sessionAccess ) ) {
 	$pageClass = "admin";
 	$subMenuClass = "user";
 	
-	if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) ) {
-		$crew = $_GET['crew'];
-	} else {
-		exit;
+	if( isset( $_GET['crew'] ) ) {
+		if( is_numeric( $_GET['crew'] ) ) {
+			$crew = $_GET['crew'];
+		} else {
+			exit;
+		}
 	}
 	
 	if( isset($_GET['sec']) && is_numeric($_GET['sec']) ) {
