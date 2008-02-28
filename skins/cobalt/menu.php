@@ -17,7 +17,8 @@ Last Modified: 2007-04-29 1534 EST
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#container-mainnav > ul').tabs();
+		$('#list').clickMenu();
+		$('ul.hidemenu').show();
 	});
 </script>
 
@@ -28,29 +29,25 @@ $menu = new Menu;
 
 ?>
 
-<div id="header">
-	<img src="skins/cobalt/images/mainnav-left.jpg" alt="" style="float:left;" />
-	<img src="skins/cobalt/images/mainnav-right.jpg" alt="" style="float:right;" />
-	<div class="headerTitle fontTitle"><?=SHIP_PREFIX . " " . SHIP_NAME . " " . SHIP_REG;?></div>
+<div id="mainNav">
+	<div class="mainNavInner">
+		<?php
 	
-	<div class="mainNav">
-	<?php if( !isset( $sessionCrewid ) ) { ?>
-			<? $menu->main( $sessionCrewid ); ?>
-	<?php } else { ?>
-		<div id="container-mainnav">
-			<ul>
-				<li><a href="#mainNav"><span>Global</span></a></li>
-				<li><a href="#userNav"><span>User</span></a></li>
-			</ul>
-			<div id="mainNav" class="ui-tabs-container ui-tabs-hide">
-				<? $menu->main( $sessionCrewid ); ?>
-			</div>
-			<div id="userNav" class="ui-tabs-container ui-tabs-hide">
-				<? $menu->user( $sessionCrewid ); ?>
-			</div>
-		</div>
-	<?php } ?>
+		$menu->main();
+	
+		if( isset( $sessionCrewid ) ) {
+			$menu->user( $sessionCrewid );
+		}
+	
+		?>
 	</div>
+</div>
+
+<div id="header">
+	<img src="skins/cobalt/images/header-left.jpg" alt="" style="float:left;" />
+	<img src="skins/cobalt/images/sms.jpg" alt="" style="float:left;" />
+	<img src="skins/cobalt/images/header-right.jpg" alt="" style="float:right;" />
+	<img src="skins/cobalt/images/anodyne.jpg" alt="" style="float:right;" />
 </div>
 
 <div class="content">
@@ -67,7 +64,7 @@ $menu = new Menu;
 				<b>Password</b><br />
 				<input type="password" name="password" size="12" class="loginSmallText" /><br /><br />
 				
-				<input type="image" src="skins/cobalt/buttons/login-small.png" name="submit" class="buttonLogin" value="Login" />
+				<input type="image" src="skins/cobalt/buttons/login-small" name="submit" class="buttonLogin" value="Login" />
 			</form>
 			<br />
 			<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
