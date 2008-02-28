@@ -8,7 +8,7 @@ File: skins/default/header.php
 Purpose: The header file that the system calls for the template
 
 Skin Version: 2.5
-Last Modified: 2008-01-30 1045 EST
+Last Modified: 2008-02-28 1627 EST
 **/
 
 $path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */
@@ -33,24 +33,17 @@ define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
 		
 		<script type="text/javascript">
 			<? include_once( "framework/functionsJavascript.js" ); ?>
-			
-			if(document.images)
-			{
-				preload_image_object = new Image();
-				
-				image_url = new Array();
-				image_url[0] = "<?=SKIN_PATH;?>buttons/button-off.png";
-				image_url[1] = "<?=SKIN_PATH;?>buttons/button-hover.png";
-				
-				var i = 0;
-				for(i = 0; i < image_url.length; i++)
-				{
-					preload_image_object.src = image_url[i];
-				}
-			}
 		</script>
 	</head>
 	<body>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$.preload( '.button img', {
+				    find:'-off.png',
+				    replace:'-hover.png'
+				});
+			});
+		</script>
 		<div id="headerTopSpacer"></div>
 		<div id="header"></div>
 		<div id="container">
