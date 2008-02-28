@@ -1,4 +1,4 @@
-Last Update: 2008.02.28 1133 EST
+Last Update: 2008.02.28 1503 EST
 
 IN PROGRESS
 =====
@@ -56,6 +56,10 @@ IN PROGRESS
 #	Re-build site options page
 		*	Development: 	IN PROGRESS
 		*	Landing: 		IN PROGRESS
+
+#	HUD windows for creation (missions, ranks, departments, positions, awards, etc.)
+		*	Development:	IN PROGRESS
+		*	Landing:		IN PROGRESS
 		
 IN QUEUE
 =====
@@ -68,8 +72,6 @@ IN QUEUE
 #	Departmental databases
 
 #	Add CC ability for private messages
-
-#	Accessing database entries in Neptune
 
 COMPLETED
 =====
@@ -106,6 +108,10 @@ X	[BUG] If the large version of an award image doesn't exist, it won't fall back
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
 
-X	JQuery-ify departments page to use toggling
+X	jQuery-ify departments page to use toggling
+		*	Development:	COMPLETED
+		*	Landing:		COMPLETED
+
+X	Accessing database entries in Neptune
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
