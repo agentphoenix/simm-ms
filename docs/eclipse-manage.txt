@@ -1,5 +1,16 @@
+Last Update: 2008.02.28 1133 EST
+
 IN PROGRESS
 =====
+#	Update system queries to protect against SQL injection
+		*	Development:	COMPLETED
+		*	Landing:		IN PROGRESS
+
+#	Take care of Apache errors throughout the system
+		*	Development: 	IN PROGRESS
+		*	Landing: 		IN PROGRESS
+				@	pages/bio.php - pages/join.php
+						
 #	Tab content immediately available
 		*	Development: 	COMPLETED
 		*	Landing: 		IN PROGRESS
@@ -18,10 +29,6 @@ IN PROGRESS
 		*	Development:	COMPLETED
 		*	Landing:		IN PROGRESS
 		
-#	Update system queries to protect against SQL injection
-		*	Development:	COMPLETED
-		*	Landing:		IN PROGRESS
-
 #	Award categories (in character, out of character, both)
 		*	Development:	IN PROGRESS
 		*	Landing:
@@ -30,30 +37,25 @@ IN PROGRESS
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
 
-#	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
+#	Re-write activation page
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
 
 #	Nominated awards to queue for CO approval
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
-
-#	Re-write activation page
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
-
+				
 #	Clean-up install and update files
 		*	Development: 	IN PROGRESS
 		*	Landing: 		COMPLETED
+		
+#	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
+		*	Development:	IN PROGRESS
+		*	Landing:		IN PROGRESS
 
 #	Re-build site options page
 		*	Development: 	IN PROGRESS
 		*	Landing: 		IN PROGRESS
-
-#	Take care of Apache errors throughout the system
-		*	Development: 	IN PROGRESS
-		*	Landing: 		IN PROGRESS
-				@	pages/bio.php - pages/join.php
 		
 IN QUEUE
 =====
@@ -66,6 +68,8 @@ IN QUEUE
 #	Departmental databases
 
 #	Add CC ability for private messages
+
+#	Accessing database entries in Neptune
 
 COMPLETED
 =====
