@@ -10,7 +10,7 @@ File: admin/user/site.php
 Purpose: Page that allows a user to various site options
 
 System Version: 2.6.0
-Last Modified: 2008-02-08 1816 EST
+Last Modified: 2008-02-28 1616 EST
 **/
 
 /* access check */
@@ -20,11 +20,10 @@ if( in_array( "u_options", $sessionAccess ) ) {
 	$pageClass = "admin";
 	$subMenuClass = "user";
 	
-	if( isset( $_GET['crew'] ) && !is_numeric( $_GET['crew'] ) ) {
-		//errorMessageIllegal( 'site options' );
-		exit;
-	} elseif( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) ) {
+	if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) ) {
 		$crew = $_GET['crew'];
+	} else {
+		exit;
 	}
 	
 	if( isset($_GET['sec']) && is_numeric($_GET['sec']) ) {
