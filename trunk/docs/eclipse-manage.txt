@@ -1,4 +1,4 @@
-Last Update: 2008.02.28 1503 EST
+Last Update: 2008.02.28 1746 EST
 
 IN PROGRESS
 =====
@@ -58,6 +58,10 @@ IN PROGRESS
 		*	Landing: 		IN PROGRESS
 
 #	HUD windows for creation (missions, ranks, departments, positions, awards, etc.)
+		*	Development:	IN PROGRESS
+		*	Landing:		IN PROGRESS
+
+#	Update skins
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
 		
