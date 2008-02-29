@@ -10,7 +10,7 @@ File: pages/tour.php
 Purpose: Page to display the tour items
 
 System Version: 2.6.0
-Last Modified: 2008-02-25 1603 EST
+Last Modified: 2008-02-29 1015 EST
 **/
 
 /* define the page class and vars */
@@ -32,8 +32,26 @@ if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $skin . '/menu.php' );
 }
 
-/* open the body class */
-echo "<div class='body'>";
+?>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('img.reflect').reflect({height: 0.3, opacity: 0.3});
+		
+		var options = {
+			resizeLgImages:     true,
+			displayNav:         true,
+			handleUnsupported:  'remove',
+			keysClose:          ['c', 27] // c or esc
+		};
+
+		Shadowbox.init(options);
+	});
+</script>
+
+<div class="body">
+
+<?php
 
 /* if there is an id in the URL, pull that specific entry */
 if( !empty( $tour ) ) {
@@ -64,23 +82,6 @@ if( !empty( $tour ) ) {
 	if( !empty( $tourPicture1 ) || !empty( $tourPicture2 ) || !empty( $tourPicture3 ) ) {
 	
 	?>
-	
-	<script type="text/javascript">
-		$(document).ready(function(){
-
-			$('img.reflect').reflect({height: 0.3, opacity: 0.3});
-			
-			var options = {
-				resizeLgImages:     true,
-				displayNav:         true,
-				handleUnsupported:  'remove',
-				keysClose:          ['c', 27] // c or esc
-			};
-
-			Shadowbox.init(options);
-
-		});
-	</script>
 	
 	<br /><br />
 	<div id="gallery">
