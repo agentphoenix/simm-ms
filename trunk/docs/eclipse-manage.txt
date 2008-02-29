@@ -1,4 +1,4 @@
-Last Update: 2008.02.28 1746 EST
+Last Update: 2008.02.29 1020 EST
 
 IN PROGRESS
 =====
@@ -76,6 +76,8 @@ IN QUEUE
 #	Departmental databases
 
 #	Add CC ability for private messages
+
+#	Ability to specify more options for the Neptune arrow graphic
 
 COMPLETED
 =====
