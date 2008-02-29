@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-02-28 1620 EST
+Last Modified: 2008-02-29 1018 EST
 **/
 
 /*
@@ -253,7 +253,7 @@ VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library u
 ( '2', 'jQuery UI', '1.0', 'http://ui.jquery.com/', 'Tabs throughout the system', 'framework/js/ui.tabs.js;skins/[your skin]/style-ui.tabs.css' ),
 ( '3', 'clickMenu', '0.1.6', 'http://p.sohei.org/jquery-plugins/clickmenu/', 'Customizable user menu', 'framework/js/clickmenu.js;skins/[your skin]/style-clickmenu.css' ),
 ( '4', 'Link Scrubber', '1.0', 'http://www.crismancich.de/jquery/plugins/linkscrubber/', 'Remove dotted border around clicked links in Firefox', 'framework/js/linkscrubber.js' ),
-( '5', 'Shadowbox', '1.0b4', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
+( '5', 'Shadowbox', '1.0', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
 ( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs on the activation page', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
 ( '7', 'Reflect jQuery', '1.0', 'http://plugins.jquery.com/project/reflect', 'Dynamic image reflection on tour pages', 'framework/js/reflect.js' ),
 ( '8', 'jQuery.Preload', '1.0.4', 'http://flesler.blogspot.com/search/label/jQuery.Preload', 'Ability to pre-load images, specifically for skin elements', 'framework/js/preload.js' )" );
