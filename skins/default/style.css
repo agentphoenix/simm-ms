@@ -8,28 +8,49 @@ File: skins/default/style.css
 Purpose: Stylesheet that controls the look and feel of the site
 
 Skin Version: 2.5
-Last Modified: 2008-02-20 1412 EST
+Last Modified: 2008-03-03 1730 EST
 **/
 
 /*
-	import the different other stylesheets
-	these imports are ESSENTIAL for the system to be displayed correctly
+|---------------------------------------------------------------
+| INCLUDED STYLESHEETS
+|---------------------------------------------------------------
+|
+| The following stylsheets are required for the system to be displayed
+| properly.
+|
 */
-@import url( "style-login.css" ); /* the login styles */
-@import url( "style-ui.tabs.css" ); /* jQuery-UI tabs stylesheet */
-@import url( "style-clickmenu.css" ); /* personalized menu styles */
-@import url( "style-misc.css" ); /* miscellaneous styles */
+@import url( "style-misc.css" );
+@import url( "style-login.css" );
+@import url( "style-ui.tabs.css" );
+@import url( "style-clickmenu.css" );
 
+/*
+|---------------------------------------------------------------
+| GLOBAL STYLES
+|---------------------------------------------------------------
+|
+| Styles that are global to the HTML or BODY
+|
+*/
 body {
-	background-color: #000;
-	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
-	font-size: .8em;
-	color: #fff;
 	margin: 0;
 	padding: 0;
+	
+	background-color: #000;
+	color: #fff;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+	font-size: 12px;
 }
 
-/* styles that control the main block containing the rest of the system */
+/*
+|---------------------------------------------------------------
+| CONTAINER STYLES
+|---------------------------------------------------------------
+|
+| The container holds the entire content of the site.
+|
+*/
 #container {
 	width: 100%;
 	margin: auto;
@@ -44,6 +65,7 @@ body {
 	width: 100%;
 	height: 110px;
 	margin: auto;
+	
 	border-top: 1px solid #111;
 	border-bottom: 1px solid #111;
 	background: #090909 url( 'images/header.png' ) no-repeat top left;
@@ -51,13 +73,21 @@ body {
 
 
 
-/** main navigation **/
+/*
+|---------------------------------------------------------------
+| MAIN NAVIGATION STYLES
+|---------------------------------------------------------------
+|
+| Styles controlling the main navigation of the system.
+|
+*/
 #container .mainNav {
-	background: #000;
 	height: 25px;
-	line-height: 25px; /* ie doesn't like line height, so we have to use the height as well */
+	line-height: 25px;
 	margin: .5em 0 0 2em;
 	width: 60%;
+	
+	background: #000;
 }
 #nav-main {
 	display: inline;
@@ -69,37 +99,54 @@ body {
 	display: inline;
 	list-style: none;
 }
-#nav-main li.spacer {
-	padding: 2px 0 0 0;
-}
+#nav-main li.spacer { padding: 2px 0 0 0; }
 #nav-main li a {
 	font-weight: bold;
 	color: #fff;
 	padding: 0 1em 0 1em;
 }
-#nav-main li a:hover {
-	color: #5b5a4f;
-}
+#nav-main li a:hover { color: #5b5a4f; }
 
 
 
-/* the content of the template */
-#container .content {
-	padding: 0 2em 0 2em;
-}
+/*
+|---------------------------------------------------------------
+| CONTENT STYLES
+|---------------------------------------------------------------
+|
+| Styles that control the content layer of the system (includes
+| the body and side navigation as well)
+|
+*/
+#container .content { padding: 0 2em 0 2em; }
 
-/* the body of the content class where the text is found */
+/*
+|---------------------------------------------------------------
+| BODY STYLES
+|---------------------------------------------------------------
+|
+| Styles that control the body of the system (where all the content is held)
+|
+*/
 #container .content .body {
 	margin-right: 20%;
 	padding: 1em 0 1em 1em;
 }
 
-/* the side navigation menu */
+/*
+|---------------------------------------------------------------
+| SIDE NAVIGATION STYLES
+|---------------------------------------------------------------
+|
+| Styles that control the side navigation
+|
+*/
 #container .content .nav {
 	float: right;
 	width: 18%;
-	font-size: 8.5pt;
 	padding: 1.5em 0 1em 0;
+	
+	font-size: 95%;
 	text-align: right;
 }
 #container .content .nav ul {
@@ -107,51 +154,47 @@ body {
 	margin: 0;
 	padding: .5em .2em 1em 0;
 }
-#container .content .nav ul li {
-	list-style-type: none;
-}
-#container .content .nav a {
-	padding: 0 .5em 0 0;
-}
+#container .content .nav ul li { list-style-type: none; }
+#container .content .nav a { padding: 0 .5em 0 0; }
 
 /* part of the nav menu ... controls the login display */
-#container .content .nav .login a {
-	padding: 0;
-}
+#container .content .nav .login a { padding: 0; }
+
+/* part of the nav menu ... controls the info below the menu */
+#container .content .nav .info { padding: 0 1em 0 2em; }
+#container .content .nav .info .fontLarge { margin: 0 -.5em 0 0; }
+#container .content .nav .info a { margin: 0 -.5em 0 0; }
 
 /*
-	part of the nav menu ... controls the info below the menu
-	that's shown in the main section (latest posts, mission, etc.)
+|---------------------------------------------------------------
+| FOOTER STYLES
+|---------------------------------------------------------------
+|
+| Styles that control the footer
+|
 */
-#container .content .nav .info {
-	padding: 0 1em 0 2em;
-}
-#container .content .nav .info .fontLarge {
-	margin: 0 -.5em 0 0;
-}
-#container .content .nav .info a {
-	margin: 0 -.5em 0 0;
-}
-
-/* the footer */
 #container .footer {
+	clear: both;
+	height: 25px;
+	line-height: 25px;
+	
 	background: #090909;
+	color: #fff;
 	border-top: 1px solid #111;
 	border-bottom: 1px solid #111;
 	text-align: center;
-	clear: both;
-	font-size: .8em;
-	height: 25px;
-	line-height: 25px;
-	color: #fff;
+	font-size: 80%;
 }
 
+/** NEEDS TO COME OUT BEFORE RELEASE! **/
+/*
 #mainNav, #userNav {
-	background: #000;
-	text-align: center;
 	height: 25px;
 	line-height: 25px;
 	width: 100%;
+	
+	background: #000;
+	text-align: center;
 }
 #mainNav ul, #userNav ul {
 	display: inline;
@@ -170,6 +213,4 @@ body {
 	color: #fff;
 	padding: 0 1em 0 1em;
 }
-#mainNav a:hover, #userNav a:hover {
-	color: #5b5a4f;
-}
+#mainNav a:hover, #userNav a:hover { color: #5b5a4f; }*/
