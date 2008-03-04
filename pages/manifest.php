@@ -11,7 +11,7 @@ Purpose: Provides a full listing from the database of the active crew, available
 	positions, and non-playing characters on the simm.
 
 System Version: 2.6.0
-Last Modified: 2008-02-25 1556 EST
+Last Modified: 2008-03-03 2149 EST
 **/
 
 /* define the page class and vars */
@@ -256,11 +256,11 @@ if(isset($display))
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$u_id;?>">
 				
 				<? if($u_loa == 1) { ?>
-					<img src="images/combadge-loa.jpg" border="0" class="image" />
+					<img src="images/combadge-loa.png" border="0" class="image" />
 				<? } elseif($u_loa == 2) { ?>
-					<img src="images/combadge-eloa.jpg" border="0" class="image" />
+					<img src="images/combadge-eloa.png" border="0" class="image" />
 				<? } else { ?>
-					<img src="images/combadge.jpg" border="0" class="image" />
+					<img src="images/combadge.png" border="0" class="image" />
 				<? } ?>
 				</a>
 			</td>
@@ -308,7 +308,7 @@ if(isset($display))
 			</td>
 			<td width="10%" valign="middle">
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$n_id;?>">
-					<img src="images/combadge-npc.jpg" border="0" class="image" />
+					<img src="images/combadge-npc.png" border="0" class="image" />
 				</a>
 			</td>
 		</tr>
