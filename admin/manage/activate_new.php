@@ -146,18 +146,47 @@ if(
 	$getPendingPostsResult = mysql_query( $getPendingPosts );
 	$countPendingPosts = mysql_num_rows( $getPendingPostsResult );
 	
+	/* get pending personal logs */
+	$getPendingLogs = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'pending'";
+	$getPendingLogsResult = mysql_query( $getPendingLogs );
+	$countPendingLogs = mysql_num_rows( $getPendingLogsResult );
+	
+	/* get pending news items */
+	$getPendingNews = "SELECT newsid, newsTitle FROM sms_news WHERE newsStatus = 'pending'";
+	$getPendingNewsResult = mysql_query( $getPendingNews );
+	$countPendingNews = mysql_num_rows( $getPendingNewsResult );
+	
+	/* get pending awards */
+	$getPendingAwards = "SELECT * FROM sms_awards_queue WHERE status = 'pending'";
+	$getPendingAwardsResult = mysql_query( $getPendingAwards );
+	$countPendingAwards = mysql_num_rows( $getPendingAwardsResult );
+	
 	if($debug == 1)
 	{
 		echo "<pre>";
 		print_r($_POST);
 		echo "</pre>";
 	}
+	
+	if($countPendingUsers > 0) {
+		$start = 1;
+	} elseif($countPendingPosts > 0) {
+		$start = 2;
+	} elseif($countPendingLogs > 0) {
+		$start = 3;
+	} elseif($countPendingNews > 0) {
+		$start = 4;
+	} elseif($countPendingAwards > 0) {
+		$start = 5;
+	} else {
+		$start = 1;
+	}
 
 ?>
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#container-1 > ul').tabs();
+		$('#container-1 > ul').tabs(<?php echo $start; ?>);
 		$('.zebra tr:odd').addClass('alt');
 		
 		$("a[rel*=facebox]").click(function() {
@@ -182,9 +211,9 @@ if(
 		<ul>
 			<li><a href="#one"><span>Users (<?=$countPendingUsers;?>)</span></a></li>
 			<li><a href="#two"><span>Mission Posts (<?=$countPendingPosts;?>)</span></a></li>
-			<li><a href="#three"><span>Personal Logs</span></a></li>
-			<li><a href="#four"><span>News Items</span></a></li>
-			<li><a href="#five"><span>Awards</span></a></li>
+			<li><a href="#three"><span>Personal Logs (<?=$countPendingLogs;?>)</span></a></li>
+			<li><a href="#four"><span>News Items (<?=$countPendingNews;?>)</span></a></li>
+			<li><a href="#five"><span>Awards (<?=$countPendingAwards;?>)</span></a></li>
 			<?php if($simmType == "starbase") { ?><li><a href="#six"><span>Docking Requests</span></a></li><?php } ?>
 		</ul>
 	
@@ -259,9 +288,119 @@ if(
 			</table>
 			<?php } /* close counting */ ?>
 		</div>
-		<div id="three" class="ui-tabs-container ui-tabs-hide"></div>
-		<div id="four" class="ui-tabs-container ui-tabs-hide"></div>
-		<div id="five" class="ui-tabs-container ui-tabs-hide"></div>
+		
+		<div id="three" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingLogs < 1 ) { ?>
+				<b class="fontMedium orange">No pending personal logs found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Personal Logs</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="35%">Title</th>
+						<th width="35%">Author</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
+				/* loop through the results and fill the form */
+				while( $pendingLogs = mysql_fetch_assoc( $getPendingLogsResult ) ) {
+					extract( $pendingLogs, EXTR_OVERWRITE );
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingLogs['logTitle'] ); ?></td>
+					<td><? displayAuthors( $pendingLogs['logid'], 'noLink' ); ?></td>
+					<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$pendingLogs['logid'];?>"><b>View Log</b></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingLogs['logid'];?>" myType="log" myAction="delete"><b>Delete</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingLogs['logid'];?>" myType="log" myAction="activate"><b>Activate</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
+		
+		<div id="four" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingNews < 1 ) { ?>
+				<b class="fontMedium orange">No pending news items found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending News Items</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="35%">Title</th>
+						<th width="35%">Author</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
+				/* loop through the results and fill the form */
+				while( $pendingNews = mysql_fetch_assoc( $getPendingNewsResult ) ) {
+					extract( $pendingNews, EXTR_OVERWRITE );
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingNews['newsTitle'] ); ?></td>
+					<td><? displayAuthors( $pendingNews['newsid'], 'noLink' ); ?></td>
+					<td align="center"><a href="<?=$webLocation;?>index.php?page=news&id=<?=$pendingNews['newsid'];?>"><b>View News</b></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="delete"><b>Delete</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="activate"><b>Activate</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
+		
+		<div id="five" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingAwards < 1 ) { ?>
+				<b class="fontMedium orange">No pending award nominations found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Award Nominations</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="30%">Award</th>
+						<th width="25%">Recipient</th>
+						<th width="25%">Nominated By</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
+				/* loop through the results and fill the form */
+				while( $pendingAwards = mysql_fetch_assoc( $getPendingAwardsResult ) ) {
+					extract( $pendingAwards, EXTR_OVERWRITE );
+					
+					$getA = "SELECT * FROM sms_awards WHERE awardid = $pendingAwards[award] LIMIT 1";
+					$getAResult = mysql_query($getA);
+					$award = mysql_fetch_assoc($getAResult);
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $award['awardName'] ); ?></td>
+					<td><? printCrewName( $pendingAwards['nominated'], "rank", "noLink" ); ?></td>
+					<td><? printCrewName( $pendingAwards['crew'], "rank", "noLink" ); ?></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingAwards['id'];?>" myType="award" myAction="deny"><b>Deny</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingAwards['id'];?>" myType="award" myAction="approve"><b>Approve</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
+		
 		<div id="six" class="ui-tabs-container ui-tabs-hide"></div>
 	</div>
 
