@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2008-03-05 1335 EST
+Last Modified: 2008-03-05 1529 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
