@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2008-02-06 1145 EST
+Last Modified: 2008-03-05 1335 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -29,14 +29,30 @@ Included Functions:
 	update_position( $position )
 **/
 
-/* pull in the DB connection variables */
+/*
+|---------------------------------------------------------------
+| DATABASE CONNECTION
+|---------------------------------------------------------------
+|
+| This gets us our connection to the database using the database
+| connection variables set in the variables file.
+|
+*/
 include_once( 'variables.php' );
 
-/* database connection */
 $db = @mysql_connect( $dbServer, $dbUser, $dbPassword ) or die ( "<b>" . $dbErrorMessage . "</b>" );
 mysql_select_db( $dbName, $db ) or die ( "<b>Unable to select the appropriate database.  Please try again later.</b>" );
 
-/* query the globals table */
+/*
+|---------------------------------------------------------------
+| GLOBAL INFORMATION
+|---------------------------------------------------------------
+|
+| We'll need to get all the globals and messages for use throughout
+| the system. In addition, we'll get the system UID and version to
+| use in the system check.
+|
+*/
 $globals = "SELECT globals.*, messages.*, sys.sysuid, sys.sysVersion FROM sms_globals AS globals, sms_messages AS messages, ";
 $globals.= "sms_system AS sys WHERE globals.globalid = '1' AND messages.messageid = '1' AND sys.sysid = '1'";
 $globalsResult = mysql_query( $globals );
@@ -45,11 +61,29 @@ while( $global = mysql_fetch_assoc( $globalsResult ) ) {
 	extract( $global, EXTR_OVERWRITE );
 }
 
-/* define the version number */
+/*
+|---------------------------------------------------------------
+| SYSTEM INFORMATION
+|---------------------------------------------------------------
+|
+| This is system's file version and the system UID. Do not change
+| either of these variables! Doing so WILL cause problems within
+| the system as a whole.
+|
+*/
 $version = "2.6.0";
 $code = $sysuid;
 
-/* define web location, file version, and db version constants */
+/*
+|---------------------------------------------------------------
+| SYSTEM CONSTANTS
+|---------------------------------------------------------------
+|
+| These constants are used throughout the system for various things,
+| though you may find they aren't used consistently throughout. That
+| will be addressed more in Jefferson.
+|
+*/
 define( 'WEBLOC', $webLocation );
 define( 'VER_FILES', $version );
 define( 'VER_DB', $sysVersion );
@@ -58,9 +92,17 @@ define( 'SHIP_PREFIX', $shipPrefix );
 define( 'SHIP_REG', $shipRegistry );
 define( 'SIM_YEAR', $simmYear );
 
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-
+/*
+|---------------------------------------------------------------
+| GLOBAL FUNCTIONS
+|---------------------------------------------------------------
+|
+| The title kinda lies, but moving things around at this stage in
+| the game just would be more of a headache than it's worth. These
+| functions are used in both the authenticated parts as well as the
+| unauthenticated parts of SMS.
+|
+*/
 /**
 	JP Author Function
 **/
@@ -176,7 +218,7 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 			echo "</select>";
 			
 			/*
-				if there are less than 6 array keys, allow a user to add another one
+				if there are less than 8 array keys, allow a user to add another one
 				if there is a second array key, allow a user to delete a user, otherwise don't
 			*/
 			if( $i < 7 ) {
@@ -195,7 +237,7 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 				}
 			}
 			
-			/* as long as $i is under 5, keep adding 1 to it */
+			/* as long as $i is under 7, keep adding 1 to it */
 			if( $i < 7 ) {
 				$i = $i +1;
 			}
@@ -220,10 +262,8 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 **/
 function printCO() {
 	
-	$getCO = "SELECT crew.firstName, crew.lastName, rank.rankName ";
-	$getCO.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-	$getCO.= "WHERE crew.positionid = 1 AND crew.crewType = 'active' ";
-	$getCO.= "AND crew.rankid = rank.rankid LIMIT 1";
+	$getCO = "SELECT crew.firstName, crew.lastName, rank.rankName FROM sms_crew AS crew, sms_ranks AS rank ";
+	$getCO.= "WHERE crew.positionid = 1 AND crew.crewType = 'active' AND crew.rankid = rank.rankid LIMIT 1";
 	$getCOResult = mysql_query( $getCO );
 	$coFetch = mysql_fetch_array( $getCOResult );
 	
@@ -237,10 +277,8 @@ function printCO() {
 **/
 function printXO() {
 	
-	$getXO = "SELECT crew.firstName, crew.lastName, rank.rankName ";
-	$getXO.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-	$getXO.= "WHERE crew.positionid = 2 AND crew.rankid = rank.rankid ";
-	$getXO.= "AND crew.crewType = 'active' LIMIT 1";
+	$getXO = "SELECT crew.firstName, crew.lastName, rank.rankName FROM sms_crew AS crew, sms_ranks AS rank ";
+	$getXO.= "WHERE crew.positionid = 2 AND crew.rankid = rank.rankid AND crew.crewType = 'active' LIMIT 1";
 	$getXOResult = mysql_query( $getXO );
 	$xoFetch = mysql_fetch_array( $getXOResult );
 	
@@ -254,15 +292,11 @@ function printXO() {
 **/
 function printCOEmail() {
 	
-	$getCOEmail = "SELECT email FROM sms_crew WHERE positionid = '1' AND ";
-	$getCOEmail.= "crewType = 'active' LIMIT 1";
+	$getCOEmail = "SELECT email FROM sms_crew WHERE positionid = '1' AND crewType = 'active' LIMIT 1";
 	$getCOEmailResult = mysql_query( $getCOEmail );
+	$email = mysql_fetch_array( $getCOEmailResult );
 	
-	while( $coEmailFetch = mysql_fetch_assoc( $getCOEmailResult ) ) {
-		extract( $coEmailFetch, EXTR_OVERWRITE );
-	}
-	
-	return $email;
+	return $email[0];
 
 }
 /* END FUNCTION */
@@ -272,15 +306,11 @@ function printCOEmail() {
 **/
 function printXOEmail() {
 	
-	$getXOEmail = "SELECT email FROM sms_crew WHERE positionid = '2' AND ";
-	$getXOEmail.= "crewType = 'active' LIMIT 1";
+	$getXOEmail = "SELECT email FROM sms_crew WHERE positionid = '2' AND crewType = 'active' LIMIT 1";
 	$getXOEmailResult = mysql_query( $getXOEmail );
+	$email = mysql_fetch_array( $getXOEmailResult );
 	
-	while( $xoEmailFetch = mysql_fetch_assoc( $getXOEmailResult ) ) {
-		extract( $xoEmailFetch, EXTR_OVERWRITE );
-	}
-	
-	return $email;
+	return $email[0];
 
 }
 /* END FUNCTION */
