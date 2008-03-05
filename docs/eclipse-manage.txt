@@ -1,4 +1,4 @@
-Last Update: 2008.02.29 1020 EST
+Last Update: 2008.03.05 1339 EST
 
 IN PROGRESS
 =====
@@ -52,10 +52,6 @@ IN PROGRESS
 #	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
-
-#	Re-build site options page
-		*	Development: 	IN PROGRESS
-		*	Landing: 		IN PROGRESS
 
 #	HUD windows for creation (missions, ranks, departments, positions, awards, etc.)
 		*	Development:	IN PROGRESS
@@ -121,3 +117,7 @@ X	jQuery-ify departments page to use toggling
 X	Accessing database entries in Neptune
 		*	Development:	COMPLETED
 		*	Landing:		COMPLETED
+
+X	Re-build site options page
+		*	Development: 	COMPLETED
+		*	Landing: 		COMPLETED
