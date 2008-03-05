@@ -53,6 +53,7 @@ include_dom( 'js', 'framework/js/preload.js' );
 /** pull in the CSS files **/
 include_dom( 'css', 'framework/css/shadowbox.css' );
 include_dom( 'css', 'framework/css/facebox.css' );
+include_dom( 'css', 'framework/css/global.css' );
 
 /**
 	Function that toggles checkboxes
