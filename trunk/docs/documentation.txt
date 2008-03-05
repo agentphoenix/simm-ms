@@ -1,0 +1,5 @@
+These items will need to be documented before the release of 2.6.0
+===
+
+#	Ranks management - the rank links at the top require the presence of the <color>-blank.png files
+	for each department/rank pair.
