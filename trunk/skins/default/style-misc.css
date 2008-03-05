@@ -9,7 +9,7 @@ Purpose: Stylesheet that controls several of the miscellaneous items throughout
 	the system
 
 Skin Version: 2.5
-Last Modified: 2008-03-03 1743 EST
+Last Modified: 2008-03-05 1436 EST
 **/
 
 /*
@@ -52,7 +52,7 @@ a:hover.add { color: #70c16e; }
 }
 .fontLarge { font-size: 140%; }
 .fontMedium { font-size: 120%; }
-.fontNormal { font-size: 90%; }
+.fontNormal { font-size: 95%; }
 .fontSmall { font-size: 75%; }
 
 /** bold and case styles **/
