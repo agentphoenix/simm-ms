@@ -222,19 +222,33 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 				if there is a second array key, allow a user to delete a user, otherwise don't
 			*/
 			if( $i < 7 ) {
-				echo "&nbsp;";
-				if( $_GET['id'] ) {
-					echo "<a href='" . WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&add=1&postid=" . $id . "'><img src='" . WEBLOC . "images/add.png' border='0' alt='Add' /></a>";
-				} else {
-					echo "<a href='" . WEBLOC . "admin.php?page=manage&sub=posts&add=1&postid=" . $id . "'><img src='" . WEBLOC . "images/add.png' border='0' alt='Add' /></a>";
-				}
-			} if( array_key_exists( "1", $authorArray ) ) {
 				echo "&nbsp;&nbsp;";
-				if( $_GET['id'] ) {
-					echo "<a href='" . WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&delete=" . $i . "&postid=" . $id . "'><img src='" . WEBLOC . "images/remove.png' border='0' alt='Delete' /></a>";
-				} else {
-					echo "<a href='" . WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&delete=" . $i . "&postid=" . $id . "'><img src='" . WEBLOC . "images/remove.png' border='0' alt='Delete' /></a>";
+				
+				if($_GET['id'])
+				{
+					$href = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&add=1&postid=" . $id;
 				}
+				else
+				{
+					$href = WEBLOC . "admin.php?page=manage&sub=posts&add=1&postid=" . $id;
+				}
+				
+				echo "<a href='" . $href . "' class='add_icon image'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+				
+			} if( array_key_exists( "1", $authorArray ) ) {
+				echo "&nbsp;";
+				
+				if($_GET['id'])
+				{
+					$href2 = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&delete=" . $i . "&postid=" . $id;
+				}
+				else
+				{
+					$href2 = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&delete=" . $i . "&postid=" . $id;
+				}
+				
+				echo "<a href='" . $href2 . "' class='remove_icon image'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+				
 			}
 			
 			/* as long as $i is under 7, keep adding 1 to it */
