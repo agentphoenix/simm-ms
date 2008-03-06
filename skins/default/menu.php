@@ -24,6 +24,7 @@ Last Modified: 2008-01-30 1050 EST
 
 /* create a new instance of the menu class */
 $menu = new Menu;
+$menu->skin = $sessionDisplaySkin;
 
 ?>
 

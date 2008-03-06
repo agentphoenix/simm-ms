@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/cobalt/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
-System Version: 2.5.0
-Last Modified: 2007-04-29 1534 EST
+Skin Version: 1.0
+Last Modified: 2008-03-06 1709 EST
 **/
 
 ?>
@@ -26,6 +26,7 @@ Last Modified: 2007-04-29 1534 EST
 
 /* create a new instance of the menu class */
 $menu = new Menu;
+$menu->skin = $sessionDisplaySkin;
 
 ?>
 
