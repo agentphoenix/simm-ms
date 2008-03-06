@@ -1,4 +1,4 @@
-Last Update: 2008.03.05 1530 EST
+Last Update: 2008.03.06 1628 EST
 
 IN PROGRESS
 =====
@@ -60,26 +60,6 @@ IN PROGRESS
 #	Update skins
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
-
-#	Clean up icons included with SMS
-		*	Remove icons
-				@	update.png
-				@	warning.png
-				@	warning-large.png
-				@	update.png
-				@	fail.png
-				@	feed.png
-				@	launch.png
-				@	messages-unread.png
-				@	saved.png
-				@	notes.png
-		x	Update icons
-				@	combadge.jpg (should be PNG)
-				@	combadge-loa.jpg (should be PNG)
-				@	combadge-eloa.jpg (should be PNG)
-				@	combadge-npc.jpg (should be PNG)
-				@	add.png (gray + color)
-				@	remove.png (gray + color)
 		
 IN QUEUE
 =====
@@ -141,3 +121,23 @@ X	Accessing database entries in Neptune
 X	Re-build site options page
 		*	Development: 	COMPLETED
 		*	Landing: 		COMPLETED
+
+X	Clean up icons included with SMS
+		*	Remove icons
+				@	update.png
+				@	warning.png
+				@	warning-large.png
+				@	update.png
+				@	fail.png
+				@	feed.png
+				@	launch.png
+				@	messages-unread.png
+				@	saved.png
+				@	notes.png
+		*	Update icons
+				@	combadge.jpg (should be PNG)
+				@	combadge-loa.jpg (should be PNG)
+				@	combadge-eloa.jpg (should be PNG)
+				@	combadge-npc.jpg (should be PNG)
+				@	add.png (gray + color)
+				@	remove.png (gray + color)
