@@ -11,11 +11,15 @@ Purpose: Page with the menu class that is called by the skin to build the variou
 	menus used throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2008-02-28 1501 EST
+Last Modified: 2008-03-06 1704 EST
 **/
 
 class Menu
 {
+	var $skin;
+	var $arrow = array(
+		'skin_name' => 'images/skin_arrow.png',
+	);
 	
 	/* function that builds the mainNav */
 	function main() {
@@ -84,13 +88,7 @@ class Menu
 			} /* close the if/else logic */
 
 		} /* close the foreach loop */
-		/*
-		echo "<li class='spacer'>&nbsp;</li>";
-		echo "<li>&nbsp;";
-			$this->user( $sessionCrew );
-		echo "</li>";
-		*/
-		/* close the unordered list */
+		
 		echo "</ul>";
 
 	} /* close the function */
@@ -169,10 +167,20 @@ class Menu
 				} /* close the while loop */
 			
 			} /* close the foreach */
-		
+			
+			/* figure out which arrow image to use */
+			if(!array_key_exists($this->skin, $this->arrow))
+			{
+				$image = 'images/arrow.png';
+			}
+			else
+			{
+				$image = $this->arrow[$this->skin];
+			}
+			
 			/* open the unordered list */
 			echo "<ul id='list'>";
-				echo "<li><img src='images/arrow.png' alt='>>' border='0' />";
+				echo "<li><img src='" . $image . "' alt='>>' border='0' />";
 					echo "<ul class='hidemenu'>";
 		
 					/* loop through each key of the array, evaluate it, then spit it out */
