@@ -60,3 +60,4 @@ Shift
 Slipstream
 Curve
 Nova
+Eclipse
