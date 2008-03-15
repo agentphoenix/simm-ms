@@ -1,4 +1,4 @@
-Last Update: 2008.03.06 1628 EST
+Last Update: 2008.03.15 0118 EST
 
 IN PROGRESS
 =====
@@ -74,6 +74,10 @@ IN QUEUE
 #	Add CC ability for private messages
 
 #	Ability to specify more options for the Neptune arrow graphic
+
+#	Ability for crew to edit their posts and logs
+
+#	Access changes need to filter to all the access pages
 
 COMPLETED
 =====
