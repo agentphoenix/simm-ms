@@ -9,25 +9,26 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/access.php
 Purpose: Page to display all of a user's access levels
 
-System Version: 2.5.2
-Last Modified: 2007-08-08 2151 EST
+System Version: 2.6.0
+Last Modified: 2008-03-15 0119 EST
 **/
 
-/* set the page class */
-$pageClass = "admin";
-$subMenuClass = "user";
-
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['crew'] ) && preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
+if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) )
+{
+	$crew = $_GET['crew'];
+}
+else
+{
 	errorMessageIllegal( "user access level page" );
 	exit();
-} else {
-	/* set the GET variable */
-	$crew = $_GET['crew'];
 }
 
 /* access check */
 if( in_array( "x_access", $sessionAccess ) ) {
+	
+	/* set the page class */
+	$pageClass = "admin";
+	$subMenuClass = "user";
 
 	$getCrewType = "SELECT crewType FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
 	$getCrewTypeResult = mysql_query( $getCrewType );
@@ -133,7 +134,14 @@ if( in_array( "x_access", $sessionAccess ) ) {
 		$otherAccess = explode( ",", $accessOthers );
 
 ?>
-
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.zebra tr:odd').addClass('alt');
+			$('tr.noZebra').removeClass('alt');
+		});
+	</script>
+	
 	<div class="body">
 		
 		<? if( $getType['crewType'] == "npc" ) { ?>
@@ -165,19 +173,17 @@ if( in_array( "x_access", $sessionAccess ) ) {
 		
 		<br /><br />
 		
-		<table>
+		<table class="zebra" cellspacing="0" cellpadding="3">
 			<? foreach( $arrayAccessGroups as $key1 => $value1 ) { ?>
 			<tr>
 				<td class="fontLarge" align="right"><b><?=ucfirst( $value1 );?></b></td>
-				<td></td>
+				<td width="20"></td>
 				<td>
 					<?
 					
 					if( $value1 == "other" ) {} else {
 						if( in_array( $value1, ${$value1.Access} ) ) {
-							echo "<img src='images/update.png' alt='' border='0' />";
-						} else {
-							echo "<img src='images/fail.png' alt='' border='0' />";
+							echo "<img src='images/message-unread-icon.png' alt='' border='0' />";
 						}
 					}
 					
@@ -188,14 +194,12 @@ if( in_array( "x_access", $sessionAccess ) ) {
 			<? foreach( $arrayAccessLevels[$value1] as $key2 => $value2 ) { ?>
 			<tr>
 				<td class="tableCellLabel"><?=( $value2[1] );?></td>
-				<td></td>
+				<td width="20"></td>
 				<td>
 					<?
 					
 					if( in_array( $value2[0], ${$value1.Access} ) ) {
-						echo "<img src='images/update.png' alt='' border='0' />";
-					} else {
-						echo "<img src='images/fail.png' alt='' border='0' />";
+						echo "<img src='images/message-unread-icon.png' alt='' border='0' />";
 					}
 					
 					?>
@@ -203,7 +207,7 @@ if( in_array( "x_access", $sessionAccess ) ) {
 			</tr>
 			<? } ?>
 			
-			<tr>
+			<tr class="noZebra">
 				<td colspan="3" height="20"></td>
 			</tr>
 			<? } /* close the group foreach */ ?>
