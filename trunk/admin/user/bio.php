@@ -10,16 +10,17 @@ File: admin/user/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2007-11-13 2109 EST
+Last Modified: 2008-03-15 0103 EST
 **/
 
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['crew'] ) && preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
+/* do some checking to make sure someone's not trying to do a SQL injection */
+if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) )
+{
+	$crew = $_GET['crew'];
+}
+else {
 	errorMessageIllegal( "user bio page" );
 	exit();
-} else {
-	/* set the GET variable */
-	$crew = $_GET['crew'];
 }
 
 /* get the crew type */
@@ -39,134 +40,107 @@ if(
 	$subMenuClass = "user";
 	$action = $_POST['action_x'];
 
-	if( $action ) {
+	if( isset( $action ) ) {
 	
-		/* define the POST vars */
-		$firstName = addslashes( $_POST['firstName'] );
-		$middleName = addslashes( $_POST['middleName'] );
-		$lastName = addslashes( $_POST['lastName'] );
-		$rank = $_POST['rank'];
-		$position = $_POST['position'];
-		$position2 = $_POST['position2'];
-		$gender = $_POST['gender'];
-		$species = addslashes( $_POST['species'] );
-		$age = $_POST['age'];
-		$image = $_POST['image'];
-		$heightFeet = $_POST['heightFeet'];
-		$heightInches = $_POST['heightInches'];
-		$weight = $_POST['weight'];
-		$eyeColor = addslashes( $_POST['eyeColor'] );
-		$hairColor = addslashes( $_POST['hairColor'] );
-		$physicalDesc = addslashes( $_POST['physicalDesc'] );
-		$personalityOverview = addslashes( $_POST['personalityOverview'] );
-		$strengths = addslashes( $_POST['strengths'] );
-		$ambitions = addslashes( $_POST['ambitions'] );
-		$hobbies = addslashes( $_POST['hobbies'] );
-		$languages = addslashes( $_POST['languages'] );
-		$father = addslashes( $_POST['father'] );
-		$mother = addslashes( $_POST['mother'] );
-		$brothers = addslashes( $_POST['brothers'] );
-		$sisters = addslashes( $_POST['sisters'] );
-		$spouse = addslashes( $_POST['spouse'] );
-		$children = addslashes( $_POST['children'] );
-		$otherFamily = addslashes( $_POST['otherFamily'] );
-		$history = addslashes( $_POST['history'] );
-		$serviceRecord = addslashes( $_POST['serviceRecord'] );
+		$update = "UPDATE sms_crew SET firstName = %s, middleName = %s, lastName = %s, rankid = %d, positionid = %d, positionid2 = %d, ";
+		$update.= "gender = %s, species = %s, age = %d, image = %s, heightFeet = %d, heightInches = %d, weight = %d, eyeColor = %s, ";
+		$update.= "hairColor = %s, physicalDesc = %s, personalityOverview = %s, strengths = %s, ambitions = %s, hobbies = %s, languages = %s, ";
+		$update.= "father = %s, mother = %s, brothers = %s, sisters = %s, spouse = %s, children = %s, otherFamily = %s, history = %s, ";
+		$update.= "serviceRecord = %s WHERE crewid = $crew LIMIT 1";
 		
-		$oldPosition = $_POST['oldPosition'];
-		$oldPosition2 = $_POST['oldPosition2'];
+		$updateCrew = sprintf(
+			$update,
+			escape_string( $_POST['firstName'] ),
+			escape_string( $_POST['middleName'] ),
+			escape_string( $_POST['lastName'] ),
+			escape_string( $_POST['rank'] ),
+			escape_string( $_POST['position'] ),
+			escape_string( $_POST['position2'] ),
+			escape_string( $_POST['gender'] ),
+			escape_string( $_POST['species'] ),
+			escape_string( $_POST['age'] ),
+			escape_string( $_POST['image'] ),
+			escape_string( $_POST['heightFeet'] ),
+			escape_string( $_POST['heightInches'] ),
+			escape_string( $_POST['weight'] ),
+			escape_string( $_POST['eyeColor'] ),
+			escape_string( $_POST['hairColor'] ),
+			escape_string( $_POST['physicalDesc'] ),
+			escape_string( $_POST['personalityOverview'] ),
+			escape_string( $_POST['strengths'] ),
+			escape_string( $_POST['ambitions'] ),
+			escape_string( $_POST['hobbies'] ),
+			escape_string( $_POST['languages'] ),
+			escape_string( $_POST['father'] ),
+			escape_string( $_POST['mother'] ),
+			escape_string( $_POST['brothers'] ),
+			escape_string( $_POST['sisters'] ),
+			escape_string( $_POST['spouse'] ),
+			escape_string( $_POST['children'] ),
+			escape_string( $_POST['otherFamily'] ),
+			escape_string( $_POST['history'] ),
+			escape_string( $_POST['serviceRecord'] )
+		);
 		
-		/* do the update query */
-		$updateCrew = "UPDATE sms_crew SET firstName = '$firstName', middleName = '$middleName', ";
-		$updateCrew.= "lastName = '$lastName', rankid = '$rank', positionid = '$position', positionid2 = '$position2', ";
-		$updateCrew.= "gender = '$gender', species = '$species', age = '$age', image = '$image', heightFeet = '$heightFeet', heightInches = '$heightInches', ";
-		$updateCrew.= "weight = '$weight', eyeColor = '$eyeColor', hairColor = '$hairColor', physicalDesc = '$physicalDesc', ";
-		$updateCrew.= "personalityOverview = '$personalityOverview', strengths = '$strengths', ambitions = '$ambitions', ";
-		$updateCrew.= "hobbies = '$hobbies', languages = '$languages', father = '$father', mother = '$mother', ";
-		$updateCrew.= "brothers = '$brothers', sisters = '$sisters', spouse = '$spouse', children = '$children', ";
-		$updateCrew.= "otherFamily = '$otherFamily', history = '$history', serviceRecord = '$serviceRecord' ";
-		$updateCrew.= "WHERE crewid = '$crew' LIMIT 1";
 		$result = mysql_query( $updateCrew );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
 		
+		/* set the variables */
+		$position = $_POST['position'];
+		$position2 = $_POST['position2'];
+		$oldPosition = $_POST['oldPosition'];
+		$oldPosition2 = $_POST['oldPosition2'];
+		
 		if( $getType['crewType'] == "active" || $getType['crewType'] == "inactive" ) {
 		
-			if( $oldPosition != $position ) {
+			if( $oldPosition != $position && in_array( "u_bio3", $sessionAccess ) ) {
 				
 				/* update the position they're being given */
-				$positionFetch = "SELECT positionid, positionOpen, positionType FROM sms_positions ";
-				$positionFetch.= "WHERE positionid = '$position' LIMIT 1";
-				$positionFetchResult = mysql_query( $positionFetch );
-				$positionX = mysql_fetch_row( $positionFetchResult );
-				$open = $positionX[1];
-				$revised = ( $open - 1 );
-				$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-				$updatePosition.= "WHERE positionid = '$position' LIMIT 1";
-				$updatePositionResult = mysql_query( $updatePosition );
+				update_position( $position, 'give' );
+				update_position( $oldPosition, 'take' );
 				
-				/* if the position is a department head, set the access levels to DH */
-				/* otherwise, set it to standard player */
-				if( $positionX[2] == "senior" ) {
-					$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-					$levelsManage = "manage,m_createcrew,m_npcs1,m_newscat2";
-					$levelsReports = "reports,r_count,r_strikes,r_activity,r_progress,r_milestones";
-					$levelsUser = "user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2";
-					$levelsOther = "";
+				/* get the position type from the database */
+				$getPosType = "SELECT positionType FROM sms_positions WHERE positionid = '$position' LIMIT 1";
+				$getPosTypeResult = mysql_query( $getPosType );
+				$positionType = mysql_fetch_row( $getPosTypeResult );
+				
+				/* set the access levels accordingly */
+				if( $positionType[0] == "senior" ) {
+					$accessID = 3;
 				} else {
-					$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-					$levelsManage = "";
-					$levelsReports = "reports,r_progress,r_milestones";
-					$levelsUser = "user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options";
-					$levelsOther = "";
+					$accessID = 4;
 				}
 				
-				$crewUpdate = "UPDATE sms_crew SET accessPost = '" . $levelsPost . "', accessManage = '" . $levelsManage . "', ";
-				$crewUpdate.= "accessReports = '" . $levelsReport . "', accessUser = '" . $levelsUser . "', ";
-				$crewUpdate.= "accessOthers = '" . $levelsOther . "' WHERE crewid = '" . $crew . "' LIMIT 1";
-				$crewUpdateResult = mysql_query( $crewUpdate );
+				/* pull the default access levels from the db */
+				$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = $accessID LIMIT 1";
+				$getGroupLevelsResult = mysql_query( $getGroupLevels );
+				$groups = mysql_fetch_array( $getGroupLevelsResult );
 				
-				/* optimize the table */
+				$update = "UPDATE sms_crew SET accessPost = %s, accessManage = %s, accessReports = %s, accessUser = %s, accessOthers = %s ";
+				$update.= "WHERE crewid = $crew LIMIT 1";
+				
+				$query = sprintf(
+					$update,
+					escape_string( $groups[1] ),
+					escape_string( $groups[2] ),
+					escape_string( $groups[3] ),
+					escape_string( $groups[4] ),
+					escape_string( $groups[5] )
+				);
+				
+				$crewUpdateResult = mysql_query( $query );
+				
+				/* optimize the tables */
 				optimizeSQLTable( "sms_crew" );
-				
-				/* update the position they had */
-				$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-				$positionFetch.= "WHERE positionid = '$oldPosition' LIMIT 1";
-				$positionFetchResult = mysql_query( $positionFetch );
-				$positionX = mysql_fetch_row( $positionFetchResult );
-				$open = $positionX[1];
-				$revised = ( $open + 1 );
-				$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-				$updatePosition.= "WHERE positionid = '$oldPosition' LIMIT 1";
-				$updatePositionResult = mysql_query( $updatePosition );
-				
-				/* optimize the table */
 				optimizeSQLTable( "sms_positions" );
 				
-			} if( $oldPosition2 != $position2 ) {
+			} if( $oldPosition2 != $position2 && in_array( "u_bio3", $sessionAccess ) ) {
 			
-				/* update the second position they're being given */
-				$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-				$positionFetch.= "WHERE positionid = '$position2' LIMIT 1";
-				$positionFetchResult = mysql_query( $positionFetch );
-				$positionX = mysql_fetch_row( $positionFetchResult );
-				$open = $positionX[1];
-				$revised = ( $open - 1 );
-				$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-				$updatePosition.= "WHERE positionid = '$position2' LIMIT 1";
-				$updatePositionResult = mysql_query( $updatePosition );
-				
-				/* update the second position they had */
-				$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-				$positionFetch.= "WHERE positionid = '$oldPosition2' LIMIT 1";
-				$positionFetchResult = mysql_query( $positionFetch );
-				$positionX = mysql_fetch_row( $positionFetchResult );
-				$open = $positionX[1];
-				$revised = ( $open + 1 );
-				$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-				$updatePosition.= "WHERE positionid = '$oldPosition2' LIMIT 1";
-				$updatePositionResult = mysql_query( $updatePosition );
+				/* update the position they're being given */
+				update_position( $position2, 'give' );
+				update_position( $oldPosition2, 'take' );
 				
 				/* optimize the table */
 				optimizeSQLTable( "sms_positions" );
@@ -175,7 +149,7 @@ if(
 		
 		} /* close the crewType check */
 		
-	}
+	} /* close the check for the POST action */
 
 $getCrew = "SELECT * FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
 $getCrewResult = mysql_query( $getCrew );
@@ -230,29 +204,6 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	} else {
 		$type = "Character";
 	}
-	
-	/* define the POST vars */
-	$firstName = stripslashes( $firstName );
-	$middleName = stripslashes( $middleName );
-	$lastName = stripslashes( $lastName );
-	$species = stripslashes( $species );
-	$eyeColor = stripslashes( $eyeColor );
-	$hairColor = stripslashes( $hairColor );
-	$physicalDesc = stripslashes( $physicalDesc );
-	$personalityOverview = stripslashes( $personalityOverview );
-	$strengths = stripslashes( $strengths );
-	$ambitions = stripslashes( $ambitions );
-	$hobbies = stripslashes( $hobbies );
-	$languages = stripslashes( $languages );
-	$father = stripslashes( $father );
-	$mother = stripslashes( $mother );
-	$brothers = stripslashes( $brothers );
-	$sisters = stripslashes( $sisters );
-	$spouse = stripslashes( $spouse );
-	$children = stripslashes( $children );
-	$otherFamily = stripslashes( $otherFamily );
-	$history = stripslashes( $history );
-	$serviceRecord = stripslashes( $serviceRecord );
 
 ?>
 
@@ -438,8 +389,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 				<td class="tableCellLabel">
 					Image<br />
 					<b class="yellow fontSmall">All images must be no wider than 200 pixels and no taller than 300
-					pixels for the integrity of the image. SMS will automatically crop the image if these guidelines aren't
-					met, sometimes resulting in unwanted positioning.
+					pixels to preserve the SMS skin.</b>
 				</td>
 				<td>&nbsp;</td>
 				<td><input type="text" class="image"  name="image" size="40" value="<?=$image;?>" /></td>
