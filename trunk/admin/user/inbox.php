@@ -19,24 +19,42 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "user";
-	$action = $_POST['action_x'];
-	$box = $_POST['box'];
-	$tab = $_GET['tab'];
-	$send = $_POST['action_send_x'];
-	$reply = $_GET['reply'];
-	$replysubject = $_POST['replysubject'];
+	$result = "";
+	$query = "";
 	
-	if( !isset( $tab ) ) {
+	if( isset( $_GET['id'] ) ) {
+		if( is_numeric( $_GET['id'] ) ) {
+			$id = $_GET['id'];
+		} else {
+			errorMessageIllegal( "send private message page" );
+			exit();
+		}
+	}
+	
+	if( isset( $_POST['action_x'] ) ) {
+		$action = $_POST['action_x'];
+	}
+	
+	if( isset( $_POST['box'] ) ) {
+		$box = $_POST['box'];
+	}
+	
+	if( isset( $_GET['tab'] ) && is_numeric( $_GET['tab'] ) ) {
+		$tab = $_GET['tab'];
+	} else {
 		$tab = 1;
 	}
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "send private message page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$id = $_GET['id'];
+	if( isset( $_POST['action_send_x'] ) ) {
+		$send = $_POST['action_send_x'];
+	}
+	
+	if( isset( $_GET['reply'] ) ) {
+		$reply = $_GET['reply'];
+	}
+	
+	if( isset( $_POST['replysubject'] ) ) {
+		$replysubject = $_POST['replysubject'];
 	}
 	
 	if( isset( $send ) ) {
@@ -46,20 +64,8 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 		$pmContent = addslashes( $_POST['pmContent'] );
 		$pmRecipient = $_POST['pmRecipient'];
 		
-		if( !isset( $_GET['reply'] ) ) {
-			$getLastConvo = "SELECT conversationId from sms_privatemessages ORDER BY conversationId DESC";
-			$getLastConvoR = mysql_query( $getLastConvo );
-			$lastConvo = mysql_fetch_array( $getLastConvoR );
-			$conversation = $lastConvo[0] + 1;
-		} else {
-			$getLastConvo = "SELECT conversationId from sms_privatemessages WHERE pmid = '$reply'";
-			$getLastConvoR = mysql_query( $getLastConvo );
-			$lastConvo = mysql_fetch_array( $getLastConvoR );
-			$conversation = $lastConvo[0];
-		}
-		
-		$query = "INSERT INTO sms_privatemessages ( pmid, pmRecipient, pmAuthor, pmContent, pmDate, pmSubject, pmStatus, conversationId ) ";
-		$query.= "VALUES ( '', '$pmRecipient', '$sessionCrewid', '$pmContent', UNIX_TIMESTAMP(), '$pmSubject', 'unread', '$conversation' )";
+		$query = "INSERT INTO sms_privatemessages ( pmid, pmRecipient, pmAuthor, pmContent, pmDate, pmSubject, pmStatus ) ";
+		$query.= "VALUES ( '', '$pmRecipient', '$sessionCrewid', '$pmContent', UNIX_TIMESTAMP(), '$pmSubject', 'unread' )";
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
@@ -350,7 +356,7 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 						<td>
 							<?
 			
-							if( !$id ) {
+							if( !isset( $id ) ) {
 								print_active_crew_select_menu( "pm", "", "", "", "" );
 							} else {
 								printCrewName( $id, "rank", "noLink" );
