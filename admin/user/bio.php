@@ -10,7 +10,7 @@ File: admin/user/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-03-15 0103 EST
+Last Modified: 2008-03-16 0118 EST
 **/
 
 /* do some checking to make sure someone's not trying to do a SQL injection */
@@ -38,7 +38,13 @@ if(
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "user";
-	$action = $_POST['action_x'];
+	$result = "";
+	$updateCrew = "";
+	
+	if( isset( $_POST['action_x'] ) )
+	{
+		$action = $_POST['action_x'];
+	}
 
 	if( isset( $action ) ) {
 	
