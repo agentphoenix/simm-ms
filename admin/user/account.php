@@ -10,60 +10,136 @@ File: admin/user/account.php
 Purpose: Page with the account settings for a user
 
 System Version: 2.6.0
-Last Modified: 2008-02-09 2350 EST
+Last Modified: 2008-03-16 0116 EST
 **/
 
 /* set the page class */
 $pageClass = "admin";
 $subMenuClass = "user";
-$action = $_POST['action_x'];
-$crew = $_GET['crew'];
+$result = "";
+$updateAcct = "";
+
+/* set the POST action */
+if( isset( $_POST['action_x'] ) )
+{
+	$action = $_POST['action_x'];
+}
+
+/* make sure the CREW variable is a number */
+if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) )
+{
+	$crew = $_GET['crew'];
+}
+else
+{
+	errorMessageIllegal( "crew account page" );
+	exit();
+}
 
 /* access check */
 if(
 	( $sessionCrewid == $crew && in_array( "u_account1", $sessionAccess ) ) ||
 	( in_array( "u_account2", $sessionAccess ) )
 ) {
-
+	
 	if( isset( $action ) ) {
 		
-		/* if the GET variable isn't a number, display a critical error */
-		if( preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
-			errorMessageIllegal( "crew account page" );
-			exit();
-		} else {
+		/* pull the current password hash */
+		$getPassword = "SELECT password, username, realName, email FROM sms_crew WHERE crewid = '$_GET[crew]' LIMIT 1";
+		$getPasswordResult = mysql_query( $getPassword );
+		$fetchPassword = mysql_fetch_array( $getPasswordResult );
+		
+		if( isset( $_POST['currentPassword'] ) ) {
 			
-			/* pull the current password hash */
-			$getPassword = "SELECT password, username, realName, email FROM sms_crew WHERE crewid = '$_GET[crew]' LIMIT 1";
-			$getPasswordResult = mysql_query( $getPassword );
-			$fetchPassword = mysql_fetch_array( $getPasswordResult );
+			if( $_POST['currentPassword'] == "" ) {
+				/*
+				if the current password is empty, check to make sure they're
+				not trying to update username, real name, or email, otherwise
+				run the update query
+				*/
+				if( $_POST['username'] != $fetchPassword[1] ) {
+					$updateAcct = "foo username";
+					$result = "";
+				} elseif( $_POST['realName'] != $fetchPassword[2] ) {
+					$updateAcct = "foo real name";
+					$result = "";
+				} elseif( $_POST['email'] != $fetchPassword[3] ) {
+					$updateAcct = "foo email";
+					$result = "";
+				} else {
+					$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, emailNews = %s, aim = %s, ";
+					$update.= "msn = %s, yim = %s, icq = %s, loa = %s, crewType = %s, moderatePosts = %s, moderateLogs = %s, ";
+					$update.= "moderateNews = %s WHERE crewid = $crew LIMIT 1";
+					
+					$updateAcct = sprintf(
+						$update,
+						escape_string( $_POST['contactInfo'] ),
+						escape_string( $_POST['emailPosts'] ),
+						escape_string( $_POST['emailLogs'] ),
+						escape_string( $_POST['emailNews'] ),
+						escape_string( $_POST['aim'] ),
+						escape_string( $_POST['msn'] ),
+						escape_string( $_POST['yim'] ),
+						escape_string( $_POST['icq'] ),
+						escape_string( $_POST['loa'] ),
+						escape_string( $_POST['crewType'] ),
+						escape_string( $_POST['moderatePosts'] ),
+						escape_string( $_POST['moderateLogs'] ),
+						escape_string( $_POST['moderateNews'] )
+					);
+					
+					$result = mysql_query( $updateAcct );
+				}
+			} elseif( $_POST['currentPassword'] > "" ) {
 			
-			if( isset( $_POST['currentPassword'] ) ) {
-				
-				if( $_POST['currentPassword'] == "" ) {
+				if( md5( $_POST['currentPassword'] ) == $fetchPassword[0] ) {
 					/*
-					if the current password is empty, check to make sure they're
-					not trying to update username, real name, or email, otherwise
-					run the update query
+					if what the user provided matches what's in the database, then
+					either change their password (if they want that) or update their
+					personal information
 					*/
-					if( $username != $fetchPassword[1] ) {
-						$updateAcct = "foo username";
-						$result = "";
-					} elseif( $realName != $fetchPassword[2] ) {
-						$updateAcct = "foo real name";
-						$result = "";
-					} elseif( $email != $fetchPassword[3] ) {
-						$updateAcct = "foo email";
-						$result = "";
-					} else {
-						$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, ";
-						$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
-						$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
-						$update.= "WHERE crewid = '$crew' LIMIT 1";
-						
+					if( isset( $_POST['changePass'] ) ) {
+						$update = "UPDATE sms_crew SET username = %s, password = %s, contactInfo = %s, realName = %s, email = %s, ";
+						$update.= "emailPosts = %s, emailLogs = %s, emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
+						$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s WHERE crewid = $crew LIMIT 1";
+
 						$updateAcct = sprintf(
 							$update,
+							escape_string( $_POST['username'] ),
+							escape_string( md5( $_POST['newPassword'] ) ),
 							escape_string( $_POST['contactInfo'] ),
+							escape_string( $_POST['realName'] ),
+							escape_string( $_POST['email'] ),
+							escape_string( $_POST['emailPosts'] ),
+							escape_string( $_POST['emailLogs'] ),
+							escape_string( $_POST['emailNews'] ),
+							escape_string( $_POST['aim'] ),
+							escape_string( $_POST['msn'] ),
+							escape_string( $_POST['yim'] ),
+							escape_string( $_POST['icq'] ),
+							escape_string( $_POST['loa'] ),
+							escape_string( $_POST['crewType'] ),
+							escape_string( $_POST['moderatePosts'] ),
+							escape_string( $_POST['moderateLogs'] ),
+							escape_string( $_POST['moderateNews'] )
+						);
+							
+						if( $_POST['newPassword'] == $_POST['passwordConfirm'] ) {
+							$result = mysql_query( $updateAcct );
+						} else {
+							$result = "";
+						}
+					} elseif( !isset( $_POST['changePass'] ) ) {
+						$update = "UPDATE sms_crew SET username = %s, contactInfo = %s, realName = %s, email = %s, emailPosts = %s, ";
+						$update.= "emailLogs = %s, emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, crewType = %s, ";
+						$update.= "moderatePosts = %s, moderateLogs = %s, moderateNews = %s WHERE crewid = $crew LIMIT 1";
+
+						$updateAcct = sprintf(
+							$update,
+							escape_string( $_POST['username'] ),
+							escape_string( $_POST['contactInfo'] ),
+							escape_string( $_POST['realName'] ),
+							escape_string( $_POST['email'] ),
 							escape_string( $_POST['emailPosts'] ),
 							escape_string( $_POST['emailLogs'] ),
 							escape_string( $_POST['emailNews'] ),
@@ -80,124 +156,47 @@ if(
 						
 						$result = mysql_query( $updateAcct );
 					}
-				} elseif( $_POST['currentPassword'] > "" ) {
-				
-					if( $fetchPassword[0] == $currentPassword ) {
-						/*
-						if what the user provided matches what's in the database, then
-						either change their password (if they want that) or update their
-						personal information
-						*/
-						if( $_POST['changePass'] == "y" ) {
-							$update = "UPDATE sms_crew SET username = %s, password = %s, contactInfo = %s, ";
-							$update.= "realName = %s, email = %s, emailPosts = %s, emailLogs = %s, ";
-							$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
-							$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
-							$update.= "WHERE crewid = '$crew' LIMIT 1";
-
-							$updateAcct = sprintf(
-								$update,
-								escape_string( $_POST['username'] ),
-								escape_string( $_POST['newPassword'] ),
-								escape_string( $_POST['contactInfo'] ),
-								escape_string( $_POST['realName'] ),
-								escape_string( $_POST['email'] ),
-								escape_string( $_POST['emailPosts'] ),
-								escape_string( $_POST['emailLogs'] ),
-								escape_string( $_POST['emailNews'] ),
-								escape_string( $_POST['aim'] ),
-								escape_string( $_POST['msn'] ),
-								escape_string( $_POST['yim'] ),
-								escape_string( $_POST['icq'] ),
-								escape_string( $_POST['loa'] ),
-								escape_string( $_POST['crewType'] ),
-								escape_string( $_POST['moderatePosts'] ),
-								escape_string( $_POST['moderateLogs'] ),
-								escape_string( $_POST['moderateNews'] )
-							);
-								
-							if( $newPassword == $passwordConfirm ) {
-								$result = mysql_query( $updateAcct );
-							} else {
-								$result = "";
-							}
-						} if( empty( $changePass ) ) {
-							$update = "UPDATE sms_crew SET username = %s, contactInfo = %s, ";
-							$update.= "realName = %s, email = %s, emailPosts = %s, emailLogs = %s, ";
-							$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
-							$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
-							$update.= "WHERE crewid = '$crew' LIMIT 1";
-
-							$updateAcct = sprintf(
-								$update,
-								escape_string( $_POST['username'] ),
-								escape_string( $_POST['contactInfo'] ),
-								escape_string( $_POST['realName'] ),
-								escape_string( $_POST['email'] ),
-								escape_string( $_POST['emailPosts'] ),
-								escape_string( $_POST['emailLogs'] ),
-								escape_string( $_POST['emailNews'] ),
-								escape_string( $_POST['aim'] ),
-								escape_string( $_POST['msn'] ),
-								escape_string( $_POST['yim'] ),
-								escape_string( $_POST['icq'] ),
-								escape_string( $_POST['loa'] ),
-								escape_string( $_POST['crewType'] ),
-								escape_string( $_POST['moderatePosts'] ),
-								escape_string( $_POST['moderateLogs'] ),
-								escape_string( $_POST['moderateNews'] )
-							);
-							
-							$result = mysql_query( $updateAcct );
-						}
-					} else {
-						/*
-						if what the user provided doesn't match what's in the database,
-						then error out
-						*/
-						$updateAcct = "foo bad password";
-						$result = "";
-					}
-					
+				} else {
+					/* if what the user provided doesn't match what's in the database, then error out */
+					$updateAcct = "Bad password!";
+					$result = "";
 				}
 				
-			} else {
-				/* if someone is trying to update another person's account, then do it */
-				$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, ";
-				$update.= "emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
-				$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s, ";
-				$update.= "WHERE crewid = '$crew' LIMIT 1";
-
-				$updateAcct = sprintf(
-					$update,
-					escape_string( $_POST['contactInfo'] ),
-					escape_string( $_POST['emailPosts'] ),
-					escape_string( $_POST['emailLogs'] ),
-					escape_string( $_POST['emailNews'] ),
-					escape_string( $_POST['aim'] ),
-					escape_string( $_POST['msn'] ),
-					escape_string( $_POST['yim'] ),
-					escape_string( $_POST['icq'] ),
-					escape_string( $_POST['loa'] ),
-					escape_string( $_POST['crewType'] ),
-					escape_string( $_POST['moderatePosts'] ),
-					escape_string( $_POST['moderateLogs'] ),
-					escape_string( $_POST['moderateNews'] )
-				);
-				
-				$result = mysql_query( $updateAcct );
 			}
 			
-			/* optimize the table */
-			optimizeSQLTable( "sms_crew" );
+		} else {
+			/* if someone is trying to update another person's account, then do it */
+			$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, emailNews = %s, aim = %s, msn = %s, ";
+			$update.= "yim = %s, icq = %s, loa = %s, crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s ";
+			$update.= "WHERE crewid = $crew LIMIT 1";
+
+			$updateAcct = sprintf(
+				$update,
+				escape_string( $_POST['contactInfo'] ),
+				escape_string( $_POST['emailPosts'] ),
+				escape_string( $_POST['emailLogs'] ),
+				escape_string( $_POST['emailNews'] ),
+				escape_string( $_POST['aim'] ),
+				escape_string( $_POST['msn'] ),
+				escape_string( $_POST['yim'] ),
+				escape_string( $_POST['icq'] ),
+				escape_string( $_POST['loa'] ),
+				escape_string( $_POST['crewType'] ),
+				escape_string( $_POST['moderatePosts'] ),
+				escape_string( $_POST['moderateLogs'] ),
+				escape_string( $_POST['moderateNews'] )
+			);
+			
+			$result = mysql_query( $updateAcct );
+		}
 		
-		} /* close the regular expression check */
+		/* optimize the table */
+		optimizeSQLTable( "sms_crew" );
 	
 	}
 	
-	$accountInfo = "SELECT username, password, loa, realName, email, aim, yim, msn, icq, ";
-	$accountInfo.= "contactInfo, emailPosts, emailLogs, emailNews, crewType, moderatePosts, moderateLogs, ";
-	$accountInfo.= "moderateNews FROM sms_crew WHERE crewid = '$_GET[crew]' LIMIT 1";
+	$accountInfo = "SELECT username, password, loa, realName, email, aim, yim, msn, icq, contactInfo, emailPosts, emailLogs, ";
+	$accountInfo.= "emailNews, crewType, moderatePosts, moderateLogs, moderateNews FROM sms_crew WHERE crewid = $crew LIMIT 1";
 	$accountInfoResult = mysql_query( $accountInfo );
 	
 	while( $account = mysql_fetch_assoc( $accountInfoResult ) ) {
