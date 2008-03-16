@@ -10,7 +10,7 @@ File: framework/functionsAdmin.php
 Purpose: List of functions specific to the administration control panel
 
 System Version: 2.6.0
-Last Modified: 2008-02-07 0934 EST
+Last Modified: 2008-03-16 0133 EST
 
 Included Functions:
 	printCrewName( $crewid, $rank, $link )
@@ -39,7 +39,7 @@ function printCrewName( $crewid, $rank, $link ) {
 			if( $link == "noLink" ) {
 				echo stripslashes( $firstName . " " . $lastName );
 			} elseif( $link == "link" ) {
-				echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $userFetchArray['crewid'] . "'>";
+				echo "<a href='" . WEBLOC . "index.php?page=bio&crew=" . $userFetchArray['crewid'] . "'>";
 				echo stripslashes( $firstName . " " . $lastName );
 				echo "</a>";
 			}
@@ -59,7 +59,7 @@ function printCrewName( $crewid, $rank, $link ) {
 			if( $link == "noLink" ) {
 				echo stripslashes( $rankName . " " . $firstName . " " . $lastName );
 			} elseif( $link == "link" ) {
-				echo "<a href='" . $webLocation . "index.php?page=bio&crew=" . $userFetchArray['crewid'] . "'>";
+				echo "<a href='" . WEBLOC . "index.php?page=bio&crew=" . $userFetchArray['crewid'] . "'>";
 				echo stripslashes( $rankName . " " . $firstName . " " . $lastName );
 				echo "</a>";
 			}
@@ -173,7 +173,7 @@ function checkPendings( $accessLevel, $simmType ) {
 	) {
 		
 		echo "<div class='update'>";
-		echo "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='warning' style='float:left; padding: 0 6px 0 0;' />";
+		echo "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='warning' style='float:left; padding: 0 6px 0 0;' />";
 		echo "<span class='fontTitle'>Pending Items</span><br /><br />";
 		echo "There " . $pendings . " [ ";
 		
@@ -222,7 +222,7 @@ function checkPendings( $accessLevel, $simmType ) {
 			
 		}
 		
-		 echo " ] awaiting moderation. Please go to the <a href='" . $webLocation . "admin.php?page=manage&sub=activate'>activation page</a> to view activation options.";
+		 echo " ] awaiting moderation. Please go to the <a href='" . WEBLOC . "admin.php?page=manage&sub=activate'>activation page</a> to view activation options.";
 		
 		echo "</div>";
 		echo "<br />";
@@ -277,7 +277,7 @@ function checkSMSVersion( $version ) {
 	if( $version < $rssVersion && $dbVersion['sysVersion'] < $rssVersion ) {
 		echo "<div class='update'>";
 		
-		echo "<img src='" . $webLocation . "images/feed.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+		echo "<img src='" . WEBLOC . "images/feed.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 		echo "<span class='fontTitle'>SMS Update Available</span><br /><br />";
 		echo "SMS " . $rssVersion . " is now available.<br /><br />";
 		
@@ -290,7 +290,7 @@ function checkSMSVersion( $version ) {
 	} if( $dbVersion['sysVersion'] > $version && $dbVersion['sysVersion'] == $rssVersion ) {
 		echo "<div class='update'>";
 		
-		echo "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+		echo "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 		echo "<span class='fontTitle'>SMS Update Warning</span><br /><br />";
 		echo "Your database is running SMS version " . $dbVersion['sysVersion'] . ", however, your SMS files are running version " . $version . " and need to be updated. Please upload the correct files before continuing. If you do not update your files and database, the new version of SMS will not work correctly!<br /><br />";
 		
@@ -308,10 +308,10 @@ function checkSMSVersion( $version ) {
 		
 		echo "<div class='update'>";
 		
-		echo "<img src='" . $webLocation . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+		echo "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 		echo "<span class='fontTitle'>SMS Update Warning</span><br /><br />";
 		echo "Your SMS files are running SMS version " . $version . ", however, your database is running version " . $dbVersion['sysVersion'] . " and needs to be updated. Please use the link below to finish your update. If you do not update your files and database, the new version of SMS will not work correctly!<br /><br />";
-		echo "<a href='" . $webLocation . "update.php?version=" . $urlVersion . "'>Update SMS Database</a>";
+		echo "<a href='" . WEBLOC . "update.php?version=" . $urlVersion . "'>Update SMS Database</a>";
 		
 		echo "</div>";
 		echo "<br />";
@@ -366,7 +366,7 @@ function checkSavedPosts( $crew, $access ) {
 	if( $count > "0" ) {
 		echo "<br />";
 		echo "<div class='update'>";
-			echo "<img src='" . $webLocation . "images/saved.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+			echo "<img src='" . WEBLOC . "images/saved.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 			echo "<span class='fontTitle'>" . $count . " Saved " . ucwords( $countPlural ) . "</span>";
 
 			echo "<br /><br />";
@@ -381,7 +381,7 @@ function checkSavedPosts( $crew, $access ) {
 					extract( $postFetch, EXTR_OVERWRITE );
 					
 					echo "<tr>";
-						echo "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=post&sub=mission&id=" . $postFetch['postid'] . "'>";
+						echo "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=post&sub=mission&id=" . $postFetch['postid'] . "'>";
 						
 						if( !empty( $postFetch['postTitle'] ) ) {
 							echo $postFetch['postTitle'];
@@ -408,11 +408,11 @@ function checkSavedPosts( $crew, $access ) {
 						
 						if( $postSave > 0 ) {
 							if( $postSave == $crew ) { } else {
-								echo "<img src='" . $webLocation . "images/message-unread-icon.png' border='0' alt='' /> &nbsp;";
+								echo "<img src='" . WEBLOC . "images/message-unread-icon.png' border='0' alt='' /> &nbsp;";
 							}
 						}
 						
-						echo "<a href='" . $webLocation . "admin.php?page=post&sub=jp&id=" . $jpFetch['postid'] . "'>";
+						echo "<a href='" . WEBLOC . "admin.php?page=post&sub=jp&id=" . $jpFetch['postid'] . "'>";
 						
 						if( !empty( $jpFetch['postTitle'] ) ) {
 							echo $jpFetch['postTitle'];
@@ -435,7 +435,7 @@ function checkSavedPosts( $crew, $access ) {
 					extract( $logFetch, EXTR_OVERWRITE );
 
 					echo "<tr>";
-						echo "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=post&sub=log&id=" . $logFetch['logid'] . "'>";
+						echo "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=post&sub=log&id=" . $logFetch['logid'] . "'>";
 						
 						if( !empty( $logFetch['logTitle'] ) ) {
 							echo $logFetch['logTitle'];
@@ -458,7 +458,7 @@ function checkSavedPosts( $crew, $access ) {
 					extract( $newsFetch, EXTR_OVERWRITE );
 
 					echo "<tr>";
-						echo "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=post&sub=news&id=" . $newsFetch['newsid'] . "'>";
+						echo "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=post&sub=news&id=" . $newsFetch['newsid'] . "'>";
 						
 						if( !empty( $newsFetch['newsTitle'] ) ) {
 							echo $newsFetch['newsTitle'];
@@ -527,7 +527,7 @@ function checkUnreadMessages( $crew ) {
 	if( $countMessagesFinal > "0" ) {
 		echo "<br />";
 		echo "<div class='update'>";
-			echo "<img src='" . $webLocation . "images/messages-unread.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
+			echo "<img src='" . WEBLOC . "images/messages-unread.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
 			echo "<span class='fontTitle'>" . $countMessagesFinal . " Unread Private " . ucwords( $countPlural ) . "</span>";
 
 			echo "<br /><br />";
@@ -537,7 +537,7 @@ function checkUnreadMessages( $crew ) {
 					extract( $msgFetch, EXTR_OVERWRITE );
 					
 					echo "<tr>";
-						echo "<td class='fontNormal'><a href='" . $webLocation . "admin.php?page=user&sub=message&id=" . $msgFetch['pmid'] . "'>";
+						echo "<td class='fontNormal'><a href='" . WEBLOC . "admin.php?page=user&sub=message&id=" . $msgFetch['pmid'] . "'>";
 						
 						if( !empty( $msgFetch['pmSubject'] ) ) {
 							echo $msgFetch['pmSubject'];
@@ -553,7 +553,7 @@ function checkUnreadMessages( $crew ) {
 			echo "</table>";
 
 			echo "<br />";
-			echo "<a href='" . $webLocation . "admin.php?page=user&sub=inbox'>Go to Inbox &raquo;</a>";
+			echo "<a href='" . WEBLOC . "admin.php?page=user&sub=inbox'>Go to Inbox &raquo;</a>";
 			
 		echo "</div>";
 	}
