@@ -10,7 +10,7 @@ File: pages/coc.php
 Purpose: Page to display the chain of command
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 0955 EST
+Last Modified: 2008-03-16 0049 EST
 **/
 
 /* define the page class */
@@ -71,7 +71,7 @@ if( isset( $sessionCrewid ) ) {
 			</td>
 			<td width="130"><center><img src="<?=$webLocation . 'images/ranks/' . $rankSet . '/' . $rankImage;?>" alt="rank image" /></center></td>
 			<td width="40%"><font class="fontSmall">
-				<b><? printText( $rankName . " " . $firstName . " " . $middleName . " " . $lastName ); ?></b><br />
+				<b><? printText( $rankName . " " . $firstName . " " . $lastName ); ?></b><br />
 				<? printText( $species . " " . $gender ); ?>
 			</td>
 			<td width="37" align="center">
