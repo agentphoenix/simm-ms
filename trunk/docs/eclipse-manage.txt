@@ -1,4 +1,4 @@
-Last Update: 2008.03.15 0118 EST
+Last Update: 2008.03.16 0051 EST
 
 IN PROGRESS
 =====
@@ -9,7 +9,11 @@ IN PROGRESS
 #	Take care of Apache errors throughout the system
 		*	Development: 	IN PROGRESS
 		*	Landing: 		IN PROGRESS
-				@	pages/bio.php - pages/join.php
+				x	/pages
+				@	/admin/manage
+				@	/admin/post
+				@	/admin/reports
+				@	/admin/user
 						
 #	Tab content immediately available
 		*	Development: 	COMPLETED
