@@ -10,7 +10,7 @@ File: admin/user/access.php
 Purpose: Page to display all of a user's access levels
 
 System Version: 2.6.0
-Last Modified: 2008-03-15 0119 EST
+Last Modified: 2008-03-16 0054 EST
 **/
 
 if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) )
@@ -182,7 +182,7 @@ if( in_array( "x_access", $sessionAccess ) ) {
 					<?
 					
 					if( $value1 == "other" ) {} else {
-						if( in_array( $value1, ${$value1.Access} ) ) {
+						if( in_array( $value1, ${$value1.'Access'} ) ) {
 							echo "<img src='images/message-unread-icon.png' alt='' border='0' />";
 						}
 					}
@@ -198,7 +198,7 @@ if( in_array( "x_access", $sessionAccess ) ) {
 				<td>
 					<?
 					
-					if( in_array( $value2[0], ${$value1.Access} ) ) {
+					if( in_array( $value2[0], ${$value1.'Access'} ) ) {
 						echo "<img src='images/message-unread-icon.png' alt='' border='0' />";
 					}
 					
