@@ -6,11 +6,11 @@ knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: pages/simm.php
-Purpose: Main page for the simm section
+File: pages/starbase.php
+Purpose: Main page for the starbase section
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 1018 EST
+Last Modified: 2008-03-16 1407 EST
 **/
 
 /* define the page class and vars */
@@ -44,7 +44,7 @@ if( isset( $sessionCrewid ) ) {
 	?>
 	<br /><br />
 	
-	<? printText( $simmMessage ); ?>
+	<? printText( $shipMessage ); ?>
 	<br /><br />
 	
 	<p>
