@@ -12,7 +12,7 @@ Purpose: Page with the class that is called by the system to check for the
 	messages
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1536 EST
+Last Modified: 2008-03-19 1749 EST
 
 Included Classes:
 	QueryCheck
@@ -93,6 +93,7 @@ class QueryCheck
 			'submit' => array( 'submit', 'submitted' ),
 			'deactivate' => array( 'deactivation', 'deactivated' ),
 			'reset' => array( 'reset', 'reset' ),
+			'accept' => array( 'acceptance', 'accepted' ),
 		);
 		
 		/* take the neccessary action based on whether the result of the query is TRUE or FALSE */
