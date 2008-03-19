@@ -3,7 +3,7 @@
 session_start();
 
 if( !isset( $sessionAccess ) ) {
-	$sessionAccess = "";
+	$sessionAccess = false;
 }
 
 if( !is_array( $sessionAccess ) ) {
@@ -22,7 +22,7 @@ if(in_array("x_approve_users", $sessionAccess))
 	
 	/* get the data */
 	$getPendingCrew = "SELECT crewid, firstName, lastName, positionid, rankid ";
-	$getPendingCrew.= "FROM sms_crew WHERE crewid = '$id' LIMIT 1";
+	$getPendingCrew.= "FROM sms_crew WHERE crewid = $id LIMIT 1";
 	$getPendingCrewResult = mysql_query( $getPendingCrew );
 	$pendingArray = mysql_fetch_assoc( $getPendingCrewResult );
 
