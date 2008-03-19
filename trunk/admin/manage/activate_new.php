@@ -10,12 +10,12 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-02-07 1805 EST
+Last Modified: 2008-03-19 1752 EST
 **/
 
-$debug = 0;
+$debug = 1;
 
-if($debug == 1)
+if($debug >= 1)
 {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
@@ -34,6 +34,9 @@ if(
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
+	$action_category = FALSE;
+	$result = FALSE;
+	$query = FALSE;
 	
 	if( isset( $_POST ) )
 	{
@@ -83,10 +86,10 @@ if(
 						escape_string( '' )
 					);
 
-					//$result = mysql_query( $query );
+					$result = mysql_query( $query );
 
 					/* update the position they're being given */
-					//update_position( $position );
+					update_position( $position, 'give' );
 
 					/** EMAIL THE APPROVAL **/
 
@@ -105,13 +108,13 @@ if(
 					$message->message = $acceptMessage;
 					$message->shipName = $shipPrefix . " " . $shipName;
 					$message->player = $action_id;
-					$message->rank = $rank;
-					$message->position = $position;
+					$message->rank = $_POST['rank'];
+					$message->position = $_POST['position'];
 					$message->setArray();
 					$accept = nl2br( stripslashes( $message->changeMessage() ) );
 
 					/* send the email */
-					//mail( $to, $subject, $accept, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					mail( $to, $subject, $accept, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
 					
 					/* optimize the tables */
 					optimizeSQLTable( "sms_crew" );
@@ -119,10 +122,82 @@ if(
 					
 					break;
 				case 'reject':
+					
+					/** EMAIL THE REJECTION **/
+
+					/* set the email author */
+					$userFetch = "SELECT email FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+					$userEmail = mysql_fetch_row( $userFetchResult );
+
+					/* define the variables */
+					$to = $userEmail[0] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Application";
+
+					/* new instance of the replacement class */
+					$message = new MessageReplace;
+					$message->message = $rejectMessage;
+					$message->shipName = $shipPrefix . " " . $shipName;
+					$message->player = $action_id;
+					$message->position = $_POST['position'];
+					$message->setArray();
+					$reject = nl2br( stripslashes( $message->changeMessage() ) );
+
+					/* send the email */
+					mail( $to, $subject, $reject, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					/* delete the record from the db */
+					$query = "DELETE FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+					
+					/* optimize the tables */
+					optimizeSQLTable( "sms_crew" );
+					
 					break;
 			}
 		}
 		if($action_category == 'post' && in_array('x_approve_posts', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'activate':
+					break;
+				case 'delete':
+					break;
+			}
+		}
+		if($action_category == 'log' && in_array('x_approve_logs', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'activate':
+					break;
+				case 'delete':
+					break;
+			}
+		}
+		if($action_category == 'news' && in_array('x_approve_news', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'activate':
+					break;
+				case 'delete':
+					break;
+			}
+		}
+		if($action_category == 'award' && in_array('m_giveaward', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'accept':
+					break;
+				case 'reject':
+					break;
+			}
+		}
+		if($action_category == 'docking' && in_array('x_approve_docking', $sessionAccess))
 		{
 			switch($action_type)
 			{
@@ -161,7 +236,7 @@ if(
 	$getPendingAwardsResult = mysql_query( $getPendingAwards );
 	$countPendingAwards = mysql_num_rows( $getPendingAwardsResult );
 	
-	if($debug == 1)
+	if($debug >= 2)
 	{
 		echo "<pre>";
 		print_r($_POST);
@@ -205,6 +280,17 @@ if(
 </script>
 
 <div class="body">
+	<?php
+	
+	$check = new QueryCheck;
+	$check->checkQuery( $result, $query );
+	
+	if( !empty( $check->query ) ) {
+		$check->message( $action_category, $action_type );
+		$check->display();
+	}
+	
+	?>
 	<span class="fontTitle">Manage Pending Items</span><br /><br />
 
 	<div id="container-1">
