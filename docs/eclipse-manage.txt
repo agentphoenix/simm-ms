@@ -1,4 +1,4 @@
-Last Update: 2008.03.16 0051 EST
+Last Update: 2008.03.19 1801 EST
 
 IN PROGRESS
 =====
@@ -44,6 +44,12 @@ IN PROGRESS
 #	Re-write activation page
 		*	Development:	IN PROGRESS
 		*	Landing:		IN PROGRESS
+				x	Users
+				@	Posts
+				@	Logs
+				@	News
+				@	Awards
+				@	Docking Requests
 
 #	Nominated awards to queue for CO approval
 		*	Development:	IN PROGRESS
@@ -82,6 +88,8 @@ IN QUEUE
 #	Ability for crew to edit their posts and logs
 
 #	Access changes need to filter to all the access pages
+
+#	[BUG] Account page - changing user's crewType to pending doesn't affect the position count
 
 COMPLETED
 =====
