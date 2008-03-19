@@ -29,7 +29,7 @@ if(in_array("x_approve_users", $sessionAccess))
 ?>
 	<h2>Reject Crew Application &ndash; <? printText( $pendingArray['firstName'] . " " . $pendingArray['lastName'] );?></h2>
 	<p>Please specify message you want to be sent to the player regarding their rejection.</p>
-	<p>Rejection messages can now use wild cards for dynamic elements. For instance, using the <strong class="yellow">#rank#</strong> wild card will insert the rank you give them into the email before it is sent. Available wild cards are: <strong>#ship#</strong>, <strong>#position#</strong>, <strong>#player#</strong> (character&rsquo;s name), and <strong>#rank#</strong>.</p>
+	<p>Rejection messages can now use wild cards for dynamic elements. For instance, using the <strong class="yellow">#position#</strong> wild card will insert the position they applied for into the email before it is sent. Available wild cards are: <strong>#ship#</strong>, <strong>#position#</strong>, and <strong>#player#</strong> (character&rsquo;s name).</p>
 	
 	<form method="post" action="">
 		<table>
@@ -46,6 +46,7 @@ if(in_array("x_approve_users", $sessionAccess))
 			<tr>
 				<td colspan="2"></td>
 				<td>
+					<input type="hidden" name="position" value="<?=$pendingArray['positionid'];?>" />
 					<input type="hidden" name="action_id" value="<?=$pendingArray['crewid'];?>" />
 					<input type="hidden" name="action_category" value="user" />
 					<input type="hidden" name="action_type" value="reject" />
