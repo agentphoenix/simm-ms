@@ -29,6 +29,8 @@ if(in_array("x_approve_posts", $sessionAccess))
 	<h2>Activate Pending Mission Post?</h2>
 	<p>Are you sure you want to activate this post?  Once activated, the post will be emailed to the entire crew.</p>
 	
+	<hr size="1" width="100%" />
+	
 	<form method="post" action="">
 		<h3><? printText( $pendingArray['postTitle'] );?></h3>
 		<h4>By <? displayAuthors( $pendingArray['postid'], 'noLink' );?></h4>
