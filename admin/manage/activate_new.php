@@ -10,7 +10,7 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-03-19 1752 EST
+Last Modified: 2008-03-20 1713 EST
 **/
 
 $debug = 1;
@@ -38,12 +38,19 @@ if(
 	$result = FALSE;
 	$query = FALSE;
 	
-	if( isset( $_POST ) )
+	if(isset($_POST))
 	{
 		/* define the POST variables */
 		foreach($_POST as $key => $value)
 		{
 			$$key = $value;
+		}
+		
+		/* protecting against SQL injection */
+		if(isset($action_id) && !is_numeric($action_id))
+		{
+			$action_id = FALSE;
+			exit();
 		}
 		
 		if($action_category == 'user' && in_array('x_approve_users', $sessionAccess))
@@ -162,8 +169,56 @@ if(
 			switch($action_type)
 			{
 				case 'activate':
+					
+					$query = "UPDATE sms_posts SET postStatus = 'activated' WHERE postid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					 /* optimize the table */
+					optimizeSQLTable( "sms_posts" );
+
+					/** EMAIL THE POST **/
+
+					$getPostContents = "SELECT * FROM sms_posts WHERE postid = $action_id LIMIT 1";
+					$getPostContentsResult = mysql_query( $getPostContents );
+					$fetchPost = mysql_fetch_assoc( $getPostContentsResult );
+
+					/* set the email author */
+					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
+					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "crew.crewid = '$fetchPost[postAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+
+					while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
+						extract( $userFetchArray, EXTR_OVERWRITE );
+					}
+
+					$firstName = str_replace( "'", "", $firstName );
+					$lastName = str_replace( "'", "", $lastName );
+
+					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+
+					/* define the variables */
+					$to = getCrewEmails( "emailPosts" );
+					$subject = $emailSubject . " " . printMissionTitle( $fetchPost['postMission'] ) . " - " . $fetchPost['postTitle'];
+					$message = "A Post By " . displayEmailAuthors( $fetchPost['postAuthor'], 'noLink' ) . "
+Location: " . $fetchPost['postLocation'] . "
+Timeline: " . $fetchPost['postTimeline'] . "
+Tag: " . $fetchPost['postTag'] . "
+
+" . $fetchPost['postContent'] . "";
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
 					break;
 				case 'delete':
+					
+					$query = "DELETE FROM sms_posts WHERE postid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_posts" );
+					
 					break;
 			}
 		}
@@ -172,8 +227,52 @@ if(
 			switch($action_type)
 			{
 				case 'activate':
+				
+					$query = "UPDATE sms_personallogs SET logStatus = 'activated' WHERE logid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_personallogs" );
+
+					/** EMAIL THE LOG **/
+
+					$getLogContents = "SELECT * FROM sms_personallogs WHERE logid = $action_id LIMIT 1";
+					$getLogContentsResult = mysql_query( $getLogContents );
+					$fetchLog = mysql_fetch_assoc( $getLogContentsResult );
+
+					/* set the email author */
+					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
+					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "crew.crewid = '$fetchLog[logAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+
+					while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
+						extract( $userFetchArray, EXTR_OVERWRITE );
+					}
+
+					$firstName = str_replace( "'", "", $firstName );
+					$lastName = str_replace( "'", "", $lastName );
+
+					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+					$name = $rankName . " " . $firstName . " " . $lastName;
+
+					/* define the variables */
+					$to = getCrewEmails( "emailLogs" );
+					$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $fetchLog['logTitle'] );
+					$message = stripslashes( $fetchLog['logContent'] );
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
 					break;
 				case 'delete':
+					
+					$query = "DELETE FROM sms_personallogs WHERE logid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_personallogs" );
+					
 					break;
 			}
 		}
@@ -182,8 +281,58 @@ if(
 			switch($action_type)
 			{
 				case 'activate':
+					
+					$query = "UPDATE sms_news SET newsStatus = 'activated' WHERE newsid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_news" );
+
+					/** EMAIL THE NEWS **/
+
+					$getNewsContents = "SELECT * FROM sms_news WHERE newsid = $action_id LIMIT 1";
+					$getNewsContentsResult = mysql_query( $getNewsContents );
+					$fetchNews = mysql_fetch_assoc( $getNewsContentsResult );
+
+					/* pull the category name */
+					$getCategory = "SELECT catName FROM sms_news_categories WHERE catid = '$fetchNews[newsCat]' LIMIT 1";
+					$getCategoryResult = mysql_query( $getCategory );
+					$category = mysql_fetch_assoc( $getCategoryResult );
+
+					/* set the email author */
+					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
+					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "crew.crewid = '$fetchNews[newsAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+
+					while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
+						extract( $userFetchArray, EXTR_OVERWRITE );
+					}
+
+					$firstName = str_replace( "'", "", $firstName );
+					$lastName = str_replace( "'", "", $lastName );
+
+					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+
+					/* define the variables */
+					$to = getCrewEmails( "emailNews" );
+					$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $fetchNews['newsTitle'] );
+					$message = "A News Item Posted By " . printCrewNameEmail( $fetchNews['newsAuthor'] ) . "
+
+" . stripslashes( $fetchNews['newsContent'] );
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
 					break;
 				case 'delete':
+					
+					$query = "DELETE FROM sms_news WHERE newsid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_news" );
+					
 					break;
 			}
 		}
@@ -400,7 +549,7 @@ if(
 				?>
 				<tr class="fontNormal">
 					<td><? printText( $pendingLogs['logTitle'] ); ?></td>
-					<td><? displayAuthors( $pendingLogs['logid'], 'noLink' ); ?></td>
+					<td><? printCrewName( $pendingLogs['logid'], 'rank', 'noLink' ); ?></td>
 					<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$pendingLogs['logid'];?>"><b>View Log</b></a></td>
 					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingLogs['logid'];?>" myType="log" myAction="delete"><b>Delete</b></a></td>
 					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingLogs['logid'];?>" myType="log" myAction="activate"><b>Activate</b></a></td>
@@ -436,7 +585,7 @@ if(
 				?>
 				<tr class="fontNormal">
 					<td><? printText( $pendingNews['newsTitle'] ); ?></td>
-					<td><? displayAuthors( $pendingNews['newsid'], 'noLink' ); ?></td>
+					<td><? printCrewName( $pendingNews['newsid'], 'rank', 'noLink' ); ?></td>
 					<td align="center"><a href="<?=$webLocation;?>index.php?page=news&id=<?=$pendingNews['newsid'];?>"><b>View News</b></a></td>
 					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="delete"><b>Delete</b></a></td>
 					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="activate"><b>Activate</b></a></td>
