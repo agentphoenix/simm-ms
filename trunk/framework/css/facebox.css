@@ -131,6 +131,6 @@ Last Modified: 2008-03-20 1649 EST
 /*----- activate/delete post content class -----*/
 #facebox .overflow {
 	overflow-y: auto;
-	height: 200px;
-	margin-bottom: 10px;
+	max-height: 200px;
+	margin-bottom: 20px;
 }
