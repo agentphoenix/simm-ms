@@ -3,7 +3,7 @@
 session_start();
 
 if( !isset( $sessionAccess ) ) {
-	$sessionAccess = "";
+	$sessionAccess = FALSE;
 }
 
 if( !is_array( $sessionAccess ) ) {
@@ -21,53 +21,29 @@ if(in_array("x_approve_posts", $sessionAccess))
 	}
 	
 	/* get the data */
-	$get = "SELECT * FROM sms_posts WHERE postid = '$id' LIMIT 1";
+	$get = "SELECT * FROM sms_posts WHERE postid = $id LIMIT 1";
 	$getR = mysql_query( $get );
 	$pendingArray = mysql_fetch_assoc( $getR );
-	
-	$length = 100; /* The number of words you want */
-	$words = explode(' ', $pendingArray['postContent']); /* Creates an array of words */
-	$words = array_slice($words, 0, $length); /* Slices the array */
-	$text = implode(' ', $words); /* Grabs only the specified number of words */
 
 ?>
 	<h2>Delete Pending Mission Post?</h2>
 	<p>Are you sure you want to delete this post? This action cannot be undone!</p>
 	
 	<form method="post" action="">
-		<table>
-			<tr>
-				<td class="tableCellLabel">Post Title</td>
-				<td></td>
-				<td><? printText( $pendingArray['postTitle'] );?></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel">Post Author(s)</td>
-				<td></td>
-				<td><? displayAuthors( $pendingArray['postid'], 'noLink' );?></td>
-			</tr>
-			<tr>
-				<td colspan="3" height="5"></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel"></td>
-				<td></td>
-				<td><a href="<?=$webLocation;?>index.php?page=post&id=<?=$pendingArray['postid'];?>"><strong>Read Post &raquo;</strong></a></td>
-			</tr>
-			<tr>
-				<td colspan="3" height="15"></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-				<td>
-					<input type="hidden" name="action_id" value="<?=$pendingArray['postid'];?>" />
-					<input type="hidden" name="action_category" value="post" />
-					<input type="hidden" name="action_type" value="delete" />
-					
-					<input type="image" src="<?=$webLocation;?>images/hud_button_ok.png" name="activate" value="Delete" />
-				</td>
-			</tr>
-		</table>
+		<h3><? printText( $pendingArray['postTitle'] );?></h3>
+		<h4>By <? displayAuthors( $pendingArray['postid'], 'noLink' );?></h4>
+		
+		<div class="overflow"><? printText( $pendingArray['postContent'] );?></div>
+		
+		<p></p>
+		
+		<div>
+			<input type="hidden" name="action_id" value="<?=$pendingArray['postid'];?>" />
+			<input type="hidden" name="action_category" value="post" />
+			<input type="hidden" name="action_type" value="delete" />
+			
+			<input type="image" src="<?=$webLocation;?>images/hud_button_ok.png" name="activate" value="Delete" />
+		</div>
 	</form>
 
 <?php } /* close the referer check */ ?>
