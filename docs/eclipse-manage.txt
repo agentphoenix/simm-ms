@@ -1,75 +1,47 @@
-Last Update: 2008.03.19 1801 EST
+Last Update: 2008.03.20 1719 EST
 
 IN PROGRESS
 =====
 #	Update system queries to protect against SQL injection
-		*	Development:	COMPLETED
-		*	Landing:		IN PROGRESS
 
 #	Take care of Apache errors throughout the system
-		*	Development: 	IN PROGRESS
-		*	Landing: 		IN PROGRESS
-				x	/pages
-				@	/admin/manage
-				@	/admin/post
-				@	/admin/reports
-				@	/admin/user
+		x	/pages
+		*	/admin/manage
+		*	/admin/post
+		*	/admin/reports
+		*	/admin/user
 						
 #	Tab content immediately available
-		*	Development: 	COMPLETED
-		*	Landing: 		IN PROGRESS
-				@	admin/manage/menuadvanced.php
-				@	admin/manage/menugeneral.php
+		*	admin/manage/menuadvanced.php
+		*	admin/manage/menugeneral.php
 
 #	Global setting for default access levels
-		*	Development:	COMPLETED
-		*	Landing:		IN PROGRESS
 
 #	SMS Update options
-		*	Development: 	IN PROGRESS
-		*	Landing: 		IN PROGRESS
 
 #	Toggle boxes should use jQuery instead of the custom Javascript code
-		*	Development:	COMPLETED
-		*	Landing:		IN PROGRESS
 		
 #	Award categories (in character, out of character, both)
-		*	Development:	IN PROGRESS
-		*	Landing:
 
 #	Extra information on award (id, timestamp, reason;)
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
 
 #	Re-write activation page
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
-				x	Users
-				@	Posts
-				@	Logs
-				@	News
-				@	Awards
-				@	Docking Requests
+		x	Users
+		x	Posts
+		x	Logs
+		x	News
+		*	Awards
+		*	Docking Requests
 
 #	Nominated awards to queue for CO approval
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
 				
 #	Clean-up install and update files
-		*	Development: 	IN PROGRESS
-		*	Landing: 		COMPLETED
 		
 #	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
 
 #	HUD windows for creation (missions, ranks, departments, positions, awards, etc.)
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
 
 #	Update skins
-		*	Development:	IN PROGRESS
-		*	Landing:		IN PROGRESS
 		
 IN QUEUE
 =====
@@ -81,10 +53,6 @@ IN QUEUE
 
 #	Departmental databases
 
-#	Add CC ability for private messages
-
-#	Ability to specify more options for the Neptune arrow graphic
-
 #	Ability for crew to edit their posts and logs
 
 #	Access changes need to filter to all the access pages
@@ -94,49 +62,27 @@ IN QUEUE
 COMPLETED
 =====
 X	Dynamic acceptance and rejection messages
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
 
 X	SMS Personalized Menu
-		*	Development: 	COMPLETED
-		*	Landing:		COMPLETED
 
 X	Customizable message subject lines
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
 
 X	Error catching page
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
 
 X	"Private" news messages
-		*	Development:	COMPLETED
-		*	Landing:		COMPLETED
 
 X	[BUG] Database uses integer fields for the crew compliment section
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
 
 X	[BUG] Rank drop down menus need to respect the rankDisplay flag
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
 
 X	[BUG] If the large version of an award image doesn't exist, it won't fall back
 	to the small version
-		*	Development:	COMPLETED
-		*	Landing:		COMPLETED
 
 X	jQuery-ify departments page to use toggling
-		*	Development:	COMPLETED
-		*	Landing:		COMPLETED
 
-X	Accessing database entries in Neptune
-		*	Development:	COMPLETED
-		*	Landing:		COMPLETED
+X	Accessing database entries in personalized menus
 
 X	Re-build site options page
-		*	Development: 	COMPLETED
-		*	Landing: 		COMPLETED
 
 X	Clean up icons included with SMS
 		*	Remove icons
@@ -157,3 +103,5 @@ X	Clean up icons included with SMS
 				@	combadge-npc.jpg (should be PNG)
 				@	add.png (gray + color)
 				@	remove.png (gray + color)
+
+X	Ability to specify more options for the personalized menu arrow graphic
