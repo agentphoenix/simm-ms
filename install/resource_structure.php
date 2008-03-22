@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2008-02-22 1157 EST
+Last Modified: 2008-03-22 1952 EST
 **/
 
 /* query the database for the mysql version */
@@ -54,7 +54,7 @@ mysql_query( "CREATE TABLE `sms_awards_queue` (
   `nominated` int(6) NOT NULL default '0',
   `award` int(6) NOT NULL default '0',
   `reason` text NOT NULL,
-  `status` enum('approved','pending') NOT NULL default 'pending',
+  `status` enum('accepted','pending','rejected') NOT NULL default 'pending',
   PRIMARY KEY  (`id`)
 ) " . $tail . " ;" );
 
