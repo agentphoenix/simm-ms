@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2008-03-13 1642 EST
+Last Modified: 2008-03-22 1657 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -224,7 +224,7 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 			if( $i < 7 ) {
 				echo "&nbsp;&nbsp;";
 				
-				if($_GET['id'])
+				if(isset($_GET['id']))
 				{
 					$href = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&add=1&postid=" . $id;
 				}
@@ -238,7 +238,7 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 			} if( array_key_exists( "1", $authorArray ) ) {
 				echo "&nbsp;";
 				
-				if($_GET['id'])
+				if(isset($_GET['id']))
 				{
 					$href2 = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&delete=" . $i . "&postid=" . $id;
 				}
