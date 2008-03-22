@@ -10,7 +10,7 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.0
-Last Modified: 2007-09-17 0913 EST
+Last Modified: 2008-03-22 1806 EST
 **/
 
 /* access check */
@@ -19,102 +19,101 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$actionUpdate = $_POST['action_update_x'];
-	$actionDelete = $_POST['action_delete_x'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "post moderation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$id = $_GET['id'];
-	}
-	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['remove'] ) && preg_match( "/^\d+$/", $_GET['remove'], $matches ) == 0 ) {
-		errorMessageIllegal( "post moderation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$remove = $_GET['remove'];
-	}
-	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['delete'] ) && preg_match( "/^\d+$/", $_GET['delete'], $matches ) == 0 ) {
-		errorMessageIllegal( "post moderation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$delete = $_GET['delete'];
-	}
-	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['add'] ) && preg_match( "/^\d+$/", $_GET['add'], $matches ) == 0 ) {
-		errorMessageIllegal( "post moderation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$add = $_GET['add'];
-	}
-
-	$count = $_POST['authorCount'];
-	
-	$author1 = $_POST['postAuthor0'];
-	$author2 = $_POST['postAuthor1'];
-	$author3 = $_POST['postAuthor2'];
-	$author4 = $_POST['postAuthor3'];
-	$author5 = $_POST['postAuthor4'];
-	$author6 = $_POST['postAuthor5'];
-	$author7 = $_POST['postAuthor6'];
-	$author8 = $_POST['postAuthor7'];
-	
-	if( $count == "1" ) {
-		$postAuthor = $author1;
-	} elseif( $count == "2" ) {
-		$postAuthor = $author1 . "," . $author2;
-	} elseif( $count == "3" ) {
-		$postAuthor = $author1 . "," . $author2 . "," . $author3;
-	} elseif( $count == "4" ) {
-		$postAuthor = $author1 . "," . $author2 . "," . $author3  . "," . $author4;
-	} elseif( $count == "5" ) {
-		$postAuthor = $author1 . "," . $author2 . "," . $author3  . "," . $author4  . "," . $author5;
-	} elseif( $count == "6" ) {
-		$postAuthor = $author1 . "," . $author2 . "," . $author3  . "," . $author4  . "," . $author6  . "," . $author6;
-	} elseif( $count == "7" ) {
-		$postAuthor = $author1 . "," . $author2 . "," . $author3  . "," . $author4  . "," . $author6  . "," . $author6 . "," . $author7;
-	} elseif( $count == "8" ) {
-		$postAuthor = $author1 . "," . $author2 . "," . $author3  . "," . $author4  . "," . $author6  . "," . $author6 . "," . $author7 . "," . $author8;
-	}
-	
-	$postid = $_POST['postid'];
-	$postTitle = addslashes( $_POST['postTitle'] );
-	$postLocation = addslashes( $_POST['postLocation'] );
-	$postTimeline = addslashes( $_POST['postTimeline'] );
-	$postContent = addslashes( $_POST['postContent'] );
-	$postStatus = $_POST['postStatus'];
-	$postMission = $_POST['postMission'];
-	
-	if( $actionUpdate ) {
-		
-		if( $id ) {
-			$query = "UPDATE sms_posts SET postTitle = '$postTitle', postLocation = '$postLocation', ";
-			$query.= "postTimeline = '$postTimeline', postAuthor = '$postAuthor', postContent = '$postContent', ";
-			$query.= "postStatus = '$postStatus', postMission = '$postMission' WHERE postid = '$postid' LIMIT 1";
-			$result = mysql_query( $query );
+	if(isset($_GET['id']))
+	{
+		if(is_numeric($_GET['id'])) {
+			$id = $_GET['id'];
 		} else {
-			$query = "UPDATE sms_posts SET postTitle = '$postTitle', postLocation = '$postLocation', ";
-			$query.= "postTimeline = '$postTimeline', postAuthor = '$postAuthor', postContent = '$postContent', ";
-			$query.= "postStatus = '$postStatus' WHERE postid = '$postid' LIMIT 1";
-			$result = mysql_query( $query );
+			errorMessageIllegal( "post moderation page" );
+			exit();
 		}
+	}
+	
+	if(isset($_GET['remove']))
+	{
+		if(is_numeric($_GET['remove'])) {
+			$remove = $_GET['remove'];
+		} else {
+			errorMessageIllegal( "post moderation page" );
+			exit();
+		}
+	}
+	
+	if(isset($_GET['delete']))
+	{
+		if(is_numeric($_GET['delete'])) {
+			$delete = $_GET['delete'];
+		} else {
+			errorMessageIllegal( "post moderation page" );
+			exit();
+		}
+	}
+	
+	if(isset($_GET['add']))
+	{
+		if(is_numeric($_GET['add'])) {
+			$add = $_GET['add'];
+		} else {
+			errorMessageIllegal( "post moderation page" );
+			exit();
+		}
+	}
+	
+	if(isset($_POST['authorCount'])) {
+		$count = $_POST['authorCount'];
+	} else {
+		$count = FALSE;
+	}
+	
+	$authors_array = array();
+	
+	for($i = 0; $i < 8; $i++)
+	{
+		if(isset($_POST['postAuthor' . $i])) {
+			$authors_array[] = $_POST['postAuthor' . $i];
+		}
+	}
+	
+	if(count($authors_array) > 0) {
+		$postAuthor = implode(',', $authors_array);
+	} else {
+		$postAuthor = FALSE;
+	}
+	
+	if( isset( $_POST['action_update_x'] ) ) {
+		
+		if(isset($_POST['postid']) && is_numeric($_POST['postid'])) {
+			$postid = $_POST['postid'];
+		} else {
+			$postid = FALSE;
+		}
+		
+		$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, ";
+		$update.= "postAuthor = %s, postContent = %s, postStatus = %s, postMission = %d ";
+		$update.= "WHERE postid = $postid LIMIT 1";
+		
+		$query = sprintf(
+			$update,
+			escape_string($_POST['postTitle']),
+			escape_string($_POST['postLocation']),
+			escape_string($_POST['postTimeline']),
+			escape_string($postAuthor),
+			escape_string($_POST['postContent']),
+			escape_string($_POST['postStatus']),
+			escape_string($_POST['postMission'])
+		);
+		
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "update";
 	
-	} elseif( $actionDelete ) {
+	} elseif( isset( $_POST['action_delete_x'] ) ) {
 		
 		/* do the delete query */
 		$query = "DELETE FROM sms_posts WHERE postid = '$postid' LIMIT 1";
@@ -136,11 +135,23 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		
 		$action = "delete";
 	
-	} elseif( $delete ) {
+	} elseif( isset( $delete ) ) {
 		
 		/* define the vars */
-		$postid = $_GET['postid'];
-		$arrayid = $_GET['delete'];
+		if(isset($_GET))
+		{
+			if(is_numeric($_GET['postid'])) {
+				$postid = $_GET['postid'];
+			} else {
+				$postid = FALSE;
+			}
+			
+			if(is_numeric($_GET['delete'])) {
+				$arrayid = $_GET['delete'];
+			} else {
+				$arrayid = FALSE;
+			}
+		}
 		
 		/* pull the authors for the specific post */
 		$getAuthors = "SELECT postAuthor FROM sms_posts WHERE postid = '$postid' LIMIT 1";
@@ -165,7 +176,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		
 		$action = "remove";
 		
-	} elseif( $add ) {
+	} elseif( isset( $add ) ) {
 		
 		/* define the vars */
 		$postid = $_GET['postid'];
@@ -196,7 +207,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 	}
 	
 	/* if there's an id in the URL, proceed */
-	if( $id ) {
+	if( isset( $id ) ) {
 
 ?>
 
@@ -207,7 +218,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		/* do logic to make sure the object is right */
 		if( isset( $add ) || isset( $delete ) ) {
 			$object = "author";
-		} elseif( isset( $actionUpdate ) || isset( $actionDelete ) || isset( $remove ) ) {
+		} elseif( isset( $_POST['action_update_x'] ) || isset( $_POST['action_delete_x'] ) || isset( $remove ) ) {
 			$object = "post";
 		}
 		
@@ -327,7 +338,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		/* do logic to make sure the object is right */
 		if( isset( $add ) || isset( $delete ) ) {
 			$object = "author";
-		} elseif( isset( $actionUpdate ) || isset( $actionDelete ) || isset( $remove ) ) {
+		} elseif( isset( $_POST['action_update_x'] ) || isset( $_POST['action_delete_x'] ) || isset( $remove ) ) {
 			$object = "post";
 		}
 		
@@ -403,6 +414,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 				<td></td>
 				<td valign="top" align="center">
 					<input type="hidden" name="postid" value="<?=$postid;?>" />
+					<input type="hidden" name="postMission" value="<?=$postMission;?>" />
 	
 					<script type="text/javascript">
 						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission post?')\" />" );
