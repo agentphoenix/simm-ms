@@ -1,4 +1,4 @@
-Last Update: 2008.03.20 1719 EST
+Last Update: 2008.03.22 2017 EST
 
 IN PROGRESS
 =====
@@ -7,6 +7,7 @@ IN PROGRESS
 #	Take care of Apache errors throughout the system
 		x	/pages
 		*	/admin/manage
+				x	posts.php
 		*	/admin/post
 		*	/admin/reports
 		*	/admin/user
@@ -30,7 +31,7 @@ IN PROGRESS
 		x	Posts
 		x	Logs
 		x	News
-		*	Awards
+		x	Awards
 		*	Docking Requests
 
 #	Nominated awards to queue for CO approval
