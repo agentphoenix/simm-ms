@@ -219,9 +219,9 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 
 		<div class="update notify-normal">
 			<a href="#" id="toggle" class="fontNormal" style="float:right;margin-right:.5em;">Show/Hide</a>
-			<img src="<?=$webLocation;?>images/notes.png" style="float:left; padding-right: 12px;" border="0" />
+			
 			<span class="fontTitle">Mission Notes</span>
-			<div id="notes" style="display:none;clear:left;">
+			<div id="notes" style="display:none;">
 				<br />
 				<?
 
