@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-02-22 1158 EST
+Last Modified: 2008-03-23 0002 EST
 **/
 
 /* insert data into the access levels table */
@@ -107,7 +107,7 @@ VALUES (1, 0, 0, 'Main', 'onsite', 'index.php?page=main', '', '', 'n', 'main'),
 (60, 0, 1, 'Site Messages', 'onsite', 'admin.php?page=manage&sub=messages', 'm_messages', 'manage', 'y', 'admin'),
 (61, 0, 2, 'User Access Levels', 'onsite', 'admin.php?page=manage&sub=access', 'x_access', 'manage', 'y', 'admin'),
 (62, 0, 3, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin'),
-(63, 0, 4, 'Menu Items', 'onsite', 'admin.php?page=manage&sub=menugeneral', 'x_menu', 'manage', 'y', 'admin'),
+(63, 0, 4, 'Menu Items', 'onsite', 'admin.php?page=manage&sub=menus', 'x_menu', 'manage', 'y', 'admin'),
 (64, 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_database', 'manage', 'y', 'admin'),
 (65, 1, 0, 'Missions', 'onsite', 'admin.php?page=manage&sub=missions', 'm_missions', 'manage', 'y', 'admin'),
 (66, 1, 1, 'Mission Notes', 'onsite', 'admin.php?page=manage&sub=missionnotes', 'm_missionnotes', 'manage', 'y', 'admin'),
