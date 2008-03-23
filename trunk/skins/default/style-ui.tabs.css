@@ -12,11 +12,13 @@
     }
 }
 
-#container-1 {
+#container-1, #container-2, #container-3 {
 	float: left;
-	width: 90%;
+	width: 95%;
+	width: 100% !important;
 	margin-top: 1.5em;
 }
+#container-2, #container-3 { width: 100%; }
 
 /* Skin */
 .ui-tabs-nav {
