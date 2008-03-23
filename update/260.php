@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-02-29 1018 EST
+Last Modified: 2008-03-23 0006 EST
 **/
 
 /*
@@ -111,8 +111,10 @@ if( $count1 > 0 ) {
 |
 | The system changes mean we have to update where the private messages
 | link points to. In addition, we have changed the name of the private
-| messages inbox to be Inbox instead of just Private Messages. Finally
-| we have to add the menu item for the new Default Access Levels feature.
+| messages inbox to be Inbox instead of just Private Messages. The menu
+| management page has been consolidated into a single page and the link
+| has been changed to reflec that. Finally we have to add the menu item
+| for the new Default Access Levels feature.
 |
 */
 $getPMLink = "SELECT * FROM sms_menu_items WHERE menuAccess = 'p_pm' LIMIT 1";
@@ -124,6 +126,11 @@ $getInboxLink = "SELECT * FROM sms_menu_items WHERE menuAccess = 'u_inbox' LIMIT
 $getInboxLinkResult = mysql_query( $getInboxLink );
 $inboxLink = mysql_fetch_assoc( $getInboxLinkResult );
 mysql_query( "UPDATE sms_menu_items SET menuTitle = 'Inbox' WHERE menuid = '$inboxLink[menuid]' LIMIT 1" );
+
+$getMenuLink = "SELECT * FROM sms_menu_items WHERE menuAccess = 'x_menu' LIMIT 1";
+$getMenuLinkResult = mysql_query( $getMenuLink );
+$menuLink = mysql_fetch_assoc( $getMenuLinkResult );
+mysql_query( "UPDATE sms_menu_items SET menuLink = 'admin.php?page=manage&sub=menus' WHERE menuid = '$menuLink[menuid]' LIMIT 1" );
 
 mysql_query( "INSERT INTO sms_menu_items ( menuGroup, menuOrder, menuTitle, menuLinkType, menuLink, menuAccess, menuMainSec, menuLogin, menuCat )
 VALUES ( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin' )" );
@@ -225,7 +232,7 @@ mysql_query( "CREATE TABLE `sms_awards_queue` (
   `nominated` int(6) NOT NULL default '0',
   `award` int(6) NOT NULL default '0',
   `reason` text NOT NULL,
-  `status` enum('approved','pending') NOT NULL default 'pending',
+  `status` enum('accepted','pending','rejected') NOT NULL default 'pending',
   PRIMARY KEY  (`id`)
 ) " . $tail . " ;" );
 
