@@ -1,4 +1,4 @@
-Last Update: 2008.03.22 2017 EST
+Last Update: 2008.03.23 0015 EST
 
 IN PROGRESS
 =====
@@ -11,10 +11,6 @@ IN PROGRESS
 		*	/admin/post
 		*	/admin/reports
 		*	/admin/user
-						
-#	Tab content immediately available
-		*	admin/manage/menuadvanced.php
-		*	admin/manage/menugeneral.php
 
 #	Global setting for default access levels
 
@@ -24,7 +20,10 @@ IN PROGRESS
 		
 #	Award categories (in character, out of character, both)
 
-#	Extra information on award (id, timestamp, reason;)
+#	Nominated awards to queue for CO approval
+		*	Award nomination page should give users the ability to nominate an NPC
+			for an award. Need to figure out how that'll be done what with IC and OOC
+			awards now.
 
 #	Re-write activation page
 		x	Users
@@ -34,7 +33,10 @@ IN PROGRESS
 		x	Awards
 		*	Docking Requests
 
-#	Nominated awards to queue for CO approval
+#	Finish re-writing the menu management AJAX pages
+		*	Add
+		*	Edit
+		*	Delete
 				
 #	Clean-up install and update files
 		
@@ -106,3 +108,7 @@ X	Clean up icons included with SMS
 				@	remove.png (gray + color)
 
 X	Ability to specify more options for the personalized menu arrow graphic
+
+X	Tab content immediately available
+
+X	Extra information on award (id, timestamp, reason;)
