@@ -6,12 +6,20 @@ knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: admin/manage/menuadvanced.php
+File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-02-25 1339 EST
+Last Modified: 2008-03-22 2354 EST
 **/
+
+$debug = 1;
+
+if($debug >= 1)
+{
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+}
 
 /* access check */
 if( in_array( "x_menu", $sessionAccess ) ) {
@@ -19,258 +27,150 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$update = $_POST['action_update_x'];
-	$delete = $_POST['action_delete_x'];
-	$add = $_POST['action_add_x'];
-	$sec = $_GET['sec'];
-	$subsec = $_GET['subsec'];
-	$create = $_GET['create'];
+	$query = FALSE;
+	$result = FALSE;
+	$action_type = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "menu management page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$id = $_GET['id'];
-	}
-	
-	/* set up the default section */
-	if( !$sec ) {
-		$sec = "main";
-	}
-	
-	/* set up the default sub section for the general tab */
-	if( $sec == "general" && !$subsec ) {
-		$subsec = "main";
-	}
-	
-	/* set up the default sub section for the admin tab */
-	if( $sec == "admin" && !$subsec ) {
-		$subsec = "post";
-	}
-	
-	if( $update ) {
-		
+	if(isset($_POST))
+	{
 		/* define the POST variables */
-		$menuTitle = addslashes( $_POST['menuTitle'] );
-		$menuLink = $_POST['menuLink'];
-		$menuLinkType = $_POST['menuLinkType'];
-		$menuGroup = $_POST['menuGroup'];
-		$menuOrder = $_POST['menuOrder'];
-		$menuLogin = $_POST['menuLogin'];
-		$menuCat = $_POST['menuCat'];
-		$menuMainSec = $_POST['menuMainSec'];
-		$menuAvailability = $_POST['menuAvailability'];
-		
-		if( $sec == "main" ) {
-		
-			/* run the update query */
-			$query = "UPDATE sms_menu_items SET menuTitle = '$menuTitle', menuLink = '$menuLink', ";
-			$query.= "menuLinkType = '$menuLinkType', menuOrder = '$menuOrder', menuLogin = '$menuLogin', ";
-			$query.= "menuCat = '$menuCat', menuMainSec = '$menuMainSec', menuGroup = '$menuGroup', ";
-			$query.= "menuAvailability = '$menuAvailability' WHERE menuid = '$id' LIMIT 1";
-			$result = mysql_query( $query );
-		
-		} if( $sec == "general" ) {
-			
-			/* run the update query */
-			$query = "UPDATE sms_menu_items SET menuTitle = '$menuTitle', menuLink = '$menuLink', ";
-			$query.= "menuLinkType = '$menuLinkType', menuOrder = '$menuOrder', menuLogin = '$menuLogin', ";
-			$query.= "menuCat = '$menuCat', menuMainSec = '$menuMainSec', menuGroup = '$menuGroup', ";
-			$query.= "menuAvailability = '$menuAvailability'WHERE menuid = '$id' LIMIT 1";
-			$result = mysql_query( $query );
-		
-		} if( $sec == "admin" ) {
-			
-			/* define additional POST variables */
-			$menuAccess = $_POST['menuAccess'];
-			
-			/* run the update query */
-			$query = "UPDATE sms_menu_items SET menuTitle = '$menuTitle', menuLink = '$menuLink', ";
-			$query.= "menuLinkType = '$menuLinkType', menuOrder = '$menuOrder', menuGroup = '$menuGroup', ";
-			$query.= "menuCat = '$menuCat', menuMainSec = '$menuMainSec', menuLogin = '$menuLogin', ";
-			$query.= "menuAccess = '$menuAccess', menuAvailability = '$menuAvailability' WHERE menuid = '$id' LIMIT 1";
-			$result = mysql_query( $query );
-		
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
 		}
 		
-		/* optimize the table */
-		optimizeSQLTable( "sms_menu_items" );
+		/* protecting against SQL injection */
+		if(isset($action_id) && !is_numeric($action_id))
+		{
+			$action_id = FALSE;
+			exit();
+		}
 		
-		$action = "update";
-		
-	} if( $add ) {
-	
-		/* define the POST variables */
-		$menuTitle = addslashes( $_POST['menuTitle'] );
-		$menuLink = $_POST['menuLink'];
-		$menuLinkType = $_POST['menuLinkType'];
-		$menuOrder = $_POST['menuOrder'];
-		$menuLogin = $_POST['menuLogin'];
-		$menuCat = $_POST['menuCat'];
-		$menuMainSec = $_POST['menuMainSec'];
-		
-		/* run the query */
-		$query = "INSERT INTO sms_menu_items ";
-		$query.= "( menuid, menuTitle, menuLink, menuLinkType, menuOrder, menuLogin, menuCat, menuMainSec ) ";
-		$query.= "VALUES ( '', '$menuTitle', '$menuLink', '$menuLinkType', '$menuOrder', '$menuLogin', '$menuCat', '$menuMainSec' )";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_menu_items" );
-		
-		$action = "add";
-	
-	} if( $delete ) {
-	
-		/* run the delete query */
-		$query = "DELETE FROM sms_menu_items WHERE menuid = '$id' LIMIT 1";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_menu_items" );
-		
-		$action = "delete";
-	
+		switch($action_type)
+		{
+			case 'create':
+				break;
+			case 'edit':
+				break;
+			case 'delete':
+				break;
+			default:
+				break;
+		}
 	}
+
+$menus = array(
+	'main' => array(),
+	'general' => array(
+		'main' => array(),
+		'personnel' => array(),
+		'ship' => array(),
+		'simm' => array()
+	),
+	'admin' => array(
+		'post' => array(),
+		'manage' => array(),
+		'reports' => array(),
+		'user' => array()
+	)
+);
+
+/** THE QUERIES **/
+
+/* get the main menu items and dump them into the menu array */
+$getMain = "SELECT * FROM sms_menu_items WHERE menuCat = 'main' ORDER BY menuGroup, menuOrder ASC";
+$getMainResult = mysql_query( $getMain );
+
+while($menuMain = mysql_fetch_assoc($getMainResult)) {
+	extract($menuMain, EXTR_OVERWRITE);
 	
-	/* the queries */
-	$getMain = "SELECT * FROM sms_menu_items WHERE menuCat = 'main' ORDER BY menuGroup, menuOrder ASC";
-	$getMainResult = mysql_query( $getMain );
+	$menus['main'][] = array('id' => $menuid, 'title' => $menuTitle, 'link' => $menuLink, 'display' => $menuAvailability);
 	
-	$getGeneral = "SELECT * FROM sms_menu_items WHERE menuCat = 'general' ORDER BY menuGroup, menuOrder ASC";
-	$getGeneralResult = mysql_query( $getGeneral );
+}
+
+/* get the general menu items and dump them into the menu array */
+$getGeneral = "SELECT * FROM sms_menu_items WHERE menuCat = 'general' ORDER BY menuGroup, menuOrder ASC";
+$getGeneralResult = mysql_query( $getGeneral );
+
+while($menuGen = mysql_fetch_assoc($getGeneralResult)) {
+	extract($menuGen, EXTR_OVERWRITE);
 	
-	$getAdmin = "SELECT * FROM sms_menu_items WHERE menuCat = 'admin' ORDER BY menuGroup, menuOrder ASC";
-	$getAdminResult = mysql_query( $getAdmin );
+	$menus['general'][$menuMainSec][] = array('id' => $menuid, 'title' => $menuTitle, 'link' => $menuLink, 'display' => $menuAvailability);
+	
+}
+
+/* get the admin menu items and dump them into the menu array */
+$getAdmin = "SELECT * FROM sms_menu_items WHERE menuCat = 'admin' ORDER BY menuGroup, menuOrder ASC";
+$getAdminResult = mysql_query( $getAdmin );
+
+while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
+	extract($menuAdmin, EXTR_OVERWRITE);
+	
+	$menus['admin'][$menuMainSec][] = array('id' => $menuid, 'title' => $menuTitle, 'link' => $menuLink, 'display' => $menuAvailability);
+	
+}
 
 ?>
 
-	<div class="body">
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#container-1 > ul').tabs();
+		$('#container-2 > ul').tabs();
+		$('#container-3 > ul').tabs();
 		
-		<?
+		$('.zebra tr:odd').addClass('alt');
+
+		$("a[rel*=facebox]").click(function() {
+			var id = $(this).attr("myID");
+			var action = $(this).attr("myAction");
+
+			jQuery.facebox(function() {
+				jQuery.get('admin/ajax/menu_' + action + '.php?id=' + id, function(data) {
+					jQuery.facebox(data);
+				});
+			});
+			return false;
+		});
 		
-		$check = new QueryCheck;
-		$check->checkQuery( $result, $query );
-		
-		if( !empty( $check->query ) ) {
-			$check->message( "menu item", $action );
-			$check->display();
-		}
-		
-		?>
-		
-		<span class="fontTitle">Advanced Menu Management</span><br /><br />
-		Use this page to edit the menus used throughout SMS. From the advanced menu management page you will
-		be able to change anything about a menu item or delete the item entirely. <b class="red">
-		Please use extreme caution when editing menu items. Incorrect modification can cause you to not be able to
-		access the menu items any more! Deletions cannot be undone.</b> Changes made to any menu item will affect 
-		that item across all skins in the system.<br /><br />
-		
-		<b class="fontMedium"><a href="<?=$webLocation;?>admin.php?page=manage&sub=menugeneral">&laquo; Basic Menu Management</a></b>
-		<br />
-		<b class="fontMedium"><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&create">Add Menu Item &raquo;</a></b>
-		<br /><br />
-		
-		<? if( isset( $create ) && !$add ) { ?>
-			<div class="update">
-				<span class="fontTitle">Add Menu Item</span><br /><br />
-				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>">
-					<table>
-						<tr>
-							<td class="tableCellLabel">Menu Item Title</td>
-							<td></td>
-							<td><input type="text" class="text" name="menuTitle" size="40" /></td>
-						</tr>
-						<tr>
-							<td class="tableCellLabel">Menu Item Link Type</td>
-							<td></td>
-							<td>
-								<select name="menuLinkType">
-									<option value="onsite">Onsite</option>
-									<option value="offsite">Offsite</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td class="tableCellLabel">Menu Item Link</td>
-							<td></td>
-							<td><input type="text" class="text" name="menuLink" size="40" /></td>
-						</tr>
-						<tr>
-							<td class="tableCellLabel">Menu Category</td>
-							<td></td>
-							<td>
-								<select name="menuCat">
-									<option value="main">Main Navigation</option>
-									<option value="general">General Menus</option>
-									<option value="admin">Admin Menus</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td class="tableCellLabel">Menu Section</td>
-							<td></td>
-							<td>
-								<select name="menuMainSec">
-									<optgroup label="Main Navigation">
-										<option value="">Main Navigation</option>
-									</optgroup>
-									<optgroup label="General Menus">
-										<option value="main">Main</option>
-										<option value="personnel">Personnel</option>
-										<option value="ship"><?=ucfirst( $simmType );?></option>
-										<option value="simm">Simm</option>
-									</optgroup>
-									<optgroup label="Admin Menus">
-										<option value="post">Post</option>
-										<option value="manage">Manage</option>
-										<option value="reports">Reports</option>
-										<option value="user">User</option>
-									</optgroup>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td class="tableCellLabel">Menu Item Order</td>
-							<td></td>
-							<td><input type="text" class="text" name="menuOrder" size="3" /></td>
-						</tr>
-						<tr>
-							<td class="tableCellLabel">Requires Login?</td>
-							<td></td>
-							<td>
-								<input type="radio" id="menuLoginY" name="menuLogin" value="y" /><label for="menuLoginY">Yes</label>
-								<input type="radio" id="menuLoginN" name="menuLogin" value="n" checked="y" /><label for="menuLoginN">No</label>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="25"></td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<input type="image" src="<?=path_userskin;?>buttons/add.png" class="button" name="action_add" value="add" />
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>
-			<br />
-		<? } ?>
-		
-		<? if( $simmType == "starbase" || $manifestDisplay == "full" || $usePosting == "n" || $useMissionNotes == "n" ) { ?>
-		<div class="update">
-			<a href="javascript:toggleLayer('notes')" style="float:right;">Show/Hide</a>
-			<img src="<?=$webLocation;?>images/notes.png" style="float:left; padding-right: 12px;" border="0" />
+		$('a#toggle').click(function() {
+			$('#notes').toggle(75);
+			return false;
+		});
+	});
+</script>
+
+<div class="body">
+	
+	<?
+	
+	$check = new QueryCheck;
+	$check->checkQuery( $result, $query );
+	
+	if( !empty( $check->query ) ) {
+		$check->message( "menu item", $action );
+		$check->display();
+	}
+	
+	?>
+	
+	<span class="fontTitle">Menu Management</span><br /><br />
+	Use this page to edit the menus used throughout SMS. From these pages, you will be able to change anything about a menu item or delete the item entirely. <b class="red">Use extreme caution when editing menu items. Incorrect modification can cause you to not be able to access the menu items any more! Deletions cannot be undone.</b> Changes made to any menu item will affect that item across all skins in the system.<br /><br />
+	
+	<b class="fontMedium"><a href="#" class="add" myAction="add" rel="facebox">Add Menu Item &raquo;</a></b><br />
+	
+	<? if( $simmType == "starbase" || $usePosting == "n" || $useMissionNotes == "n" ) { ?>
+	<br />
+	<div class="update">
+		<div class="notify-normal">
+			<a href="#" id="toggle" class="fontNormal" style="float:right;margin-right:.5em;">Show/Hide</a>
 			<span class="fontTitle">Notes</span>
-			
+		
 			<div id="notes" style="display:none;">
 			<br />
-			
+		
 			Additional information about menu changes is available through Anodyne's <a href="http://docs.anodyne-productions.com/index.php?title=Changing_Menus_Around" target="_blank">
 			online documentation</a>.<br /><br />
-		
+	
 			<? if( $simmType == "starbase" ) { ?>
 			Your simm type is set to STARBASE. Please make sure you make the following changes to your menus!
 			<ul class="version">
@@ -330,598 +230,324 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 			<? } ?>
 			</div>
 		</div>
-		<? } ?>
-		
-		<div id="subnav">
-			<ul>
-				<li <? if( $sec == "main" ) { echo "id='current'"; } ?>><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=main">Main Navigation</a></li>
-				<li <? if( $sec == "general" ) { echo "id='current'"; } ?>><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=general">General Menus</a></li>
-				<li <? if( $sec == "admin" ) { echo "id='current'"; } ?>><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=admin">Admin Menus</a></li>
-			</ul>
-		</div>
+	</div>
+	<? } ?>
 	
-		<div class="tabcontainer">
-		<? if( $sec == "main" ) { ?>
-			<br />
-			<? if( !$id || isset( $delete ) ) { ?>
-			The main navigation links are the links at the top of SMS that will take a user to the various
-			sections of the site. By default, the only link that requires the user to be logged in is the
-			Control Panel. In order to see changes to the main navigation menu, you may have to refresh
-			the page after making changes.
-			
-			<ul class="list-dark">
-				<?
-				
-				while( $menuadvanced = mysql_fetch_array( $getMainResult ) ) {
-					extract( $menuadvanced, EXTR_OVERWRITE );
-					
-					echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=menuadvanced&sec=" . $sec . "&id=" . $menuid . "'>" . $menuTitle . "</a></li>";
-					
-				}
-				
-				?>
-			</ul>
-			<? } else { ?>
-			
-				<div class="postDetails fontNormal">
-					<b class="fontMedium">Main Navigation Menu Items</b><br /><br />
-					<table>
-						<tr>
-							<td><b>Title</b></td>
-							<td><b>Order</b></td>
-						</tr>
-						<?
-						
-						while( $menuadvanced = mysql_fetch_array( $getMainResult ) ) {
-							extract( $menuadvanced, EXTR_OVERWRITE );
-							
-							echo "<tr>";
-								echo "<td>";
-								if( $menuAvailability == "off" ) {
-									echo "<b class='red'>OFF</span> &nbsp;";
-								}
-								echo "<a href='" . $webLocation . "admin.php?page=manage&sub=menuadvanced&sec=" . $sec . "&id=" . $menuid . "'>" . $menuTitle . "</a></td>";
-								echo "<td>" . $menuOrder . "</td>";
-							echo "</tr>";
-							
-						}
-						
-						?>
-					</table>
-				</div>
-				
-				<b class="fontLarge">Edit Menu Item</b><br /><br />
-				Offsite links will open in a new window.  If you choose an offsite link, please provide the entire URL, otherwise,
-				please only provide the information after the domain (i.e. index.php?page=main). Additional information about
-				other menu items in this category are provided on the side.<br /><br />
-				
-				<b><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>">&laquo; Back to Menu Items</a></b><br /><br />
-				
-				<?
-			
-				$getItem = "SELECT * FROM sms_menu_items WHERE menuid = '$id' LIMIT 1";
-				$getItemResult = mysql_query( $getItem );
-				
-				while( $itemFetch = mysql_fetch_array( $getItemResult ) ) {
-					extract( $itemFetch, EXTR_OVERWRITE );
-				}
-			
-				?>
-			
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&id=<?=$id;?>">
-				<table>
-					<tr>
-						<td class="tableCellLabel">Menu Item Status</td>
-						<td></td>
-						<td>
-							<input type="radio" name="menuAvailability" id="maOn" value="on"<? if( $menuAvailability == "on" ) { echo " checked"; } ?>/><label for="maOn">On</label>
-							<input type="radio" name="menuAvailability" id="maOff" value="off"<? if( $menuAvailability == "off" ) { echo " checked"; } ?>/><label for="maOff">Off</label>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Title</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuTitle" value="<?=$menuTitle;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Link Type</td>
-						<td></td>
-						<td>
-							<select name="menuLinkType">
-								<option value="onsite"<? if( $menuLinkType == "onsite" ) { echo " selected"; } ?>>Onsite</option>
-								<option value="offsite"<? if( $menuLinkType == "offsite" ) { echo " selected"; } ?>>Offsite</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Link</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuLink" value="<?=$menuLink;?>" /></td>
-					</tr>
-					<tr>
-						<td colspan="3" height="15"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Category</td>
-						<td></td>
-						<td>
-							<select name="menuCat">
-								<option value="main"<? if( $menuCat == "main" ) { echo " selected"; } ?>>Main Navigation</option>
-								<option value="general"<? if( $menuCat == "general" ) { echo " selected"; } ?>>General Menus</option>
-								<option value="admin"<? if( $menuCat == "admin" ) { echo " selected"; } ?>>Admin Menus</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Section</td>
-						<td></td>
-						<td>
-							<select name="menuMainSec">
-								<optgroup label="Main Navigation">
-									<option value=""<? if( $menuMainSec == "" ) { echo " selected"; } ?>>Main Navigation</option>
-								</optgroup>
-								<optgroup label="General Menus">
-									<option value="main"<? if( $menuMainSec == "main" ) { echo " selected"; } ?>>Main</option>
-									<option value="personnel"<? if( $menuMainSec == "personnel" ) { echo " selected"; } ?>>Personnel</option>
-									<option value="ship"<? if( $menuMainSec == "ship" ) { echo " selected"; } ?>><?=ucfirst( $simmType );?></option>
-									<option value="simm"<? if( $menuMainSec == "simm" ) { echo " selected"; } ?>>Simm</option>
-								</optgroup>
-								<optgroup label="Admin Menus">
-									<option value="post"<? if( $menuMainSec == "post" ) { echo " selected"; } ?>>Post</option>
-									<option value="manage"<? if( $menuMainSec == "manage" ) { echo " selected"; } ?>>Manage</option>
-									<option value="reports"<? if( $menuMainSec == "reports" ) { echo " selected"; } ?>>Reports</option>
-									<option value="user"<? if( $menuMainSec == "user" ) { echo " selected"; } ?>>User</option>
-								</optgroup>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="15"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Group</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuGroup" size="3" value="<?=$menuGroup;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Order</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuOrder" size="3" value="<?=$menuOrder;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Requires Login?</td>
-						<td></td>
-						<td>
-							<input type="radio" id="menuLoginY" name="menuLogin" value="y" <? if( $menuLogin == "y" ) { echo "checked"; } ?>/><label for="menuLoginY">Yes</label>
-							<input type="radio" id="menuLoginN" name="menuLogin" value="n" <? if( $menuLogin == "n" ) { echo "checked"; } ?>/><label for="menuLoginN">No</label>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="25"></td>
-					</tr>
-					<tr>
-						<td colspan="3">
-							<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="update" />
-							&nbsp;
-							<script type="text/javascript">
-								document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this menu item?')\" />" );
-							</script>
-							<noscript>
-								<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
-							</noscript>
-						</td>
-					</tr>
-				</table>
-			</form>
-			
-			<? } ?>
-		<? } if( $sec == "general" ) { ?>
-		<br />
+	<div id="container-1">
+		<ul>
+			<li><a href="#one-a"><span>Main Navigation</span></a></li>
+			<li><a href="#two-a"><span>General Menus</span></a></li>
+			<li><a href="#three-a"><span>Admin Menus</span></a></li>
+		</ul>
 		
-			<div class="subMenu">
+		<div id="one-a" class="ui-tabs-container ui-tabs-hide">
+			The main navigation links are the links at the top of SMS that will take a user to the various sections of the site. By default, the only link that requires the user to be logged in is the Control Panel. In order to see changes to the main navigation menu, you may have to refresh the page after making changes.<br /><br />
+			
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="30%">Title</th>
+						<th width="50%">URL</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				
+				<?php foreach($menus['main'] as $main_value) { ?>
+				<tr class="fontNormal">
+					<td width="30%"><? printText($main_value['title']);?></td>
+					<td width="50%"><?=$main_value['link'];?></td>
+					<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$main_value['id'];?>" myAction="delete"><b>Delete</b></a></td>
+					<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$main_value['id'];?>" myAction="edit"><b>Edit</b></a></td>
+				</tr>
+				<?php } ?>
+			</table>
+		</div>
+		
+		<div id="two-a" class="ui-tabs-container ui-tabs-hide">
+			Each major section of SMS has its own menu items. Use the sub navigation below to move through the various sections and make any changes you want.
+			
+			<div id="container-2">
 				<ul>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=main">Main</a></li>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=personnel">Personnel</a></li>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=simm">The Simm</a></li>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=ship">The <?=ucfirst( $simmType );?></a></li>
+					<li><a href="#one-b"><span>Main</span></a></li>
+					<li><a href="#two-b"><span>Personnel</span></a></li>
+					<li><a href="#three-b"><span>The Simm</span></a></li>
+					<li><a href="#four-b"><span>The <?=ucfirst( $simmType );?></span></a></li>
 				</ul>
-			</div>
-			
-			<? if( !$id || isset( $delete ) ) { ?>
-			Each section of SMS has its own menu items. Use the sub navigation above to move through the various sections
-			and make changes.
-			
-			<ul class="list-dark">
-				<?
 				
-				while( $menuMain = mysql_fetch_array( $getGeneralResult ) ) {
-					extract( $menuMain, EXTR_OVERWRITE );
-					
-					if( $subsec == $menuMainSec ) {
-					
-						echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=menuadvanced&sec=" . $sec . "&subsec=" . $subsec . "&id=" . $menuid . "'>" . $menuTitle . "</a></li>";
-					
-					}
-					
-				}
-				
-				?>
-			</ul>
-			<? } else { ?>
-			
-				<div class="postDetails fontNormal">
-					<b class="fontMedium">General Navigation Menu Items - <?=ucfirst( $subsec );?></b><br /><br />
-					<table>
-						<tr>
-							<td><b>Title</b></td>
-							<td><b>Group</b></td>
-							<td><b>Order</b></td>
+				<div id="one-b" class="ui-tabs-container ui-tabs-hide">
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['general']['main'] as $gen_main_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $gen_main_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($gen_main_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$gen_main_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$gen_main_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$gen_main_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
 						</tr>
-						<?
-						
-						while( $menuMain = mysql_fetch_array( $getGeneralResult ) ) {
-							extract( $menuMain, EXTR_OVERWRITE );
-							
-							if( $subsec == $menuMainSec ) {
-							
-								echo "<tr>";
-									echo "<td>";
-									if( $menuAvailability == "off" ) {
-										echo "<b class='red'>OFF</span> &nbsp;";
-									}
-									echo "<a href='" . $webLocation . "admin.php?page=manage&sub=menuadvanced&sec=" . $sec . "&subsec=" . $subsec . "&id=" . $menuid . "'>" . $menuTitle . "</a></td>";
-									echo "<td>" . $menuGroup . "</td>";
-									echo "<td>" . $menuOrder . "</td>";
-								echo "</tr>";
-							
-							}
-							
-						}
-						
-						?>
+						<?php } ?>
 					</table>
 				</div>
 				
-				<b class="fontLarge">Edit Menu Item</b><br /><br />
-				Offsite links will open in a new window.  If you choose an offsite link, please provide the entire URL, otherwise,
-				please only provide the information after the domain (i.e. index.php?page=main). Additional information about
-				other menu items in this category are provided on the side.<br /><br />
-				
-				<b><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>">&laquo; Back to Menu Items</a></b><br /><br />
-				
-				<?
-			
-				$getItem = "SELECT * FROM sms_menu_items WHERE menuid = '$id' LIMIT 1";
-				$getItemResult = mysql_query( $getItem );
-				
-				while( $itemFetch = mysql_fetch_array( $getItemResult ) ) {
-					extract( $itemFetch, EXTR_OVERWRITE );
-				}
-			
-				?>
-			
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=<?=$subsec;?>&id=<?=$id;?>">
-				<table>
-					<tr>
-						<td class="tableCellLabel">Menu Item Status</td>
-						<td></td>
-						<td>
-							<input type="radio" name="menuAvailability" id="maOn" value="on"<? if( $menuAvailability == "on" ) { echo " checked"; } ?>/><label for="maOn">On</label>
-							<input type="radio" name="menuAvailability" id="maOff" value="off"<? if( $menuAvailability == "off" ) { echo " checked"; } ?>/><label for="maOff">Off</label>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Title</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuTitle" value="<?=$menuTitle;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Link Type</td>
-						<td></td>
-						<td>
-							<select name="menuLinkType">
-								<option value="onsite"<? if( $menuLinkType == "onsite" ) { echo " selected"; } ?>>Onsite</option>
-								<option value="offsite"<? if( $menuLinkType == "offsite" ) { echo " selected"; } ?>>Offsite</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Link</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuLink" value="<?=$menuLink;?>" /></td>
-					</tr>
-					<tr>
-						<td colspan="3" height="15"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Category</td>
-						<td></td>
-						<td>
-							<select name="menuCat">
-								<option value="main"<? if( $menuCat == "main" ) { echo " selected"; } ?>>Main Navigation</option>
-								<option value="general"<? if( $menuCat == "general" ) { echo " selected"; } ?>>General Menus</option>
-								<option value="admin"<? if( $menuCat == "admin" ) { echo " selected"; } ?>>Admin Menus</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Section</td>
-						<td></td>
-						<td>
-							<select name="menuMainSec">
-								<optgroup label="Main Navigation">
-									<option value=""<? if( $menuMainSec == "" ) { echo " selected"; } ?>>Main Navigation</option>
-								</optgroup>
-								<optgroup label="General Menus">
-									<option value="main"<? if( $menuMainSec == "main" ) { echo " selected"; } ?>>Main</option>
-									<option value="personnel"<? if( $menuMainSec == "personnel" ) { echo " selected"; } ?>>Personnel</option>
-									<option value="ship"<? if( $menuMainSec == "ship" ) { echo " selected"; } ?>><?=ucfirst( $simmType );?></option>
-									<option value="simm"<? if( $menuMainSec == "simm" ) { echo " selected"; } ?>>Simm</option>
-								</optgroup>
-								<optgroup label="Admin Menus">
-									<option value="post"<? if( $menuMainSec == "post" ) { echo " selected"; } ?>>Post</option>
-									<option value="manage"<? if( $menuMainSec == "manage" ) { echo " selected"; } ?>>Manage</option>
-									<option value="reports"<? if( $menuMainSec == "reports" ) { echo " selected"; } ?>>Reports</option>
-									<option value="user"<? if( $menuMainSec == "user" ) { echo " selected"; } ?>>User</option>
-								</optgroup>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="15"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Group</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuGroup" size="3" value="<?=$menuGroup;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Order</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuOrder" size="3" value="<?=$menuOrder;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Requires Login?</td>
-						<td></td>
-						<td>
-							<input type="radio" id="menuLoginY" name="menuLogin" value="y" <? if( $menuLogin == "y" ) { echo "checked"; } ?>/><label for="menuLoginY">Yes</label>
-							<input type="radio" id="menuLoginN" name="menuLogin" value="n" <? if( $menuLogin == "n" ) { echo "checked"; } ?>/><label for="menuLoginN">No</label>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="25"></td>
-					</tr>
-					<tr>
-						<td colspan="3">
-							<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="update" />
-							&nbsp;
-							<script type="text/javascript">
-								document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this menu item?')\" />" );
-							</script>
-							<noscript>
-								<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
-							</noscript>
-						</td>
-					</tr>
-				</table>
-			</form>
-			
-			<? } ?>
-		<? } if( $sec == "admin" ) { ?>
-		<br />
-			
-			<div class="subMenu">
-				<ul>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=post">Post</a></li>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=manage">Manage</a></li>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=reports">Reports</a></li>
-					<li><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=user">User</a></li>
-				</ul>
-			</div>
-			
-			<? if( !$id || isset( $delete ) ) { ?>
-			The administration control panel of SMS is broken up in four distinct sections. Use the sub-navigation
-			menu above to move between the sections and make changes.
-			
-			<?
-			
-			switch( $subsec ) {
-				case "user":
-					echo "<b class='yellow'>There are 2 user account links and 3 biography links to account for the various access levels associated with those features. Do not delete any of those links or those features, at certain access levels, will cease to function correctly!</b>";
-					break;
-				case "manage":
-					echo "<b class='yellow'>There are 2 All NPC links to account for the various access levels associated with that feature. Do not delete either of those links or the feature, at certain access levels, will cease to function correctly!</b>";
-					break;
-			}
-			
-			?>
-			
-			<ul class="list-dark">
-				<?
-				
-				while( $menuAdmin = mysql_fetch_array( $getAdminResult ) ) {
-					extract( $menuAdmin, EXTR_OVERWRITE );
-					
-					if( $subsec == $menuMainSec ) {
-					
-						echo "<li><a href='" . $webLocation . "admin.php?page=manage&sub=menuadvanced&sec=" . $sec . "&subsec=" . $subsec . "&id=" . $menuid . "'>" . $menuTitle . "</a></li>";
-					
-					}
-					
-				}
-				
-				?>
-			</ul>
-			<? } else { ?>
-			
-				<div class="postDetails fontNormal">
-					<b class="fontMedium">Admin Navigation Menu Items - <?=ucfirst( $subsec ); ?></b><br /><br />
-					<table>
-						<tr>
-							<td><b>Title</b></td>
-							<td><b>Group</b></td>
-							<td><b>Order</b></td>
+				<div id="two-b" class="ui-tabs-container ui-tabs-hide">
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['general']['personnel'] as $gen_pers_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $gen_pers_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($gen_pers_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$gen_pers_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$gen_pers_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$gen_pers_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
 						</tr>
-						<?
-						
-						while( $menuAdmin = mysql_fetch_array( $getAdminResult ) ) {
-							extract( $menuAdmin, EXTR_OVERWRITE );
-							
-							if( $subsec == $menuMainSec ) {
-							
-								echo "<tr>";
-									echo "<td>";
-									if( $menuAvailability == "off" ) {
-										echo "<b class='red'>OFF</span> &nbsp;";
-									}
-									echo "<a href='" . $webLocation . "admin.php?page=manage&sub=menuadvanced&sec=" . $sec . "&subsec=" . $subsec . "&id=" . $menuid . "'>" . $menuTitle . "</a></td>";
-									echo "<td>" . $menuGroup . "</td>";
-									echo "<td>" . $menuOrder . "</td>";
-								echo "</tr>";
-							
-							}
-							
-						}
-						
-						?>
+						<?php } ?>
 					</table>
 				</div>
 				
-				<b class="fontLarge">Edit Menu Item</b><br /><br />
-				Offsite links will open in a new window.  If you choose an offsite link, please provide the entire URL, otherwise,
-				please only provide the information after the domain (i.e. index.php?page=manage&amp;sub=globals). Additional
-				information about other menu items in this category are provided on the side. <b class="red">Editing the menu
-				item access code will cause the menu item to be unusable!</b><br /><br />
+				<div id="three-b" class="ui-tabs-container ui-tabs-hide">
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['general']['simm'] as $gen_simm_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $gen_simm_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($gen_simm_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$gen_simm_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$gen_simm_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$gen_simm_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
 				
-				<b><a href="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>">&laquo; Back to Menu Items</a></b><br /><br />
+				<div id="four-b" class="ui-tabs-container ui-tabs-hide">
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['general']['ship'] as $gen_ship_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $gen_ship_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($gen_ship_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$gen_ship_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$gen_ship_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$gen_ship_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<div id="three-a" class="ui-tabs-container ui-tabs-hide">
+			The administration control panel of SMS is broken up in four distinct sections. Use the sub-navigation menu below to move between the sections and make any changes.
+			
+			<div id="container-3">
+				<ul>
+					<li><a href="#one-c"><span>Post</span></a></li>
+					<li><a href="#two-c"><span>Manage</span></a></li>
+					<li><a href="#three-c"><span>Reports</span></a></li>
+					<li><a href="#four-c"><span>User</span></a></li>
+				</ul>
 				
-				<?
-			
-				$getItem = "SELECT * FROM sms_menu_items WHERE menuid = '$id' LIMIT 1";
-				$getItemResult = mysql_query( $getItem );
+				<div id="one-c" class="ui-tabs-container ui-tabs-hide">
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['admin']['post'] as $admin_post_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $admin_post_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($admin_post_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$admin_post_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$admin_post_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$admin_post_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
 				
-				while( $itemFetch = mysql_fetch_array( $getItemResult ) ) {
-					extract( $itemFetch, EXTR_OVERWRITE );
-				}
-			
-				?>
-			
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=menuadvanced&sec=<?=$sec;?>&subsec=<?=$subsec;?>&id=<?=$id;?>">
-				<table>
-					<tr>
-						<td class="tableCellLabel">Menu Item Status</td>
-						<td></td>
-						<td>
-							<input type="radio" name="menuAvailability" id="maOn" value="on"<? if( $menuAvailability == "on" ) { echo " checked"; } ?>/><label for="maOn">On</label>
-							<input type="radio" name="menuAvailability" id="maOff" value="off"<? if( $menuAvailability == "off" ) { echo " checked"; } ?>/><label for="maOff">Off</label>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Title</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuTitle" value="<?=$menuTitle;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Link Type</td>
-						<td></td>
-						<td>
-							<select name="menuLinkType">
-								<option value="onsite"<? if( $menuLinkType == "onsite" ) { echo " selected"; } ?>>Onsite</option>
-								<option value="offsite"<? if( $menuLinkType == "offsite" ) { echo " selected"; } ?>>Offsite</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Link</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuLink" value="<?=$menuLink;?>" /></td>
-					</tr>
-					<tr>
-						<td colspan="3" height="15"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Category</td>
-						<td></td>
-						<td>
-							<select name="menuCat">
-								<option value="main"<? if( $menuCat == "main" ) { echo " selected"; } ?>>Main Navigation</option>
-								<option value="general"<? if( $menuCat == "general" ) { echo " selected"; } ?>>General Menus</option>
-								<option value="admin"<? if( $menuCat == "admin" ) { echo " selected"; } ?>>Admin Menus</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Section</td>
-						<td></td>
-						<td>
-							<select name="menuMainSec">
-								<optgroup label="Main Navigation">
-									<option value=""<? if( $menuMainSec == "" ) { echo " selected"; } ?>>Main Navigation</option>
-								</optgroup>
-								<optgroup label="General Menus">
-									<option value="main"<? if( $menuMainSec == "main" ) { echo " selected"; } ?>>Main</option>
-									<option value="personnel"<? if( $menuMainSec == "personnel" ) { echo " selected"; } ?>>Personnel</option>
-									<option value="ship"<? if( $menuMainSec == "ship" ) { echo " selected"; } ?>><?=ucfirst( $simmType );?></option>
-									<option value="simm"<? if( $menuMainSec == "simm" ) { echo " selected"; } ?>>Simm</option>
-								</optgroup>
-								<optgroup label="Admin Menus">
-									<option value="post"<? if( $menuMainSec == "post" ) { echo " selected"; } ?>>Post</option>
-									<option value="manage"<? if( $menuMainSec == "manage" ) { echo " selected"; } ?>>Manage</option>
-									<option value="reports"<? if( $menuMainSec == "reports" ) { echo " selected"; } ?>>Reports</option>
-									<option value="user"<? if( $menuMainSec == "user" ) { echo " selected"; } ?>>User</option>
-								</optgroup>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Access Code</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuAccess" value="<?=$menuAccess;?>" /></td>
-					</tr>
-					<tr>
-						<td colspan="3" height="15"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Group</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuGroup" size="3" value="<?=$menuGroup;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Menu Item Order</td>
-						<td></td>
-						<td><input type="text" class="text" name="menuOrder" size="3" value="<?=$menuOrder;?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Requires Login?</td>
-						<td></td>
-						<td>
-							<input type="radio" id="menuLoginY" name="menuLogin" value="y" <? if( $menuLogin == "y" ) { echo "checked"; } ?>/><label for="menuLoginY">Yes</label>
-							<input type="radio" id="menuLoginN" name="menuLogin" value="n" <? if( $menuLogin == "n" ) { echo "checked"; } ?>/><label for="menuLoginN">No</label>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="25"></td>
-					</tr>
-					<tr>
-						<td colspan="3">
-							<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="update" />
-							&nbsp;
-							<script type="text/javascript">
-								document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this menu item?')\" />" );
-							</script>
-							<noscript>
-								<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
-							</noscript>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="250"></td>
-					</tr>
-				</table>
-			</form>
-			
-			<? } ?>
-		<? } ?>
+				<div id="two-c" class="ui-tabs-container ui-tabs-hide">
+					<b class='yellow'>There are 2 All NPC links to account for the various access levels associated with that feature. Do not delete either of those links or the feature, at certain access levels, will cease to function correctly!</b><br /><br />
+					
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['admin']['manage'] as $admin_manage_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $admin_manage_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($admin_manage_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$admin_manage_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$admin_manage_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$admin_manage_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
+				
+				<div id="three-c" class="ui-tabs-container ui-tabs-hide">
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['admin']['reports'] as $admin_reports_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $admin_reports_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($admin_reports_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$admin_reports_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$admin_reports_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$admin_reports_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
+				
+				<div id="four-c" class="ui-tabs-container ui-tabs-hide">
+					<b class='yellow'>There are 2 user account links and 3 biography links to account for the various access levels associated with those features. Do not delete any of those links or those features, at certain access levels, will cease to function correctly!</b><br /><br />
+					
+					<table class="zebra" cellpadding="3" cellspacing="0">
+						<thead>
+							<tr class="fontMedium">
+								<th width="30%">Title</th>
+								<th width="50%">URL</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<?php foreach($menus['admin']['user'] as $admin_user_v) { ?>
+						<tr class="fontNormal">
+							<td width="30%">
+								<?
+								
+								if( $admin_user_v['display'] == "off" ) {
+									echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+								}
+								
+								printText($admin_user_v['title']);
+								
+								?>
+							</td>
+							<td width="50%"><?=$admin_user_v['link'];?></td>
+							<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$admin_user_v['id'];?>" myAction="delete"><b>Delete</b></a></td>
+							<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$admin_user_v['id'];?>" myAction="edit"><b>Edit</b></a></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 
