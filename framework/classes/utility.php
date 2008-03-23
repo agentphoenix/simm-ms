@@ -12,7 +12,7 @@ Purpose: Page with the class that is called by the system to check for the
 	messages
 
 System Version: 2.6.0
-Last Modified: 2008-03-19 1749 EST
+Last Modified: 2008-03-23 0011 EST
 
 Included Classes:
 	QueryCheck
@@ -109,7 +109,7 @@ class QueryCheck
 			
 			/* this phrase should be added for skin and rank set updates */
 			if( $object == "site globals" ) {
-				$this->message.= " Some changes to the Site Globals require menu changes as well. Please check the <a href='admin.php?page=manage&sub=menugeneral'>menu management</a> page for instructions on any menu changes that need to be made.";
+				$this->message.= " Some changes to the Site Globals require menu changes as well. Please check the <a href='admin.php?page=manage&sub=menus'>menu management</a> page for instructions on any menu changes that need to be made.";
 			}
 			
 			/* this phrase should be added for skin and rank set updates */
