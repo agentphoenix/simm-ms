@@ -341,8 +341,57 @@ Tag: " . $fetchPost['postTag'] . "
 			switch($action_type)
 			{
 				case 'accept':
+					
+					/* set the status to accepted */
+					$query1 = "UPDATE sms_awards_queue SET status = 'accepted' WHERE id = $action_id";
+					$result1 = mysql_query($query1);
+					
+					/* get the data */
+					$get = "SELECT q.*, c.awards FROM sms_awards_queue AS q, sms_crew AS c ";
+					$get.= "WHERE q.id = $action_id AND c.crewid = q.nominated LIMIT 1";
+					$getR = mysql_query($get);
+					$fetch = mysql_fetch_assoc($getR);
+					
+					/* don't explode the array if there's nothing there to start with */
+					if(!empty($fetch['awards']))
+					{
+						$awards_array = explode(";", $fetch['awards']);
+					}
+
+					/* get the date info from PHP */
+					$now = getdate();
+
+					/* build the new award entry */
+					$awards_array[] = $fetch['award'] . "," . $now[0] . "," . $fetch['reason'];
+
+					/* put the string back together */
+					$awards_string = implode(";", $awards_array);
+					
+					/* build the update query */
+					$update = "UPDATE sms_crew SET awards = %s WHERE crewid = $fetch[nominated]";
+					
+					/* insert the values into the query */
+					$query = sprintf(
+						$update,
+						escape_string($awards_string)
+					);
+					
+					/* run the query */
+					$result = mysql_query($query);
+					
+					/* optimize the tables */
+					optimizeSQLTable( "sms_awards_queue" );
+					optimizeSQLTable( "sms_crew" );
+					
 					break;
 				case 'reject':
+					
+					$query = "UPDATE sms_awards_queue SET status = 'rejected' WHERE id = $action_id";
+					$result = mysql_query($query);
+					
+					/* optimize the table */
+					optimizeSQLTable( "sms_awards_queue" );
+					
 					break;
 			}
 		}
