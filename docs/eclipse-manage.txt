@@ -1,4 +1,4 @@
-Last Update: 2008.03.23 0015 EST
+Last Update: 2008.03.23 2326 EST
 
 IN PROGRESS
 =====
@@ -35,8 +35,8 @@ IN PROGRESS
 
 #	Finish re-writing the menu management AJAX pages
 		*	Add
-		*	Edit
-		*	Delete
+		x	Edit
+		x	Delete
 				
 #	Clean-up install and update files
 		
