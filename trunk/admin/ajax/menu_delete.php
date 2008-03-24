@@ -25,25 +25,28 @@ if(in_array("x_menu", $sessionAccess))
 	$get = "SELECT * FROM sms_menu_items WHERE menuid = $id LIMIT 1";
 	$getR = mysql_query( $get );
 	$pendingArray = mysql_fetch_assoc( $getR );
+	
+	switch($pendingArray['menuCat'])
+	{
+		case 'main':
+			$section = "Main Navgiation";
+			break;
+		case 'general':
+			$section = "General System menus";
+			break;
+		case 'admin':
+			$section = "Administration System menus";
+			break;
+	}
 
 ?>
-	<h2>Activate Pending Mission Post?</h2>
-	<p>Are you sure you want to activate this post?  Once activated, the post will be emailed to the entire crew.</p>
-	
-	<hr size="1" width="100%" />
+	<h2>Delete Menu Item?</h2>
+	<p>Are you sure you want to delete the <strong class="orange"><? printText($pendingArray['menuTitle']);?></strong> menu item from the <?=$section;?>?  This action cannot be undone and could cause problems with SMS! If you are unsure, we recommend that you simply turn the menu item&rsquo;s availability to OFF.</p>
 	
 	<form method="post" action="">
-		<h3><? printText( $pendingArray['postTitle'] );?></h3>
-		<h4>By <? displayAuthors( $pendingArray['postid'], 'noLink' );?></h4>
-		
-		<div class="overflow"><? printText( $pendingArray['postContent'] );?></div>
-		
-		<p></p>
-		
 		<div>
-			<input type="hidden" name="action_id" value="<?=$pendingArray['postid'];?>" />
-			<input type="hidden" name="action_category" value="post" />
-			<input type="hidden" name="action_type" value="activate" />
+			<input type="hidden" name="action_id" value="<?=$pendingArray['menuid'];?>" />
+			<input type="hidden" name="action_type" value="delete" />
 			
 			<input type="image" src="<?=$webLocation;?>images/hud_button_ok.png" name="activate" value="Activate" />
 		</div>
