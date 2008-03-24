@@ -1,4 +1,4 @@
-Last Update: 2008.03.23 2326 EST
+Last Update: 2008.03.23 2353 EST
 
 IN PROGRESS
 =====
@@ -39,6 +39,9 @@ IN PROGRESS
 		x	Delete
 				
 #	Clean-up install and update files
+		*	Add a step at the beginning of the installation which checks for any
+			compatibility issues using ini_get()
+		*	Add a page to the reports section to do the same thing
 		
 #	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
 
