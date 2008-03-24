@@ -10,7 +10,7 @@ File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-03-23 0001 EST
+Last Modified: 2008-03-23 2325 EST
 **/
 
 $debug = 1;
@@ -49,12 +49,74 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 		switch($action_type)
 		{
 			case 'create':
+				
+				$create = "INSERT INTO sms_menu_items (menuGroup, menuOrder, menuTitle, menuLinkType, ";
+				$create.= "menuLink, menuAccess, menuMainSec, menuLogin, menuCat, menuAvailability) ";
+				$create.= "VALUES (%d, %d, %s, %s, %s, %s, %s, %s, %s, %s)";
+				
+				$query = sprintf(
+					$create,
+					escape_string($_POST['menuGroup']),
+					escape_string($_POST['menuOrder']),
+					escape_string($_POST['menuTitle']),
+					escape_string($_POST['menuLinkType']),
+					escape_string($_POST['menuLink']),
+					escape_string($_POST['menuAccess']),
+					escape_string($_POST['menuMainSec']),
+					escape_string($_POST['menuLogin']),
+					escape_string($_POST['menuCat']),
+					escape_string($_POST['menuAvailability'])
+				);
+				
+				$result = mysql_query($query);
+				
+				/* optimize the table */
+				optimizeSQLTable( "sms_menu_items" );
+				
+				/* set the action */
+				$action = $action_type;
+				
 				break;
 			case 'edit':
+				
+				$edit = "UPDATE sms_menu_items SET menuGroup = %d, menuOrder = %d, menuTitle = %s, ";
+				$edit.= "menuLinkType = %s, menuLink = %s, menuAccess = %s, menuMainSec = %s, ";
+				$edit.= "menuLogin = %s, menuCat = %s, menuAvailability = %s WHERE menuid = $action_id";
+				
+				$query = sprintf(
+					$edit,
+					escape_string($_POST['menuGroup']),
+					escape_string($_POST['menuOrder']),
+					escape_string($_POST['menuTitle']),
+					escape_string($_POST['menuLinkType']),
+					escape_string($_POST['menuLink']),
+					escape_string($_POST['menuAccess']),
+					escape_string($_POST['menuMainSec']),
+					escape_string($_POST['menuLogin']),
+					escape_string($_POST['menuCat']),
+					escape_string($_POST['menuAvailability'])
+				);
+				
+				$result = mysql_query($query);
+				
+				/* optimize the table */
+				optimizeSQLTable( "sms_menu_items" );
+				
+				/* set the action */
+				$action = "update";
+				
 				break;
 			case 'delete':
-				break;
-			default:
+				
+				$query = "DELETE FROM sms_menu_items WHERE menuid = $action_id";
+				$result = mysql_query($query);
+				
+				/* optimize the table */
+				optimizeSQLTable( "sms_menu_items" );
+				
+				/* set the action */
+				$action = $action_type;
+				
 				break;
 		}
 	}
