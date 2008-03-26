@@ -93,7 +93,7 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		$updateGlobals.= "WHERE globalid = '1' LIMIT 1";
 		$result = mysql_query( $updateGlobals );
 		
-	} if( isset( $action_options ) && $_POST['maxJPAuthors'] > 0 ) {
+	} if( isset( $action_options ) ) {
 		
 		/* pop the x, y, and name values off the POST array */
 		array_pop( $_POST );
