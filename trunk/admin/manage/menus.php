@@ -10,16 +10,8 @@ File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-03-26 1333 EST
+Last Modified: 2008-03-26 1341 EST
 **/
-
-$debug = 1;
-
-if($debug >= 1)
-{
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
-}
 
 /* access check */
 if( in_array( "x_menu", $sessionAccess ) ) {
