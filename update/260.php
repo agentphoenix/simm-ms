@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-03-23 0006 EST
+Last Modified: 2008-03-25 2124 EST
 **/
 
 /*
@@ -141,9 +141,9 @@ VALUES ( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=acc
 | CREW
 |---------------------------------------------------------------
 |
-| Codenamed Neptune, SMS now offers a personalized menu option that
-| allows players to set up 10 of their favorite or most used links,
-| giving them quick access to them once they are logged in.
+| SMS now offers a personalized menu option that allows players to 
+| set up 10 of their favorite or most used links, giving them quick
+| access to them once they are logged in.
 |
 */
 /* add the user menu item preferences */
