@@ -10,7 +10,7 @@ File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-03-23 2325 EST
+Last Modified: 2008-03-26 1333 EST
 **/
 
 $debug = 1;
@@ -51,8 +51,8 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 			case 'create':
 				
 				$create = "INSERT INTO sms_menu_items (menuGroup, menuOrder, menuTitle, menuLinkType, ";
-				$create.= "menuLink, menuAccess, menuMainSec, menuLogin, menuCat, menuAvailability) ";
-				$create.= "VALUES (%d, %d, %s, %s, %s, %s, %s, %s, %s, %s)";
+				$create.= "menuLink, menuMainSec, menuLogin, menuCat) ";
+				$create.= "VALUES (%d, %d, %s, %s, %s, %s, %s, %s)";
 				
 				$query = sprintf(
 					$create,
@@ -61,11 +61,9 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 					escape_string($_POST['menuTitle']),
 					escape_string($_POST['menuLinkType']),
 					escape_string($_POST['menuLink']),
-					escape_string($_POST['menuAccess']),
 					escape_string($_POST['menuMainSec']),
 					escape_string($_POST['menuLogin']),
-					escape_string($_POST['menuCat']),
-					escape_string($_POST['menuAvailability'])
+					escape_string($_POST['menuCat'])
 				);
 				
 				$result = mysql_query($query);
