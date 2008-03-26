@@ -1,4 +1,4 @@
-Last Update: 2008.03.23 2353 EST
+Last Update: 2008.03.26 1504 EST
 
 IN PROGRESS
 =====
@@ -13,8 +13,6 @@ IN PROGRESS
 		*	/admin/user
 
 #	Global setting for default access levels
-
-#	SMS Update options
 
 #	Toggle boxes should use jQuery instead of the custom Javascript code
 		
@@ -32,11 +30,6 @@ IN PROGRESS
 		x	News
 		x	Awards
 		*	Docking Requests
-
-#	Finish re-writing the menu management AJAX pages
-		*	Add
-		x	Edit
-		x	Delete
 				
 #	Clean-up install and update files
 		*	Add a step at the beginning of the installation which checks for any
@@ -115,3 +108,7 @@ X	Ability to specify more options for the personalized menu arrow graphic
 X	Tab content immediately available
 
 X	Extra information on award (id, timestamp, reason;)
+
+X	Finish re-writing the menu management AJAX pages
+
+X	SMS Update options
