@@ -11,7 +11,7 @@ Purpose: Page with the class that is called by the system to check for
 	ACP items liked saved posts, pending items, SMS updates and PMs
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1623 EST
+Last Modified: 2008-03-26 1503 EST
 
 Included Classes:
 	SystemCheck
@@ -34,9 +34,9 @@ class SystemCheck
 		
 		/* set the url of the XML file */
 		/* DO NOT CHANGE THIS URL! Doing so will break the version checking function! */
-		#$url = "http://www.anodyne-productions.com/feeds/version.xml";
-		$url = "http://eclipse.anodyne-productions.com/version.xml";
+		$url = "http://www.anodyne-productions.com/feeds/version.xml";
 		$rss = fetch_rss( $url );
+		$continue = 1;
 		
 		/* define the variables coming out of the XML file */
 		foreach( $rss->items as $item ) {
@@ -45,48 +45,54 @@ class SystemCheck
 			$severity = $item['severity'];
 		}
 		
-		/* if the version the user has and the version from the XML file are different, display the notice */
-		if( VER_FILES < $rssVersion && VER_DB < $rssVersion ) {
-			
-			//$this->output_array[0][1].= "<img src='" . WEBLOC . "images/feed.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
-			//$this->output_array[0][1].= "<span class='fontTitle'>SMS Update Available</span><br /><br />";
-			$this->output_array[0][1] = "<div class='notify-red'>";
-			$this->output_array[0][1].= "<b class='red case'>Update Available</b> &mdash; ";
-			$this->output_array[0][1].= "SMS " . $rssVersion . " is now available.<br /><br />";
-			
-			$this->output_array[0][1].= $notes;
-			$this->output_array[0][1].= "<br /><br />";
-			$this->output_array[0][1].= "Go to the <a href='http://www.anodyne-productions.com/index.php?cat=sms&page=downloads' target='_blank'>Anodyne SMS Site</a> to download this update.";
-			$this->output_array[0][1].= "</div>";
-			
-		} if( VER_DB > VER_FILES && VER_DB == $rssVersion ) {
-			
-			//$this->output_array[0][1].= "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
-			//$this->output_array[0][1].= "<span class='fontTitle'>SMS Update Warning</span><br /><br />";
-			$this->output_array[0][1] = "<div class='notify-orange'>";
-			$this->output_array[0][1].= "<b class='orange case'>Update Warning</b> &mdash; ";
-			$this->output_array[0][1].= "Your database is running SMS version " . VER_DB . ", however, your files are running version " . VER_FILES . " and need to be updated. Please upload the correct files before continuing. If you do not update your files and database SMS will not work correctly!";
-			$this->output_array[0][1].= "</div>";
-			
-		} if( VER_FILES > VER_DB && VER_FILES == $rssVersion ) {
-	
-			/* format the version right for the URL pass */
-			$urlVersion = str_replace( ".", "", VER_DB );
-	
-			/* do some logic to make sure that the urlVersion var is right */
-			if( $urlVersion == "20" || $urlVersion == "21" || $urlVersion == "22" || $urlVersion == "23" || $urlVersion == "24" || $urlVersion == "25" || $urlVersion == "26" ) {
-				$urlVersion = $urlVersion . "0";
-			}
-			
-			//$this->output_array[0][1].= "<img src='" . WEBLOC . "images/warning-large.png' border='0' alt='' style='float:left; padding: 0 12px 0 0;' />";
-			//$this->output_array[0][1].= "<span class='fontTitle'>SMS Update Warning</span><br /><br />";
-			$this->output_array[0][1] = "<div class='notify-orange'>";
-			$this->output_array[0][1].= "<b class='orange case'>Update Warning</b> &mdash; ";
-			$this->output_array[0][1].= "Your files are running SMS version " . VER_FILES . ", however, your database is running version " . VER_DB . " and needs to be updated. Please use the link below to finish your update. If you do not update your files and database SMS will not work correctly!<br /><br />";
-			$this->output_array[0][1].= "<a href='" . WEBLOC . "update.php?version=" . $urlVersion . "'>Update SMS Database</a>";
-			$this->output_array[0][1].= "</div>";
-			
+		/* logic to figure out if we're supposed to show the update notification */
+		if($notify == "none") {
+			$continue = 0;
+		} if($notify == "major" && $severity == "minor") {
+			$continue = 0;
 		}
+		
+		/* if we're supposed to show the update info, do it */
+		if($continue == 1)
+		{
+		
+			/* if the version the user has and the version from the XML file are different, display the notice */
+			if( VER_FILES < $rssVersion && VER_DB < $rssVersion ) {
+			
+				$this->output_array[0][1] = "<div class='notify-red'>";
+				$this->output_array[0][1].= "<b class='red case'>Update Available</b> &mdash; ";
+				$this->output_array[0][1].= "SMS " . $rssVersion . " is now available.<br /><br />";
+			
+				$this->output_array[0][1].= $notes;
+				$this->output_array[0][1].= "<br /><br />";
+				$this->output_array[0][1].= "Go to the <a href='http://www.anodyne-productions.com/index.php?cat=sms&page=downloads' target='_blank'>Anodyne SMS Site</a> to download this update.";
+				$this->output_array[0][1].= "</div>";
+			
+			} if( VER_DB > VER_FILES && VER_DB == $rssVersion ) {
+			
+				$this->output_array[0][1] = "<div class='notify-orange'>";
+				$this->output_array[0][1].= "<b class='orange case'>Update Warning</b> &mdash; ";
+				$this->output_array[0][1].= "Your database is running SMS version " . VER_DB . ", however, your files are running version " . VER_FILES . " and need to be updated. Please upload the correct files before continuing. If you do not update your files and database SMS will not work correctly!";
+				$this->output_array[0][1].= "</div>";
+			
+			} if( VER_FILES > VER_DB && VER_FILES == $rssVersion ) {
+	
+				/* format the version right for the URL pass */
+				$urlVersion = str_replace( ".", "", VER_DB );
+	
+				/* do some logic to make sure that the urlVersion var is right */
+				if( $urlVersion == "20" || $urlVersion == "21" || $urlVersion == "22" || $urlVersion == "23" || $urlVersion == "24" || $urlVersion == "25" || $urlVersion == "26" ) {
+					$urlVersion = $urlVersion . "0";
+				}
+			
+				$this->output_array[0][1] = "<div class='notify-orange'>";
+				$this->output_array[0][1].= "<b class='orange case'>Update Warning</b> &mdash; ";
+				$this->output_array[0][1].= "Your files are running SMS version " . VER_FILES . ", however, your database is running version " . VER_DB . " and needs to be updated. Please use the link below to finish your update. If you do not update your files and database SMS will not work correctly!<br /><br />";
+				$this->output_array[0][1].= "<a href='" . WEBLOC . "update.php?version=" . $urlVersion . "'>Update SMS Database</a>";
+				$this->output_array[0][1].= "</div>";
+			
+			}
+		} /* close the continue variable */
 	}
 	
 	function pendings()
