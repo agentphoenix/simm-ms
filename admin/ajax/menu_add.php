@@ -16,16 +16,6 @@ if(in_array("x_menu", $sessionAccess))
 	include_once('../../framework/functionsAdmin.php');
 	include_once('../../framework/functionsUtility.php');
 
-	if(isset($_GET['id']) && is_numeric($_GET['id']))
-	{
-		$id = $_GET['id'];
-	}
-	
-	/* get the data */
-	$get = "SELECT * FROM sms_menu_items WHERE menuid = $id LIMIT 1";
-	$getR = mysql_query( $get );
-	$pendingArray = mysql_fetch_assoc( $getR );
-
 ?>
 	<h2>Add Menu Item</h2>
 	<p>Use the fields below to provide details for your new menu item. Please note that creating admin items that require unique access controls is not supported in this version of SMS!</p>
@@ -36,7 +26,17 @@ if(in_array("x_menu", $sessionAccess))
 			<tr>
 				<td class="hudLabel">Title</td>
 				<td></td>
-				<td><input type="text" class="text" name="menuTitle" size="40" /></td>
+				<td><input type="text" class="image" name="menuTitle" /></td>
+			</tr>
+			
+			<tr>
+				<td colspan="3" height="15"></td>
+			</tr>
+			
+			<tr>
+				<td class="hudLabel">Link</td>
+				<td></td>
+				<td><input type="text" class="image" name="menuLink" /></td>
 			</tr>
 			<tr>
 				<td class="hudLabel">Link Type</td>
@@ -48,11 +48,11 @@ if(in_array("x_menu", $sessionAccess))
 					</select>
 				</td>
 			</tr>
+			
 			<tr>
-				<td class="hudLabel">Link</td>
-				<td></td>
-				<td><input type="text" class="text" name="menuLink" size="40" /></td>
+				<td colspan="3" height="15"></td>
 			</tr>
+			
 			<tr>
 				<td class="hudLabel">Category</td>
 				<td></td>
@@ -87,13 +87,28 @@ if(in_array("x_menu", $sessionAccess))
 					</select>
 				</td>
 			</tr>
+			
+			<tr>
+				<td colspan="3" height="15"></td>
+			</tr>
+			
+			<tr>
+				<td class="hudLabel">Group</td>
+				<td></td>
+				<td><input type="text" class="order" name="menuGroup" /></td>
+			</tr>
 			<tr>
 				<td class="hudLabel">Order</td>
 				<td></td>
-				<td><input type="text" class="text" name="menuOrder" size="3" /></td>
+				<td><input type="text" class="order" name="menuOrder" /></td>
 			</tr>
+			
 			<tr>
-				<td class="hudLabel">Login Required?</td>
+				<td colspan="3" height="15"></td>
+			</tr>
+			
+			<tr>
+				<td class="hudLabel">Requires Login?</td>
 				<td></td>
 				<td>
 					<input type="radio" id="menuLoginY" name="menuLogin" value="y" /><label for="menuLoginY">Yes</label>
@@ -105,8 +120,7 @@ if(in_array("x_menu", $sessionAccess))
 		<br /><br />
 		
 		<div>
-			<input type="hidden" name="action_id" value="<?=$pendingArray['menuid'];?>" />
-			<input type="hidden" name="action_type" value="edit" />
+			<input type="hidden" name="action_type" value="create" />
 			
 			<input type="image" src="<?=$webLocation;?>images/hud_button_ok.png" name="activate" value="Activate" />
 		</div>
