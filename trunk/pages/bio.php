@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1318 EST
+Last Modified: 2008-03-27 1812 EST
 **/
 
 /* define the page class and set the vars */
@@ -431,10 +431,28 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 				<tr class="fontNormal <?=$rowColor;?>">	
 					<td width="70"><img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
 					<td>
-						<b><? printText( $awardName ); ?></b><br />
-						<span class="fontNormal">Awarded: <?=dateFormat( "short2", $value[1] );?></span>
+						<b><? printText( $awardName ); ?></b>
+						<?php
+						
+						if(count($value) > 1)
+						{
+							echo "<br /><span class='fontNormal'>Awarded: ";
+							echo dateFormat( "short2", $value[1] );
+							echo "</span>";
+						}
+						
+						?>
 					</td>
-					<td><? printText( $value[2] );?></td>
+					<td>
+						<?
+						
+						if(count($value) > 1)
+						{
+							printText( $value[2] );
+						}
+						
+						?>
+					</td>
 				</tr>
 		
 				<?
