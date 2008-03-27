@@ -10,7 +10,7 @@ File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1553 EST
+Last Modified: 2008-03-27 1818 EST
 **/
 
 /* access check */
@@ -207,11 +207,11 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 		?>
 	
 		<? if( $useMissionNotes == "y" && $action != "Delete" ) { ?>
-		
+			
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('a#toggle').click(function() {
-					$('#notes').toggle(75);
+					$('#notes').slideToggle('slow');
 					return false;
 				});
 			});
