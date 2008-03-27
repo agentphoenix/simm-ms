@@ -10,7 +10,7 @@ File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-03-26 1341 EST
+Last Modified: 2008-03-27 1821 EST
 **/
 
 /* access check */
@@ -185,7 +185,7 @@ while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
 		});
 		
 		$('a#toggle').click(function() {
-			$('#notes').toggle(75);
+			$('#notes').slideToggle('slow');
 			return false;
 		});
 	});
