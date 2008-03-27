@@ -81,7 +81,7 @@ body {
 	height: 25px;
 	line-height: 25px;
 	width: 978px;
-	margin: auto;
+	margin: 0 auto;
 	
 	border-top: 2px solid #5C5E61;
 	background: #898A8C;
@@ -116,7 +116,7 @@ body {
 | the body and side navigation as well)
 |
 */
-#container .content { padding: 0 2em 0 2em; }
+#container .content {}
 
 /*
 |---------------------------------------------------------------
@@ -126,10 +126,7 @@ body {
 | Styles that control the body of the system (where all the content is held)
 |
 */
-#container .content .body {
-	margin-right: 20%;
-	padding: 1em 0 1em 1em;
-}
+#container .content .body { padding: 1em; }
 
 /*
 |---------------------------------------------------------------
@@ -139,29 +136,32 @@ body {
 | Styles that control the side navigation
 |
 */
-#container .content .nav {
-	float: right;
-	width: 18%;
-	padding: 1.5em 0 1em 0;
+.nav {
+	height: 130px;
+	width: 978px;
+	margin: -13px auto;
+	overflow: hidden;
 	
 	font-size: 95%;
 	text-align: right;
 }
-#container .content .nav ul {
+.nav ul {
 	display: block;
 	margin: 0;
-	padding: .5em .2em 1em 0;
 }
-#container .content .nav ul li { list-style-type: none; }
-#container .content .nav a { padding: 0 .5em 0 0; }
+.nav ul li {
+	list-style-type: none;
+	display: inline;
+}
+.nav a {}
 
 /* part of the nav menu ... controls the login display */
-#container .content .nav .login a { padding: 0; }
+.nav .login a { padding: 0; }
 
 /* part of the nav menu ... controls the info below the menu */
-#container .content .nav .info { padding: 0 1em 0 2em; }
-#container .content .nav .info .fontLarge { margin: 0 -.5em 0 0; }
-#container .content .nav .info a { margin: 0 -.5em 0 0; }
+.nav .info { padding: 0 1em 0 2em; }
+.nav .info .fontLarge { margin: 0 -.5em 0 0; }
+.nav .info a { margin: 0 -.5em 0 0; }
 
 /*
 |---------------------------------------------------------------

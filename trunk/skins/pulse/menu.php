@@ -57,56 +57,44 @@ $menu->skin = $sessionDisplaySkin;
 	?>
 </div><br />
 
-<div class="content">
-	<div class="nav">
-		<div class="login">
-		<? if( isset( $sessionCrewid ) ) { ?>
-			<i>Hello, <? printCrewName( $sessionCrewid, "noRank", "noLink" ); ?></i><br />
-			{ <a href="<?=$webLocation;?>login.php?action=logout">Log Out</a> }
-		<? } else { ?>
-			<form method="post" action="<?=$webLocation;?>login.php?action=checkLogin" class="login">
-				<b>Username</b><br />
-				<input type="text" name="username" size="12" class="text" /><br /><br />
-				
-				<b>Password</b><br />
-				<input type="password" name="password" size="12" class="text" /><br /><br />
-				
-				<input type="image" src="<?=SKIN_PATH;?>buttons/login-small.png" name="submit" class="buttonSmall" value="Login" />
-			</form>
-			<br />
-			<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
-		<? } ?>
-		<br /><br />
-		<? include_once( 'framework/stardate.php' ); ?>
-		</div> <!-- close the .login layer -->
-		<br />
+<div class="nav">
+	<?
+	
+	include_once( 'framework/stardate.php' );
+	echo "<br /><br />";
+	
+	if( $pageClass == "main" ) {
+	
+		/* pull in the menu */
+		$menu->general( "main" );
+	
+		/* include the info page */
+		include_once( "pages/info.php" );
+	
+	} elseif( $pageClass == "personnel" ) {
+	
+		/* pull in the menu */
+		$menu->general( "personnel" );
+	
+	} elseif( $pageClass == "ship" ) {
+	
+		/* pull in the menu */
+		$menu->general( $simmType );
+	
+	} elseif( $pageClass == "simm" ) {
+		
+		/* pull in the menu */
+		$menu->general( "simm" );
+		
+	}
+	
+	?>
+</div>
 
-		<?
-		
-		if( $pageClass == "main" ) {
-		
-			/* pull in the menu */
-			$menu->general( "main" );
-		
-			/* include the info page */
-			include_once( "pages/info.php" );
-		
-		} elseif( $pageClass == "personnel" ) {
-		
-			/* pull in the menu */
-			$menu->general( "personnel" );
-		
-		} elseif( $pageClass == "ship" ) {
-		
-			/* pull in the menu */
-			$menu->general( $simmType );
-		
-		} elseif( $pageClass == "simm" ) {
-			
-			/* pull in the menu */
-			$menu->general( "simm" );
-			
-		} elseif( $pageClass == "admin" ) {
+<div class="content">
+	<?php
+	
+	if( $pageClass == "admin" ) {
 			
 			/* pull in the admin menus */
 			$menu->admin( "post", $sessionAccess, $sessionCrewid );
@@ -117,4 +105,3 @@ $menu->skin = $sessionDisplaySkin;
 		}
 		
 		?>
-	</div> <!-- close the .nav layer -->
