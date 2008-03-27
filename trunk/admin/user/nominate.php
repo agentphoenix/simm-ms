@@ -10,7 +10,7 @@ File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1617 EST
+Last Modified: 2008-03-27 1820 EST
 **/
 
 /* access check */
@@ -19,9 +19,11 @@ if( in_array( "u_nominate", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "user";
-	$action = $_POST['action_x'];
+	$result = false;
+	$query = false;
 
-	if( isset($action) ) {
+	if(isset($_POST['action_x']))
+	{
 		
 		$insert = "INSERT INTO sms_awards_queue ( crew, nominated, award, reason ) VALUES ( %d, %d, %d, %s )";
 		
@@ -82,7 +84,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 		
 		?>
 		
-		<span class="fontTitle">Crew Award Nomination</span><br /><br />
+		<span class="fontTitle">Award Nomination</span><br /><br />
 		
 		You can nominate a member of the crew for an award with this form.  Your 
 		nomination will be sent to the CO and XO for their review.  Please refer to the 
