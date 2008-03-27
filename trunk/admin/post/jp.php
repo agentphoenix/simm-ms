@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1553 EST
+Last Modified: 2008-03-27 1819 EST
 **/
 
 /* access check */
@@ -569,7 +569,7 @@ Tag: " . $postTag . "
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('a#toggle').click(function() {
-					$('#notes').toggle(75);
+					$('#notes').slideToggle('slow');
 					return false;
 				});
 			});
