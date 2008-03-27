@@ -1,4 +1,4 @@
-Last Update: 2008.03.26 1504 EST
+Last Update: 2008.03.27 1848 EST
 
 IN PROGRESS
 =====
@@ -8,16 +8,16 @@ IN PROGRESS
 		x	/pages
 		*	/admin/manage
 				x	posts.php
+				x	missionnotes.php
 		*	/admin/post
 		*	/admin/reports
 		*	/admin/user
+				x	nominate.php
 
 #	Global setting for default access levels
 
 #	Toggle boxes should use jQuery instead of the custom Javascript code
 		
-#	Award categories (in character, out of character, both)
-
 #	Nominated awards to queue for CO approval
 		*	Award nomination page should give users the ability to nominate an NPC
 			for an award. Need to figure out how that'll be done what with IC and OOC
@@ -36,8 +36,6 @@ IN PROGRESS
 			compatibility issues using ini_get()
 		*	Add a page to the reports section to do the same thing
 		
-#	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
-
 #	HUD windows for creation (missions, ranks, departments, positions, awards, etc.)
 
 #	Update skins
@@ -112,3 +110,7 @@ X	Extra information on award (id, timestamp, reason;)
 X	Finish re-writing the menu management AJAX pages
 
 X	SMS Update options
+
+X	Award categories (in character, out of character, both)
+
+X	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
