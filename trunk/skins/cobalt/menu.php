@@ -10,7 +10,7 @@ File: skins/cobalt/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
 Skin Version: 1.0
-Last Modified: 2008-03-06 1709 EST
+Last Modified: 2008-03-28 1634 EST
 **/
 
 ?>
@@ -65,7 +65,7 @@ $menu->skin = $sessionDisplaySkin;
 				<b>Password</b><br />
 				<input type="password" name="password" size="12" class="loginSmallText" /><br /><br />
 				
-				<input type="image" src="skins/cobalt/buttons/login-small" name="submit" class="buttonLogin" value="Login" />
+				<input type="image" src="skins/cobalt/buttons/login-small.png" name="submit" class="buttonLogin" value="Login" />
 			</form>
 			<br />
 			<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
