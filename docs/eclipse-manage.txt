@@ -1,4 +1,4 @@
-Last Update: 2008.03.27 1848 EST
+Last Update: 2008.03.29 1633 EST
 
 IN PROGRESS
 =====
@@ -23,20 +23,20 @@ IN PROGRESS
 			for an award. Need to figure out how that'll be done what with IC and OOC
 			awards now.
 
-#	Re-write activation page
-		x	Users
-		x	Posts
-		x	Logs
-		x	News
-		x	Awards
-		*	Docking Requests
-				
 #	Clean-up install and update files
 		*	Add a step at the beginning of the installation which checks for any
 			compatibility issues using ini_get()
 		*	Add a page to the reports section to do the same thing
 		
-#	HUD windows for creation (missions, ranks, departments, positions, awards, etc.)
+#	HUD windows
+		*	Creation
+				x	Missions
+				@	Ranks
+				@	Departments
+				@	Positions
+				@	Awards
+		*	Editing
+				@	Docked Ships
 
 #	Update skins
 		
@@ -46,13 +46,13 @@ IN QUEUE
 
 #	Add cadet ranks (off by default)
 
-#	[BUG] Player stats page doesn't have logic against blank timestamps
-
 #	Departmental databases
 
 #	Ability for crew to edit their posts and logs
 
-#	Access changes need to filter to all the access pages
+#	Access changes need to filter down to all the access pages
+
+#	[BUG] Player stats page doesn't have logic against blank timestamps
 
 #	[BUG] Account page - changing user's crewType to pending doesn't affect the position count
 
@@ -114,3 +114,5 @@ X	SMS Update options
 X	Award categories (in character, out of character, both)
 
 X	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
+
+X	Re-write activation page
