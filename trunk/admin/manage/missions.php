@@ -10,7 +10,7 @@ File: admin/manage/missions.php
 Purpose: Page that creates and moderates the missions
 
 System Version: 2.6.0
-Last Modified: 2008-02-26 0951 EST
+Last Modified: 2008-03-29 1721 EST
 **/
 
 /* access check */
@@ -19,32 +19,39 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
+	$query = FALSE;
+	$result = FALSE;
 	
-	/* if the POST is set, set the vars */
-	if( isset($_POST) )
+	if(isset($_GET['s']) && is_numeric($_GET['s']))
 	{
-		$actionCreate = $_POST['action_create_x'];
-		$actionUpdate = $_POST['action_update_x'];
-		$actionDelete = $_POST['action_delete_x'];
+		$sec = $_GET['s'];
+	}
+	else
+	{
+		$sec = 1;
 	}
 	
-	/* make sure a zero date isn't inserted into the db */
-	if( $_POST['missionStart'] == "0000-00-00 00:00:00" || $_POST['missionStart'] == "" ) {
-		$missionStart = "";
-	} else {
-		$missionStart = strtotime( $_POST['missionStart'] );
-	}
+	/* special function that preps the date for insertion */
+	function prep_date($date)
+	{
+		if($date == "0000-00-00 00:00:00" || $date == "")
+		{
+			$date = "";
+		}
+		else
+		{
+			$date = strtotime($date);
+		}
 		
-	if( $_POST['missionEnd'] == "0000-00-00 00:00:00" || $_POST['missionEnd'] == "" ) {
-		$missionEnd = "";
-	} else {
-		$missionEnd = strtotime( $_POST['missionEnd'] );
+		return $date;
 	}
 	
-	/* if the POST action is create */
-	if( isset( $actionCreate ) ) {
+	if(isset($_POST['action_type']) && $_POST['action_type'] == 'create') {
 		
 		$create = "INSERT INTO sms_missions ( missionOrder, missionTitle, missionDesc, missionStatus, missionStart, missionEnd, missionImage ) VALUES ( %d, %s, %s, %s, %d, %d, %s )";
+		
+		$start = prep_date($_POST['missionStart']);
+		$end = prep_date($_POST['missionEnd']);
 		
 		$query = sprintf(
 			$create,
@@ -52,8 +59,8 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 			escape_string( $_POST['missionTitle'] ),
 			escape_string( $_POST['missionDesc'] ),
 			escape_string( $_POST['missionStatus'] ),
-			escape_string( $missionStart ),
-			escape_string( $missionEnd ),
+			escape_string( $start ),
+			escape_string( $end ),
 			escape_string( $_POST['missionImage'] )
 		);
 		
@@ -64,8 +71,7 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 		
 		$action = "create";
 	
-	/* if the POST action is update */
-	} elseif( isset( $actionUpdate ) ) {
+	} if(isset($_POST['action_update_x'])) {
 		
 		/* make sure the mission id is a number */
 		if( is_numeric( $_POST['missionid'] ) )
@@ -73,14 +79,17 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 			$update = "UPDATE sms_missions SET missionOrder = %d, missionTitle = %s, missionDesc = %s, missionStatus = %s, ";
 			$update.= "missionStart = %d, missionEnd = %d, missionImage = %s WHERE missionid = $_POST[missionid] LIMIT 1";
 			
+			$start = prep_date($_POST['missionStart']);
+			$end = prep_date($_POST['missionEnd']);
+			
 			$query = sprintf(
 				$update,
 				escape_string( $_POST['missionOrder'] ),
 				escape_string( $_POST['missionTitle'] ),
 				escape_string( $_POST['missionDesc'] ),
 				escape_string( $_POST['missionStatus'] ),
-				escape_string( $missionStart ),
-				escape_string( $missionEnd ),
+				escape_string( $start ),
+				escape_string( $end ),
 				escape_string( $_POST['missionImage'] )
 			);
 		
@@ -92,8 +101,7 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 			$action = "update";
 		}
 	
-	/* if the POST action is delete */
-	} elseif( isset( $actionDelete ) ) {
+	} if(isset($_POST['action_delete_x'])) {
 		
 		/* make sure the mission id is a number */
 		if( is_numeric( $_POST['missionid'] ) )
@@ -109,13 +117,56 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 		}
 	
 	}
+	
+	$mission_array = array(
+		'current' => array(),
+		'completed' => array(),
+		'upcoming' => array()
+	);
+
+	$missions = "SELECT * FROM sms_missions ORDER BY missionOrder DESC";
+	$missionsResult = mysql_query( $missions );
+
+	while( $notes = mysql_fetch_array( $missionsResult ) ) {
+		extract( $notes, EXTR_OVERWRITE );
+
+		$mission_array[$missionStatus][] = array(
+			'id' => $missionid,
+			'title' => $missionTitle,
+			'order' => $missionOrder,
+			'start' => $missionStart,
+			'end' => $missionStart,
+			'desc' => $missionDesc,
+			'image' => $missionImage,
+			'status' => $missionStatus
+		);
+
+	}
+
+	$disable = array();
+
+	if(count($mission_array['current']) == 0) {
+		$disable[] = 1;
+	}
+
+	if(count($mission_array['upcoming']) == 0) {
+		$disable[] = 2;
+	}
+
+	if(count($mission_array['completed']) == 0) {
+		$disable[] = 3;
+	}
+
+	$disable_string = implode(",", $disable);
 
 ?>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('#container-1 > ul').tabs(<?php echo $sec; ?>, { disabled: [<?php echo $disable_string; ?>] });
+		
 		$("a[rel*=facebox]").click(function() {
 			jQuery.facebox(function() {
-				jQuery.get('admin/ajax/mission_create.php', function(data) {
+				jQuery.get('admin/ajax/mission_add.php', function(data) {
 					jQuery.facebox(data);
 				});
 			});
@@ -143,82 +194,216 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 	management lets you provide the pertinent information to your crew. To create a mission, click the link below, or to
 	update/delete a mission, use the forms below.<br /><br />
 	
-	<a href="#" rel="facebox" class="fontMedium"><strong>Create New Mission &raquo;</strong></a>
+	<a href="#" rel="facebox" class="fontMedium add"><strong>Add New Mission &raquo;</strong></a>
 	<br /><br />
 	
-	<table cellpadding="0" cellspacing="3">
-	<?
-	
-	/* pull the missions from the database */
-	$missions = "SELECT * FROM sms_missions ORDER BY missionOrder DESC";
-	$missionsResult = mysql_query( $missions );
-	
-	/* loop through the result set and fill the form */
-	while( $missionFetch = mysql_fetch_assoc( $missionsResult ) ) {
-		extract( $missionFetch, EXTR_OVERWRITE );
+	<div id="container-1">
+		<ul>
+			<li><a href="#one"><span>Current Mission</span></a></li>
+			<li><a href="#two"><span>Upcoming Missions</span></a></li>
+			<li><a href="#three"><span>Completed Missions</span></a></li>
+		</ul>
+
+		<div id="one" class="ui-tabs-container ui-tabs-hide">
+			<table cellpadding="0" cellspacing="3">
+				<?php foreach($mission_array['current'] as $k1 => $v1) { ?>
+				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=missions&s=1">
+				<tr>
+					<td colspan="2" valign="top">
+						<span class="fontNormal"><b>Title</b></span><br />
+						<input type="text" class="image" name="missionTitle" value="<?=stripslashes( $v1['title'] );?>" />
+					</td>
+					<td valign="top">
+						<span class="fontNormal"><b>Start Date</b></span><br />
+						<input type="text" class="date" name="missionStart" value="<? if( empty( $v1['start'] ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $v1['start'] ); } ?>" />
+					</td>
+					<td width="55%" rowspan="3" align="center" valign="top">
+						<span class="fontNormal"><b>Description</b></span><br />
+						<textarea name="missionDesc" class="desc" rows="7"><?=stripslashes( $v1['desc'] );?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="bottom">
+						<span class="fontNormal"><b>Image</b></span><br />
+						<span class="fontSmall">images/missionimages/</span>
+						<input type="text" class="image" name="missionImage" value="<?=$v1['image'];?>" maxlength="50" />
+					</td>
+				    <td valign="bottom">
+				    	<span class="fontNormal"><b>End Date</b></span><br />
+						<input type="text" class="date" name="missionEnd" value="<? if( empty( $v1['end'] ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $v1['end'] ); } ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span class="fontNormal"><b>Order</b></span><br />
+						<input type="text" class="color" name="missionOrder" value="<?=$v1['order'];?>" />
+					</td>
+				    <td>
+				    	<span class="fontNormal"><b>Status</b></span><br />
+						<select name="missionStatus">
+							<option value="upcoming"<? if( $v1['status'] == "upcoming" ) { echo " selected"; } ?>>Upcoming Mission</option>
+							<option value="current"<? if( $v1['status'] == "current" ) { echo " selected"; } ?>>Current Mission</option>
+							<option value="completed"<? if( $v1['status'] == "completed" ) { echo " selected"; } ?>>Completed Mission</option>
+						</select>
+					</td>
+				    <td></td>
+				</tr>
+				<tr>
+					<td colspan="3"></td>
+				    <td align="center" valign="top">
+				    	<script type="text/javascript">
+							document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission?')\" />" );
+						</script>
+						<noscript>
+							<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
+						</noscript>
+						&nbsp;&nbsp;
+						<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="Update" />
+						<input type="hidden" name="missionid" value="<?=$v1['id'];?>" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" height="25">&nbsp;</td>
+				</tr>
+				</form>
+			<? } ?>
+			</table>
+		</div>
 		
-	?>
-		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=missions">
-		<tr>
-			<td colspan="2" valign="top">
-				<span class="fontNormal"><b>Title</b></span><br />
-				<input type="text" class="image" name="missionTitle" value="<?=stripslashes( $missionTitle );?>" />
-			</td>
-			<td valign="top">
-				<span class="fontNormal"><b>Start Date</b></span><br />
-				<input type="text" class="date" name="missionStart" value="<? if( empty( $missionStart ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $missionStart ); } ?>" />
-			</td>
-			<td width="55%" rowspan="3" align="center" valign="top">
-				<span class="fontNormal"><b>Description</b></span><br />
-				<textarea name="missionDesc" class="desc" rows="7"><?=stripslashes( $missionDesc );?></textarea>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" valign="bottom">
-				<span class="fontNormal"><b>Image</b></span><br />
-				<span class="fontSmall">images/missionimages/</span>
-				<input type="text" class="image" name="missionImage" value="<?=$missionImage;?>" maxlength="50" />
-			</td>
-		    <td valign="bottom">
-		    	<span class="fontNormal"><b>End Date</b></span><br />
-				<input type="text" class="date" name="missionEnd" value="<? if( empty( $missionEnd ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $missionEnd ); } ?>" />
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<span class="fontNormal"><b>Order</b></span><br />
-				<input type="text" class="color" name="missionOrder" value="<?=$missionOrder;?>" />
-			</td>
-		    <td>
-		    	<span class="fontNormal"><b>Status</b></span><br />
-				<select name="missionStatus">
-					<option value="upcoming"<? if( $missionStatus == "upcoming" ) { echo " selected"; } ?>>Upcoming Mission</option>
-					<option value="current"<? if( $missionStatus == "current" ) { echo " selected"; } ?>>Current Mission</option>
-					<option value="completed"<? if( $missionStatus == "completed" ) { echo " selected"; } ?>>Completed Mission</option>
-				</select>
-			</td>
-		    <td></td>
-		</tr>
-		<tr>
-			<td colspan="3"></td>
-		    <td align="center" valign="top">
-		    	<script type="text/javascript">
-					document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission?')\" />" );
-				</script>
-				<noscript>
-					<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
-				</noscript>
-				&nbsp;&nbsp;
-				<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="Update" />
-				<input type="hidden" name="missionid" value="<?=$missionid;?>" />
-			</td>
-		</tr>
-		<tr>
-			<td colspan="4" height="25">&nbsp;</td>
-		</tr>
-		</form>
-	<? } ?>
-	</table>
+		<div id="two" class="ui-tabs-container ui-tabs-hide">
+			<table cellpadding="0" cellspacing="3">
+				<?php foreach($mission_array['upcoming'] as $k2 => $v2) { ?>
+				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=missions&s=2">
+				<tr>
+					<td colspan="2" valign="top">
+						<span class="fontNormal"><b>Title</b></span><br />
+						<input type="text" class="image" name="missionTitle" value="<?=stripslashes( $v2['title'] );?>" />
+					</td>
+					<td valign="top">
+						<span class="fontNormal"><b>Start Date</b></span><br />
+						<input type="text" class="date" name="missionStart" value="<? if( empty( $v2['start'] ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $v2['start'] ); } ?>" />
+					</td>
+					<td width="55%" rowspan="3" align="center" valign="top">
+						<span class="fontNormal"><b>Description</b></span><br />
+						<textarea name="missionDesc" class="desc" rows="7"><?=stripslashes( $v2['desc'] );?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="bottom">
+						<span class="fontNormal"><b>Image</b></span><br />
+						<span class="fontSmall">images/missionimages/</span>
+						<input type="text" class="image" name="missionImage" value="<?=$v2['image'];?>" maxlength="50" />
+					</td>
+				    <td valign="bottom">
+				    	<span class="fontNormal"><b>End Date</b></span><br />
+						<input type="text" class="date" name="missionEnd" value="<? if( empty( $v2['end'] ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $v2['end'] ); } ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span class="fontNormal"><b>Order</b></span><br />
+						<input type="text" class="color" name="missionOrder" value="<?=$v2['order'];?>" />
+					</td>
+				    <td>
+				    	<span class="fontNormal"><b>Status</b></span><br />
+						<select name="missionStatus">
+							<option value="upcoming"<? if( $v2['status'] == "upcoming" ) { echo " selected"; } ?>>Upcoming Mission</option>
+							<option value="current"<? if( $v2['status'] == "current" ) { echo " selected"; } ?>>Current Mission</option>
+							<option value="completed"<? if( $v2['status'] == "completed" ) { echo " selected"; } ?>>Completed Mission</option>
+						</select>
+					</td>
+				    <td></td>
+				</tr>
+				<tr>
+					<td colspan="3"></td>
+				    <td align="center" valign="top">
+				    	<script type="text/javascript">
+							document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission?')\" />" );
+						</script>
+						<noscript>
+							<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
+						</noscript>
+						&nbsp;&nbsp;
+						<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="Update" />
+						<input type="hidden" name="missionid" value="<?=$v2['id'];?>" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" height="25">&nbsp;</td>
+				</tr>
+				</form>
+			<? } ?>
+			</table>
+		</div>
+		
+		<div id="three" class="ui-tabs-container ui-tabs-hide">
+			<table cellpadding="0" cellspacing="3">
+				<?php foreach($mission_array['completed'] as $k3 => $v3) { ?>
+				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=missions&s=3">
+				<tr>
+					<td colspan="2" valign="top">
+						<span class="fontNormal"><b>Title</b></span><br />
+						<input type="text" class="image" name="missionTitle" value="<?=stripslashes( $v3['title'] );?>" />
+					</td>
+					<td valign="top">
+						<span class="fontNormal"><b>Start Date</b></span><br />
+						<input type="text" class="date" name="missionStart" value="<? if( empty( $v3['start'] ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $v3['start'] ); } ?>" />
+					</td>
+					<td width="55%" rowspan="3" align="center" valign="top">
+						<span class="fontNormal"><b>Description</b></span><br />
+						<textarea name="missionDesc" class="desc" rows="7"><?=stripslashes( $v3['desc'] );?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="bottom">
+						<span class="fontNormal"><b>Image</b></span><br />
+						<span class="fontSmall">images/missionimages/</span>
+						<input type="text" class="image" name="missionImage" value="<?=$v3['image'];?>" maxlength="50" />
+					</td>
+				    <td valign="bottom">
+				    	<span class="fontNormal"><b>End Date</b></span><br />
+						<input type="text" class="date" name="missionEnd" value="<? if( empty( $v3['end'] ) ) { echo "0000-00-00 00:00:00"; } else { echo dateFormat( "sql", $v3['end'] ); } ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span class="fontNormal"><b>Order</b></span><br />
+						<input type="text" class="color" name="missionOrder" value="<?=$v3['order'];?>" />
+					</td>
+				    <td>
+				    	<span class="fontNormal"><b>Status</b></span><br />
+						<select name="missionStatus">
+							<option value="upcoming"<? if( $v3['status'] == "upcoming" ) { echo " selected"; } ?>>Upcoming Mission</option>
+							<option value="current"<? if( $v3['status'] == "current" ) { echo " selected"; } ?>>Current Mission</option>
+							<option value="completed"<? if( $v3['status'] == "completed" ) { echo " selected"; } ?>>Completed Mission</option>
+						</select>
+					</td>
+				    <td></td>
+				</tr>
+				<tr>
+					<td colspan="3"></td>
+				    <td align="center" valign="top">
+				    	<script type="text/javascript">
+							document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission?')\" />" );
+						</script>
+						<noscript>
+							<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
+						</noscript>
+						&nbsp;&nbsp;
+						<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="Update" />
+						<input type="hidden" name="missionid" value="<?=$v3['id'];?>" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" height="25">&nbsp;</td>
+				</tr>
+				</form>
+			<? } ?>
+			</table>
+		</div>
+		
+	</div>
+	
 </div>
 
 <? } else { errorMessage( "mission management" ); } ?>
