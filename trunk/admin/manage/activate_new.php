@@ -10,7 +10,7 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-03-20 1713 EST
+Last Modified: 2008-03-29 1626 EST
 **/
 
 $debug = 1;
@@ -399,9 +399,57 @@ Tag: " . $fetchPost['postTag'] . "
 		{
 			switch($action_type)
 			{
-				case 'activate':
+				case 'approve':
+					
+					$query = "UPDATE sms_starbase_docking SET dockingStatus = 'activated' WHERE dockid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_starbase_docking" );
+
+					/** EMAIL THE APPROVAL **/
+
+					/* set the email author */
+					$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
+					$emailFetchResult = mysql_query( $emailFetch );
+					$coEmail = mysql_fetch_row( $emailFetchResult );
+
+					/* define the variables */
+					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Docking Request";
+					$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we are pleased to inform you that your request to dock with our starbase has been approved!
+
+The CO of the station will be in contact with you shortly.  Thank you for interest in docking with us.";
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
 					break;
-				case 'delete':
+				case 'deny':
+					
+					$query = "DELETE FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_stabase_docking" );
+
+					/** EMAIL THE DENIAL **/
+
+					/* set the email author */
+					$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
+					$emailFetchResult = mysql_query( $emailFetch );
+					$coEmail = mysql_fetch_row( $emailFetchResult );
+
+					/* define the variables */
+					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Docking Request";
+					$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we regret to inform you that your request to dock with our starbase has been denied.  There can be many reasons for this.  If you would like clarification, please contact the CO.";
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
 					break;
 			}
 		}
@@ -434,6 +482,19 @@ Tag: " . $fetchPost['postTag'] . "
 	$getPendingAwardsResult = mysql_query( $getPendingAwards );
 	$countPendingAwards = mysql_num_rows( $getPendingAwardsResult );
 	
+	if($simmType == "starbase")
+	{
+		/* get pending docking requests */
+		$getPendingDocking = "SELECT * FROM sms_starbase_docking WHERE dockingStatus = 'pending'";
+		$getPendingDockingResult = mysql_query( $getPendingDocking );
+		$countPendingDocking = mysql_num_rows( $getPendingDockingResult );
+		
+		if($action_category == "docking")
+		{
+			$action_category = "docking request";
+		}
+	}
+	
 	if($debug >= 2)
 	{
 		echo "<pre>";
@@ -451,6 +512,8 @@ Tag: " . $fetchPost['postTag'] . "
 		$start = 4;
 	} elseif($countPendingAwards > 0) {
 		$start = 5;
+	} elseif($simmType == "starbase" && $countPendingDocking > 0) {
+		$start = 6;
 	} else {
 		$start = 1;
 	}
@@ -498,9 +561,10 @@ Tag: " . $fetchPost['postTag'] . "
 			<li><a href="#three"><span>Personal Logs (<?=$countPendingLogs;?>)</span></a></li>
 			<li><a href="#four"><span>News Items (<?=$countPendingNews;?>)</span></a></li>
 			<li><a href="#five"><span>Awards (<?=$countPendingAwards;?>)</span></a></li>
-			<?php if($simmType == "starbase") { ?><li><a href="#six"><span>Docking Requests</span></a></li><?php } ?>
+			<?php if($simmType == "starbase") { ?><li><a href="#six"><span>Docking Requests (<?=$countPendingDocking;?>)</span></a></li><?php } ?>
 		</ul>
-	
+		
+		<!-- users -->
 		<div id="one" class="ui-tabs-container ui-tabs-hide">
 			<?php if( $countPendingUsers < 1 ) { ?>
 				<b class="fontMedium orange">No pending users found</b>
@@ -537,6 +601,7 @@ Tag: " . $fetchPost['postTag'] . "
 			<?php } /* close counting */ ?>
 		</div>
 		
+		<!-- posts -->
 		<div id="two" class="ui-tabs-container ui-tabs-hide">
 			<?php if( $countPendingPosts < 1 ) { ?>
 				<b class="fontMedium orange">No pending mission posts found</b>
@@ -573,6 +638,7 @@ Tag: " . $fetchPost['postTag'] . "
 			<?php } /* close counting */ ?>
 		</div>
 		
+		<!-- personal logs -->
 		<div id="three" class="ui-tabs-container ui-tabs-hide">
 			<?php if( $countPendingLogs < 1 ) { ?>
 				<b class="fontMedium orange">No pending personal logs found</b>
@@ -609,6 +675,7 @@ Tag: " . $fetchPost['postTag'] . "
 			<?php } /* close counting */ ?>
 		</div>
 		
+		<!-- news items -->
 		<div id="four" class="ui-tabs-container ui-tabs-hide">
 			<?php if( $countPendingNews < 1 ) { ?>
 				<b class="fontMedium orange">No pending news items found</b>
@@ -645,6 +712,7 @@ Tag: " . $fetchPost['postTag'] . "
 			<?php } /* close counting */ ?>
 		</div>
 		
+		<!-- award nominations -->
 		<div id="five" class="ui-tabs-container ui-tabs-hide">
 			<?php if( $countPendingAwards < 1 ) { ?>
 				<b class="fontMedium orange">No pending award nominations found</b>
@@ -685,7 +753,42 @@ Tag: " . $fetchPost['postTag'] . "
 			<?php } /* close counting */ ?>
 		</div>
 		
-		<div id="six" class="ui-tabs-container ui-tabs-hide"></div>
+		<!-- docking requests -->
+		<div id="six" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingDocking < 1 ) { ?>
+				<b class="fontMedium orange">No pending docking requests found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Docking Requests</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="30%">Ship Name</th>
+						<th width="25%">Ship CO</th>
+						<th width="25%">Ship Site</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
+				/* loop through the results and fill the form */
+				while( $pendingDocking = mysql_fetch_assoc( $getPendingDockingResult ) ) {
+					extract( $pendingDocking, EXTR_OVERWRITE );
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingDocking['dockingShipName'] . " " . $pendingDocking['dockingShipRegistry'] ); ?></td>
+					<td><? printText( $pendingDocking['dockingShipCO'] ); ?></td>
+					<td><a href="<?=$pendingDocking['dockingShipURL'];?>" target="_blank"><?=$pendingDocking['dockingShipURL'];?></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingDocking['dockid'];?>" myType="docking" myAction="deny"><b>Deny</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingDocking['dockid'];?>" myType="docking" myAction="approve"><b>Approve</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
 	</div>
 
 </div>
