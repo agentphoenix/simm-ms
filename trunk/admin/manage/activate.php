@@ -10,7 +10,7 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2007-11-13 2107 EST
+Last Modified: 2008-03-29 1629 EST
 **/
 
 /* access check */
@@ -26,828 +26,756 @@ if(
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_GET['action'];
-	$type = $_GET['type'];
+	$action_category = FALSE;
+	$result = FALSE;
+	$query = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "activation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$actionid = $_GET['id'];
-	}
-
-	if( $type == "crew" && in_array( "x_approve_users", $sessionAccess ) ) {
-		
-		if( $action == "activate" && isset( $_POST['activateid'] ) ) {
-			
-			$activate = $_POST['activateid'];
-			$position = $_POST['position'];
-			$rank = $_POST['rank'];
-			$message = stripslashes( $_POST['acceptMessage'] );
-			
-			/* get the position type from the database */
-			$getPosType = "SELECT positionType FROM sms_positions WHERE positionid = '$position' LIMIT 1";
-			$getPosTypeResult = mysql_query( $getPosType );
-			$positionType = mysql_fetch_row( $getPosTypeResult );
-			
-			/* if the position is a department head, set the access levels to DH */
-			/* otherwise, set it to standard player */
-			if( $positionType['0'] == "senior" ) {
-				$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-				$levelsManage = "manage,m_createcrew,m_npcs1,m_newscat2";
-				$levelsReports = "reports,r_count,r_strikes,r_activity,r_progress,r_milestones";
-				$levelsUser = "user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2";
-				$levelsOther = "";
-			} else {
-				$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-				$levelsManage = "";
-				$levelsReports = "reports,r_progress,r_milestones";
-				$levelsUser = "user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options";
-				$levelsOther = "";
-			}
-			
-			$query = "UPDATE sms_crew SET positionid = '$position', crewType = 'active', ";
-			$query.= "accessPost = '$levelsPost', accessManage = '$levelsManage', ";
-			$query.= "accessReports = '$levelsReports', accessUser = '$levelsUser', ";
-			$query.= "accessOthers = '$levelsOther', rankid = '$rank', ";
-			$query.= "leaveDate = '' WHERE crewid = '$activate' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_crew" );
-			
-			/* update the position they're being given */
-			$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-			$positionFetch.= "WHERE positionid = '$position' LIMIT 1";
-			$positionFetchResult = mysql_query( $positionFetch );
-			$positionX = mysql_fetch_row( $positionFetchResult );
-			$open = $positionX[1];
-			$revised = ( $open - 1 );
-			$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-			$updatePosition.= "WHERE positionid = '$position' LIMIT 1";
-			$updatePositionResult = mysql_query( $updatePosition );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_positions" );
-			
-			/** EMAIL THE APPROVAL **/
-	
-			/* set the email author */
-			$userFetch = "SELECT email FROM sms_crew WHERE crewid = '$activate' LIMIT 1";
-			$userFetchResult = mysql_query( $userFetch );
-			$userEmail = mysql_fetch_row( $userFetchResult );
-			
-			/* define the variables */
-			$to = $userEmail[0] . ", " . printCOEmail();
-			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Application";
-			
-			/* new instance of the replacement class */
-			$message = new MessageReplace;
-			$message->message = $acceptMessage;
-			$message->shipName = $shipPrefix . " " . $shipName;
-			$message->player = $activate;
-			$message->rank = $rank;
-			$message->position = $position;
-			$message->setArray();
-			$accept = nl2br( stripslashes( $message->changeMessage() ) );
-			
-			/* send the email */
-			mail( $to, $subject, $accept, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $action == "activate" && isset( $_POST['rejectid'] ) ) {
-
-			$actionid = $_POST['rejectid'];
-			$message = stripslashes( $_POST['rejectMessage'] );
-			
-			/** EMAIL THE DENIAL **/
-	
-			/* set the email author */
-			$userFetch = "SELECT email, positionid FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
-			$userFetchResult = mysql_query( $userFetch );
-			$userEmail = mysql_fetch_row( $userFetchResult );
-			
-			/* define the variables */
-			$to = $userEmail[0] . ", " . printCOEmail();
-			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Application";
-			
-			/* new instance of the replacement class */
-			$message = new MessageReplace;
-			$message->message = $rejectMessage;
-			$message->shipName = $shipPrefix . " " . $shipName;
-			$message->player = $actionid;
-			$message->position = $userEmail[1];
-			$message->setArray();
-			$reject = nl2br( stripslashes( $message->changeMessage() ) );
-			
-			/* send the email */
-			mail( $to, $subject, $reject, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-
-			$action = "reject";
-			
-			$query = "DELETE FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_crew" );
-		
+	if(isset($_POST))
+	{
+		/* define the POST variables */
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
 		}
 		
-	} elseif( $type == "post" && in_array( "x_approve_posts", $sessionAccess ) ) {
+		/* protecting against SQL injection */
+		if(isset($action_id) && !is_numeric($action_id))
+		{
+			$action_id = FALSE;
+			exit();
+		}
 		
-		if( $action == "activate" ) {
-		
-			$query = "UPDATE sms_posts SET postStatus = 'activated' WHERE postid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			 
-			 /* optimize the table */
-			optimizeSQLTable( "sms_posts" );
+		if($action_category == 'user' && in_array('x_approve_users', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'accept':
+					
+					/* get the position type from the database */
+					$getPosType = "SELECT positionType FROM sms_positions WHERE positionid = '$position' LIMIT 1";
+					$getPosTypeResult = mysql_query( $getPosType );
+					$positionType = mysql_fetch_row( $getPosTypeResult );
 
-			/** EMAIL THE POST **/
+					/* set the access levels accordingly */
+					if( $positionType[0] == "senior" ) {
+						$accessID = 3;
+					} else {
+						$accessID = 4;
+					}
 
-			$getPostContents = "SELECT * FROM sms_posts WHERE postid = '$actionid' LIMIT 1";
-			$getPostContentsResult = mysql_query( $getPostContents );
-			$fetchPost = mysql_fetch_assoc( $getPostContentsResult );
-	
-			/* set the email author */
-			$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
-			$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
-			$userFetch.= "crew.crewid = '$fetchPost[postAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
-			$userFetchResult = mysql_query( $userFetch );
-			
-			while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
-				extract( $userFetchArray, EXTR_OVERWRITE );
+					/* pull the default access levels from the db */
+					$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = $accessID LIMIT 1";
+					$getGroupLevelsResult = mysql_query( $getGroupLevels );
+					$groups = mysql_fetch_array( $getGroupLevelsResult );
+					
+					$update = "UPDATE sms_crew SET positionid = %d, crewType = %s, accessPost = %s, ";
+					$update.= "accessManage = %s, accessReports = %s, accessUser = %s, accessOthers = %s, ";
+					$update.= "rankid = %d, leaveDate = %s WHERE crewid = $action_id LIMIT 1";
+					
+					$query = sprintf(
+						$update,
+						escape_string( $position ),
+						escape_string( 'active' ),
+						escape_string( $groups[1] ),
+						escape_string( $groups[2] ),
+						escape_string( $groups[3] ),
+						escape_string( $groups[4] ),
+						escape_string( $groups[5] ),
+						escape_string( $rank ),
+						escape_string( '' )
+					);
+
+					$result = mysql_query( $query );
+
+					/* update the position they're being given */
+					update_position( $position, 'give' );
+
+					/** EMAIL THE APPROVAL **/
+
+					/* set the email author */
+					$userFetch = "SELECT email FROM sms_crew WHERE crewid = '$action_id' LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+					$userEmail = mysql_fetch_row( $userFetchResult );
+
+					/* define the variables */
+					$to = $userEmail[0] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Application";
+
+					/* new instance of the replacement class */
+					$message = new MessageReplace;
+					$message->message = $acceptMessage;
+					$message->shipName = $shipPrefix . " " . $shipName;
+					$message->player = $action_id;
+					$message->rank = $_POST['rank'];
+					$message->position = $_POST['position'];
+					$message->setArray();
+					$accept = nl2br( stripslashes( $message->changeMessage() ) );
+
+					/* send the email */
+					mail( $to, $subject, $accept, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					/* optimize the tables */
+					optimizeSQLTable( "sms_crew" );
+					optimizeSQLTable( "sms_positions" );
+					
+					break;
+				case 'reject':
+					
+					/** EMAIL THE REJECTION **/
+
+					/* set the email author */
+					$userFetch = "SELECT email FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+					$userEmail = mysql_fetch_row( $userFetchResult );
+
+					/* define the variables */
+					$to = $userEmail[0] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Application";
+
+					/* new instance of the replacement class */
+					$message = new MessageReplace;
+					$message->message = $rejectMessage;
+					$message->shipName = $shipPrefix . " " . $shipName;
+					$message->player = $action_id;
+					$message->position = $_POST['position'];
+					$message->setArray();
+					$reject = nl2br( stripslashes( $message->changeMessage() ) );
+
+					/* send the email */
+					mail( $to, $subject, $reject, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					/* delete the record from the db */
+					$query = "DELETE FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+					
+					/* optimize the tables */
+					optimizeSQLTable( "sms_crew" );
+					
+					break;
 			}
-			
-			$firstName = str_replace( "'", "", $firstName );
-			$lastName = str_replace( "'", "", $lastName );
-			
-			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
-			
-			/* define the variables */
-			$to = getCrewEmails( "emailPosts" );
-			$subject = $emailSubject . " " . printMissionTitle( $fetchPost['postMission'] ) . " - " . $fetchPost['postTitle'];
-			$message = "A Post By " . displayEmailAuthors( $fetchPost['postAuthor'], 'noLink' ) . "
+		}
+		if($action_category == 'post' && in_array('x_approve_posts', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'activate':
+					
+					$query = "UPDATE sms_posts SET postStatus = 'activated' WHERE postid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					 /* optimize the table */
+					optimizeSQLTable( "sms_posts" );
+
+					/** EMAIL THE POST **/
+
+					$getPostContents = "SELECT * FROM sms_posts WHERE postid = $action_id LIMIT 1";
+					$getPostContentsResult = mysql_query( $getPostContents );
+					$fetchPost = mysql_fetch_assoc( $getPostContentsResult );
+
+					/* set the email author */
+					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
+					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "crew.crewid = '$fetchPost[postAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+
+					while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
+						extract( $userFetchArray, EXTR_OVERWRITE );
+					}
+
+					$firstName = str_replace( "'", "", $firstName );
+					$lastName = str_replace( "'", "", $lastName );
+
+					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+
+					/* define the variables */
+					$to = getCrewEmails( "emailPosts" );
+					$subject = $emailSubject . " " . printMissionTitle( $fetchPost['postMission'] ) . " - " . $fetchPost['postTitle'];
+					$message = "A Post By " . displayEmailAuthors( $fetchPost['postAuthor'], 'noLink' ) . "
 Location: " . $fetchPost['postLocation'] . "
 Timeline: " . $fetchPost['postTimeline'] . "
 Tag: " . $fetchPost['postTag'] . "
 
 " . $fetchPost['postContent'] . "";
-		
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $action == "delete" ) {
-		
-			$query = "DELETE FROM sms_posts WHERE postid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_posts" );
-		
-		}
-		
-	} elseif( $type == "log" && in_array( "x_approve_logs", $sessionAccess ) ) {
-		
-		if( $action == "activate" ) {
-		
-			$query = "UPDATE sms_personallogs SET logStatus = 'activated' WHERE logid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_personallogs" );
 
-			/** EMAIL THE LOG **/
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					break;
+				case 'delete':
+					
+					$query = "DELETE FROM sms_posts WHERE postid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
 
-			$getLogContents = "SELECT * FROM sms_personallogs WHERE logid = '$actionid' LIMIT 1";
-			$getLogContentsResult = mysql_query( $getLogContents );
-			$fetchLog = mysql_fetch_assoc( $getLogContentsResult );
-	
-			/* set the email author */
-			$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
-			$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
-			$userFetch.= "crew.crewid = '$fetchLog[logAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
-			$userFetchResult = mysql_query( $userFetch );
-			
-			while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
-				extract( $userFetchArray, EXTR_OVERWRITE );
+					/* optimize the table */
+					optimizeSQLTable( "sms_posts" );
+					
+					break;
 			}
-			
-			$firstName = str_replace( "'", "", $firstName );
-			$lastName = str_replace( "'", "", $lastName );
-			
-			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
-			$name = $rankName . " " . $firstName . " " . $lastName;
-			
-			/* define the variables */
-			$to = getCrewEmails( "emailLogs" );
-			$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $fetchLog['logTitle'] );
-			$message = stripslashes( $fetchLog['logContent'] );
-		
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $action == "delete" ) {
-		
-			$query = "DELETE FROM sms_personallogs WHERE logid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_personallogs" );
-		
 		}
-		
-	} elseif( $type == "news" && in_array( "x_approve_news", $sessionAccess ) ) {
-		
-		if( $action == "activate" ) {
-		
-			$query = "UPDATE sms_news SET newsStatus = 'activated' WHERE newsid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_news" );
+		if($action_category == 'log' && in_array('x_approve_logs', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'activate':
+				
+					$query = "UPDATE sms_personallogs SET logStatus = 'activated' WHERE logid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
 
-			/** EMAIL THE NEWS **/
+					/* optimize the table */
+					optimizeSQLTable( "sms_personallogs" );
 
-			$getNewsContents = "SELECT * FROM sms_news WHERE newsid = '$actionid' LIMIT 1";
-			$getNewsContentsResult = mysql_query( $getNewsContents );
-			$fetchNews = mysql_fetch_assoc( $getNewsContentsResult );
+					/** EMAIL THE LOG **/
 
-			/* pull the category name */
-			$getCategory = "SELECT catName FROM sms_news_categories WHERE catid = '$fetchNews[newsCat]' LIMIT 1";
-			$getCategoryResult = mysql_query( $getCategory );
-			$category = mysql_fetch_assoc( $getCategoryResult );
+					$getLogContents = "SELECT * FROM sms_personallogs WHERE logid = $action_id LIMIT 1";
+					$getLogContentsResult = mysql_query( $getLogContents );
+					$fetchLog = mysql_fetch_assoc( $getLogContentsResult );
 
-			/* set the email author */
-			$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
-			$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
-			$userFetch.= "crew.crewid = '$fetchNews[newsAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
-			$userFetchResult = mysql_query( $userFetch );
-			
-			while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
-				extract( $userFetchArray, EXTR_OVERWRITE );
+					/* set the email author */
+					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
+					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "crew.crewid = '$fetchLog[logAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+
+					while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
+						extract( $userFetchArray, EXTR_OVERWRITE );
+					}
+
+					$firstName = str_replace( "'", "", $firstName );
+					$lastName = str_replace( "'", "", $lastName );
+
+					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+					$name = $rankName . " " . $firstName . " " . $lastName;
+
+					/* define the variables */
+					$to = getCrewEmails( "emailLogs" );
+					$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $fetchLog['logTitle'] );
+					$message = stripslashes( $fetchLog['logContent'] );
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					break;
+				case 'delete':
+					
+					$query = "DELETE FROM sms_personallogs WHERE logid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_personallogs" );
+					
+					break;
 			}
+		}
+		if($action_category == 'news' && in_array('x_approve_news', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'activate':
+					
+					$query = "UPDATE sms_news SET newsStatus = 'activated' WHERE newsid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
 
-			$firstName = str_replace( "'", "", $firstName );
-			$lastName = str_replace( "'", "", $lastName );
-			
-			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
-			
-			/* define the variables */
-			$to = getCrewEmails( "emailNews" );
-			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $fetchNews['newsTitle'] );
-			$message = "A News Item Posted By " . printCrewNameEmail( $fetchNews['newsAuthor'] ) . "
-			
+					/* optimize the table */
+					optimizeSQLTable( "sms_news" );
+
+					/** EMAIL THE NEWS **/
+
+					$getNewsContents = "SELECT * FROM sms_news WHERE newsid = $action_id LIMIT 1";
+					$getNewsContentsResult = mysql_query( $getNewsContents );
+					$fetchNews = mysql_fetch_assoc( $getNewsContentsResult );
+
+					/* pull the category name */
+					$getCategory = "SELECT catName FROM sms_news_categories WHERE catid = '$fetchNews[newsCat]' LIMIT 1";
+					$getCategoryResult = mysql_query( $getCategory );
+					$category = mysql_fetch_assoc( $getCategoryResult );
+
+					/* set the email author */
+					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
+					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "crew.crewid = '$fetchNews[newsAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
+					$userFetchResult = mysql_query( $userFetch );
+
+					while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
+						extract( $userFetchArray, EXTR_OVERWRITE );
+					}
+
+					$firstName = str_replace( "'", "", $firstName );
+					$lastName = str_replace( "'", "", $lastName );
+
+					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+
+					/* define the variables */
+					$to = getCrewEmails( "emailNews" );
+					$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $fetchNews['newsTitle'] );
+					$message = "A News Item Posted By " . printCrewNameEmail( $fetchNews['newsAuthor'] ) . "
+
 " . stripslashes( $fetchNews['newsContent'] );
 
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $action == "delete" ) {
-		
-			$query = "DELETE FROM sms_news WHERE newsid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_news" );
-		
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					break;
+				case 'delete':
+					
+					$query = "DELETE FROM sms_news WHERE newsid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_news" );
+					
+					break;
+			}
 		}
-		
-	} elseif( $type == "docking" && $simmType == "starbase" && in_array( "x_approve_docking", $sessionAccess ) ) {
-		
-		if( $action == "activate" ) {
-		
-			$query = "UPDATE sms_starbase_docking SET dockingStatus = 'activated' WHERE dockid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_starbase_docking" );
-			
-			/** EMAIL THE APPROVAL **/
-	
-			/* set the email author */
-			$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = '$actionid' LIMIT 1";
-			$emailFetchResult = mysql_query( $emailFetch );
-			$coEmail = mysql_fetch_row( $emailFetchResult );
-			
-			/* define the variables */
-			$to = $coEmail['email'] . ", " . printCOEmail();
-			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Docking Request";
-			$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we are pleased to inform you that your request to dock with our starbase has been approved!
+		if($action_category == 'award' && in_array('m_giveaward', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'accept':
+					
+					/* set the status to accepted */
+					$query1 = "UPDATE sms_awards_queue SET status = 'accepted' WHERE id = $action_id";
+					$result1 = mysql_query($query1);
+					
+					/* get the data */
+					$get = "SELECT q.*, c.awards FROM sms_awards_queue AS q, sms_crew AS c ";
+					$get.= "WHERE q.id = $action_id AND c.crewid = q.nominated LIMIT 1";
+					$getR = mysql_query($get);
+					$fetch = mysql_fetch_assoc($getR);
+					
+					/* don't explode the array if there's nothing there to start with */
+					if(!empty($fetch['awards']))
+					{
+						$awards_array = explode(";", $fetch['awards']);
+					}
+
+					/* get the date info from PHP */
+					$now = getdate();
+
+					/* build the new award entry */
+					$awards_array[] = $fetch['award'] . "," . $now[0] . "," . $fetch['reason'];
+
+					/* put the string back together */
+					$awards_string = implode(";", $awards_array);
+					
+					/* build the update query */
+					$update = "UPDATE sms_crew SET awards = %s WHERE crewid = $fetch[nominated]";
+					
+					/* insert the values into the query */
+					$query = sprintf(
+						$update,
+						escape_string($awards_string)
+					);
+					
+					/* run the query */
+					$result = mysql_query($query);
+					
+					/* optimize the tables */
+					optimizeSQLTable( "sms_awards_queue" );
+					optimizeSQLTable( "sms_crew" );
+					
+					break;
+				case 'reject':
+					
+					$query = "UPDATE sms_awards_queue SET status = 'rejected' WHERE id = $action_id";
+					$result = mysql_query($query);
+					
+					/* optimize the table */
+					optimizeSQLTable( "sms_awards_queue" );
+					
+					break;
+			}
+		}
+		if($action_category == 'docking' && in_array('x_approve_docking', $sessionAccess))
+		{
+			switch($action_type)
+			{
+				case 'approve':
+					
+					$query = "UPDATE sms_starbase_docking SET dockingStatus = 'activated' WHERE dockid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_starbase_docking" );
+
+					/** EMAIL THE APPROVAL **/
+
+					/* set the email author */
+					$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
+					$emailFetchResult = mysql_query( $emailFetch );
+					$coEmail = mysql_fetch_row( $emailFetchResult );
+
+					/* define the variables */
+					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Docking Request";
+					$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we are pleased to inform you that your request to dock with our starbase has been approved!
 
 The CO of the station will be in contact with you shortly.  Thank you for interest in docking with us.";
-		
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $action == "delete" ) {
-		
-			$query = "DELETE FROM sms_starbase_docking WHERE dockid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_stabase_docking" );
-			
-			/** EMAIL THE DENIAL **/
-	
-			/* set the email author */
-			$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = '$actionid' LIMIT 1";
-			$emailFetchResult = mysql_query( $emailFetch );
-			$coEmail = mysql_fetch_row( $emailFetchResult );
-			
-			/* define the variables */
-			$to = $coEmail['email'] . ", " . printCOEmail();
-			$from = printCO() . " < " . printCOEmail() . " >";
-			$subject = $emailSubject . " Your Docking Request";
-			$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we regret to inform you that your request to dock with our starbase has been denied.  There can be many reasons for this.  If you would like clarification, please contact the CO.";
-		
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					break;
+				case 'deny':
+					
+					$query = "DELETE FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
+					$result = mysql_query( $query );
+
+					/* optimize the table */
+					optimizeSQLTable( "sms_stabase_docking" );
+
+					/** EMAIL THE DENIAL **/
+
+					/* set the email author */
+					$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
+					$emailFetchResult = mysql_query( $emailFetch );
+					$coEmail = mysql_fetch_row( $emailFetchResult );
+
+					/* define the variables */
+					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();
+					$from = printCO() . " < " . printCOEmail() . " >";
+					$subject = $emailSubject . " Your Docking Request";
+					$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we regret to inform you that your request to dock with our starbase has been denied.  There can be many reasons for this.  If you would like clarification, please contact the CO.";
+
+					/* send the email */
+					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+					
+					break;
+			}
 		}
+	}
+
+	/* get pending users */
+	$getPendingUsers = "SELECT crew.crewid, crew.firstName, crew.lastName, position.positionName ";
+	$getPendingUsers.= "FROM sms_crew AS crew, sms_positions AS position WHERE ";
+	$getPendingUsers.= "crew.positionid = position.positionid AND crewType = 'pending'";
+	$getPendingUsersResult = mysql_query( $getPendingUsers );
+	$countPendingUsers = mysql_num_rows( $getPendingUsersResult );
+	
+	/* get pending mission posts */
+	$getPendingPosts = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'pending'";
+	$getPendingPostsResult = mysql_query( $getPendingPosts );
+	$countPendingPosts = mysql_num_rows( $getPendingPostsResult );
+	
+	/* get pending personal logs */
+	$getPendingLogs = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'pending'";
+	$getPendingLogsResult = mysql_query( $getPendingLogs );
+	$countPendingLogs = mysql_num_rows( $getPendingLogsResult );
+	
+	/* get pending news items */
+	$getPendingNews = "SELECT newsid, newsTitle FROM sms_news WHERE newsStatus = 'pending'";
+	$getPendingNewsResult = mysql_query( $getPendingNews );
+	$countPendingNews = mysql_num_rows( $getPendingNewsResult );
+	
+	/* get pending awards */
+	$getPendingAwards = "SELECT * FROM sms_awards_queue WHERE status = 'pending'";
+	$getPendingAwardsResult = mysql_query( $getPendingAwards );
+	$countPendingAwards = mysql_num_rows( $getPendingAwardsResult );
+	
+	if($simmType == "starbase")
+	{
+		/* get pending docking requests */
+		$getPendingDocking = "SELECT * FROM sms_starbase_docking WHERE dockingStatus = 'pending'";
+		$getPendingDockingResult = mysql_query( $getPendingDocking );
+		$countPendingDocking = mysql_num_rows( $getPendingDockingResult );
 		
+		if($action_category == "docking")
+		{
+			$action_category = "docking request";
+		}
+	}
+	
+	if($countPendingUsers > 0) {
+		$start = 1;
+	} elseif($countPendingPosts > 0) {
+		$start = 2;
+	} elseif($countPendingLogs > 0) {
+		$start = 3;
+	} elseif($countPendingNews > 0) {
+		$start = 4;
+	} elseif($countPendingAwards > 0) {
+		$start = 5;
+	} elseif($simmType == "starbase" && $countPendingDocking > 0) {
+		$start = 6;
+	} else {
+		$start = 1;
 	}
 
 ?>
 
-	<div class="body">
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#container-1 > ul').tabs(<?php echo $start; ?>);
+		$('.zebra tr:odd').addClass('alt');
+		
+		$("a[rel*=facebox]").click(function() {
+			var id = $(this).attr("myID");
+			var type = $(this).attr("myType");
+			var action = $(this).attr("myAction");
+			
+			jQuery.facebox(function() {
+				jQuery.get('admin/ajax/activate_' + type + "_" + action + '.php?id=' + id, function(data) {
+					jQuery.facebox(data);
+				});
+			});
+			return false;
+		});
+	});
+</script>
+
+<div class="body">
+	<?php
 	
-		<?
+	$check = new QueryCheck;
+	$check->checkQuery( $result, $query );
+	
+	if( !empty( $check->query ) ) {
+		$check->message( $action_category, $action_type );
+		$check->display();
+	}
+	
+	?>
+	<span class="fontTitle">Manage Pending Items</span><br /><br />
+
+	<div id="container-1">
+		<ul>
+			<li><a href="#one"><span>Users (<?=$countPendingUsers;?>)</span></a></li>
+			<li><a href="#two"><span>Mission Posts (<?=$countPendingPosts;?>)</span></a></li>
+			<li><a href="#three"><span>Personal Logs (<?=$countPendingLogs;?>)</span></a></li>
+			<li><a href="#four"><span>News Items (<?=$countPendingNews;?>)</span></a></li>
+			<li><a href="#five"><span>Awards (<?=$countPendingAwards;?>)</span></a></li>
+			<?php if($simmType == "starbase") { ?><li><a href="#six"><span>Docking Requests (<?=$countPendingDocking;?>)</span></a></li><?php } ?>
+		</ul>
 		
-		$check = new QueryCheck;
-		$check->checkQuery( $result, $query );
-		
-		if( !empty( $check->query ) ) {
-			$check->message( $type, $action );
-			$check->display();
-		}
-		
-		if( $_GET['activate'] == "details" && in_array( "x_approve_users", $sessionAccess ) ) {
-			
-			/* do some advanced checking to make sure someone's not trying */
-			/* to do a SQL injection */
-			if( preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-				errorMessageIllegal( "activation page" );
-				exit();
-			} else {
-				/* set the GET variable */
-				$id = $_GET['id'];
-			}
-			
-			$getPendingCrew = "SELECT crewid, firstName, lastName, positionid, rankid ";
-			$getPendingCrew.= "FROM sms_crew WHERE crewid = '$id' LIMIT 1";
-			$getPendingCrewResult = mysql_query( $getPendingCrew );
-			$pendingArray = mysql_fetch_assoc( $getPendingCrewResult );
-			
-		?>
-			<div class="update">
-				<span class="fontTitle">Activate <? printText( $pendingArray['firstName'] . " " . $pendingArray['lastName'] ); ?></span>
+		<!-- users -->
+		<div id="one" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingUsers < 1 ) { ?>
+				<b class="fontMedium orange">No pending users found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Users</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="35%">Name</th>
+						<th width="35%">Position</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
 				
-				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=crew&action=activate">
-				<table>
-					
-					<?
-					
-					$ranks = "SELECT rank.rankid, rank.rankName, rank.rankImage, dept.deptColor FROM sms_ranks AS rank, ";
-					$ranks.= "sms_departments AS dept WHERE dept.deptClass = rank.rankClass AND dept.deptDisplay = 'y' ";
-					$ranks.= "AND rank.rankDisplay = 'y' GROUP BY rank.rankid ORDER BY rank.rankClass, rank.rankOrder ASC";
-					$ranksResult = mysql_query( $ranks );
-					
-					$positions = "SELECT position.positionid, position.positionName, dept.deptName, ";
-					$positions.= "dept.deptColor FROM sms_positions AS position, sms_departments AS dept ";
-					$positions.= "WHERE position.positionOpen > '0' AND dept.deptDisplay = 'y' AND ";
-					$positions.= "dept.deptid = position.positionDept AND dept.deptType = 'playing' ";
-					$positions.= "ORDER BY dept.deptOrder, position.positionid ASC";
-					$positionsResult = mysql_query( $positions );
-					
-					?>
-					
-					<tr>
-						<td class="tableCellLabel">Position</td>
-						<td>&nbsp;</td>
-						<td>
-							<select name="position">
-							<?
-					
-							$currentPosition = "SELECT position.positionid, position.positionName, dept.deptName, ";
-							$currentPosition.= "dept.deptColor FROM sms_positions AS position, sms_departments ";
-							$currentPosition.= "AS dept WHERE position.positionid = '$pendingArray[positionid]' ";
-							$currentPosition.= "AND position.positionDept = dept.deptid";
-							$currentPositionResult = mysql_query( $currentPosition );
-							$fetchCurrentPosition = mysql_fetch_assoc( $currentPositionResult );
-							
-							echo "<option value='" . $fetchCurrentPosition['positionid'] . "' style='color:#" . $fetchCurrentPosition['deptColor'] . "'>" . $fetchCurrentPosition['deptName'] . " - " . $fetchCurrentPosition['positionName'] . "</option>";
-							
-							while( $position = mysql_fetch_array( $positionsResult ) ) {
-								extract( $position, EXTR_OVERWRITE );
-						
-								echo "<option value='" . $position['positionid'] . "' style='color:#" . $position['deptColor'] . "'>" . $position['deptName'] . " - " . $position['positionName'] . "</option>";
-								
-							}
-							
-							?>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Rank</td>
-						<td>&nbsp;</td>
-						<td>
-							<select name="rank">
-							<?
-					
-							while( $rank = mysql_fetch_array( $ranksResult ) ) {
-								extract( $rank, EXTR_OVERWRITE );
-								
-								if( $pendingArray['rankid'] == $rank['rankid'] ) {
-									echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
-								} else {
-									echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
-								}
-								
-							}
-							
-							?>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Email Message</td>
-						<td>&nbsp;</td>
-						<td>
-							<textarea name="acceptMessage" class="narrowTable" rows="10"><?=stripslashes( $acceptMessage );?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="5"></td>
-					</tr>
-					<tr>
-						<td colspan="2"></td>
-						<td>
-							<input type="hidden" name="activateid" value="<?=$pendingArray['crewid'];?>" />
-							<input type="image" src="<?=path_userskin;?>buttons/approve.png" name="activate" class="button" value="Approve" />
-						</td>
-					</tr>
-				</table>
-				</form>
-			</div><br /><br />
-		<?
-		
-		} elseif( $_GET['reject'] == "details" && in_array( "x_approve_users", $sessionAccess ) ) {
-	
-			/* do some advanced checking to make sure someone's not trying */
-			/* to do a SQL injection */
-			if( preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-				errorMessageIllegal( "activation page" );
-				exit();
-			} else {
-				/* set the GET variable */
-				$id = $_GET['id'];
-			}
-			
-			$getPendingCrew = "SELECT crewid, firstName, lastName, positionid, rankid ";
-			$getPendingCrew.= "FROM sms_crew WHERE crewid = '$id' LIMIT 1";
-			$getPendingCrewResult = mysql_query( $getPendingCrew );
-			$pendingArray = mysql_fetch_assoc( $getPendingCrewResult );
-			
-		?>
-			<div class="update">
-				<span class="fontTitle">Reject <? printText( $pendingArray['firstName'] . " " . $pendingArray['lastName'] ); ?></span>
+				<?php
 				
-				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=crew&action=activate">
-				<table>
-					<tr>
-						<td class="tableCellLabel">Email Message</td>
-						<td>&nbsp;</td>
-						<td>
-							<textarea name="rejectMessage" class="narrowTable" rows="10"><?=stripslashes( $rejectMessage );?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" height="5"></td>
-					</tr>
-					<tr>
-						<td colspan="2"></td>
-						<td>
-							<input type="hidden" name="rejectid" value="<?=$pendingArray['crewid'];?>" />
-							<input type="image" src="<?=path_userskin;?>buttons/reject.png" name="reject" class="button" value="Reject" />
-						</td>
-					</tr>
-				</table>
-				</form>
-			</div><br /><br />
-		<? } ?>
-	
-		<span class="fontTitle">Manage Pending Items</span><br /><br />
-		
-		<table>
-			<? if( in_array( "x_approve_users", $sessionAccess ) ) { ?>
-			<tr>
-				<td colspan="5" class="fontLarge"><b>Pending Users</b></td>
-			</tr>
-			
-			<?
-			
-			$getPendingUsers = "SELECT crew.crewid, crew.firstName, crew.lastName, position.positionName ";
-			$getPendingUsers.= "FROM sms_crew AS crew, sms_positions AS position WHERE ";
-			$getPendingUsers.= "crew.positionid = position.positionid AND crewType = 'pending'";
-			$getPendingUsersResult = mysql_query( $getPendingUsers );
-			$countPendingUsers = mysql_num_rows( $getPendingUsersResult );
-			
-			if( $countPendingUsers == 0 ) {
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td colspan="6">There are currently no pending users</td>
-			</tr>
-			
-			<?
-			
-			} elseif( $countPendingUsers > 0 ) {
-			
 				/* loop through the results and fill the form */
 				while( $pendingUser = mysql_fetch_assoc( $getPendingUsersResult ) ) {
 					extract( $pendingUser, EXTR_OVERWRITE );
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td width="35%"><? printText( $pendingUser['firstName'] . " " . $pendingUser['lastName'] ); ?></td>
-				<td width="35%"><? printText( $pendingUser['positionName'] ); ?></td>
-				<td>&nbsp;</td>
-				<td width="10%" align="center"><a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$pendingUser['crewid'];?>">View Bio</a></td>
-				<td width="10%" align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&reject=details&id=<?=$pendingUser['crewid'];?>">Deny</a></td>
-				<td width="10%" align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&activate=details&id=<?=$pendingUser['crewid'];?>">Approve</a></td>
-			</tr>
-			
-			<? } } ?>
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingUser['firstName'] . " " . $pendingUser['lastName'] ); ?></td>
+					<td><? printText( $pendingUser['positionName'] ); ?></td>
+					<td align="center"><a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$pendingUser['crewid'];?>"><b>View Bio</b></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingUser['crewid'];?>" myType="user" myAction="reject"><b>Reject</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingUser['crewid'];?>" myType="user" myAction="accept"><b>Accept</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
 		
-			<tr>
-				<td colspan="6" height="30"></td>
-			</tr>
-			<? } if( in_array( "x_approve_posts", $sessionAccess ) ) { ?>
-			
-			<tr>
-				<td colspan="6" class="fontLarge"><b>Pending Mission Posts</b></td>
-			</tr>
-			
-			<?
-			
-			$getPendingPosts = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'pending'";
-			$getPendingPostsResult = mysql_query( $getPendingPosts );
-			$countPendingPosts = mysql_num_rows( $getPendingPostsResult );
-			
-			if( $countPendingPosts == 0 ) {
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td colspan="6">There are currently no pending posts</td>
-			</tr>
-			
-			<?
-			
-			} elseif( $countPendingPosts > 0 ) {
-			
+		<!-- posts -->
+		<div id="two" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingPosts < 1 ) { ?>
+				<b class="fontMedium orange">No pending mission posts found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Mission Posts</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="35%">Title</th>
+						<th width="35%">Author</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
 				/* loop through the results and fill the form */
-				while( $pendingPost = mysql_fetch_assoc( $getPendingPostsResult ) ) {
-					extract( $pendingPost, EXTR_OVERWRITE );
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td><? printText( $pendingPost['postTitle'] ); ?></td>
-				<td><? displayAuthors( $pendingPost['postid'], "noLink" ); ?></td>
-				<td>&nbsp;</td>
-				<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$pendingPost['postid'];?>">View Post</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=activate&type=post&id=<?=$pendingPost['postid'];?>&action=delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this pending mission post?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=post&id=<?=$pendingPost['postid'];?>&action=delete">Delete</a>
-					</noscript>
-				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=post&id=<?=$pendingPost['postid'];?>&action=activate">Activate</a></td>
-			</tr>
-			
-			<? } } ?>
-			
-			<tr>
-				<td colspan="6" height="30"></td>
-			</tr>
-			
-			<? } if( in_array( "x_approve_logs", $sessionAccess ) ) { ?>
-			<tr>
-				<td colspan="6" class="fontLarge"><b>Pending Personal Logs</b></td>
-			</tr>
-			
-			<?
-			
-			$getPendingLogs = "SELECT logid, logTitle, logAuthor ";
-			$getPendingLogs.= "FROM sms_personallogs WHERE logStatus = 'pending'";
-			$getPendingLogsResult = mysql_query( $getPendingLogs );
-			$countPendingLogs = mysql_num_rows( $getPendingLogsResult );
-			
-			if( $countPendingLogs == 0 ) {
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td colspan="6">There are currently no pending personal logs</td>
-			</tr>
-			
-			<?
-			
-			} elseif( $countPendingLogs > 0 ) {
-			
+				while( $pendingPosts = mysql_fetch_assoc( $getPendingPostsResult ) ) {
+					extract( $pendingPosts, EXTR_OVERWRITE );
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingPosts['postTitle'] ); ?></td>
+					<td><? displayAuthors( $pendingPosts['postid'], 'noLink' ); ?></td>
+					<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$pendingPosts['postid'];?>"><b>View Post</b></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingPosts['postid'];?>" myType="post" myAction="delete"><b>Delete</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingPosts['postid'];?>" myType="post" myAction="activate"><b>Activate</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
+		
+		<!-- personal logs -->
+		<div id="three" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingLogs < 1 ) { ?>
+				<b class="fontMedium orange">No pending personal logs found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Personal Logs</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="35%">Title</th>
+						<th width="35%">Author</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
 				/* loop through the results and fill the form */
-				while( $pendingLog = mysql_fetch_assoc( $getPendingLogsResult ) ) {
-					extract( $pendingLog, EXTR_OVERWRITE );
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td><? printText( $pendingLog['logTitle'] ); ?></td>
-				<td><? printCrewName( $pendingLog['logAuthor'], "rank", "noLink" ); ?></td>
-				<td>&nbsp;</td>
-				<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$pendingLog['logid'];?>">View Log</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=activate&type=log&id=<?=$pendingLog['logid'];?>&action=delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this pending personal log?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=log&id=<?=$pendingLog['logid'];?>&action=delete">Delete</a>
-					</noscript>
-				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=log&id=<?=$pendingLog['logid'];?>&action=activate">Activate</a></td>
-			</tr>
-			
-			<? } } ?>
-	
-			<tr>
-				<td colspan="6" height="30"></td>
-			</tr>
-			
-			<? } if( in_array( "x_approve_news", $sessionAccess ) ) { ?>
-			<tr>
-				<td colspan="6" class="fontLarge"><b>Pending News Items</b></td>
-			</tr>
-			
-			<?
-			
-			$getPendingNews = "SELECT newsid, newsTitle, newsAuthor ";
-			$getPendingNews.= "FROM sms_news WHERE newsStatus = 'pending'";
-			$getPendingNewsResult = mysql_query( $getPendingNews );
-			$countPendingNews = mysql_num_rows( $getPendingNewsResult );
-			
-			if( $countPendingNews == 0 ) {
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td colspan="6">There are currently no pending news items</td>
-			</tr>
-			
-			<?
-			
-			} elseif( $countPendingNews > 0 ) {
-			
+				while( $pendingLogs = mysql_fetch_assoc( $getPendingLogsResult ) ) {
+					extract( $pendingLogs, EXTR_OVERWRITE );
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingLogs['logTitle'] ); ?></td>
+					<td><? printCrewName( $pendingLogs['logid'], 'rank', 'noLink' ); ?></td>
+					<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$pendingLogs['logid'];?>"><b>View Log</b></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingLogs['logid'];?>" myType="log" myAction="delete"><b>Delete</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingLogs['logid'];?>" myType="log" myAction="activate"><b>Activate</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
+		
+		<!-- news items -->
+		<div id="four" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingNews < 1 ) { ?>
+				<b class="fontMedium orange">No pending news items found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending News Items</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="35%">Title</th>
+						<th width="35%">Author</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
 				/* loop through the results and fill the form */
 				while( $pendingNews = mysql_fetch_assoc( $getPendingNewsResult ) ) {
 					extract( $pendingNews, EXTR_OVERWRITE );
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td><? printText( $pendingNews['newsTitle'] ); ?></td>
-				<td><? printCrewName( $pendingNews['newsAuthor'], "rank", "noLink" ); ?></td>
-				<td>&nbsp;</td>
-				<td align="center"><a href="<?=$webLocation;?>index.php?page=news">View News</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=activate&type=news&id=<?=$pendingNews['newsid'];?>&action=delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this pending news item?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=news&id=<?=$pendingNews['newsid'];?>&action=delete">Delete</a>
-					</noscript>
-				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=news&id=<?=$pendingNews['newsid'];?>&action=activate">Activate</a></td>
-			</tr>
-			
-			<? } } ?>
-			
-			<? } if( $simmType == "starbase" && in_array( "x_approve_docking", $sessionAccess ) ) { ?>
-			<tr>
-				<td colspan="6" height="30"></td>
-			</tr>
-			<tr>
-				<td colspan="6" class="fontLarge"><b>Pending Docking Requests</b></td>
-			</tr>
-			
-			<?
-			
-			$getPendingDockings = "SELECT dockid, dockingShipName, dockingShipRegistry, dockingShipCO ";
-			$getPendingDockings.= "FROM sms_starbase_docking WHERE dockingStatus = 'pending'";
-			$getPendingDockingsResult = mysql_query( $getPendingDockings );
-			$countPendingDockings = mysql_num_rows( $getPendingDockingsResult );
-			
-			if( $countPendingDockings == 0 ) {
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td colspan="6">There are currently no pending docking requests</td>
-			</tr>
-			
-			<?
-			
-			} elseif( $countPendingDockings > 0 ) {
-			
-				/* loop through the results and fill the form */
-				while( $pendingDocking = mysql_fetch_assoc( $getPendingDockingsResult ) ) {
-					extract( $pendingDocking, EXTR_OVERWRITE );
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td><? printText( $pendingDocking['dockingShipName'] . " " . $pendingDocking['dockingShipRegistry'] ); ?></td>
-				<td><? printText( $pendingDocking['dockingShipCO'] ); ?></td>
-				<td>&nbsp;</td>
-				<td align="center"><a href="<?=$webLocation;?>index.php?page=dockedships&ship=<?=$pendingDocking['dockid'];?>">View Request</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=activate&type=docking&id=<?=$pendingDocking['dockid'];?>&action=delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this pending docking request?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=docking&id=<?=$pendingDocking['dockid'];?>&action=delete">Delete</a>
-					</noscript>
-				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=docking&id=<?=$pendingDocking['dockid'];?>&action=activate">Activate</a></td>
-			</tr>
-			
-			<? } } ?>
-			
-			<? } if( in_array( "x_approve_posts", $sessionAccess ) ) { ?>
-			
-			<tr>
-				<td colspan="6" height="30"></td>
-			</tr>
-			<tr>
-				<td colspan="6" class="fontLarge"><b>Pending Award Nominations</b></td>
-			</tr>
-			
-			<?
-			
-			$getPendingAwards = "SELECT q.*, a.* FROM sms_awards_queue AS q, sms_awards AS a ";
-			$getPendingAwards.= "WHERE q.status = 'pending' AND q.award = a.awardid";
-			$getPendingAwardsResult = mysql_query( $getPendingAwards );
-			$countPendingAwards = mysql_num_rows( $getPendingAwardsResult );
-			
-			if( $countPendingAwards == 0 ) {
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td colspan="6">There are currently no pending award nominations</td>
-			</tr>
-			
-			<?
-			
-			} elseif( $countPendingAwards > 0 ) {
-			
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingNews['newsTitle'] ); ?></td>
+					<td><? printCrewName( $pendingNews['newsid'], 'rank', 'noLink' ); ?></td>
+					<td align="center"><a href="<?=$webLocation;?>index.php?page=news&id=<?=$pendingNews['newsid'];?>"><b>View News</b></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="delete"><b>Delete</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="activate"><b>Activate</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
+		
+		<!-- award nominations -->
+		<div id="five" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingAwards < 1 ) { ?>
+				<b class="fontMedium orange">No pending award nominations found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Award Nominations</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="30%">Award</th>
+						<th width="25%">Recipient</th>
+						<th width="25%">Nominated By</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
 				/* loop through the results and fill the form */
 				while( $pendingAwards = mysql_fetch_assoc( $getPendingAwardsResult ) ) {
 					extract( $pendingAwards, EXTR_OVERWRITE );
-			
-			?>
-			
-			<tr class="fontNormal">
-				<td><? printCrewName( $pendingAwards['nominated'], "rank", "noLink" ); ?></td>
-				<td><? printText( $pendingAwards['awardName'] ); ?></td>
-				<td>&nbsp;</td>
-				<td align="center"><a href="<?=$webLocation;?>index.php?page=news">View News</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this pending news item?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=delete">Delete</a>
-					</noscript>
-				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&type=award&id=<?=$pendingAwards['id'];?>&action=approve">Approve</a></td>
-			</tr>
-			
-			<? } } ?>
-			
-			<?php } ?>
-		</table>
+					
+					$getA = "SELECT * FROM sms_awards WHERE awardid = $pendingAwards[award] LIMIT 1";
+					$getAResult = mysql_query($getA);
+					$award = mysql_fetch_assoc($getAResult);
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $award['awardName'] ); ?></td>
+					<td><? printCrewName( $pendingAwards['nominated'], "rank", "noLink" ); ?></td>
+					<td><? printCrewName( $pendingAwards['crew'], "rank", "noLink" ); ?></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingAwards['id'];?>" myType="award" myAction="deny"><b>Deny</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingAwards['id'];?>" myType="award" myAction="approve"><b>Approve</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
 		
+		<!-- docking requests -->
+		<div id="six" class="ui-tabs-container ui-tabs-hide">
+			<?php if( $countPendingDocking < 1 ) { ?>
+				<b class="fontMedium orange">No pending docking requests found</b>
+			<?php } else { ?>
+			<b class="fontLarge">Pending Docking Requests</b><br /><br />
+			<table class="zebra" cellpadding="3" cellspacing="0">
+				<thead>
+					<tr class="fontMedium">
+						<th width="30%">Ship Name</th>
+						<th width="25%">Ship CO</th>
+						<th width="25%">Ship Site</th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				</thead>
+				
+				<?php
+				
+				/* loop through the results and fill the form */
+				while( $pendingDocking = mysql_fetch_assoc( $getPendingDockingResult ) ) {
+					extract( $pendingDocking, EXTR_OVERWRITE );
+				
+				?>
+				<tr class="fontNormal">
+					<td><? printText( $pendingDocking['dockingShipName'] . " " . $pendingDocking['dockingShipRegistry'] ); ?></td>
+					<td><? printText( $pendingDocking['dockingShipCO'] ); ?></td>
+					<td><a href="<?=$pendingDocking['dockingShipURL'];?>" target="_blank"><?=$pendingDocking['dockingShipURL'];?></a></td>
+					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingDocking['dockid'];?>" myType="docking" myAction="deny"><b>Deny</b></a></td>
+					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingDocking['dockid'];?>" myType="docking" myAction="approve"><b>Approve</b></a></td>
+				</tr>
+				<?php } ?>
+				
+			</table>
+			<?php } /* close counting */ ?>
+		</div>
 	</div>
-	
-<? } else { errorMessage( "activation" ); } ?>
+
+</div>
+
+<?php } else { errorMessage( "activation" ); } ?>
