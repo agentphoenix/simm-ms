@@ -1,4 +1,4 @@
-Last Update: 2008.03.29 1633 EST
+Last Update: 2008.03.29 1722 EST
 
 IN PROGRESS
 =====
@@ -9,6 +9,7 @@ IN PROGRESS
 		*	/admin/manage
 				x	posts.php
 				x	missionnotes.php
+				x	missions.php
 		*	/admin/post
 		*	/admin/reports
 		*	/admin/user
