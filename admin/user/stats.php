@@ -10,30 +10,31 @@ File: admin/user/stats.php
 Purpose: Page to display a user's statistics
 
 System Version: 2.6.0
-Last Modified: 2008-01-14 1730 EST
+Last Modified: 2008-03-31 1230 EST
 **/
 
 /* set the page class */
 $pageClass = "admin";
 $subMenuClass = "user";
 
-/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-if( !empty( $_GET['crew'] ) && preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
-	errorMessageIllegal( "user bio page" );
-	exit();
-} else {
-	/* set the GET variable */
-	$crew = $_GET['crew'];
+if(isset($_GET['crew']))
+{
+	if(is_numeric($_GET['crew'])) {
+		$crew = $_GET['crew'];
+	} else {
+		errorMessageIllegal( "user bio page" );
+		exit();
+	}
 }
 
 /* access check */
 if( $sessionCrewid == $crew || in_array( "u_stats", $sessionAccess ) ) {
 
-	$getCrewType = "SELECT crewType FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
+	$getCrewType = "SELECT crewType FROM sms_crew WHERE crewid = $crew LIMIT 1";
 	$getCrewTypeResult = mysql_query( $getCrewType );
 	$getType = mysql_fetch_assoc( $getCrewTypeResult );
 	
-	$getCrew = "SELECT * FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
+	$getCrew = "SELECT * FROM sms_crew WHERE crewid = $crew LIMIT 1";
 	$getCrewResult = mysql_query( $getCrew );
 	
 	while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
@@ -277,6 +278,13 @@ if( $sessionCrewid == $crew || in_array( "u_stats", $sessionAccess ) ) {
 		<br /><br />
 		
 		<b class="fontLarge">Milestones</b><br /><br />
+		<?php
+		
+		if(empty($joinDate) || $joinDate == 0) {
+			echo "<b class='fontMedium orange'>No Join Date On Record</b>";
+		} else {
+		
+		?>
 		<table class="narrowTable">
 			<tr>
 				<td class="tableCellLabel">3 Months</td>
@@ -350,6 +358,8 @@ if( $sessionCrewid == $crew || in_array( "u_stats", $sessionAccess ) ) {
 			</tr>
 		</table>
 		<br /><br />
+		
+		<?php } ?>
 		
 		<?
 		
