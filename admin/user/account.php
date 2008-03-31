@@ -10,14 +10,14 @@ File: admin/user/account.php
 Purpose: Page with the account settings for a user
 
 System Version: 2.6.0
-Last Modified: 2008-03-16 0116 EST
+Last Modified: 2008-03-31 1249 EST
 **/
 
 /* set the page class */
 $pageClass = "admin";
 $subMenuClass = "user";
-$result = "";
-$updateAcct = "";
+$result = FALSE;
+$updateAcct = FALSE;
 
 /* set the POST action */
 if( isset( $_POST['action_x'] ) )
@@ -26,12 +26,9 @@ if( isset( $_POST['action_x'] ) )
 }
 
 /* make sure the CREW variable is a number */
-if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) )
-{
+if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) ) {
 	$crew = $_GET['crew'];
-}
-else
-{
+} else {
 	errorMessageIllegal( "crew account page" );
 	exit();
 }
@@ -190,10 +187,52 @@ if(
 			$result = mysql_query( $updateAcct );
 		}
 		
+		/* make sure that positions get adjusted accordingly */
+		$type_array = array('active', 'inactive', 'pending', 'npc');
+		
+		if( in_array($_POST['crewType'], $type_array) && in_array($_POST['oldCrewType'], $type_array))
+		{
+			/* define the variables */
+			$crewType = $_POST['crewType'];
+			$oldCrewType = $_POST['oldCrewType'];
+			
+			if($crewType != $oldCrewType)
+			{
+				/* get their positions */
+				$getPos = "SELECT positionid, positionid2 FROM sms_crew WHERE crewid = $crew LIMIT 1";
+				$getPosR = mysql_query($getPos);
+				$positions = mysql_fetch_array($getPosR);
+				
+				if($oldCrewType == 'active')
+				{
+					update_position( $positions[0], 'take' );
+					
+					if(count($positions) > 1)
+					{
+						update_position( $positions[1], 'take' );
+					}
+				}
+				
+				if($crewType == 'active')
+				{
+					update_position( $positions[0], 'give' );
+					
+					if(count($positions) > 1)
+					{
+						update_position( $positions[1], 'give' );
+					}
+				}
+				
+				/* optimize the table */
+				optimizeSQLTable( "sms_positions" );
+				
+			} /* close the not equal check */
+		} /* close the array check */
+		
 		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
 	
-	}
+	} /* close if action is set */
 	
 	$accountInfo = "SELECT username, password, loa, realName, email, aim, yim, msn, icq, contactInfo, emailPosts, emailLogs, ";
 	$accountInfo.= "emailNews, crewType, moderatePosts, moderateLogs, moderateNews FROM sms_crew WHERE crewid = $crew LIMIT 1";
