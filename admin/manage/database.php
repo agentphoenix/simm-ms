@@ -10,11 +10,16 @@ File: admin/manage/database.php
 Purpose: Page that moderates the database entries
 
 System Version: 2.6.0
-Last Modified: 2008-04-03 2058 EST
+Last Modified: 2008-04-04 0202 EST
 **/
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+$debug = 1;
+
+if($debug >= 1)
+{
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+}
 
 /* access check */
 if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessionAccess ) ) {
@@ -25,6 +30,7 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 	$query = FALSE;
 	$result = FALSE;
 	$action_type = FALSE;
+	$myDept = FALSE;
 	
 	if(isset($_POST))
 	{
@@ -119,6 +125,38 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 	
 		$database[$dbDept][] = array('id' => $dbid, 'title' => $dbTitle, 'type' => $dbType, 'url' => $dbURL, 'order' => $dbOrder);
 	}
+	
+	/* if they have level 1 database access, get their department id */
+	if(!in_array("m_database2", $sessionAccess))
+	{
+		$depts = "SELECT position.positionDept FROM sms_crew AS crew, sms_positions AS position, sms_departments AS dept WHERE ";
+		$depts.= "crew.crewid = '$sessionCrewid' AND crew.positionid = position.positionid LIMIT 1";
+		$deptsR = mysql_query($depts);
+		$deptFetch = mysql_fetch_row($deptsR);
+		
+		$myDept = $deptFetch[0];
+	}
+	
+	/* scrub the array for empty sets */
+	foreach($database as $a => $b)
+	{
+		if(count($b) == 0)
+		{
+			unset($database[$a]);
+		}
+		
+		if(!in_array("m_database2", $sessionAccess) && $a != $myDept)
+		{
+			unset($database[$a]);
+		}
+	}
+	
+	if($debug >= 2)
+	{
+		echo "<pre>";
+		print_r($database);
+		echo "</pre>";
+	}
 
 ?>
 <script type="text/javascript">
@@ -135,176 +173,106 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 			return false;
 		});
 		
-		$('.zebra tr:odd').addClass('alt');
+		$('.zebra tr:nth-child(even)').addClass('alt');
 	});
 </script>
 
-	<div class="body">
+<div class="body">
+
+	<?php
 	
-		<?
+	$check = new QueryCheck;
+	$check->checkQuery( $result, $query );
+			
+	if( !empty( $check->query ) ) {
+		$check->message( "database entry", $action_type );
+		$check->display();
+	}
+	
+	?>
+
+	<span class="fontTitle">Database Entry Management</span><br /><br />
+	
+	The database feature in SMS 2 allows COs to create an easy-to-manage list of important links, 
+	both on-site and off-site, as well as the option to create a database entry for those things that 
+	don't require a complete new page created.  If you want to create an entry that uses extensive 
+	HTML or PHP, please create a new SMS page and use an on-site URL forwarding entry.  The 
+	database feature will display basic HTML, but does not support extensive use of HTML code in 
+	the database entries.  For off-site URL forwarding entries, give the full URL (e.g. http://www.something.com/), 
+	for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest).  
+	For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
+	
+	<a href="#" rel="facebox" myAction="add" class="fontMedium add"><strong>Create New Database Entry &raquo;</strong></a>
+	<br /><br />
+	
+	<span class="fontTitle">Manage Existing Database Entries</span><br /><br />
+	<?php
+	
+	foreach($database as $k1 => $v1)
+	{
+		$getD = "SELECT deptName, deptColor FROM sms_departments WHERE deptid = $k1";
+		$getDResult = mysql_query($getD);
+		$deptX = mysql_fetch_row($getDResult);
 		
-		$check = new QueryCheck;
-		$check->checkQuery( $result, $query );
-				
-		if( !empty( $check->query ) ) {
-			$check->message( "database entry", $action_type );
-			$check->display();
+		/* if it is not the 0 entry, set the dept name and color accordingly */
+		if($k1 > 0)
+		{
+			$d_name = $deptX[0];
+			$d_color = $deptX[1];
 		}
-		
-		?>
+		else
+		{
+			$d_name = "Global Entries";
+			$d_color = "ffffff";
+		}
 	
-		<? if(!isset($entry) || isset($_POST['action_delete_x'])) { ?>
-			
-		<span class="fontTitle">Database Entry Management</span><br /><br />
-		
-		The database feature in SMS 2 allows COs to create an easy-to-manage list of important links, 
-		both on-site and off-site, as well as the option to create a database entry for those things that 
-		don't require a complete new page created.  If you want to create an entry that uses extensive 
-		HTML or PHP, please create a new SMS page and use an on-site URL forwarding entry.  The 
-		database feature will display basic HTML, but does not support extensive use of HTML code in 
-		the database entries.  For off-site URL forwarding entries, give the full URL (e.g. http:/*www.something.com/), 
-		for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest).  
-		For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
-		
-		<a href="#" rel="facebox" myAction="add" class="fontMedium add"><strong>Create New Database Entry &raquo;</strong></a>
-		<br /><br />
-		
-		<span class="fontTitle">Manage Existing Database Items</span><br /><br />
-			<table class="zebra" cellpadding="3" cellspacing="0">
-			<?
-			
-			/* pull the info from the database */
-			$getDB = "SELECT dbid, dbTitle, dbType, dbURL FROM sms_database ORDER BY dbOrder ASC";
-			$getDBResult = mysql_query( $getDB );
-			
-			/* loop through the results and fill the form */
-			while( $dbFetch = mysql_fetch_assoc( $getDBResult ) ) {
-				extract( $dbFetch, EXTR_OVERWRITE );
+	?>
+	<table class="zebra" cellpadding="3" cellspacing="0">
+		<tr class="table_head">
+			<td colspan="4">
+				<strong class="fontMedium" style="color:#<?=$d_color;?>;"><?=$d_name;?></strong>
+			</td>
+		</tr>
+	<?php
 	
-			?>
-			
-				<tr>
-					<td><? printText( $dbTitle ); ?></td>
-					<td align="center" width="10%">
-						<?php
-						
-						switch($dbType)
-						{
-							case 'entry':
-								echo "<strong><a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
-								break;
-							case 'onsite':
-								echo "<strong><a href='" . $webLocation . $dbURL . "'>";
-								break;
-							case 'offsite':
-								echo "<strong><a href='" . $dbURL . "'>";
-								break;
-						}
-						
-						echo "View</a></strong>";
-						
-						?>
-					</td>
-					<td align="center" width="10%">
-						<strong><a href="#" rel="facebox" myAction="edit" myID="<?=$dbid;?>" class="edit" >Edit</a></strong>
-					</td>
-					<td align="center" width="10%">
-						<script type="text/javascript">
-							document.write( "<b><a href=\"<?=$webLocation;?>admin.php?page=manage&sub=database&delete=<?=$dbid;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this database item?')\">Delete</a></b>" );
-						</script>
-						<noscript>
-							<b><a href="<?=$webLocation;?>admin.php?page=manage&sub=database&delete=<?=$dbid;?>" class="delete">Delete</a></b>
-						</noscript>
-					</td>
-				</tr>
-		
-			<? } ?>
+		foreach($database[$k1] as $k2 => $v2)
+		{
 	
-			</table>
-			
-		<?
+	?>
+		<tr>
+			<td><? printText( $v2['title'] ); ?></td>
+			<td align="center" width="10%">
+				<?php
+				
+				switch($v2['type'])
+				{
+					case 'entry':
+						echo "<strong><a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
+						break;
+					case 'onsite':
+						echo "<strong><a href='" . $webLocation . $dbURL . "'>";
+						break;
+					case 'offsite':
+						echo "<strong><a href='" . $dbURL . "'>";
+						break;
+				}
+				
+				echo "View</a></strong>";
+				
+				?>
+			</td>
+			<td align="center" width="10%">
+				<strong><a href="#" rel="facebox" myAction="edit" myID="<?=$v2['id'];?>" class="edit">Edit</a></strong>
+			</td>
+			<td align="center" width="10%">
+				<strong><a href="#" rel="facebox" myAction="delete" myID="<?=$v2['id'];?>" class="delete">Delete</a></strong>
+			</td>
+		</tr>
+	<?php } ?>
 	
-		} else {
+	</table><br />	
+	<?php } ?>
 	
-			/* pull the ranks from the database */
-			$getEntry = "SELECT * FROM sms_database WHERE dbid = '$entry' LIMIT 1";
-			$getEntryResult = mysql_query( $getEntry );
-	
-			/* loop through the results and fill the form */
-			while( $entryFetch = mysql_fetch_assoc( $getEntryResult ) ) {
-				extract( $entryFetch, EXTR_OVERWRITE );
-			}
-	
-		?>
-	
-		<span class="fontTitle">Manage Database Item: <? printText( $dbTitle ); ?></span><br /><br />
-		<b class="fontMedium">
-			<a href="<?=$webLocation;?>admin.php?page=manage&sub=database">&laquo; Back to Database Management</a><br /><br />
-		</b>
-		
-		<table cellpadding="0" cellspacing="3">
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=database&entry=<?=$entry;?>">
-			<tr>
-				<td valign="top">
-					<b class="fontNormal">Title</b><br />
-					<input type="text" class="name" name="dbTitle" maxlength="100" value="<?=stripslashes( $dbTitle );?>" />
-				</td>
-				<td>
-					<b class="fontNormal">Short Description</b><br />
-					<input type="text" class="name" name="dbDesc" value="<?=stripslashes( $dbDesc );?>" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Entry Type</b><br />
-					<select name="dbType">
-						<option value="onsite" <? if( $dbType == "onsite" ) { echo "selected"; } ?>>URL Forward (On-Site)</option>
-						<option value="offsite" <? if( $dbType == "offsite" ) { echo "selected"; } ?>>URL Forward (Off-Site)</option>
-						<option value="entry" <? if( $dbType == "entry" ) { echo "selected"; } ?>>Database Entry</option>
-					</select>
-				</td>
-				<td>
-					<b class="fontNormal">URL</b><br />
-					<span class="fontSmall">* used only for URL forwarding entries</span><br />
-					<input type="text" class="name" name="dbURL" maxlength="255" value="<?=$dbURL;?>" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Order</b><br />
-					<input type="text" class="order" name="dbOrder" maxlength="4" value="<?=$dbOrder;?>" />
-				</td>
-				<td>
-					<span class="fontNormal"><b>Display?</b></span><br />
-					<select name="dbDisplay">
-						<option value="y" <? if( $dbDisplay == "y" ) { echo "selected"; } ?>>Yes</option>
-						<option value="n" <? if( $dbDisplay == "n" ) { echo "selected"; } ?>>No</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<b class="fontNormal">Content</b><br />
-					<textarea name="dbContent" class="wideTextArea" rows="15"><?=stripslashes( $dbContent );?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td align="right" colspan="2">
-					<input type="hidden" name="dbid" value="<?=$entry;?>" />
-					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this database entry?')\" />" );
-					</script>
-					<noscript>
-						<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
-					</noscript>
-					&nbsp; &nbsp;
-					<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="Update" />
-				</td>
-			</tr>
-			</form>
-		</table>
-		<? } ?>
-		
-	</div>
+</div>
 
 <? } else { errorMessage( "database management" ); } ?>
