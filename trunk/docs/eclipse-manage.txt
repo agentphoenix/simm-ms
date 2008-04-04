@@ -1,4 +1,4 @@
-Last Update: 2008.03.31 1250 EST
+Last Update: 2008.04.03 2100 EST
 
 IN PROGRESS
 =====
@@ -10,6 +10,7 @@ IN PROGRESS
 				x	posts.php
 				x	missionnotes.php
 				x	missions.php
+				x	database.php
 		*	/admin/post
 		*	/admin/reports
 		*	/admin/user
@@ -36,18 +37,22 @@ IN PROGRESS
 				@	Departments
 				@	Positions
 				@	Awards
+				x	Database
 		*	Editing
 				@	Docked Ships
+				@	Database
+		*	Deleting
+				@	Database
 
 #	Update skins
+
+#	Departmental databases
 		
 IN QUEUE
 =====
 #	Starbase menu items in place during install, but turned off
 
 #	Add cadet ranks (off by default)
-
-#	Departmental databases
 
 #	Ability for crew to edit their posts and logs
 
