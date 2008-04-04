@@ -10,7 +10,7 @@ File: admin/manage/database.php
 Purpose: Page that moderates the database entries
 
 System Version: 2.6.0
-Last Modified: 2008-04-04 0202 EST
+Last Modified: 2008-04-04 1248 EST
 **/
 
 $debug = 1;
@@ -205,7 +205,6 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 	<a href="#" rel="facebox" myAction="add" class="fontMedium add"><strong>Create New Database Entry &raquo;</strong></a>
 	<br /><br />
 	
-	<span class="fontTitle">Manage Existing Database Entries</span><br /><br />
 	<?php
 	
 	foreach($database as $k1 => $v1)
@@ -239,7 +238,7 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 		{
 	
 	?>
-		<tr>
+		<tr class="fontNormal">
 			<td><? printText( $v2['title'] ); ?></td>
 			<td align="center" width="10%">
 				<?php
