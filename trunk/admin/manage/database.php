@@ -9,102 +9,135 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/database.php
 Purpose: Page that moderates the database entries
 
-System Version: 2.5.0
-Last Modified: 2007-07-10 1002 EST
+System Version: 2.6.0
+Last Modified: 2008-04-03 2058 EST
 **/
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 /* access check */
-if( in_array( "m_database", $sessionAccess ) ) {
+if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessionAccess ) ) {
 
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$actionUpdate = $_POST['action_update_x'];
-	$actionCreate = $_POST['action_create_x'];
-	$actionDelete = $_POST['action_delete_x'];
+	$query = FALSE;
+	$result = FALSE;
+	$action_type = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['entry'] ) && preg_match( "/^\d+$/", $_GET['entry'], $matches ) == 0 ) {
-		errorMessageIllegal( "database page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$entry = $_GET['entry'];
-	}
-	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['delete'] ) && preg_match( "/^\d+$/", $_GET['delete'], $matches ) == 0 ) {
-		errorMessageIllegal( "database page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$delete = $_GET['delete'];
-	}
-	
-	/* define the POST variables */
-	$dbid = $_POST['dbid'];
-	$dbTitle = addslashes( $_POST['dbTitle'] );
-	$dbDesc = addslashes( $_POST['dbDesc'] );
-	$dbOrder = $_POST['dbOrder'];
-	$dbDisplay = $_POST['dbDisplay'];
-	$dbContent = addslashes( $_POST['dbContent'] );
-	$dbType = $_POST['dbType'];
-	$dbURL = $_POST['dbURL'];
-	
-	/* if the POST action is update */
-	if( $actionUpdate ) {
+	if(isset($_POST))
+	{
+		/* define the POST variables */
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
 		
-		/* do the update query */
-		$query = "UPDATE sms_database SET ";
-		$query.= "dbTitle = '$dbTitle', dbOrder = '$dbOrder', dbDisplay = '$dbDisplay', ";
-		$query.= "dbURL = '$dbURL', dbDesc = '$dbDesc', dbContent = '$dbContent', ";
-		$query.= "dbType = '$dbType' WHERE dbid = '$dbid' LIMIT 1";
-		$result = mysql_query( $query );
+		/* protecting against SQL injection */
+		if(isset($action_id) && !is_numeric($action_id))
+		{
+			$action_id = FALSE;
+			exit();
+		}
 		
-		/* optimize the table */
-		optimizeSQLTable( "sms_database" );
-		
-		$action = "update";
-	
-	/* if the POST action is create */
-	} elseif( $actionCreate ) {
-		
-		/* do the create query */
-		$query = "INSERT INTO sms_database ( dbid, dbTitle, dbType, dbDesc, dbOrder, dbDisplay, dbURL, dbContent ) ";
-		$query.= "VALUES ( '', '$dbTitle', '$dbType', '$dbDesc', '$dbOrder', '$dbDisplay', '$dbURL', '$dbContent' )";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_database" );
-		
-		$action = "create";
-	
-	/* if the POST action is delete */
-	} elseif( $actionDelete  || isset( $delete ) ) {
-		
-		if( $actionDelete ) {
-			/* do the delete query */
-			$query = "DELETE FROM sms_database WHERE dbid = '$dbid' LIMIT 1";
-			$result = mysql_query( $query );
-		} elseif( $delete ) {
-			/* do the delete query */
-			$query = "DELETE FROM sms_database WHERE dbid = '$delete' LIMIT 1";
-			$result = mysql_query( $query );
+		switch($action_type)
+		{
+			case 'create':
+				
+				$create = "INSERT INTO sms_database (dbTitle, dbType, dbDesc, dbOrder, dbDisplay, dbURL, dbContent, dbDept) ";
+				$create.= "VALUES (%s, %s, %s, %d, %s, %s, %s, %d)";
+
+				$query = sprintf(
+					$create,
+					escape_string($_POST['dbTitle']),
+					escape_string($_POST['dbType']),
+					escape_string($_POST['dbDesc']),
+					escape_string($_POST['dbOrder']),
+					escape_string($_POST['dbDisplay']),
+					escape_string($_POST['dbURL']),
+					escape_string($_POST['dbContent']),
+					escape_string($_POST['dbDept'])
+				);
+
+				$result = mysql_query( $query );
+				
+				break;
+			case 'update':
+				
+				$update = "UPDATE sms_database SET dbTitle = %s, dbOrder = %d, dbDisplay = %s, dbURL = %s, dbDesc = %s, dbContent = %s, ";
+				$update.= "dbType = %s, dbDept = %d WHERE dbid = $action_id LIMIT 1";
+
+				$query = sprintf(
+					$update,
+					escape_string($_POST['dbTitle']),
+					escape_string($_POST['dbOrder']),
+					escape_string($_POST['dbDisplay']),
+					escape_string($_POST['dbURL']),
+					escape_string($_POST['dbDesc']),
+					escape_string($_POST['dbContent']),
+					escape_string($_POST['dbType']),
+					escape_string($_POST['dbDept'])
+				);
+
+				$result = mysql_query( $query );
+				
+				break;
+			case 'delete':
+				
+				$query = "DELETE FROM sms_database WHERE dbid = $action_id LIMIT 1";
+				$result = mysql_query($query);
+				
+				break;
 		}
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_database" );
-		
-		$action = "delete";
-	
 	}
 
-	/* strip the slashes */
-	$tourName = stripslashes( $tourName );
-	$tourLocation = stripslashes( $tourLocation );
-	$tourDesc = stripslashes( $tourDesc );
+	/* set up the database array */
+	$database = array(0 => array());
+
+	/* pull all the applicable departments */
+	$depts = "SELECT * FROM sms_departments WHERE deptDatabaseUse = 'y' ORDER BY deptORDER ASC";
+	$deptsR = mysql_query($depts);
+
+	/* set up the department sections */
+	while($deptFetch = mysql_fetch_assoc($deptsR)) {
+		extract($deptFetch, EXTR_OVERWRITE);
+	
+		$database[$deptid] = array();
+	}
+
+	/* pull all the entries */
+	$entries = "SELECT * FROM sms_database WHERE dbDisplay = 'y'";
+	$entriesR = mysql_query($entries);
+
+	/* fill in the array */
+	while($entryFetch = mysql_fetch_assoc($entriesR)) {
+		extract($entryFetch, EXTR_OVERWRITE);
+	
+		$database[$dbDept][] = array('id' => $dbid, 'title' => $dbTitle, 'type' => $dbType, 'url' => $dbURL, 'order' => $dbOrder);
+	}
 
 ?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("a[rel*=facebox]").click(function() {
+			var id = $(this).attr("myID");
+			var action = $(this).attr("myAction");
+			
+			jQuery.facebox(function() {
+				jQuery.get('admin/ajax/database_' + action + '.php?id=' + id, function(data) {
+					jQuery.facebox(data);
+				});
+			});
+			return false;
+		});
+		
+		$('.zebra tr:odd').addClass('alt');
+	});
+</script>
 
 	<div class="body">
 	
@@ -114,14 +147,16 @@ if( in_array( "m_database", $sessionAccess ) ) {
 		$check->checkQuery( $result, $query );
 				
 		if( !empty( $check->query ) ) {
-			$check->message( "database entry", $action );
+			$check->message( "database entry", $action_type );
 			$check->display();
 		}
 		
 		?>
 	
-		<? if( !$entry || $actionDelete ) { ?>
-		<span class="fontTitle">Create New Database Item</span><br /><br />
+		<? if(!isset($entry) || isset($_POST['action_delete_x'])) { ?>
+			
+		<span class="fontTitle">Database Entry Management</span><br /><br />
+		
 		The database feature in SMS 2 allows COs to create an easy-to-manage list of important links, 
 		both on-site and off-site, as well as the option to create a database entry for those things that 
 		don't require a complete new page created.  If you want to create an entry that uses extensive 
@@ -131,77 +166,11 @@ if( in_array( "m_database", $sessionAccess ) ) {
 		for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest).  
 		For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
 		
-		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=database">
-		<table cellpadding="0" cellspacing="3">
-			<tr>
-				<td>
-					<span class="fontNormal"><b>Order</b></span><br />
-					<input type="text" class="order" name="dbOrder" maxlength="4" value="99" />
-				</td>
-				<td>
-					<span class="fontNormal"><b>Display?</b></span><br />
-					<select name="dbDisplay">
-						<option value="y">Yes</option>
-						<option value="n">No</option>
-					</select>
-				</td>
-				<td rowspan="5" valign="top" align="center" width="5">&nbsp;</td>
-				<td rowspan="5" valign="top" align="center" width="70%">
-					<span class="fontNormal"><b>Content</b></span><br />
-					<span class="fontSmall">* used only for database entries, not URL forwarding</span><br />
-					<textarea name="dbContent" rows="12" class="desc"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<span class="fontNormal"><b>Title</b></span><br />
-					<input type="text" class="name" name="dbTitle" maxlength="100" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<span class="fontNormal"><b>Short Description</b></span><br />
-					<input type="text" class="name" name="dbDesc" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<span class="fontNormal"><b>Entry Type</b></span><br />
-					<select name="dbType">
-						<option value="onsite">URL Forward (On-Site)</option>
-						<option value="offsite">URL Forward (Off-Site)</option>
-						<option value="entry">Database Entry</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<span class="fontNormal"><b>URL</b></span><br />
-					<span class="fontSmall">* used only for URL forwarding entries</span><br />
-					<input type="text" class="name" name="dbURL" maxlength="255" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2"></td>
-				<td align="center">&nbsp;</td>
-				<td align="center">
-					<input type="image" src="<?=path_userskin;?>buttons/create.png" class="button" name="action_create" value="Create" />
-				</td>
-			</tr>
-		</table>
-		</form>
+		<a href="#" rel="facebox" myAction="add" class="fontMedium add"><strong>Create New Database Entry &raquo;</strong></a>
 		<br /><br />
 		
 		<span class="fontTitle">Manage Existing Database Items</span><br /><br />
-			<?
-	
-			$rowCount = "0";
-			$color1 = "rowColor1";
-			$color2 = "rowColor2";
-				
-			?>
-			<table cellpadding="3" cellspacing="0">
-	
+			<table class="zebra" cellpadding="3" cellspacing="0">
 			<?
 			
 			/* pull the info from the database */
@@ -212,22 +181,33 @@ if( in_array( "m_database", $sessionAccess ) ) {
 			while( $dbFetch = mysql_fetch_assoc( $getDBResult ) ) {
 				extract( $dbFetch, EXTR_OVERWRITE );
 	
-				$rowColor = ($rowCount % 2) ? $color1 : $color2;
-	
 			?>
 			
-				<tr class="<?=$rowColor;?>">
+				<tr>
 					<td><? printText( $dbTitle ); ?></td>
 					<td align="center" width="10%">
-						<? if( $dbType == "entry" ) { ?>
-							<b><a href="<?=$webLocation;?>index.php?page=database&entry=<?=$dbid;?>">View</a></b>
-						<? } elseif( $dbType == "onsite" ) { ?>
-							<b><a href="<?=$webLocation . $dbURL;?>">View</a></b>
-						<? } elseif( $dbType == "offsite" ) { ?>
-							<b><a href="<?=$dbURL;?>" target="_blank">View</a></b>
-						<? } ?>
+						<?php
+						
+						switch($dbType)
+						{
+							case 'entry':
+								echo "<strong><a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
+								break;
+							case 'onsite':
+								echo "<strong><a href='" . $webLocation . $dbURL . "'>";
+								break;
+							case 'offsite':
+								echo "<strong><a href='" . $dbURL . "'>";
+								break;
+						}
+						
+						echo "View</a></strong>";
+						
+						?>
 					</td>
-					<td align="center" width="10%"><b><a href="<?=$webLocation;?>admin.php?page=manage&sub=database&entry=<?=$dbid;?>" class="edit" >Edit</a></b></td>
+					<td align="center" width="10%">
+						<strong><a href="#" rel="facebox" myAction="edit" myID="<?=$dbid;?>" class="edit" >Edit</a></strong>
+					</td>
 					<td align="center" width="10%">
 						<script type="text/javascript">
 							document.write( "<b><a href=\"<?=$webLocation;?>admin.php?page=manage&sub=database&delete=<?=$dbid;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this database item?')\">Delete</a></b>" );
@@ -238,7 +218,7 @@ if( in_array( "m_database", $sessionAccess ) ) {
 					</td>
 				</tr>
 		
-			<? $rowCount++; } ?>
+			<? } ?>
 	
 			</table>
 			
