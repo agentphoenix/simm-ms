@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-03-25 2124 EST
+Last Modified: 2008-04-03 1917 EST
 **/
 
 /*
@@ -239,6 +239,19 @@ mysql_query( "CREATE TABLE `sms_awards_queue` (
 
 /*
 |---------------------------------------------------------------
+| DATABASE
+|---------------------------------------------------------------
+|
+| We have added departmental databases to the system requiring a few
+| new fields in both the database table as well as the departments table.
+|
+*/
+mysql_query( "ALTER TABLE `sms_database` ADD `dbDept` INT NOT NULL DEFAULT '0'" );
+mysql_query( "ALTER TABLE `sms_departments` ADD `deptDatabaseUse` ENUM( 'y', 'n' ) NOT NULL DEFAULT 'y'" );
+
+
+/*
+|---------------------------------------------------------------
 | SYSTEM PLUGINS
 |---------------------------------------------------------------
 |
@@ -278,7 +291,7 @@ VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library u
 | for this release.
 |
 */
-mysql_query( "ALTER TABLE `sms_system_versions` ADD `versionRev` INT( 5 ) NOT NULL AFTER `version`" );
+mysql_query( "ALTER TABLE `sms_system_versions` ADD `versionRev` int(5) NOT NULL AFTER `version`" );
 mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.0', '', '', '' )" );
 
 ?>
