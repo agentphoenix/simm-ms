@@ -9,7 +9,7 @@ Purpose: Stylesheet that controls several of the miscellaneous items throughout
 	the system
 
 Skin Version: 2.5
-Last Modified: 2008-03-05 1436 EST
+Last Modified: 2008-04-04 1956 EST
 **/
 
 /*
@@ -173,11 +173,15 @@ table { width: 100%; }
 */
 .update { width: 98%; }
 .update a {
-	border-bottom: 1px dotted;
-	color: #fff;
+	border-bottom: 1px dotted #888;
+	color: #888;
 	font-weight: bold;
+	padding: 0 0 1px 0;
 }
-.update a:hover { border-bottom: 1px solid; }
+.update a:hover {
+	border-bottom: 1px solid #888;
+	color: #f1f1f1;
+}
 
 /** color styles **/
 .notify-orange {
