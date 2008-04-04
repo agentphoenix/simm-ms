@@ -147,7 +147,8 @@ if(in_array("m_database1", $sessionAccess) || in_array("m_database2",$sessionAcc
 		</table>
 
 		<div>
-			<input type="hidden" name="action_type" value="create" />
+			<input type="hidden" name="action_id" value="<?=$pendingArray['dbid'];?>" />
+			<input type="hidden" name="action_type" value="update" />
 	
 			<input type="image" src="<?=$webLocation;?>images/hud_button_ok.png" name="activate" value="Activate" />
 		</div>
