@@ -10,22 +10,28 @@ File: pages/database.php
 Purpose: Page to display the database entries
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 0958 EST
+Last Modified: 2008-04-04 1235 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "simm";
 
-if( isset( $_GET['entry'] ) ) {
+if(isset($_GET['entry']) && is_numeric($_GET['entry']))
+{
 	$entry = $_GET['entry'];
-} else {
-	$entry = "";
+}
+else
+{
+	$entry = FALSE;
 }
 
-if( isset( $_GET['sort'] ) ) {
-	$sort = $_GET['sort'];
-} else {
-	$sort = "";
+if(isset($_GET['dept']) && is_numeric($_GET['dept']))
+{
+	$d = $_GET['dept'];
+}
+else
+{
+	$d = 0;
 }
 
 /* pull in the menu */
@@ -35,82 +41,127 @@ if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $skin . '/menu.php' );
 }
 
-/* if there isn't a sort var set, make it order */
-if( !$sort ) {
-	$sort = "order";
+if($d == 0)
+{
+	$d_name = "Global";
+}
+else
+{
+	$deptName = "SELECT deptName FROM sms_departments WHERE deptid = $d LIMIT 1";
+	$deptNameR = mysql_query($deptName);
+	$deptX = mysql_fetch_row($deptNameR);
+
+	$d_name = $deptX[0];
 }
 
-/* translate the sort var from the URL to the right SQL value */
-if( $sort == "order" ) {
-	$sort = "dbOrder";
-} elseif( $sort == "name" ) {
-	$sort = "dbTitle";
-} elseif( $sort == "type" ) {
-	$sort = "dbType";
+/* get the departments from the database */
+$getDepartments = "SELECT * FROM sms_departments WHERE deptDatabaseUse = 'y' ORDER BY deptOrder ASC";
+$getDepartmentsResult = mysql_query($getDepartments);
+$countDepts = mysql_num_rows($getDepartmentsResult);
+$countDeptsFinal = $countDepts - 1;
+
+$d_array = array();
+
+/* loop through the results and fill the form */
+while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
+	extract($deptFetch, EXTR_OVERWRITE);
+	
+	$d_array[] = array('id' => $deptid, 'dept' => $deptName);
 }
 
-echo "<div class='body'>";
+?>
 
-/* if there's no entry specified in the URL, give the complete listing */
-if( !$entry ) {
+<div class="body">
 
-	/* show the title */
-	echo "<span class='fontTitle'>Database Entries</span>";
+<?php if($entry == FALSE) { ?>
+	<div align="center">
+		<span class="fontSmall">Click on the department name to view the database entries</span><br />
+		<b>
+		
+		<?php
+		
+		echo "<a href='" . $webLocation . "index.php?page=database&dept=0'>Global Entries</a>";
+		if($countDeptsFinal > 0)
+		{
+			echo "&nbsp; &middot; &nbsp;";
+		}
+		
+		foreach( $d_array as $key => $value )
+		{
+	
+			echo "<a href='" . $webLocation . "index.php?page=database&dept=" . $value['id'] . "'>";
+		
+			/*
+				if it's the last element of the array, just close the HREF
+				otherwise, put a middot between the array values
+			*/
+			if( $key >= $countDeptsFinal ) {
+				echo $value['dept'] . "</a>";
+			} else {
+				echo $value['dept'] . "</a> &nbsp; &middot; &nbsp; ";
+			}
+	
+		}
 
+		?>
+		</b>
+	</div><br />
+
+	<span class="fontTitle"><? printText($d_name);?> Database Entries</span>
+	
+	<?php
+	
 	/*
 		if the person is logged in and has level 5 access, display an icon
 		that will take them to edit the entry
 	*/
-	if( isset( $sessionCrewid ) && in_array( "m_database", $sessionAccess ) ) {
+	if(isset($sessionCrewid) && (in_array("m_database1", $sessionAccess) || in_array("m_database2", $sessionAccess)))
+	{
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database'>";
 		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
 		echo "</a>";
 	}
 	
-	echo "<br />";
-
-	/* show the sort menu */
-	echo "<span class='fontNormal'><b>Sort By:</b> ";
-	echo "&nbsp;";
-	echo "<a href='" . $webLocation . "index.php?page=database&sort=name'>Name (Ascending)</a>";
-	echo "&nbsp; &middot; &nbsp;";
-	echo "<a href='" . $webLocation . "index.php?page=database&sort=order'>Order (Ascending)</a>";
-	echo "&nbsp; &middot; &nbsp;";
-	echo "<a href='" . $webLocation . "index.php?page=database&sort=type'>Type (URL Forward / Database Entry)</a>";
-
-	echo "</span>";
 	echo "<br /><br />";
 
-	$getEntries = "SELECT * FROM sms_database WHERE dbDisplay = 'y' ORDER BY $sort";
-	$getEntriesResult = mysql_query( $getEntries );
-
-	/* Start pulling the array and populate the variables */
-	while( $entries = mysql_fetch_array( $getEntriesResult ) ) {
-		extract( $entries, EXTR_OVERWRITE );
+	$getEntries = "SELECT * FROM sms_database WHERE dbDisplay = 'y' AND dbDept = $d ORDER BY dbOrder ASC";
+	$getEntriesResult = mysql_query($getEntries);
+	$countEntries = mysql_num_rows($getEntriesResult);
 	
-		echo "<span class='fontMedium'><b>";
+	if($countEntries == 0)
+	{
+		echo "<strong class='fontMedium orange'>No database entries found.</strong>";
+	}
+	else
+	{
+		/* Start pulling the array and populate the variables */
+		while($entries = mysql_fetch_array($getEntriesResult)) {
+			extract($entries, EXTR_OVERWRITE);
+	
+			echo "<strong class='fontMedium'>";
 
-		/* build a different link based on the type of entry it is */
-		if( $dbType == "entry" ) {
-			echo "<a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
-		} elseif( $dbType == "onsite" ) {
-			echo "<a href='" . $webLocation . $dbURL . "'>";
-		} elseif( $dbType == "offsite" ) {
-			echo "<a href='" .$dbURL . "' target='_blank'>";
-		}
+			/* build a different link based on the type of entry it is */
+			if( $dbType == "entry" ) {
+				echo "<a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
+			} elseif( $dbType == "onsite" ) {
+				echo "<a href='" . $webLocation . $dbURL . "'>";
+			} elseif( $dbType == "offsite" ) {
+				echo "<a href='" .$dbURL . "' target='_blank'>";
+			}
 		
-		printText( $dbTitle );
-		echo "</a>";
-		echo "</b></span><br />";
-		printText( $dbDesc );
-		echo "<br /><br />";
+			printText( $dbTitle );
+			echo "</a>";
+			echo "</strong><br />";
+			printText( $dbDesc );
+			echo "<br /><br />";
 
+		}
 	}
 
 } else {
 
-	$getEntry = "SELECT * FROM sms_database WHERE dbid = '$entry' LIMIT 1";
+	$getEntry = "SELECT * FROM sms_database WHERE dbid = $entry LIMIT 1";
 	$getEntryResult = mysql_query( $getEntry );
 
 	/* Start pulling the array and populate the variables */
