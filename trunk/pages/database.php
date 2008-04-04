@@ -10,7 +10,7 @@ File: pages/database.php
 Purpose: Page to display the database entries
 
 System Version: 2.6.0
-Last Modified: 2008-04-04 1235 EST
+Last Modified: 2008-04-04 1945 EST
 **/
 
 /* define the page class and vars */
@@ -74,9 +74,8 @@ while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
 <div class="body">
 
 <?php if($entry == FALSE) { ?>
-	<div align="center">
-		<span class="fontSmall">Click on the department name to view the database entries</span><br />
-		<b>
+	<div class="update notify-normal fontNormal">
+		<strong class="orange">Click on the department name to view its database entries:</strong><br /><br />
 		
 		<?php
 		
@@ -89,22 +88,22 @@ while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
 		foreach( $d_array as $key => $value )
 		{
 	
-			echo "<a href='" . $webLocation . "index.php?page=database&dept=" . $value['id'] . "'>";
+			echo "<nobr><a href='" . $webLocation . "index.php?page=database&dept=" . $value['id'] . "'>";
 		
 			/*
 				if it's the last element of the array, just close the HREF
 				otherwise, put a middot between the array values
 			*/
 			if( $key >= $countDeptsFinal ) {
-				echo $value['dept'] . "</a>";
+				echo $value['dept'] . "</a></nobr>";
 			} else {
-				echo $value['dept'] . "</a> &nbsp; &middot; &nbsp; ";
+				echo $value['dept'] . "</a> &nbsp; &middot; &nbsp; </nobr>";
 			}
 	
 		}
 
 		?>
-		</b>
+		<br /><br />
 	</div><br />
 
 	<span class="fontTitle"><? printText($d_name);?> Database Entries</span>
@@ -169,32 +168,14 @@ while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
 		extract( $entry, EXTR_OVERWRITE );
 	}
 
-	echo "<span class='fontTitle'>Database: " . $dbTitle . "</span>";
-	
-	/*
-		if the person is logged in and has level 5 access, display an icon
-		that will take them to edit the entry
-	*/
-	if( isset( $sessionCrewid ) && in_array( "m_database", $sessionAccess ) ) {
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database&entry=" . $dbid . "'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
-		echo "</a>";
-	}
-		
-	echo "<br /><br />";
-
-	echo stripslashes( $dbContent );
-
-	echo "<br /><br />";
-	echo "<span class='fontMedium'><b>";
-	echo "<a href='" . $webLocation . "index.php?page=database'>&laquo; Back to Database Entries</a>";
-	echo "</b></span>";
-
 ?>
 
-	
+	<span class="fontTitle">Database: <? printText($dbTitle);?></span><br /><br />
 
-<? } ?>
+	<?=stripslashes( $dbContent ); ?><br /><br />
+	
+	<strong class="fontMedium"><a href="<?=$webLocation;?>index.php?page=database">&laquo; Back to Database Entries</a></strong>
+
+<?php } ?>
 
 </div> <!-- close .body -->
