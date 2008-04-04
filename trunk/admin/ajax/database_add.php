@@ -54,9 +54,9 @@ if(in_array("m_database1", $sessionAccess) || in_array("m_database2",$sessionAcc
 				<td></td>
 				<td>
 					<select name="dbType">
+						<option value="entry">Database Entry</option>
 						<option value="onsite">URL Forward (On-Site)</option>
 						<option value="offsite">URL Forward (Off-Site)</option>
-						<option value="entry">Database Entry</option>
 					</select>
 				</td>
 			</tr>
