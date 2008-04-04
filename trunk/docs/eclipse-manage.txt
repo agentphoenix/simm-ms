@@ -1,4 +1,4 @@
-Last Update: 2008.04.03 2100 EST
+Last Update: 2008.04.04 1247 EST
 
 IN PROGRESS
 =====
@@ -42,11 +42,13 @@ IN PROGRESS
 				@	Docked Ships
 				@	Database
 		*	Deleting
-				@	Database
+				x	Database
 
 #	Update skins
 
 #	Departmental databases
+		*	Management
+		x	Display
 		
 IN QUEUE
 =====
