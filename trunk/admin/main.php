@@ -10,7 +10,7 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1623 EST
+Last Modified: 2008-04-05 1536 EST
 **/
 
 /* define the page class */
@@ -263,7 +263,7 @@ if( isset( $sessionCrewid ) ) {
 					<?php
 					
 					printText( $text );
-					echo " ... [ <a href='" . $webLocation . "index.php?page=post&id=" . $postid . "'>Read More &raquo;</a> ]";
+					echo " ... <nobr>[ <a href='" . $webLocation . "index.php?page=post&id=" . $postid . "'>Read More &raquo;</a> ]</nobr>";
 					
 					?>
 				</div>
@@ -315,7 +315,7 @@ if( isset( $sessionCrewid ) ) {
 					<?php
 					
 					printText( $text );
-					echo " ... [ <a href='" . $webLocation . "index.php?page=log&id=" . $logid . "'>Read More &raquo;</a> ]";
+					echo " ... <nobr>[ <a href='" . $webLocation . "index.php?page=log&id=" . $logid . "'>Read More &raquo;</a> ]</nobr>";
 					
 					?>
 				</div>
@@ -368,7 +368,7 @@ if( isset( $sessionCrewid ) ) {
 					<?php
 					
 					printText( $text );
-					echo " ... [ <a href='" . $webLocation . "index.php?page=news&id=" . $newsid . "'>Read More &raquo;</a> ]";
+					echo " ... <nobr>[ <a href='" . $webLocation . "index.php?page=news&id=" . $newsid . "'>Read More &raquo;</a> ]</nobr>";
 					
 					?>
 				</div>
