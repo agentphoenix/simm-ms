@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-03-23 0002 EST
+Last Modified: 2008-04-05 1636 EST
 **/
 
 /* insert data into the access levels table */
@@ -108,30 +108,31 @@ VALUES (1, 0, 0, 'Main', 'onsite', 'index.php?page=main', '', '', 'n', 'main'),
 (61, 0, 2, 'User Access Levels', 'onsite', 'admin.php?page=manage&sub=access', 'x_access', 'manage', 'y', 'admin'),
 (62, 0, 3, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin'),
 (63, 0, 4, 'Menu Items', 'onsite', 'admin.php?page=manage&sub=menus', 'x_menu', 'manage', 'y', 'admin'),
-(64, 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_database', 'manage', 'y', 'admin'),
-(65, 1, 0, 'Missions', 'onsite', 'admin.php?page=manage&sub=missions', 'm_missions', 'manage', 'y', 'admin'),
-(66, 1, 1, 'Mission Notes', 'onsite', 'admin.php?page=manage&sub=missionnotes', 'm_missionnotes', 'manage', 'y', 'admin'),
-(67, 1, 2, 'Mission Summaries', 'onsite', 'admin.php?page=manage&sub=summaries', 'm_missionsummaries', 'manage', 'y', 'admin'),
-(68, 1, 3, 'Mission Posts', 'onsite', 'admin.php?page=manage&sub=posts', 'm_posts', 'manage', 'y', 'admin'),
-(69, 1, 4, 'Personal Logs', 'onsite', 'admin.php?page=manage&sub=logs', 'm_logs', 'manage', 'y', 'admin'),
-(70, 1, 5, 'News Items', 'onsite', 'admin.php?page=manage&sub=news', 'm_news', 'manage', 'y', 'admin'),
-(71, 1, 6, 'News Categories', 'onsite', 'admin.php?page=manage&sub=newscategories', 'm_newscat3', 'manage', 'y', 'admin'),
-(72, 2, 0, 'Create Character/NPC', 'onsite', 'admin.php?page=manage&sub=add', 'm_createcrew', 'manage', 'y', 'admin'),
-(73, 2, 1, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs1', 'manage', 'y', 'admin'),
-(74, 2, 1, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs2', 'manage', 'y', 'admin'),
-(75, 2, 2, 'All Playing Characters', 'onsite', 'admin.php?page=manage&sub=crew', 'm_crew', 'manage', 'y', 'admin'),
-(76, 2, 3, 'Chain of Command', 'onsite', 'admin.php?page=manage&sub=coc', 'm_coc', 'manage', 'y', 'admin'),
-(77, 2, 4, 'Strikes', 'onsite', 'admin.php?page=manage&sub=strikes', 'm_strike', 'manage', 'y', 'admin'),
-(78, 2, 5, 'User Post Moderation', 'onsite', 'admin.php?page=manage&sub=moderate', 'm_moderation', 'manage', 'y', 'admin'),
-(79, 3, 0, 'Crew Awards', 'onsite', 'admin.php?page=manage&sub=awards', 'm_awards', 'manage', 'y', 'admin'),
-(80, 3, 1, 'Give Award', 'onsite', 'admin.php?page=manage&sub=addaward', 'm_giveaward', 'manage', 'y', 'admin'),
-(81, 3, 2, 'Remove Award', 'onsite', 'admin.php?page=manage&sub=removeaward', 'm_removeaward', 'manage', 'y', 'admin'),
-(82, 4, 0, 'Specifications', 'onsite', 'admin.php?page=manage&sub=specifications', 'm_specs', 'manage', 'y', 'admin'),
-(83, 4, 1, 'Ship Tour', 'onsite', 'admin.php?page=manage&sub=tour', 'm_tour', 'manage', 'y', 'admin'),
-(84, 4, 2, 'Deck Listing', 'onsite', 'admin.php?page=manage&sub=decklisting', 'm_decks', 'manage', 'y', 'admin'),
-(85, 5, 0, 'Departments', 'onsite', 'admin.php?page=manage&sub=departments', 'm_departments', 'manage', 'y', 'admin'),
-(86, 5, 1, 'Positions', 'onsite', 'admin.php?page=manage&sub=positions', 'm_positions', 'manage', 'y', 'admin'),
-(87, 5, 2, 'Ranks', 'onsite', 'admin.php?page=manage&sub=ranks', 'm_ranks', 'manage', 'y', 'admin')" );
+(64, 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_database1', 'manage', 'y', 'admin'),
+(65, 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_database2', 'manage', 'y', 'admin'),
+(66, 1, 0, 'Missions', 'onsite', 'admin.php?page=manage&sub=missions', 'm_missions', 'manage', 'y', 'admin'),
+(67, 1, 1, 'Mission Notes', 'onsite', 'admin.php?page=manage&sub=missionnotes', 'm_missionnotes', 'manage', 'y', 'admin'),
+(68, 1, 2, 'Mission Summaries', 'onsite', 'admin.php?page=manage&sub=summaries', 'm_missionsummaries', 'manage', 'y', 'admin'),
+(69, 1, 3, 'Mission Posts', 'onsite', 'admin.php?page=manage&sub=posts', 'm_posts', 'manage', 'y', 'admin'),
+(70, 1, 4, 'Personal Logs', 'onsite', 'admin.php?page=manage&sub=logs', 'm_logs', 'manage', 'y', 'admin'),
+(71, 1, 5, 'News Items', 'onsite', 'admin.php?page=manage&sub=news', 'm_news', 'manage', 'y', 'admin'),
+(72, 1, 6, 'News Categories', 'onsite', 'admin.php?page=manage&sub=newscategories', 'm_newscat3', 'manage', 'y', 'admin'),
+(73, 2, 0, 'Create Character/NPC', 'onsite', 'admin.php?page=manage&sub=add', 'm_createcrew', 'manage', 'y', 'admin'),
+(74, 2, 1, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs1', 'manage', 'y', 'admin'),
+(75, 2, 1, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs2', 'manage', 'y', 'admin'),
+(76, 2, 2, 'All Playing Characters', 'onsite', 'admin.php?page=manage&sub=crew', 'm_crew', 'manage', 'y', 'admin'),
+(77, 2, 3, 'Chain of Command', 'onsite', 'admin.php?page=manage&sub=coc', 'm_coc', 'manage', 'y', 'admin'),
+(78, 2, 4, 'Strikes', 'onsite', 'admin.php?page=manage&sub=strikes', 'm_strike', 'manage', 'y', 'admin'),
+(79, 2, 5, 'User Post Moderation', 'onsite', 'admin.php?page=manage&sub=moderate', 'm_moderation', 'manage', 'y', 'admin'),
+(80, 3, 0, 'Crew Awards', 'onsite', 'admin.php?page=manage&sub=awards', 'm_awards', 'manage', 'y', 'admin'),
+(81, 3, 1, 'Give Award', 'onsite', 'admin.php?page=manage&sub=addaward', 'm_giveaward', 'manage', 'y', 'admin'),
+(82, 3, 2, 'Remove Award', 'onsite', 'admin.php?page=manage&sub=removeaward', 'm_removeaward', 'manage', 'y', 'admin'),
+(83, 4, 0, 'Specifications', 'onsite', 'admin.php?page=manage&sub=specifications', 'm_specs', 'manage', 'y', 'admin'),
+(84, 4, 1, 'Ship Tour', 'onsite', 'admin.php?page=manage&sub=tour', 'm_tour', 'manage', 'y', 'admin'),
+(85, 4, 2, 'Deck Listing', 'onsite', 'admin.php?page=manage&sub=decklisting', 'm_decks', 'manage', 'y', 'admin'),
+(86, 5, 0, 'Departments', 'onsite', 'admin.php?page=manage&sub=departments', 'm_departments', 'manage', 'y', 'admin'),
+(87, 5, 1, 'Positions', 'onsite', 'admin.php?page=manage&sub=positions', 'm_positions', 'manage', 'y', 'admin'),
+(88, 5, 2, 'Ranks', 'onsite', 'admin.php?page=manage&sub=ranks', 'm_ranks', 'manage', 'y', 'admin')" );
 
 /* insert data into the messages table */
 mysql_query( "INSERT INTO `sms_messages` (`messageid`, `welcomeMessage`, `simmMessage`, `shipMessage`, `shipHistory`, `cpMessage`, `joinDisclaimer`, `samplePostQuestion`, `rules`, `acceptMessage`, `rejectMessage`, `siteCreditsPermanent`, `siteCredits` ) 

@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-04-03 1917 EST
+Last Modified: 2008-04-05 1639 EST
 **/
 
 /*
@@ -132,8 +132,18 @@ $getMenuLinkResult = mysql_query( $getMenuLink );
 $menuLink = mysql_fetch_assoc( $getMenuLinkResult );
 mysql_query( "UPDATE sms_menu_items SET menuLink = 'admin.php?page=manage&sub=menus' WHERE menuid = '$menuLink[menuid]' LIMIT 1" );
 
+$getDB = "SELECT * FROM sms_menu_items WHERE menuAccess = 'm_database' LIMIT 1";
+$getDBResult = mysql_query( $getDB );
+$dbLink = mysql_fetch_assoc( $getDBResult );
+mysql_query( "UPDATE sms_menu_items SET menuAccess = 'm_database2' WHERE menuid = '$dbLink[menuid]' LIMIT 1" );
+
+/* default access levels menu item */
 mysql_query( "INSERT INTO sms_menu_items ( menuGroup, menuOrder, menuTitle, menuLinkType, menuLink, menuAccess, menuMainSec, menuLogin, menuCat )
 VALUES ( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin' )" );
+
+/* database-1 access menu item */
+mysql_query( "INSERT INTO sms_menu_items ( menuGroup, menuOrder, menuTitle, menuLinkType, menuLink, menuAccess, menuMainSec, menuLogin, menuCat )
+VALUES ( 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_database1', 'manage', 'y', 'admin' )" );
 
 
 /*
