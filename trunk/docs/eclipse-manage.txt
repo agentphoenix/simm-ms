@@ -1,4 +1,4 @@
-Last Update: 2008.04.04 1247 EST
+Last Update: 2008.04.04 2038 EST
 
 IN PROGRESS
 =====
@@ -18,8 +18,6 @@ IN PROGRESS
 
 #	Global setting for default access levels
 
-#	Toggle boxes should use jQuery instead of the custom Javascript code
-		
 #	Nominated awards to queue for CO approval
 		*	Award nomination page should give users the ability to nominate an NPC
 			for an award. Need to figure out how that'll be done what with IC and OOC
@@ -40,15 +38,11 @@ IN PROGRESS
 				x	Database
 		*	Editing
 				@	Docked Ships
-				@	Database
+				x	Database
 		*	Deleting
 				x	Database
 
 #	Update skins
-
-#	Departmental databases
-		*	Management
-		x	Display
 		
 IN QUEUE
 =====
@@ -59,6 +53,9 @@ IN QUEUE
 #	Ability for crew to edit their posts and logs
 
 #	Access changes need to filter down to all the access pages
+		*	m_database1 and m_database2
+		*	m_posts1 and m_posts2
+		*	m_logs1 and m_logs2
 
 COMPLETED
 =====
@@ -113,6 +110,10 @@ X	Award categories (in character, out of character, both)
 X	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
 
 X	Re-write activation page
+
+X	Departmental databases
+
+X	Toggle boxes should use jQuery instead of the custom Javascript code
 
 X	[BUG] Database uses integer fields for the crew compliment section
 
