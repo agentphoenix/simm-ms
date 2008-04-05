@@ -10,16 +10,8 @@ File: admin/manage/database.php
 Purpose: Page that moderates the database entries
 
 System Version: 2.6.0
-Last Modified: 2008-04-04 1248 EST
+Last Modified: 2008-04-04 2018 EST
 **/
-
-$debug = 1;
-
-if($debug >= 1)
-{
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
-}
 
 /* access check */
 if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessionAccess ) ) {
@@ -103,6 +95,7 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 
 	/* set up the database array */
 	$database = array(0 => array());
+	$departments = array();
 
 	/* pull all the applicable departments */
 	$depts = "SELECT * FROM sms_departments WHERE deptDatabaseUse = 'y' ORDER BY deptORDER ASC";
@@ -113,19 +106,21 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 		extract($deptFetch, EXTR_OVERWRITE);
 	
 		$database[$deptid] = array();
+		$departments[] = $deptid;
 	}
 
 	/* pull all the entries */
-	$entries = "SELECT * FROM sms_database WHERE dbDisplay = 'y'";
+	$entries = "SELECT db.* FROM sms_database AS db, sms_departments AS d WHERE db.dbDisplay = 'y' ";
+	$entries.= "AND db.dbDept = d.deptid AND d.deptDatabaseUse = 'y'";
 	$entriesR = mysql_query($entries);
-
+	
 	/* fill in the array */
 	while($entryFetch = mysql_fetch_assoc($entriesR)) {
 		extract($entryFetch, EXTR_OVERWRITE);
 	
 		$database[$dbDept][] = array('id' => $dbid, 'title' => $dbTitle, 'type' => $dbType, 'url' => $dbURL, 'order' => $dbOrder);
 	}
-	
+
 	/* if they have level 1 database access, get their department id */
 	if(!in_array("m_database2", $sessionAccess))
 	{
@@ -133,10 +128,11 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 		$depts.= "crew.crewid = '$sessionCrewid' AND crew.positionid = position.positionid LIMIT 1";
 		$deptsR = mysql_query($depts);
 		$deptFetch = mysql_fetch_row($deptsR);
-		
-		$myDept = $deptFetch[0];
-	}
 	
+		$myDept = $deptFetch[0];
+		$arrayKeys = array_keys($database);
+	}
+
 	/* scrub the array for empty sets */
 	foreach($database as $a => $b)
 	{
@@ -144,18 +140,11 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 		{
 			unset($database[$a]);
 		}
-		
+	
 		if(!in_array("m_database2", $sessionAccess) && $a != $myDept)
 		{
 			unset($database[$a]);
 		}
-	}
-	
-	if($debug >= 2)
-	{
-		echo "<pre>";
-		print_r($database);
-		echo "</pre>";
 	}
 
 ?>
@@ -202,74 +191,84 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 	for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest).  
 	For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
 	
+	<?php if(!in_array("m_database2", $sessionAccess) && in_array($myDept, $arrayKeys)) { ?>
 	<a href="#" rel="facebox" myAction="add" class="fontMedium add"><strong>Create New Database Entry &raquo;</strong></a>
 	<br /><br />
-	
-	<?php
-	
-	foreach($database as $k1 => $v1)
-	{
-		$getD = "SELECT deptName, deptColor FROM sms_departments WHERE deptid = $k1";
-		$getDResult = mysql_query($getD);
-		$deptX = mysql_fetch_row($getDResult);
-		
-		/* if it is not the 0 entry, set the dept name and color accordingly */
-		if($k1 > 0)
-		{
-			$d_name = $deptX[0];
-			$d_color = $deptX[1];
-		}
-		else
-		{
-			$d_name = "Global Entries";
-			$d_color = "ffffff";
-		}
-	
-	?>
-	<table class="zebra" cellpadding="3" cellspacing="0">
-		<tr class="table_head">
-			<td colspan="4">
-				<strong class="fontMedium" style="color:#<?=$d_color;?>;"><?=$d_name;?></strong>
-			</td>
-		</tr>
-	<?php
-	
-		foreach($database[$k1] as $k2 => $v2)
-		{
-	
-	?>
-		<tr class="fontNormal">
-			<td><? printText( $v2['title'] ); ?></td>
-			<td align="center" width="10%">
-				<?php
-				
-				switch($v2['type'])
-				{
-					case 'entry':
-						echo "<strong><a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
-						break;
-					case 'onsite':
-						echo "<strong><a href='" . $webLocation . $dbURL . "'>";
-						break;
-					case 'offsite':
-						echo "<strong><a href='" . $dbURL . "'>";
-						break;
-				}
-				
-				echo "View</a></strong>";
-				
-				?>
-			</td>
-			<td align="center" width="10%">
-				<strong><a href="#" rel="facebox" myAction="edit" myID="<?=$v2['id'];?>" class="edit">Edit</a></strong>
-			</td>
-			<td align="center" width="10%">
-				<strong><a href="#" rel="facebox" myAction="delete" myID="<?=$v2['id'];?>" class="delete">Delete</a></strong>
-			</td>
-		</tr>
 	<?php } ?>
 	
-	</table><br />	
+	<?php
+	
+	if(!in_array("m_database2", $sessionAccess) && !in_array($myDept, $departments))
+	{
+		echo "<strong class='fontMedium orange'>Your department does not have permission to use the SMS database feature. Please contact the CO to gain access to the departmental database feature.</strong>";
+	}
+	else
+	{
+	
+		foreach($database as $k1 => $v1)
+		{
+			$getD = "SELECT deptName, deptColor FROM sms_departments WHERE deptid = $k1";
+			$getDResult = mysql_query($getD);
+			$deptX = mysql_fetch_row($getDResult);
+		
+			/* if it is not the 0 entry, set the dept name and color accordingly */
+			if($k1 > 0)
+			{
+				$d_name = $deptX[0];
+				$d_color = $deptX[1];
+			}
+			else
+			{
+				$d_name = "Global Entries";
+				$d_color = "ffffff";
+			}
+	
+		?>
+		<table class="zebra" cellpadding="3" cellspacing="0">
+			<tr class="table_head">
+				<td colspan="4">
+					<strong class="fontMedium" style="color:#<?=$d_color;?>;"><?=$d_name;?></strong>
+				</td>
+			</tr>
+		<?php
+	
+			foreach($database[$k1] as $k2 => $v2)
+			{
+	
+		?>
+			<tr class="fontNormal">
+				<td><? printText( $v2['title'] ); ?></td>
+				<td align="center" width="10%">
+					<?php
+				
+					switch($v2['type'])
+					{
+						case 'entry':
+							echo "<strong><a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
+							break;
+						case 'onsite':
+							echo "<strong><a href='" . $webLocation . $dbURL . "'>";
+							break;
+						case 'offsite':
+							echo "<strong><a href='" . $dbURL . "'>";
+							break;
+					}
+				
+					echo "View</a></strong>";
+				
+					?>
+				</td>
+				<td align="center" width="10%">
+					<strong><a href="#" rel="facebox" myAction="edit" myID="<?=$v2['id'];?>" class="edit">Edit</a></strong>
+				</td>
+				<td align="center" width="10%">
+					<strong><a href="#" rel="facebox" myAction="delete" myID="<?=$v2['id'];?>" class="delete">Delete</a></strong>
+				</td>
+			</tr>
+		<?php } ?>
+	
+		</table><br />	
+		<?php } ?>
 	<?php } ?>
 	
 </div>
