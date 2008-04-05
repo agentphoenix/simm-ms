@@ -10,13 +10,17 @@ File: admin/reports.php
 Purpose: Page to pull in the necessary report page
 
 System Version: 2.6.0
-Last Modified: 2007-11-08 1103 EST
+Last Modified: 2008-04-05 1642 EST
 **/
 
 /* define the page class and variables */
 $pageClass = "admin";
 $subMenuClass = "reports";
-$sub = $_GET['sub'];
+
+if(isset($_GET['sub']))
+{
+	$sub = $_GET['sub'];
+}
 
 /* if they have a session, continue processing */
 if( isset( $sessionCrewid ) && in_array( "reports", $sessionAccess ) ) {
