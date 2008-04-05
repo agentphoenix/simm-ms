@@ -5,40 +5,41 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/reports/progress.php
 Purpose: Page that shows the progress the sim has made
 
-System Version: 2.5.0
-Last Modified: 2007-06-10 1852 EST
+System Version: 2.6.0
+Last Modified: 2008-04-05 1646 EST
 **/
 
 /* access check */
 if( in_array( "r_progress", $sessionAccess ) ) {
-
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['period'] ) && preg_match( "/^\d+$/", $_GET['period'], $matches ) == 0 ) {
-		errorMessageIllegal( "sim progress report page" );
-		exit();
-	} else {
-		/* set the GET variable */
+	
+	if(isset($_GET['period']) && is_numeric($_GET['period']))
+	{
 		$period = $_GET['period'];
 	}
-	
-	/* if there's no period specified, set one */
-	if( !$period ) {
-		$period = "3";
+	else
+	{
+		$period = 3;
 	}
 
 	/* do some logic to determine the right period */
-	if( $period == "3" ) {
-		$periodLong = "90";
-	} if( $period == "6" ) {
-		$periodLong = "180";
-	} if( $period == "9" ) {
-		$periodLong = "270";
-	} if( $period == "12" ) {
-		$periodLong = "365";
+	switch($period)
+	{
+		case 3:
+			$periodLong = 90;
+			break;
+		case 6:
+			$periodLong = 180;
+			break;
+		case 9:
+			$periodLong = 270;
+			break;
+		case 12:
+			$periodLong = 365;
+			break;
 	}
 
 	/* pull today's information */
