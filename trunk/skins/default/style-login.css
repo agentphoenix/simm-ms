@@ -8,7 +8,7 @@ File: skins/default/style-login.css
 Purpose: Stylesheet that controls the login page
 
 Skin Version: 2.5
-Last Modified: 2008-03-03 1718 EST
+Last Modified: 2008-04-05 1529 EST
 **/
 
 /*
@@ -26,10 +26,13 @@ Last Modified: 2008-03-03 1718 EST
 }
 
 #login a {
-	color: #a7a590;
+	color: #648295;
 	font-weight: bold;
 }
-#login a:hover { text-decoration: underline; }
+#login a:hover {
+	text-decoration: underline;
+	color: #aad1e9;
+}
 
 #login .error {
 	color: #cc0000;
