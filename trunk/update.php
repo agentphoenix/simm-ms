@@ -11,13 +11,12 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.0
-Last Modified: 2008-02-05 1415 EST
+Last Modified: 2008-04-05 1540 EST
 **/
 
 /* define the step var */
 $step = $_GET['step'];
-//$urlVersion = $_GET['version'];
-$urlVersion = "2441";
+$urlVersion = $_GET['version'];
 
 /* array for controlling trailing zeroes */
 $versionArray = array(
@@ -45,7 +44,9 @@ $versionsArray = array(
 	"2511",
 	"252",
 	"253",
-	"254"
+	"254",
+	"255",
+	"256"
 );
 
 /* count the number of items in the versions array */
