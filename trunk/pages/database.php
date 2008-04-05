@@ -10,8 +10,11 @@ File: pages/database.php
 Purpose: Page to display the database entries
 
 System Version: 2.6.0
-Last Modified: 2008-04-04 1945 EST
+Last Modified: 2008-04-04 2034 EST
 **/
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 /* define the page class and vars */
 $pageClass = "simm";
@@ -55,18 +58,31 @@ else
 }
 
 /* get the departments from the database */
-$getDepartments = "SELECT * FROM sms_departments WHERE deptDatabaseUse = 'y' ORDER BY deptOrder ASC";
+$getDepartments = "SELECT * FROM sms_departments ORDER BY deptOrder ASC";
 $getDepartmentsResult = mysql_query($getDepartments);
 $countDepts = mysql_num_rows($getDepartmentsResult);
 $countDeptsFinal = $countDepts - 1;
 
+/*
+two arrays are being set up so that we can figure out if a user is
+supposed to be allowed admin access based on whether or not their
+department is setup to use the departmental database feature
+*/
 $d_array = array();
+$d_not = array();
 
 /* loop through the results and fill the form */
 while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
 	extract($deptFetch, EXTR_OVERWRITE);
 	
-	$d_array[] = array('id' => $deptid, 'dept' => $deptName);
+	if($deptDatabaseUse == "y")
+	{
+		$d_array[] = array('id' => $deptid, 'dept' => $deptName);
+	}
+	else
+	{
+		$d_not[] = $deptid;
+	}
 }
 
 ?>
@@ -116,10 +132,33 @@ while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
 	*/
 	if(isset($sessionCrewid) && (in_array("m_database1", $sessionAccess) || in_array("m_database2", $sessionAccess)))
 	{
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
-		echo "</a>";
+		$access = FALSE;
+		
+		if(!in_array("m_database2", $sessionAccess))
+		{
+			$depts = "SELECT position.positionDept FROM sms_crew AS crew, sms_positions AS position, sms_departments AS dept WHERE ";
+			$depts.= "crew.crewid = '$sessionCrewid' AND crew.positionid = position.positionid LIMIT 1";
+			$deptsR = mysql_query($depts);
+			$deptFetch = mysql_fetch_row($deptsR);
+			$myDept = $deptFetch[0];
+			
+			if(!in_array($myDept, $d_not))
+			{
+				$access = TRUE;
+			}
+		}
+		else
+		{
+			$access = TRUE;
+		}
+		
+		if($access === TRUE)
+		{
+			echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database'>";
+			echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+			echo "</a>";
+		}
 	}
 	
 	echo "<br /><br />";
