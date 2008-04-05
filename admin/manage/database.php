@@ -182,16 +182,23 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 
 	<span class="fontTitle">Database Entry Management</span><br /><br />
 	
-	The database feature in SMS 2 allows COs to create an easy-to-manage list of important links, 
+	The database feature in SMS 2 allows for the creation of an easy-to-manage list of important links, 
 	both on-site and off-site, as well as the option to create a database entry for those things that 
-	don't require a complete new page created.  If you want to create an entry that uses extensive 
-	HTML or PHP, please create a new SMS page and use an on-site URL forwarding entry.  The 
-	database feature will display basic HTML, but does not support extensive use of HTML code in 
-	the database entries.  For off-site URL forwarding entries, give the full URL (e.g. http://www.something.com/), 
-	for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest).  
-	For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
+	don&rsquo;t require a complete new page created.
 	
-	<?php if(!in_array("m_database2", $sessionAccess) && in_array($myDept, $arrayKeys)) { ?>
+	<?php if(in_array("m_database2", $sessionAccess)) { ?>
+	<strong class="yellow">Note:</strong> admins can give and take access to the database feature through
+	the Department management page.
+	<?php } ?>
+	<br /><br />
+	
+	If you want to create an entry that uses extensive HTML or any PHP, please create a new SMS page and 
+	use an on-site URL forwarding entry.  The database feature will display basic HTML, but does not support 
+	extensive use of HTML code in the entry.  For off-site URL forwarding entries, give the full URL 
+	(e.g. http://www.something.com/), for on-site URL forwarding entries only give what comes after the location 
+	of SMS (e.g. index.php?page=manifest).  For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
+	
+	<?php if( (!in_array("m_database2", $sessionAccess) && in_array($myDept, $arrayKeys)) || in_array("m_database2", $sessionAccess)) { ?>
 	<a href="#" rel="facebox" myAction="add" class="fontMedium add"><strong>Create New Database Entry &raquo;</strong></a>
 	<br /><br />
 	<?php } ?>
