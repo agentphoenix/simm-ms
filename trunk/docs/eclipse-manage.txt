@@ -1,4 +1,4 @@
-Last Update: 2008.04.04 2038 EST
+Last Update: 2008.04.04 2103 EST
 
 IN PROGRESS
 =====
@@ -43,6 +43,9 @@ IN PROGRESS
 				x	Database
 
 #	Update skins
+
+#	Departmental databases
+		*	Ability to turn the feature off for individual departments
 		
 IN QUEUE
 =====
@@ -110,8 +113,6 @@ X	Award categories (in character, out of character, both)
 X	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
 
 X	Re-write activation page
-
-X	Departmental databases
 
 X	Toggle boxes should use jQuery instead of the custom Javascript code
 
