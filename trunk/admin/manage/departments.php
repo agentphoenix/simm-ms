@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/departments.php
 Purpose: Page that moderates the simm departments
 
-System Version: 2.5.0
-Last Modified: 2007-07-10 1003 EST
+System Version: 2.6.0
+Last Modified: 2008-04-05 1632 EST
 **/
 
 /* access check */
@@ -19,68 +19,130 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$actionCreate = $_POST['action_create_x'];
-	$actionUpdate = $_POST['action_update_x'];
-	$actionDelete = $_POST['action_delete_x'];
-
-	/* define the POST variables */
-	$deptid = $_POST['deptid'];
-	$deptName = addslashes( $_POST['deptName'] );
-	$deptClass = $_POST['deptClass'];
-	$deptOrder = $_POST['deptOrder'];
-	$deptColor = $_POST['deptColor'];
-	$deptDisplay = $_POST['deptDisplay'];
-	$deptDesc = addslashes( $_POST['deptDesc'] );
-	$deptType = $_POST['deptType'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	/* if the POST action is update */
-	if( $actionUpdate ) {
+	if(isset($_POST['action_update_x']))
+	{
+		if(isset($_POST['deptid']) && is_numeric($_POST['deptid']))
+		{
+			$deptid = $_POST['deptid'];
+		}
+		else
+		{
+			$deptid = FALSE;
+			exit();
+		}
 		
-		/* do the update query */
-		$query = "UPDATE sms_departments SET ";
-		$query.= "deptName = '$deptName', deptClass = '$deptClass', deptOrder = '$deptOrder', ";
-		$query.= "deptColor = '$deptColor', deptDisplay = '$deptDisplay', deptDesc = '$deptDesc', ";
-		$query.= "deptType = '$deptType' WHERE deptid = '$deptid' LIMIT 1";
-		$result = mysql_query( $query );
+		$update = "UPDATE sms_departments SET deptName = %s, deptClass = %d, deptOrder = %d, deptColor = %s, deptDisplay = %s, ";
+		$update.= "deptDesc = %s, deptType = %s WHERE deptid = $deptid LIMIT 1";
+		
+		$query = sprintf(
+			$update,
+			escape_string($_POST['deptName']),
+			escape_string($_POST['deptClass']),
+			escape_string($_POST['deptOrder']),
+			escape_string($_POST['deptColor']),
+			escape_string($_POST['deptDisplay']),
+			escape_string($_POST['deptDesc']),
+			escape_string($_POST['deptType'])
+		);
+		
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_departments" );
 		
+		$object = "department";
 		$action = "update";
-	
-	/* if the POST action is create */
-	} elseif( $actionCreate ) {
+	}
+	elseif(isset($_POST['action_type']) && $_POST['action_type'] == "create")
+	{	
+		$insert = "INSERT INTO sms_departments (deptName, deptClass, deptOrder, deptColor, deptDisplay, deptDesc, deptType) ";
+		$insert.= "VALUES (%s, %d, %d, %s, %s, %s, %s)";
 		
-		/* do the create query */
-		$query = "INSERT INTO sms_departments ( deptid, deptName, deptClass, deptOrder, ";
-		$query.= "deptColor, deptDisplay, deptDesc, deptType ) VALUES ( '', '$deptName', '$deptClass', ";
-		$query.= "'$deptOrder', '$deptColor', '$deptDisplay', '$deptDesc', '$deptType' )";
+		$query = sprintf(
+			$insert,
+			escape_string($_POST['deptName']),
+			escape_string($_POST['deptClass']),
+			escape_string($_POST['deptOrder']),
+			escape_string($_POST['deptColor']),
+			escape_string($_POST['deptDisplay']),
+			escape_string($_POST['deptDesc']),
+			escape_string($_POST['deptType'])
+		);
+		
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_departments" );
 		
+		$object = "department";
 		$action = "create";
-	
-	/* if the POST action is delete */
-	} elseif( $actionDelete ) {
+	}
+	elseif(isset($_POST['action_type']) && $_POST['action_type'] == "database")
+	{
+		foreach($_POST as $a => $b)
+		{
+			/* only use the items that start with DEPT_ */
+			if(substr($a, 0, 5) == "dept_")
+			{
+				$id = substr_replace($a, '', 0, 5);
+				$value = $b;
+				
+				/* if the values are what we expect, do the query */
+				if(is_numeric($id) && ($value == "y" || $value == "n"))
+				{
+					$query = "UPDATE sms_departments SET deptDatabaseUse = '$value' WHERE deptid = $id";
+					$result = mysql_query($query);
+				}
+			}
+		}
+		
+		/* optimize the table */
+		optimizeSQLTable( "sms_departments" );
+		
+		$object = "departmental database access";
+		$action = "update";
+	}
+	elseif(isset($_POST['action_delete_x']))
+	{
+		if(isset($_POST['deptid']) && is_numeric($_POST['deptid']))
+		{
+			$deptid = $_POST['deptid'];
+		}
+		else
+		{
+			$deptid = FALSE;
+			exit();
+		}
 		
 		/* do the delete query */
-		$query = "DELETE FROM sms_departments WHERE deptid = '$deptid' LIMIT 1";
-		$result = mysql_query( $query );
+		$query = "DELETE FROM sms_departments WHERE deptid = $deptid LIMIT 1";
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_departments" );
 		
+		$object = "department";
 		$action = "delete";
-		
 	}
-	
-	/* strip the slashes from the vars */
-	$deptName = stripslashes( $deptName );
-	$deptDesc = stripslashes( $deptDesc );
 
 ?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("a[rel*=facebox]").click(function() {
+			var action = $(this).attr("myAction");
+			
+			jQuery.facebox(function() {
+				jQuery.get('admin/ajax/department_' + action + '.php', function(data) {
+					jQuery.facebox(data);
+				});
+			});
+			return false;
+		});
+	});
+</script>
 
 	<div class="body">
 		
@@ -90,65 +152,17 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 		$check->checkQuery( $result, $query );
 				
 		if( !empty( $check->query ) ) {
-			$check->message( "department", $action );
+			$check->message( $object, $action );
 			$check->display();
 		}
 		
 		?>
-	
-		<span class="fontTitle">Create New Department</span>
 		
-		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=departments">
-		<table cellpadding="0" cellspacing="3">
-			<tr>
-				<td colspan="5" valign="top">
-					<span class="fontNormal"><b>Department</b></span><br />
-					<input type="text" class="name" name="deptName" />
-				</td>
-				<td width="75%" rowspan="2" align="center">
-					<span class="fontNormal"><b>Description</b></span><br />
-		            <textarea name="deptDesc" rows="4" class="desc"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<span class="fontNormal"><b>Class</b></span><br />
-					<input type="text" class="class" name="deptClass" maxlength="3" />
-				</td>
-				<td>
-					<span class="fontNormal"><b>Order</b></span><br />
-					<input type="text" class="order" name="deptOrder" maxlength="3" />
-				</td>
-				<td>
-					<span class="fontNormal"><b>Color</b></span><br />
-					<input type="text" class="color" name="deptColor" maxlength="6" />
-				</td>
-			    <td>
-			    	<span class="fontNormal"><b>Dept Type</b></span><br />
-					<select name="deptType">
-						<option value="playing">Playing Dept</option>
-						<option value="nonplaying">Non-Playing Dept</option>
-					</select>
-				</td>
-			    <td>
-			    	<span class="fontNormal"><b>Display?</b></span><br />
-                    <select name="deptDisplay">
-                    	<option value="y">Yes</option>
-                    	<option value="n">No</option>
-					</select>
-				</td>
-            </tr>
-			<tr>
-				<td height="25" colspan="5" align="right"></td>
-		        <td height="25" align="center">
-		        	<input type="image" src="<?=path_userskin;?>buttons/create.png" class="button" name="action_create" value="Create" />
-		        </td>
-	        </tr>
-		</table>
-		</form>
-		<br /><br />
+		<span class="fontTitle">Department Management</span><br /><br />
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br /><br />
 		
-		<span class="fontTitle">Manage Existing Departments</span>
+		<a href="#" rel="facebox" class="fontMedium add" myAction="add"><strong>Add New Department &raquo;</strong></a><br />
+		<a href="#" rel="facebox" class="fontMedium add" myAction="database"><strong>Update Departmental Database Access &raquo;</strong></a><br /><br />
 	
 		<table>
 			<?
