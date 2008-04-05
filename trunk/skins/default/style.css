@@ -8,7 +8,7 @@ File: skins/default/style.css
 Purpose: Stylesheet that controls the look and feel of the site
 
 Skin Version: 2.5
-Last Modified: 2008-03-03 1730 EST
+Last Modified: 2008-04-05 1526 EST
 **/
 
 /*
@@ -105,7 +105,7 @@ body {
 	color: #fff;
 	padding: 0 1em 0 1em;
 }
-#nav-main li a:hover { color: #5b5a4f; }
+#nav-main li a:hover { color: #648295; }
 
 
 
