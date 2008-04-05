@@ -1,4 +1,4 @@
-Last Update: 2008.04.04 2103 EST
+Last Update: 2008.04.05 1650 EST
 
 IN PROGRESS
 =====
@@ -11,8 +11,9 @@ IN PROGRESS
 				x	missionnotes.php
 				x	missions.php
 				x	database.php
+				x	departments.php
 		*	/admin/post
-		*	/admin/reports
+		x	/admin/reports
 		*	/admin/user
 				x	nominate.php
 
@@ -32,20 +33,18 @@ IN PROGRESS
 		*	Creation
 				x	Missions
 				@	Ranks
-				@	Departments
+				x	Departments
 				@	Positions
 				@	Awards
 				x	Database
 		*	Editing
 				@	Docked Ships
 				x	Database
+				x	Departmental Database Access
 		*	Deleting
 				x	Database
 
 #	Update skins
-
-#	Departmental databases
-		*	Ability to turn the feature off for individual departments
 		
 IN QUEUE
 =====
@@ -59,6 +58,8 @@ IN QUEUE
 		*	m_database1 and m_database2
 		*	m_posts1 and m_posts2
 		*	m_logs1 and m_logs2
+		*	Remove m_database
+		*	Make sure r_security is removed
 
 COMPLETED
 =====
@@ -115,6 +116,8 @@ X	Need update logic so that all commas in sms_crew[awards] get converted to semi
 X	Re-write activation page
 
 X	Toggle boxes should use jQuery instead of the custom Javascript code
+
+X	Departmental databases
 
 X	[BUG] Database uses integer fields for the crew compliment section
 
