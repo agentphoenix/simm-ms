@@ -9,7 +9,7 @@ Purpose: Stylesheet that controls several of the miscellaneous items throughout
 	the system
 
 Skin Version: 2.5
-Last Modified: 2008-04-04 1956 EST
+Last Modified: 2008-04-05 1526 EST
 **/
 
 /*
@@ -22,9 +22,9 @@ Last Modified: 2008-04-04 1956 EST
 */
 a {
 	text-decoration: none;
-	color: #a7a590;
+	color: #648295;
 }
-a:hover { color: #5b5a4f; }
+a:hover { color: #aad1e9; }
 
 /** delete **/
 a.delete { text-decoration: none; }
