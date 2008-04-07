@@ -10,7 +10,7 @@ File: pages/missions.php
 Purpose: Page to display the list of missions
 
 System Version: 2.6.0
-Last Modified: 2008-02-25 1337 EST
+Last Modified: 2008-04-06 2042 EST
 **/
 
 /* define the page class */
@@ -39,26 +39,28 @@ $missionsCompleted.= "ORDER BY missionOrder DESC";
 $missionsCompletedResult = mysql_query( $missionsCompleted );
 $completedCount = mysql_num_rows( $missionsCompletedResult );
 
-if( $currentCount == 0 ) {
-	$disableCurrent = "1, ";
-} else {
-	$disableCurrent = "";
+$disable = array();
+
+if($currentCount == 0) {
+	$disable[] = 1;
 }
 
-if( $completedCount == 0 ) {
-	$disableCompleted = "2 ";
-} else {
-	$disableCompleted = "";
+if($upcomingCount == 0) {
+	$disable[] = 2;
 }
 
-$disable = $disableCurrent . $disableCompleted;
+if($completedCount == 0) {
+	$disable[] = 3;
+}
+
+$disable_string = implode(",", $disable);
 
 ?>
 
 <div class="body">
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable; ?>] });
+			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable_string; ?>] });
 		});
 	</script>
 	
