@@ -10,7 +10,7 @@ File: admin/user/access.php
 Purpose: Page to display all of a user's access levels
 
 System Version: 2.6.0
-Last Modified: 2008-03-16 0054 EST
+Last Modified: 2008-04-06 2122 EST
 **/
 
 if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) )
@@ -91,9 +91,8 @@ if( in_array( "x_access", $sessionAccess ) ) {
 				24 => array( "m_messages", "Site Messages" ),
 				25 => array( "m_specs", "Specifications" ),
 				26 => array( "m_strike", "Strikes" ),
-				27 => array( "m_catalogue", "System Catalogues (disabled)" ),
-				28 => array( "m_tour", "Tour" ),
-				29 => array( "m_moderation", "User Moderation" )
+				27 => array( "m_tour", "Tour" ),
+				28 => array( "m_moderation", "User Moderation" )
 			),
 			"reports" => array(
 				0 => array( "r_about", "About SMS" ),
