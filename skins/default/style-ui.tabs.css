@@ -9,7 +9,7 @@ File: skins/default/style-ui.tabs.css
 Purpose: Stylesheet that controls the tabs throughout the system
 
 Skin Version: 2.5
-Last Modified: 2008-04-05 1536 EST
+Last Modified: 2008-04-06 2042 EST
 **/
 
 /* Caution! Ensure accessibility in print and other media types... */
@@ -93,13 +93,13 @@ Last Modified: 2008-04-05 1536 EST
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
     background-color: #000;
-    color: #444;
+    color: #1b1b1b;
 }
 .ui-tabs-disabled a:hover {
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
     background-color: #000;
-    color: #444;
+    color: #1b1b1b;
 }
 
 .ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active {
@@ -133,7 +133,8 @@ Last Modified: 2008-04-05 1536 EST
     cursor: pointer;
 }
 .ui-tabs-nav .ui-tabs-disabled {
-    opacity: .4;
+	/* this has to be commented out because it causes problems in firefox 2 (but strangely, not firefox 3) */
+    /* opacity: .4; */
 }
 .ui-tabs-container {
     border-top: 1px solid #111;
