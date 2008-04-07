@@ -10,7 +10,7 @@ File: admin/user/inbox.php
 Purpose: Page that views your private message inbox
 
 System Version: 2.6.0
-Last Modified: 2008-04-06 2149 EST
+Last Modified: 2008-04-06 2219 EST
 **/
 
 /* access check */
@@ -19,8 +19,8 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "user";
-	$result = "";
-	$query = "";
+	$result = FALSE;
+	$query = FALSE;
 	
 	if( isset( $_GET['id'] ) ) {
 		if( is_numeric( $_GET['id'] ) ) {
@@ -31,49 +31,57 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 		}
 	}
 	
-	if( isset( $_POST['action_x'] ) ) {
+	if(isset($_POST['action_x'])) {
 		$action = $_POST['action_x'];
 	}
 	
-	if( isset( $_POST['box'] ) ) {
+	if(isset($_POST['box'])) {
 		$box = $_POST['box'];
 	}
 	
-	if( isset( $_GET['tab'] ) && is_numeric( $_GET['tab'] ) ) {
+	if(isset($_GET['tab']) && is_numeric($_GET['tab'])) {
 		$tab = $_GET['tab'];
 	} else {
 		$tab = 1;
 	}
 	
-	if( isset( $_POST['action_send_x'] ) ) {
+	if(isset($_POST['action_send_x'])) {
 		$send = $_POST['action_send_x'];
 	}
 	
-	if( isset( $_GET['reply'] ) ) {
+	if(isset($_GET['reply']) && is_numeric($_GET['reply'])) {
 		$reply = $_GET['reply'];
 	}
 	
-	if( isset( $_POST['replysubject'] ) ) {
+	if(isset($_POST['replysubject'])) {
 		$replysubject = $_POST['replysubject'];
 	}
 	
-	if( isset( $send ) ) {
-		
+	if(isset($send))
+	{
 		/* add the necessary slashes */
-		$pmSubject = addslashes( $_POST['pmSubject'] );
-		$pmContent = addslashes( $_POST['pmContent'] );
+		$pmSubject = $_POST['pmSubject'];
+		$pmContent = $_POST['pmContent'];
 		$pmRecipient = $_POST['pmRecipient'];
+		$today = getdate();
 		
-		$query = "INSERT INTO sms_privatemessages ( pmid, pmRecipient, pmAuthor, pmContent, pmDate, pmSubject, pmStatus ) ";
-		$query.= "VALUES ( '', '$pmRecipient', '$sessionCrewid', '$pmContent', UNIX_TIMESTAMP(), '$pmSubject', 'unread' )";
+		$insert = "INSERT INTO sms_privatemessages (pmRecipient, pmAuthor, pmContent, pmDate, pmSubject, pmStatus) ";
+		$insert.= "VALUES (%d, %d, %s, %d, %s, %s)";
+		
+		$query = sprintf(
+			$insert,
+			escape_string($_POST['pmRecipient']),
+			escape_string($sessionCrewid),
+			escape_string($_POST['pmContent']),
+			escape_string($today[0]),
+			escape_string($_POST['pmSubject']),
+			escape_string('unread')
+		);
+		
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_privatemessages" );
-		
-		/* strip the slashes added for the query */
-		$pmSubject = stripslashes( $pmSubject );
-		$pmContent = stripslashes( $pmContent );
 		
 		/** EMAIL THE PM **/
 		
@@ -102,7 +110,7 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 		/* define the variables */
 		$to = $toEmail['0'];
 		$subject = $emailSubject . " Private Message - " . $pmSubject;
-		$message = stripslashes( $pmContent ) . "
+		$message = $pmContent . "
 	
 This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".  Please log in to view your Private Message Inbox and reply to this message.  " . $webLocation . "login.php?action=login";
 			
@@ -111,10 +119,9 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 		
 		$action = "send";
 		$subject = "private message";
-		
-		
-	} elseif( isset( $action ) ) {
-
+	}
+	elseif(isset($action))
+	{
 		$postArray = $_POST;
 		array_pop( $postArray );
 		array_pop( $postArray );
@@ -130,7 +137,6 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 			$query = "UPDATE sms_privatemessages SET $boxReplace = 'n' ";
 			$query.= "WHERE pmid = '$value' LIMIT 1";
 			$result = mysql_query( $query );
-
 		}
 
 		/* optimize the table */
@@ -416,6 +422,24 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 					</tr>
 				</table>
 				</form>
+				
+				<?php
+				
+				/* display the previous message if you're replying */
+				if(isset($reply))
+				{
+					$get = "SELECT * FROM sms_privatemessages WHERE pmid = $reply LIMIT 1";
+					$getR = mysql_query($get);
+					$fetch = mysql_fetch_assoc($getR);
+					
+					echo "<br />";
+					echo "<div class='update notify-normal'>";
+					echo "<strong class='blue'>On " . dateFormat('long', $fetch['pmDate']) . " " . printCrewNameEmail($id) . " wrote:</strong><br /><br />";
+					printText($fetch['pmContent']);
+					echo "</div>";
+				}
+				
+				?>
 			</div>
 			
 		</div>
