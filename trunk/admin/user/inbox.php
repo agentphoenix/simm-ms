@@ -13,6 +13,9 @@ System Version: 2.6.0
 Last Modified: 2007-10-17 1239 EST
 **/
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 /* access check */
 if( in_array( "u_inbox", $sessionAccess ) ) {
 
@@ -154,10 +157,6 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 	$msgOut.= "AND pmAuthorDisplay = 'y' ORDER BY pmDate DESC";
 	$msgOutResult = mysql_query( $msgOut );
 
-	$rowCount = "0";
-	$color1 = "rowColor1";
-	$color2 = "rowColor2";
-
 ?>
 
 	<div class="body">
@@ -205,6 +204,10 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 					</tr>
 					<?
 					
+					$rowCount = 1;
+					$color1 = "rowColor1";
+					$color2 = "rowColor2";
+					
 					/* loop through the results and fill the form */
 					while( $msgFetch = mysql_fetch_assoc( $getMessagesResult ) ) {
 						extract( $msgFetch, EXTR_OVERWRITE );
@@ -223,7 +226,7 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 								<?
 								
 								if( $pmStatus == "unread" ) {
-									echo "<img src='" . $webLocation . "images/message-unread-icon.png' border='0' alt='' />";
+									echo "<img src='" . $webLocation . "images/message-unread-icon.png' border='0' alt='*' />";
 									echo "&nbsp;&nbsp;";
 								}
 			
@@ -285,6 +288,10 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 						<td colspan="3"></td>
 					</tr>
 					<?
+					
+					$rowCount = 1;
+					$color1 = "rowColor1";
+					$color2 = "rowColor2";
 					
 					/* loop through the results and fill the form */
 					while( $msgOutFetch = mysql_fetch_assoc( $msgOutResult ) ) {
