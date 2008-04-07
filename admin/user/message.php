@@ -10,7 +10,7 @@ File: admin/user/message.php
 Purpose: Page that views a given private message
 
 System Version: 2.6.0
-Last Modified: 2008-04-06 2219 EST
+Last Modified: 2008-04-06 2223 EST
 **/
 
 /* access check */
@@ -20,16 +20,17 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 	$pageClass = "admin";
 	$subMenuClass = "user";
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "private message viewing page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$message = $_GET['id'];
+	if(isset($_GET['id']))
+	{
+		if(is_numeric($_GET['id'])) {
+			$message = $_GET['id'];
+		} else {
+			errorMessageIllegal( "private message viewing page" );
+			exit();
+		}
 	}
 	
-	$getMessages = "SELECT * FROM sms_privatemessages WHERE pmid = '$message' LIMIT 1";
+	$getMessages = "SELECT * FROM sms_privatemessages WHERE pmid = $message LIMIT 1";
 	$getMessagesResult = mysql_query( $getMessages );
 
 	/* loop through the results and fill the form */
@@ -43,7 +44,7 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 	
 			/* if the PM status is unread, change it to read */
 			$updateStatus = "UPDATE sms_privatemessages SET pmStatus = 'read' ";
-			$updateStatus.= "WHERE pmid = '$message' LIMIT 1";
+			$updateStatus.= "WHERE pmid = $message LIMIT 1";
 			$updateStatusResult = mysql_query( $updateStatus );
 	
 			/* optimize the table */
