@@ -10,7 +10,7 @@ File: admin/user/status.php
 Purpose: Page to request a change of status to LOA or ELOA
 
 System Version: 2.6.0
-Last Modified: 2007-08-21 0918 EST
+Last Modified: 2008-04-06 2158 EST
 **/
 
 /* access check */
@@ -19,28 +19,34 @@ if( in_array( "u_status", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "user";
-	$action = $_POST['action_x'];
+	$query = FALSE;
+	$result = FALSE;
 
-	if( $action ) {
-	
-		$crewMember = $_POST['crewMember'];
-		$status = $_POST['status'];
-		$duration = stripslashes( $_POST['duration'] );
-		$reason = stripslashes( $_POST['reason'] );
+	if( isset($_POST['action_x']) )
+	{
+		$update = "UPDATE sms_crew SET loa = %s WHERE crewid = $sessionCrewid LIMIT 1";
 		
-		/* update the user's status */
-		$updateStatus = "UPDATE sms_crew SET loa = '$status' WHERE crewid = '$sessionCrewid' LIMIT 1";
+		$query = sprintf(
+			$update,
+			escape_string($_POST['status'])
+		);
+		
 		$result = mysql_query( $updateStatus );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
 		
-		if( $status == "0" ) {
-			$newStatus = "active";
-		} elseif( $status == "1" ) {
-			$newStatus = "leave of absence";
-		} elseif( $status == "2" ) {
-			$newStatus = "extended leave of absence";
+		switch($_POST['status'])
+		{
+			case 0:
+				$newStatus = 'active';
+				break;
+			case 1:
+				$newStatus = 'leave of absence';
+				break;
+			case 2:
+				$newStatus = 'extended leave of absence';
+				break;
 		}
 		
 		/** EMAIL THE REQUEST **/
@@ -63,10 +69,10 @@ if( in_array( "u_status", $sessionAccess ) ) {
 		/* define the email variables */
 		$to = printCOEmail() . ", " . printXOEmail();
 		$subject = $emailSubject . " Status Change Request";
-		$message = "$crewMember has requested that their status be changed to $newStatus.
+		$message = $_POST['crewMember'] . " has requested that their status be changed to $newStatus.
 
-Duration: $duration
-Reason: $reason";
+Duration: " . stripslashes( $_POST['duration'] ) . "
+Reason: " . stripslashes( $_POST['reason'] );
 		
 		/* send the nomination email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
@@ -80,7 +86,7 @@ Reason: $reason";
 		<?
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateStatus );
+		$check->checkQuery( $result, $query );
 				
 		if( !empty( $check->query ) ) {
 			$check->message( "status", "update" );
