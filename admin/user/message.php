@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/message.php
 Purpose: Page that views a given private message
 
-System Version: 2.5.3
-Last Modified: 2007-08-13 1152 EST
+System Version: 2.6.0
+Last Modified: 2008-04-06 2219 EST
 **/
 
 /* access check */
@@ -67,7 +67,7 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 		</span><br /><br />
 		
 		<div class="fontNormal postDetails">
-		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=message&id=<?=$pmAuthor;?>&reply=<?=$message;?>">
+		<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=inbox&tab=3&id=<?=$pmAuthor;?>&reply=<?=$message;?>">
 			<div align="center">
 				<input type="image" src="<?=$webLocation;?>images/messages-reply.png" class="imageButton" /><br />
 				<b>Private Message Details</b><br /><br />	
