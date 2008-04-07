@@ -10,7 +10,7 @@ File: admin/user/site.php
 Purpose: Page that allows a user to various site options
 
 System Version: 2.6.0
-Last Modified: 2008-02-28 1616 EST
+Last Modified: 2008-04-06 2151 EST
 **/
 
 /* access check */
@@ -19,6 +19,8 @@ if( in_array( "u_options", $sessionAccess ) ) {
 	/* set the page variables */
 	$pageClass = "admin";
 	$subMenuClass = "user";
+	$query = FALSE;
+	$result = FALSE;
 	
 	if( isset( $_GET['crew'] ) ) {
 		if( is_numeric( $_GET['crew'] ) ) {
