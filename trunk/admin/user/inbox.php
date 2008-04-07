@@ -10,11 +10,8 @@ File: admin/user/inbox.php
 Purpose: Page that views your private message inbox
 
 System Version: 2.6.0
-Last Modified: 2007-10-17 1239 EST
+Last Modified: 2008-04-06 2149 EST
 **/
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 /* access check */
 if( in_array( "u_inbox", $sessionAccess ) ) {
