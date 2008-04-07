@@ -1,8 +1,10 @@
-Last Update: 2008.04.05 1650 EST
+Last Update: 2008.04.06 2224 EST
 
 IN PROGRESS
 =====
 #	Update system queries to protect against SQL injection
+		x	/pages
+		x	/admin/user
 
 #	Take care of Apache errors throughout the system
 		x	/pages
@@ -14,15 +16,9 @@ IN PROGRESS
 				x	departments.php
 		*	/admin/post
 		x	/admin/reports
-		*	/admin/user
-				x	nominate.php
+		x	/admin/user
 
 #	Global setting for default access levels
-
-#	Nominated awards to queue for CO approval
-		*	Award nomination page should give users the ability to nominate an NPC
-			for an award. Need to figure out how that'll be done what with IC and OOC
-			awards now.
 
 #	Clean-up install and update files
 		*	Add a step at the beginning of the installation which checks for any
@@ -63,6 +59,18 @@ IN QUEUE
 
 COMPLETED
 =====
+X	[BUG] Database uses integer fields for the crew compliment section
+
+X	[BUG] Rank drop down menus need to respect the rankDisplay flag
+
+X	[BUG] If the large version of an award image doesn't exist, it won't fall back to the small version
+
+X	[BUG] Player stats page doesn't have logic against blank timestamps
+
+X	[BUG] Account page - changing user's crewType to pending doesn't affect the position count
+
+X	[BUG] Weird fading issue on some pages with tabs
+
 X	Dynamic acceptance and rejection messages
 
 X	SMS Personalized Menu
@@ -119,12 +127,4 @@ X	Toggle boxes should use jQuery instead of the custom Javascript code
 
 X	Departmental databases
 
-X	[BUG] Database uses integer fields for the crew compliment section
-
-X	[BUG] Rank drop down menus need to respect the rankDisplay flag
-
-X	[BUG] If the large version of an award image doesn't exist, it won't fall back to the small version
-
-X	[BUG] Player stats page doesn't have logic against blank timestamps
-
-X	[BUG] Account page - changing user's crewType to pending doesn't affect the position count
+X	Nominated awards to queue for CO approval
