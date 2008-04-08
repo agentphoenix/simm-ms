@@ -10,7 +10,7 @@ File: pages/contact.php
 Purpose: Page used to contact the CO, XO, or Webmaster of a simm for any user
 
 System Version: 2.6.0
-Last Modified: 2007-08-21 0933 EST
+Last Modified: 2008-04-08 1531 EST
 **/
 
 /* define the page class and set the vars */
@@ -38,6 +38,7 @@ if ( isset( $send ) ) {
 	$message = stripslashes( $_POST['message'] );
 	$subject = stripslashes( $_POST['subject'] );
 	$from = $_POST['email'];
+	$recipients = $_POST['recipients'];
 		
 	/* define the subject */
 	if( !empty( $title ) ) {
@@ -45,14 +46,21 @@ if ( isset( $send ) ) {
 	} else {
 		$subject = $emailSubject . " Information Request";
 	}
-
-	/* determine who to send the email to */
-	if ( $recipients == "coNxo" ) {
-		$to = printCOEmail() . ", " . printXOEmail();
-	} elseif ( $recipients == "co" ) {
-		$to = printCOEmail();
-	} elseif ( $recipients == "webmaster" ) {
-		$to = $webmasterEmail;
+	
+	/* figure out who to send the email to */
+	switch($recipients)
+	{
+		case 'coNxo':
+			$to = printCOEmail() . ", " . printXOEmail();
+			break;
+		case 'co':
+			$to = printCOEmail();
+			break;
+		case 'webmaster':
+			$to = $webmasterEmail;
+			break;
+		default:
+			$to = printCOEmail();
 	}
 	
 	/* set action variable */
