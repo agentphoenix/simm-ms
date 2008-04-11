@@ -36,7 +36,7 @@ ENHANCEMENTS
 *	Inbox now has a select all/deselect all option
 *	Added dynamic image reflection to the tour images
 *	All images now have a class so that a skin can style images differently if they want
-*	When viewing NPCs' bios, it won't show the Awards and Posting Activity sections
+*	When viewing NPCs' bios, it won't show the Posting Activity sections
 *	SMS now uses some PHP constants to give functions access to things like web location and ship name
 *	Awards now have categories of in character, out of character, and both
 *	Error page when someone tries to go to a page that doesn't exist
