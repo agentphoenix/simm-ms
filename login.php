@@ -13,7 +13,7 @@ Purpose: The file that controls logging in, logging out, and checking the
 	displaySkin.
 
 System Version: 2.6.0
-Last Modified: 2007-11-13 1547 EST
+Last Modified: 2008-04-11 1150 EST
 **/
 
 /* start the session */
@@ -91,14 +91,9 @@ if( $action == "checkLogin" ) {
 } if( $action == "resetPassword" ) {
 	
 	$checkEmail = "SELECT crewid, email FROM sms_crew WHERE username = '$_POST[username]' AND email = '$_POST[email]' LIMIT 1";
-	$checkEmailResult = mysql_query( $checkEmail );
-	$emailCount = mysql_num_rows( $checkEmailResult );
-	
-	/* pull variables for sql password update code */
-	if ( $emailCount != 0 ) {
-		$variableSet = mysql_fetch_array( $checkEmailResult );
-		extract( $variableSet, EXTR_OVERWRITE );
-	}
+	$checkEmailResult = mysql_query($checkEmail);
+	$emailCount = mysql_num_rows($checkEmailResult);
+	$fetch = mysql_fetch_array($getEmailResult);
 	
 	/* determine temporary password */
 	if( $emailCount == 1 ) {
@@ -131,7 +126,7 @@ if( $action == "checkLogin" ) {
 		
 		$from = printCOEmail();
 		$newPassword = md5( $password );
-		$to = $email;
+		$to = $fetch[1];
 		$subject = "[" . $shipPrefix . " " . $shipName . "] Password Reset";
 		$message = "Your new password is listed below. You can log in with this new password and your existing username. It is recommended that you change your password once you log in.
 
@@ -141,7 +136,7 @@ This is an automatically generated email, please do not reply.";
 
 		mail( $to, $subject, $message, "From: " . $shipPrefix . " " . $shipName . " < " . $from . " >\nX-Mailer: PHP/" . phpversion() );
 				
-		$updatePassword = "UPDATE sms_crew SET password = '$newPassword' WHERE crewid = '$crewid' AND email= '$email' LIMIT 1";
+		$updatePassword = "UPDATE sms_crew SET password = '$newPassword' WHERE crewid = '$fetch[0]' LIMIT 1";
 		$passwordResult = mysql_query( $updatePassword );
 		
 	}
