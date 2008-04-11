@@ -1,0 +1,69 @@
+Last updated: 2008.04.10 2043 EST
+
+NEW FEATURES
+===
+
+*	Private news items (can only be seen when logged in)
+*	Added the jQuery Javascript library
+*	Tabs now use jQuery, meaning the content is available immediately after clicking
+*	Group access levels can now be set up by the admin
+*	Added stardate script and the ability to turn it on and off (through site globals)
+*	Admins can now choose whether or not they want to be notified of SMS updates
+*	Admins can now set the email subject lines (default is [Ship Name])
+*	Acceptance and rejection messages now take wild card variables for automatically inserting things like name, rank, positions, and ship name
+*	If a query fails, it'll display an SMS Error Report that someone can copy and paste to the forums
+*	Personalized menus
+*	NPCs can now be given in character awards
+*	Departmental databases
+*	Completely new install process that's clearer and with much better instructions
+
+ENHANCEMENTS
+===
+
+*	Award nominations are now sent to a queue for approval by an admin
+*	Completely rewrote activation page
+*	Awards now include the award given, when it was given, and the reason
+*	Completely new manifest page using jQuery
+*	Completely new departments page using jQuery for toggling
+*	Site options page now uses tabs to better organize everything
+*	Combadge images on the manifest are now PNGs to match with any background color
+*	Add and remove icons now have an off and over state
+*	Added function for escaping strings before they're entered into the database
+*	Added logic to check for the existence of the large award image and if it fails, fall back to the smaller version of the image
+*	Notifications are now less obtrusive and provide more instant feedback
+*	Made the pending checks smarter
+*	Cleaned up the inbox including tabs (with unread count) and moving the compose PM into the inbox
+*	Inbox now has a select all/deselect all option
+*	Added dynamic image reflection to the tour images
+*	All images now have a class so that a skin can style images differently if they want
+*	When viewing NPCs' bios, it won't show the Awards and Posting Activity sections
+*	SMS now uses some PHP constants to give functions access to things like web location and ship name
+*	Awards now have categories of in character, out of character, and both
+*	Error page when someone tries to go to a page that doesn't exist
+*	Added a lightbox to the tour images to make a mini gallery
+*	Replying to a private message will show the content of the message you're replying to below the compose box
+*	A ton of commenting in the default skin to (hopefully) help out people who are trying to create their own skins
+*	SMS now uses AXAH (Asynchronous XHTML and HTTP) for creating, editing, and deleting some items (menu items, departments, activations, etc.)
+*	Consolidated menu management into a single page instead of two
+*	Removed unused images
+*	Adding system plugins to the About SMS page
+*	Updated the framework structure
+*	Default skin now uses some fancy dynamic location stuff so that the code could be moved to another directory and keep working
+*	Default skin now uses UTF-8 for character encoding and English as the language by default
+*	Version history page now uses tabs
+
+FIXES
+===
+
+*	Fixed bug where rank menus didn't respect the rankDisplay flag
+*	Fixed bug where the system check class would try to write something to the main ACP even if there was nothing to write, causing an extra space
+*	Fixed bug where crew compliment fields would only allow integers (commas would break things)
+*	Fixed bug where player stats page would throw back some weird data if there wasn't a properly formatted join date
+*	Fixed bug where changing a playing character to something else (or vice versa) wouldn't affect the open positions
+*	Fixed bug where contact page wouldn't send mail out
+*	Fixed bug where the read more prompts in the control panel could break right in the middle
+*	Fixed all the Apache warnings and errors SMS would dump into the server error logs (will make server admins VERY happy)
+*	Fixed bug where the crew awards page would, in some situations, print the award name twice
+*	Fixed bug where someone with full XO privileges could create a CO character (thought without the CO access levels)
+*	Fixed bug where mission status wasn't inserted into the database
+*	Fixed bug in the 2.4.4 update script where a semicolon was missing
