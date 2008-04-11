@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-03-27 1812 EST
+Last Modified: 2008-04-10 2052 EST
 **/
 
 /* define the page class and set the vars */
@@ -365,113 +365,114 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	</div>
 	<? printText( $serviceRecord ); ?>
 	
-	<? if( $fetchCrew['crewType'] != "npc" ) { ?>
-		<p>&nbsp;</p>
+	<p>&nbsp;</p>
 		
-		<div align="center">
-			<b class="fontLarge">Awards</b>&nbsp;
-			<a href="#" id="toggleAwards" class="fontSmall">[ Hide/Show ]</a>
-			
-			<? if( in_array( "m_giveaward", $sessionAccess ) || in_array( "m_removeaward", $sessionAccess ) ) { ?>
-			<br />
-			<span class="fontSmall">
-				<? if( in_array( "m_giveaward", $sessionAccess ) ) { ?>
-				<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>">Add Award</a>
-				<? } ?>
-				
-				<? if( in_array( "m_giveaward", $sessionAccess ) && in_array( "m_removeaward", $sessionAccess ) ) { ?>
-				&nbsp; &middot &nbsp;
-				<? } ?>
-				
-				<? if( in_array( "m_removeaward", $sessionAccess ) ) { ?>
-				<a href="<?=$webLocation;?>admin.php?page=manage&sub=removeaward&crew=<?=$crew;?>">Remove Award</a>
-				<? } ?>
-			</span>
+	<div align="center">
+		<b class="fontLarge">Awards</b>&nbsp;
+		<a href="#" id="toggleAwards" class="fontSmall">[ Hide/Show ]</a>
+		
+		<? if( in_array( "m_giveaward", $sessionAccess ) || in_array( "m_removeaward", $sessionAccess ) ) { ?>
+		<br />
+		<span class="fontSmall">
+			<? if( in_array( "m_giveaward", $sessionAccess ) ) { ?>
+			<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>">Add Award</a>
 			<? } ?>
-		</div>
-		
-		<div id="awards" style="display:none;width:97%;">
-			<table cellspacing="0" cellpadding="5">
-				<?php
 			
-				/* do the database query */
-				$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew'";
-				$getAwardsResult = mysql_query( $getAwards );
-				$fetchAwards = mysql_fetch_array( $getAwardsResult );
+			<? if( in_array( "m_giveaward", $sessionAccess ) && in_array( "m_removeaward", $sessionAccess ) ) { ?>
+			&nbsp; &middot &nbsp;
+			<? } ?>
+			
+			<? if( in_array( "m_removeaward", $sessionAccess ) ) { ?>
+			<a href="<?=$webLocation;?>admin.php?page=manage&sub=removeaward&crew=<?=$crew;?>">Remove Award</a>
+			<? } ?>
+		</span>
+		<? } ?>
+	</div>
+	
+	<div id="awards" style="display:none;width:97%;">
+		<table cellspacing="0" cellpadding="5">
+			<?php
 		
-				/* if there are awards, continue */
-				if( !empty( $fetchAwards[0] ) ) {
+			/* do the database query */
+			$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew'";
+			$getAwardsResult = mysql_query( $getAwards );
+			$fetchAwards = mysql_fetch_array( $getAwardsResult );
+	
+			/* if there are awards, continue */
+			if( !empty( $fetchAwards[0] ) ) {
+	
+				/* explode the string at the semicolon */
+				$awardsRaw = explode( ";", $fetchAwards[0] );
+				
+				/* explode the array again */
+				foreach($awardsRaw as $a => $b)
+				{
+					$awardsRaw[$a] = explode( ",", $b );
+				}
+				
+				$rowCount = 0;
+				$color1 = "rowColor1";
+				$color2 = "rowColor2";
 		
-					/* explode the string at the semicolon */
-					$awardsRaw = explode( ";", $fetchAwards[0] );
+				foreach($awardsRaw as $key => $value) {
+			
+					/* do the database query */
+					$pullAward = "SELECT * FROM sms_awards WHERE awardid = '$value[0]'";
+					$pullAwardResult = mysql_query( $pullAward );
+
+					while( $awardArray = mysql_fetch_array( $pullAwardResult ) ) {
+						extract( $awardArray, EXTR_OVERWRITE );
+						
+						$rowColor = ( $rowCount % 2 ) ? $color1 : $color2;
+		
+			?>	
+	
+			<tr class="fontNormal <?=$rowColor;?>">	
+				<td width="70"><img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
+				<td>
+					<b><? printText( $awardName ); ?></b>
+					<?php
 					
-					/* explode the array again */
-					foreach($awardsRaw as $a => $b)
+					if(count($value) > 1)
 					{
-						$awardsRaw[$a] = explode( ",", $b );
+						echo "<br /><span class='fontNormal'>Awarded: ";
+						echo dateFormat( "short2", $value[1] );
+						echo "</span>";
 					}
 					
-					$rowCount = 0;
-					$color1 = "rowColor1";
-					$color2 = "rowColor2";
-			
-					foreach($awardsRaw as $key => $value) {
-				
-						/* do the database query */
-						$pullAward = "SELECT * FROM sms_awards WHERE awardid = '$value[0]'";
-						$pullAwardResult = mysql_query( $pullAward );
-
-						while( $awardArray = mysql_fetch_array( $pullAwardResult ) ) {
-							extract( $awardArray, EXTR_OVERWRITE );
-							
-							$rowColor = ( $rowCount % 2 ) ? $color1 : $color2;
-			
-				?>	
-		
-				<tr class="fontNormal <?=$rowColor;?>">	
-					<td width="70"><img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
-					<td>
-						<b><? printText( $awardName ); ?></b>
-						<?php
-						
-						if(count($value) > 1)
-						{
-							echo "<br /><span class='fontNormal'>Awarded: ";
-							echo dateFormat( "short2", $value[1] );
-							echo "</span>";
-						}
-						
-						?>
-					</td>
-					<td>
-						<?
-						
-						if(count($value) > 1)
-						{
-							printText( $value[2] );
-						}
-						
-						?>
-					</td>
-				</tr>
-		
-				<?
-		
-						$rowCount++;
-						
-						}	/* close the while loop */
-					}	/* close the foreach loop */
-				} else { /* if there's nothing in the awards field */
-		
-				?>
-		
-				<tr>
-					<td colspan="3" class="fontMedium"><b>No Awards</b></td>
-				</tr>
-		
-				<? } ?>
-			</table>
-		</div>
+					?>
+				</td>
+				<td>
+					<?
+					
+					if(count($value) > 1)
+					{
+						printText( $value[2] );
+					}
+					
+					?>
+				</td>
+			</tr>
+	
+			<?
+	
+					$rowCount++;
+					
+					}	/* close the while loop */
+				}	/* close the foreach loop */
+			} else { /* if there's nothing in the awards field */
+	
+			?>
+	
+			<tr>
+				<td colspan="3" class="fontMedium orange"><b>No Awards</b></td>
+			</tr>
+	
+			<? } ?>
+		</table>
+	</div>
+	
+	<? if( $fetchCrew['crewType'] != "npc" ) { ?>
 	
 		<? if( $bioShowPosts == "y" || $bioShowLogs == "y" ) { ?>
 			<p>&nbsp;</p>
@@ -512,7 +513,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 
 						<? if( $NumPosts == 0 ) { ?>
 						<tr>
-							<td colspan="4"><b class="fontMedium">No Posts Recorded</b></td>
+							<td colspan="4"><b class="fontMedium orange">No Posts Recorded</b></td>
 						</tr>
 						<? } else { ?>
 						<tr class="fontNormal">
@@ -565,7 +566,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 
 					<? if( $NumLogs == 0 ) { ?>
 					<tr>
-						<td colspan="4"><b class="fontMedium">No Logs Recorded</b></td>
+						<td colspan="4"><b class="fontMedium orange">No Logs Recorded</b></td>
 					</tr>
 					<? } else { ?>
 					<tr class="fontNormal">
