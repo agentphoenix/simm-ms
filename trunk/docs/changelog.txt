@@ -1,4 +1,4 @@
-Last updated: 2008.04.10 2043 EST
+Last updated: 2008.04.11 1152 EST
 
 NEW FEATURES
 ===
@@ -67,3 +67,4 @@ FIXES
 *	Fixed bug where someone with full XO privileges could create a CO character (thought without the CO access levels)
 *	Fixed bug where mission status wasn't inserted into the database
 *	Fixed bug in the 2.4.4 update script where a semicolon was missing
+*	Fixed bug where reset password form wouldn't send the email out to the appropriate person (or update it in the database either)
