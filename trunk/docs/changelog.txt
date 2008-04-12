@@ -1,4 +1,4 @@
-Last updated: 2008.04.11 1152 EST
+Last updated: 2008.04.11 2247 EST
 
 NEW FEATURES
 ===
@@ -68,3 +68,4 @@ FIXES
 *	Fixed bug where mission status wasn't inserted into the database
 *	Fixed bug in the 2.4.4 update script where a semicolon was missing
 *	Fixed bug where reset password form wouldn't send the email out to the appropriate person (or update it in the database either)
+*	Fixed bug where mission order wouldn't be updated
