@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/addjp.php
 Purpose: Page to add a joint post
 
 System Version: 2.6.0
-Last Modified: 2007-09-17 0911 EST
+Last Modified: 2008-04-11 2210 EST
 **/
 
 /* access check */
@@ -19,108 +19,117 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "post";
-	$action = $_POST['action_x'];
+	$result = FALSE;
+	$query = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "add JP page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$id = $_GET['id'];
+	if(isset($_GET['id']))
+	{
+		if(is_numeric($_GET['id'])) {
+			$id = $_GET['id'];
+		} else {
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
 	}
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['number'] ) && preg_match( "/^\d+$/", $_GET['number'], $matches ) == 0 ) {
-		errorMessageIllegal( "add JP page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$number = $_GET['number'];
+	if(isset($_GET['number']))
+	{
+		if(is_numeric($_GET['number'])) {
+			$number = $_GET['number'];
+		} else {
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
 	}
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['delete'] ) && preg_match( "/^\d+$/", $_GET['delete'], $matches ) == 0 ) {
-		errorMessageIllegal( "activation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$delete = $_GET['delete'];
+	if(isset($_GET['delete']))
+	{
+		if(is_numeric($_GET['delete'])) {
+			$delete = $_GET['delete'];
+		} else {
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
 	}
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['add'] ) && preg_match( "/^\d+$/", $_GET['add'], $matches ) == 0 ) {
-		errorMessageIllegal( "activation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$add = $_GET['add'];
+	if(isset($_GET['add']))
+	{
+		if(is_numeric($_GET['add'])) {
+			$add = $_GET['add'];
+		} else {
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
 	}
 	
-	if( !$number ) {
-		$number = "2";
-	} elseif( $number > "8" ) {
-		$number = "8";
+	if(!isset($number)) {
+		$number = 2;
+	} elseif( $number > 8 ) {
+		$number = 8;
 	}
 	
-	if( $action ) {
-		
-		/* add the necessary slashes */
-		$postTitle = addslashes( $_POST['postTitle'] );
-		$postLocation = addslashes( $_POST['postLocation'] );
-		$postTimeline = addslashes( $_POST['postTimeline'] );
-		$postContent = addslashes( $_POST['postContent'] );
-		$postMission = $_POST['postMission'];
-		$postTag = addslashes( $_POST['postTag'] );
+	if(isset($_POST['action_x']))
+	{
 		$jpnumber = $_POST['jpNumber'];
 		
-		if( $jpnumber == "2" ) {
-			$postAuthors = $_POST['author1'] . "," . $_POST['author2'];
-		} if( $jpnumber == "3" ) {
-			$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3'];
-		} if( $jpnumber == "4" ) {
-			$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4'];
-		} if( $jpnumber == "5" ) {
-			$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'];
-		} if( $jpnumber == "6" ) {
-			$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'];
-		} if( $jpnumber == "7" ) {
-			$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'];
-		} if( $jpnumber == "8" ) {
-			$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'] . "," . $_POST['author8'];
+		switch($jpnumber)
+		{
+			case 2:
+				$postAuthors = $_POST['author1'] . "," . $_POST['author2'];
+				break;
+			case 3:
+				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3'];
+				break;
+			case 4:
+				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4'];
+				break;
+			case 5:
+				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'];
+				break;
+			case 6:
+				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'];
+				break;
+			case 7:
+				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'];
+				break;
+			case 8:
+				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'] . "," . $_POST['author8'];
+				break;
 		}
-	
-		$postMissionEntry = "INSERT INTO sms_posts ( postid, postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, postStatus, postTag ) ";
-		$postMissionEntry.= "VALUES ( '', '$postAuthors', '$postTitle', '$postLocation', '$postTimeline', '$postContent', UNIX_TIMESTAMP(), '$postMission', 'activated', '$postTag' )";
-		$result = mysql_query( $postMissionEntry );
 		
-		/* optimize the table */
-		optimizeSQLTable( "sms_posts" );
+		$insert = "INSERT INTO sms_posts (postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, ";
+		$insert.= "postStatus, postTag) VALUES (%s, %s, %s, %s, %s, UNIX_TIMESTAMP(), %d, %s, %s)";
+		
+		$query = sprintf(
+			$insert,
+			escape_string($postAuthors),
+			escape_string($_POST['postTitle']),
+			escape_string($_POST['postLocation']),
+			escape_string($_POST['postTimeline']),
+			escape_string($_POST['postContent']),
+			escape_string($_POST['postMission']),
+			escape_string('activated'),
+			escape_string($_POST['postTag'])
+		);
 	
-		for( $i=1; $i<=$number; $i++ ) {
+		$result = mysql_query($query);
 	
+		for($i=1; $i<=$number; $i++)
+		{
 			/* set the author var */
-			$author = $_POST['postAuthor' . $i];
+			$author = $_POST['author' . $i];
 	
 			/* update the player's last post timestamp */
-			$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() ";
-			$updateTimestamp.= "WHERE crewid = '$author' LIMIT 1";
+			$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = $author LIMIT 1";
 			$updateTimestampResult = mysql_query( $updateTimestamp );
-	
 		}
 	
 		/* optimize the crew table */
 		optimizeSQLTable( "sms_crew" );
-		
-		/* strip the slashes added for the query */
-		$postTitle = stripslashes( $_POST['postTitle'] );
-		$postLocation = stripslashes( $_POST['postLocation'] );
-		$postTimeline = stripslashes( $_POST['postTimeline'] );
-		$postContent = stripslashes( $_POST['postContent'] );
-		$postTag = stripslashes( $_POST['postTag'] );
+		optimizeSQLTable( "sms_posts" );
 		
 		/* if the user wants to send the email out, do it */
-		if( $_POST['sendEmail'] == "y" ) {
+		if(isset($_POST['sendEmail'])) {
 		
 			/** EMAIL THE POST **/
 			
@@ -139,9 +148,16 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 			
 			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 			
+			$postMission = $_POST['postMission'];
+			$postTitle = $_POST['postTitle'];
+			$postLocation = $_POST['postLocation'];
+			$postTimeline = $_POST['postTimeline'];
+			$postTag = $_POST['postTag'];
+			$postContent = $_POST['postContent'];
+			
 			/* define the variables */
-			$to = getCrewEmails( "emailPosts" );
-			$subject = "[" . $shipPrefix . " " . $shipName . "] " . printMissionTitle( $postMission ) . " - " . $postTitle;
+			$to = getCrewEmails("emailPosts");
+			$subject = $emailSubject . " " . printMissionTitle( $postMission ) . " - " . $postTitle;
 			$message = "A Post By " . displayEmailAuthors( $postAuthors, 'noLink' ) . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
@@ -163,7 +179,7 @@ Tag: " . $postTag . "
 		<?
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $postMissionEntry );
+		$check->checkQuery( $result, $query );
 				
 		if( !empty( $check->query ) ) {
 			$check->message( "joint post", "add" );
@@ -243,11 +259,12 @@ Tag: " . $postTag . "
 			</tr>
 			<? $authorNum = $authorNum + 1; } ?>
 			
-			<? if( !$_GET['number'] ) { ?>
+			<? if(!isset($number)) { ?>
 			<input type="hidden" name="jpNumber" value="2" />
 			<? } else { ?>
-			<input type="hidden" name="jpNumber" value="<?=$_GET['number'];?>" />
+			<input type="hidden" name="jpNumber" value="<?=$number;?>" />
 			<? } ?>
+			
 			<tr>
 				<td class="narrowLabel tableCellLabel">Mission</td>
 				<td>&nbsp;</td>
@@ -262,7 +279,7 @@ Tag: " . $postTag . "
 						extract( $titleArray, EXTR_OVERWRITE );
 					}
 					
-					if( $missionCount == "0" ) {
+					if( $missionCount == 0 ) {
 						echo "<b>Please create a mission before posting!</b>";
 					} else {
 					
