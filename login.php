@@ -13,7 +13,7 @@ Purpose: The file that controls logging in, logging out, and checking the
 	displaySkin.
 
 System Version: 2.6.0
-Last Modified: 2008-04-11 1150 EST
+Last Modified: 2008-04-13 1144 EST
 **/
 
 /* start the session */
@@ -47,9 +47,9 @@ if( $action == "checkLogin" ) {
 
 		/* pull the information from the user table */
 		$userLogin = "SELECT crewid, displaySkin, displayRank, accessPost, ";
-		$userLogin.= "accessManage, accessReports, accessUser, accessOthers ";
+		$userLogin.= "accessManage, accessReports, accessUser, accessOthers, crewType ";
 		$userLogin.= "FROM sms_crew WHERE username = '$_POST[username]' AND ";
-		$userLogin.= "password = md5( '$_POST[password]' ) LIMIT 1";
+		$userLogin.= "password = md5( '$_POST[password]' ) AND crewType = 'active' LIMIT 1";
 		$userLoginResult = mysql_query( $userLogin );
 		$users = mysql_num_rows( $userLoginResult );
 
@@ -84,8 +84,13 @@ if( $action == "checkLogin" ) {
 			$login = "true";
 			
 		} else {
+			if($user[8] != 'active') {
+				$error = 4;
+			} else {
+				$error = 2;
+			}
+			
 			$login = "false";
-			$error = "2";
 		}
 	}
 } if( $action == "resetPassword" ) {
@@ -212,22 +217,25 @@ This is an automatically generated email, please do not reply.";
 				<?
 				
 				switch( $error ) {
-					case "0":
+					case 0:
 						echo "Your username does not match our records.  Please try again.";
 						break;
-					case "1":
+					case 1:
 						echo "Your password does not match our records.  Please try again.  If further attempts fail, please try resetting your password.";
 						break;
-					case "2":
+					case 2:
 						echo "Your username and password combination do not match our records.  Please try again.";
 						break;
-					case "3":
+					case 3:
 						echo "Either you are not an authorized member of this sim or your session has timed out.  Please try logging in. If you still receive this error and believe you have received it in error, please contact the sim's CO.";
+						break;
+					case 4:
+						echo "You are not an active member of this sim. In order to log in, your account must be active! If you believe you have received this message in error, please contact the sim's CO.";
 						break;
 				}
 				
 				/* if they have a error 3, destroy the session */
-				if( $error == "3" ) {
+				if( $error == 3 ) {
 					session_unset();
 					session_destroy();
 				}
