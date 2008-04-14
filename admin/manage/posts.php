@@ -10,11 +10,11 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.0
-Last Modified: 2008-03-22 1806 EST
+Last Modified: 2008-04-14 1912 EST
 **/
 
 /* access check */
-if( in_array( "m_posts", $sessionAccess ) ) {
+if( in_array( "m_posts2", $sessionAccess ) ) {
 
 	/* set the page class */
 	$pageClass = "admin";
@@ -27,7 +27,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		if(is_numeric($_GET['id'])) {
 			$id = $_GET['id'];
 		} else {
-			errorMessageIllegal( "post moderation page" );
+			errorMessageIllegal( "post management page" );
 			exit();
 		}
 	}
@@ -37,7 +37,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		if(is_numeric($_GET['remove'])) {
 			$remove = $_GET['remove'];
 		} else {
-			errorMessageIllegal( "post moderation page" );
+			errorMessageIllegal( "post management page" );
 			exit();
 		}
 	}
@@ -47,7 +47,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		if(is_numeric($_GET['delete'])) {
 			$delete = $_GET['delete'];
 		} else {
-			errorMessageIllegal( "post moderation page" );
+			errorMessageIllegal( "post management page" );
 			exit();
 		}
 	}
@@ -57,7 +57,7 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		if(is_numeric($_GET['add'])) {
 			$add = $_GET['add'];
 		} else {
-			errorMessageIllegal( "post moderation page" );
+			errorMessageIllegal( "post management page" );
 			exit();
 		}
 	}
@@ -233,6 +233,8 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		?>
 	
 		<span class="fontTitle">Manage Mission Post</span><br /><br />
+		<a href="<?=$webLocation;?>admin.php?page=manage&sub=posts"><strong class="fontMedium">&laquo; Back to Mission Posts</strong></a>
+		<br /><br />
 		
 		<table cellpadding="0" cellspacing="3">
 		<?
@@ -329,110 +331,163 @@ if( in_array( "m_posts", $sessionAccess ) ) {
 		</table>
 	</div>
 	
-	<? } else { /* if there's no id, continue */ ?>
+	<?
+	
+	} else { /* if there's no id, continue */
+	
+		$posts_array = array(
+			'activated' => array(),
+			'saved' => array(),
+			'pending' => array()
+		);
+		
+		$getPostsA = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'activated' ORDER BY postPosted DESC LIMIT 25";
+		$getPostsAR = mysql_query($getPostsA);
+		
+		$getPostsS = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'saved' ORDER BY postPosted DESC";
+		$getPostsSR = mysql_query($getPostsS);
+		
+		$getPostsP = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'pending' ORDER BY postPosted DESC";
+		$getPostsPR = mysql_query($getPostsP);
+		
+		while($fetch_a = mysql_fetch_array($getPostsAR)) {
+			extract($fetch_a, EXTR_OVERWRITE);
+			
+			$posts_array['activated'][] = array('id' => $fetch_a[0], 'title' => $fetch_a[1]);
+		}
+		
+		while($fetch_s = mysql_fetch_array($getPostsSR)) {
+			extract($fetch_s, EXTR_OVERWRITE);
+			
+			$posts_array['saved'][] = array('id' => $fetch_s[0], 'title' => $fetch_s[1]);
+		}
+		
+		while($fetch_p = mysql_fetch_array($getPostsPR)) {
+			extract($fetch_p, EXTR_OVERWRITE);
+			
+			$posts_array['pending'][] = array('id' => $fetch_p[0], 'title' => $fetch_p[1]);
+		}
+	
+	?>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#container-1 > ul').tabs();
+			$('.zebra tr:nth-child(even)').addClass('alt');
+		});
+	</script>
 	
 	<div class="body">
-	
-		<?
-		
-		/* do logic to make sure the object is right */
-		if( isset( $add ) || isset( $delete ) ) {
-			$object = "author";
-		} elseif( isset( $_POST['action_update_x'] ) || isset( $_POST['action_delete_x'] ) || isset( $remove ) ) {
-			$object = "post";
-		}
-		
-		$check = new QueryCheck;
-		$check->checkQuery( $result, $query );
-		
-		if( !empty( $check->query ) ) {
-			$check->message( $object, $action );
-			$check->display();
-		}
-		
-		?>
-	
 		<span class="fontTitle">Manage Mission Posts</span><br /><br />
 		
-		<table cellpadding="0" cellspacing="3">
-		<?
-		
-			$posts = "SELECT * FROM sms_posts ORDER BY postPosted DESC LIMIT 5";
-			$postsResult = mysql_query( $posts );
+		<div id="container-1">
+			<ul>
+				<li><a href="#one"><span>Activated</span></a></li>
+				<li><a href="#two"><span>Saved (<?php echo count($posts_array['saved']);?>)</span></a></li>
+				<li><a href="#three"><span>Pending (<?php echo count($posts_array['pending']);?>)</span></a></li>
+			</ul>
+	
+			<div id="one" class="ui-tabs-container ui-tabs-hide">
+				<?
+				
+				if(count($posts_array['activated']) == 0)
+				{
+					echo "<strong class='fontLarge orange'>No activated posts found</strong>";
+				}
+				else
+				{
+				
+				?>
+				
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<tr class="fontMedium">
+						<th width="34%">Title</th>
+						<th width="44%">Author(s)</th>
+						<th width="2%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+					
+					<?php foreach($posts_array['activated'] as $value_a) { ?>
+					<tr class="fontNormal">
+						<td><? printText($value_a['title']);?></td>
+						<td><? displayAuthors($value_a['id'], 'rank', 'link');?></td>
+						<td></td>
+						<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$value_a['id'];?>"><strong>View Post</strong></a></td>
+						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=posts&id=<?=$value_a['id'];?>" class="edit"><strong>Edit</strong></a></td>
+					</tr>
+					<?php } ?>
+				</table>
+				
+				<? } ?>
+			</div>
 			
-			while( $postFetch = mysql_fetch_assoc( $postsResult ) ) {
-				extract( $postFetch, EXTR_OVERWRITE );
+			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<?
+				
+				if(count($posts_array['saved']) == 0)
+				{
+					echo "<strong class='fontLarge orange'>No saved posts found</strong>";
+				}
+				else
+				{
+				
+				?>
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<tr class="fontMedium">
+						<th width="34%">Title</th>
+						<th width="44%">Author(s)</th>
+						<th width="2%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+					
+					<?php foreach($posts_array['saved'] as $value_s) { ?>
+					<tr class="fontNormal">
+						<td><? printText($value_s['title']);?></td>
+						<td><? displayAuthors($value_s['id'], 'rank', 'link');?></td>
+						<td></td>
+						<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$value_s['id'];?>"><strong>View Post</strong></a></td>
+						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=posts&id=<?=$value_s['id'];?>" class="edit"><strong>Edit</strong></a></td>
+					</tr>
+					<?php } ?>
+				</table>
+				<?php } ?>
+			</div>
+			
+			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<?
+				
+				if(count($posts_array['pending']) == 0)
+				{
+					echo "<strong class='fontLarge orange'>No pending posts found</strong>";
+				}
+				else
+				{
+				
+				?>
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<tr class="fontMedium">
+						<th width="34%">Title</th>
+						<th width="44%">Author(s)</th>
+						<th width="2%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+					
+					<?php foreach($posts_array['pending'] as $value_p) { ?>
+					<tr class="fontNormal">
+						<td><? printText($value_p['title']);?></td>
+						<td><? displayAuthors($value_p['id'], 'rank', 'link');?></td>
+						<td></td>
+						<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$value_p['id'];?>"><strong>View Post</strong></a></td>
+						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=posts&id=<?=$value_p['id'];?>" class="edit"><strong>Edit</strong></a></td>
+					</tr>
+					<?php } ?>
+				</table>
+				<?php } ?>
+			</div>
+		</div>
 		
-		?>
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=posts">
-			<tr>
-				<td>
-					<b class="fontNormal">Post Title</b><br />
-					<input type="text" class="name" maxlength="100" name="postTitle" value="<?=stripslashes( $postTitle );?>" />
-				</td>
-				<td rowspan="6" align="center" valign="top" width="55%">
-					<span class="fontNormal"><b>Content</b></span><br />
-					<textarea rows="17" name="postContent" class="desc"><?=stripslashes( $postContent );?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Location</b><br />
-					<input type="text" class="name" maxlength="100" name="postLocation" value="<?=stripslashes( $postLocation );?>" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Timeline</b><br />
-					<input type="text" class="name" maxlength="100" name="postTimeline" value="<?=stripslashes( $postTimeline );?>" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Tag</b><br />
-					<input type="text" class="name" maxlength="100" name="postTag" value="<?=stripslashes( $postTag );?>" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Author</b><br />
-					<? $authorCount = print_active_crew_select_menu( "post", $postAuthor, $postid, "manage", "posts" ); ?>
-					<input type="hidden" name="authorCount" value="<?=$authorCount;?>" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Status</b><br />
-					<select name="postStatus">
-						<option value="pending"<? if( $postStatus == "pending" ) { echo " selected"; } ?>>Pending</option>
-						<option value="saved"<? if( $postStatus == "saved" ) { echo " selected"; } ?>>Saved</option>
-						<option value="activated"<? if( $postStatus == "activated" ) { echo " selected"; } ?>>Activated</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td valign="top" align="center">
-					<input type="hidden" name="postid" value="<?=$postid;?>" />
-					<input type="hidden" name="postMission" value="<?=$postMission;?>" />
-	
-					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission post?')\" />" );
-					</script>
-					<noscript>
-						<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
-					</noscript>
-	
-					&nbsp;&nbsp;
-					<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" height="25"></td>
-			</tr>
-			</form>
-		<? } ?>
-		</table>
 	</div>
 
-<? } } else { errorMessage( "post moderation" ); } ?>
+<? } } else { errorMessage( "post management" ); } ?>
