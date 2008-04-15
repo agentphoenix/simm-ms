@@ -10,21 +10,22 @@ File: admin/reports.php
 Purpose: Page to pull in the necessary report page
 
 System Version: 2.6.0
-Last Modified: 2008-04-05 1642 EST
+Last Modified: 2008-04-15 0102 EST
 **/
 
 /* define the page class and variables */
 $pageClass = "admin";
 $subMenuClass = "reports";
 
-if(isset($_GET['sub']))
-{
+if(isset($_GET['sub'])) {
 	$sub = $_GET['sub'];
+} else {
+	$sub = NULL;
 }
 
-/* if they have a session, continue processing */
-if( isset( $sessionCrewid ) && in_array( "reports", $sessionAccess ) ) {
-
+/* if they have a session, continue */
+if(isset($sessionCrewid))
+{
 	/* pull in the main navigation */
 	include_once( "skins/" . $sessionDisplaySkin . "/menu.php" );
 
