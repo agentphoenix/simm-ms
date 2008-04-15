@@ -10,7 +10,7 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.0
-Last Modified: 2008-04-14 2152 EST
+Last Modified: 2008-04-14 2350 EST
 **/
 
 /* access check */
@@ -291,21 +291,38 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 			<tr>
 				<td>
 					<b>Mission</b><br />
+					
+					<?php if(in_array("m_posts2", $sessionAccess)) { ?>
 					<select name="postMission">
-					<?
+						<?php
 	
-					$getMissions = "SELECT * FROM sms_missions WHERE missionStatus != 'upcoming' ORDER BY missionOrder DESC";
-					$getMissionsResult = mysql_query( $getMissions );
+						$getMissions = "SELECT * FROM sms_missions WHERE missionStatus != 'upcoming' ORDER BY missionOrder DESC";
+						$getMissionsResult = mysql_query( $getMissions );
 	
-					while( $misFetch = mysql_fetch_assoc( $getMissionsResult ) ) {
-						extract( $misFetch, EXTR_OVERWRITE );
+						while($misFetch = mysql_fetch_assoc($getMissionsResult)) {
+							extract($misFetch, EXTR_OVERWRITE);
 	
-					?>
+						?>
 	
 						<option value="<?=$missionid;?>"<? if( $fetch['postMission'] == $missionid ) { echo " selected"; } ?>><? printText( $missionTitle ); ?></option>
 	
-					<? } ?>
+						<?php } ?>
 					</select>
+					<?php
+					
+					} else {
+						$getMissions = "SELECT * FROM sms_missions WHERE missionStatus = 'current' LIMIT 1";
+						$getMissionsResult = mysql_query($getMissions);
+						$fetchMission = mysql_fetch_assoc($getMissionsResult);
+						
+						echo "<em>";
+						printText($fetchMission['missionTitle']);
+						echo "</em>";
+						
+						echo "<input type='hidden' name='postMission' value='" . $fetchMission['missionid'] . "' />";
+					}
+						
+					?>
 				</td>
 			</tr>
 			<tr>
