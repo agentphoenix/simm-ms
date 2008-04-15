@@ -10,7 +10,7 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2008-04-05 1536 EST
+Last Modified: 2008-04-14 2200 EST
 **/
 
 /* define the page class */
@@ -233,13 +233,21 @@ if( isset( $sessionCrewid ) ) {
 					$words = explode(' ', $postContent); /* Creates an array of words */
 					$words = array_slice($words, 0, $length); /* Slices the array */
 					$text = implode(' ', $words); /* Grabs only the specified number of words */
+					$tempAuthors = explode(",", $postAuthor);
 				
 			?>
 				
 				<span class="fontMedium">
 					<b><? printText( $postTitle ); ?></b>
 					
-					<?php if( in_array( "m_posts", $sessionAccess ) ) { ?>
+					<?php
+					
+					if(
+						in_array("m_posts2", $sessionAccess) ||
+						(in_array("m_posts1", $sessionAccess) && in_array($sessionCrewid, $tempAuthors))
+					) {
+					
+					?>
 					&nbsp;
 					<a href="<?=$webLocation;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
 						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
