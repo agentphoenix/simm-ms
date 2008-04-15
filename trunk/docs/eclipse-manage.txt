@@ -1,4 +1,4 @@
-Last Update: 2008.04.11 2311 EST
+Last Update: 2008.04.15 0100 EST
 
 IN PROGRESS
 =====
@@ -42,21 +42,28 @@ IN PROGRESS
 				x	Database
 
 #	Update skins
+
+#	Ability for crew to edit their posts and logs
+		x	Mission posts
+		*	Personal logs
+
+#	Access changes need to filter down to all the access pages
+		x	admin/manage/access.php
+		*	admin/manage/accessall.php
+		*	admin/manage/accesslevels.php
+		*	admin/user/access.php
+		
+			@	m_database1 and m_database2
+			@	m_posts1 and m_posts2
+			@	m_logs1 and m_logs2
+			@	Remove m_database
+			@	Make sure r_security is removed
 		
 IN QUEUE
 =====
 #	Starbase menu items in place during install, but turned off
 
 #	Add cadet ranks (off by default)
-
-#	Ability for crew to edit their posts and logs
-
-#	Access changes need to filter down to all the access pages
-		*	m_database1 and m_database2
-		*	m_posts1 and m_posts2
-		*	m_logs1 and m_logs2
-		*	Remove m_database
-		*	Make sure r_security is removed
 
 COMPLETED
 =====
