@@ -10,11 +10,12 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.0
-Last Modified: 2008-04-14 1912 EST
+Last Modified: 2008-04-14 2152 EST
 **/
 
 /* access check */
-if( in_array( "m_posts2", $sessionAccess ) ) {
+if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
+{
 
 	/* set the page class */
 	$pageClass = "admin";
@@ -207,18 +208,29 @@ if( in_array( "m_posts2", $sessionAccess ) ) {
 	}
 	
 	/* if there's an id in the URL, proceed */
-	if( isset( $id ) ) {
-
+	if(isset($id))
+	{
+		$posts = "SELECT * FROM sms_posts WHERE postid = $id LIMIT 1";
+		$postsResult = mysql_query($posts);
+		$fetch = mysql_fetch_assoc($postsResult);
+		$tempAuthors = explode(",", $fetch['postAuthor']);
+		
+		if(!in_array("m_posts2", $sessionAccess) && in_array($sessionCrewid, $tempAuthors))
+		{
+			
 ?>
 
 	<div class="body">
 	
-		<?
+		<?php
 		
 		/* do logic to make sure the object is right */
-		if( isset( $add ) || isset( $delete ) ) {
+		if(isset($add) || isset($delete))
+		{
 			$object = "author";
-		} elseif( isset( $_POST['action_update_x'] ) || isset( $_POST['action_delete_x'] ) || isset( $remove ) ) {
+		}
+		elseif(isset($_POST['action_update_x']) || isset($_POST['action_delete_x']) || isset($remove))
+		{
 			$object = "post";
 		}
 		
@@ -233,52 +245,46 @@ if( in_array( "m_posts2", $sessionAccess ) ) {
 		?>
 	
 		<span class="fontTitle">Manage Mission Post</span><br /><br />
+		
+		<?php if(in_array("m_posts2", $sessionAccess)) { ?>
 		<a href="<?=$webLocation;?>admin.php?page=manage&sub=posts"><strong class="fontMedium">&laquo; Back to Mission Posts</strong></a>
 		<br /><br />
+		<?php } ?>
 		
 		<table cellpadding="0" cellspacing="3">
-		<?
-		
-			$posts = "SELECT * FROM sms_posts WHERE postid = '$id' LIMIT 1";
-			$postsResult = mysql_query( $posts );
-			
-			while( $postFetch = mysql_fetch_assoc( $postsResult ) ) {
-				extract( $postFetch, EXTR_OVERWRITE );
-		
-		?>
 			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=posts&id=<?=$id;?>">
 			<tr>
 				<td>
 					<b>Post Title</b><br />
-					<input type="text" class="name" maxlength="100" name="postTitle" value="<?=stripslashes( $postTitle );?>" />
+					<input type="text" class="name" maxlength="100" name="postTitle" value="<?=stripslashes( $fetch['postTitle'] );?>" />
 				</td>
 				<td>
 					<b>Location</b><br />
-					<input type="text" class="name" maxlength="100" name="postLocation" value="<?=stripslashes( $postLocation );?>" />
+					<input type="text" class="name" maxlength="100" name="postLocation" value="<?=stripslashes( $fetch['postLocation'] );?>" />
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<b>Tag</b><br />
-					<input type="text" class="name" maxlength="100" name="postTag" value="<?=stripslashes( $postTag );?>" />
+					<input type="text" class="name" maxlength="100" name="postTag" value="<?=stripslashes( $fetch['postTag'] );?>" />
 				</td>
 				<td>
 					<b>Timeline</b><br />
-					<input type="text" class="name" maxlength="100" name="postTimeline" value="<?=stripslashes( $postTimeline );?>" />
+					<input type="text" class="name" maxlength="100" name="postTimeline" value="<?=stripslashes( $fetch['postTimeline'] );?>" />
 				</td>
 			</tr>
 			<tr>
 				<td valign="top" rowspan="2">
 					<b>Author</b><br />
-					<? $authorCount = print_active_crew_select_menu( "post", $postAuthor, $postid, "manage", "posts" ); ?>
+					<? $authorCount = print_active_crew_select_menu( "post", $fetch['postAuthor'], $fetch['postid'], "manage", "posts" ); ?>
 					<input type="hidden" name="authorCount" value="<?=$authorCount;?>" />
 				</td>
 				<td>
 					<b>Status</b><br />
 					<select name="postStatus">
-						<option value="pending"<? if( $postStatus == "pending" ) { echo " selected"; } ?>>Pending</option>
-						<option value="saved"<? if( $postStatus == "saved" ) { echo " selected"; } ?>>Saved</option>
-						<option value="activated"<? if( $postStatus == "activated" ) { echo " selected"; } ?>>Activated</option>
+						<option value="pending"<? if( $fetch['postStatus'] == "pending" ) { echo " selected"; } ?>>Pending</option>
+						<option value="saved"<? if( $fetch['postStatus'] == "saved" ) { echo " selected"; } ?>>Saved</option>
+						<option value="activated"<? if( $fetch['postStatus'] == "activated" ) { echo " selected"; } ?>>Activated</option>
 					</select>
 				</td>
 			</tr>
@@ -296,7 +302,7 @@ if( in_array( "m_posts2", $sessionAccess ) ) {
 	
 					?>
 	
-						<option value="<?=$missionid;?>"<? if( $postMission == $missionid ) { echo " selected"; } ?>><? printText( $missionTitle ); ?></option>
+						<option value="<?=$missionid;?>"<? if( $fetch['postMission'] == $missionid ) { echo " selected"; } ?>><? printText( $missionTitle ); ?></option>
 	
 					<? } ?>
 					</select>
@@ -305,7 +311,7 @@ if( in_array( "m_posts2", $sessionAccess ) ) {
 			<tr>
 				<td colspan="2">
 					<b>Content</b><br />
-					<textarea rows="15" name="postContent" class="wideTextArea"><?=stripslashes( $postContent );?></textarea>
+					<textarea rows="15" name="postContent" class="wideTextArea"><?=stripslashes( $fetch['postContent'] );?></textarea>
 				</td>
 			</tr>
 			<tr>
@@ -313,7 +319,7 @@ if( in_array( "m_posts2", $sessionAccess ) ) {
 			</tr>
 			<tr>
 				<td colspan="2" valign="top" align="right">
-					<input type="hidden" name="postid" value="<?=$postid;?>" />
+					<input type="hidden" name="postid" value="<?=$fetch['postid'];?>" />
 	
 					<script type="text/javascript">
 						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission post?')\" />" );
@@ -327,13 +333,21 @@ if( in_array( "m_posts2", $sessionAccess ) ) {
 				</td>
 			</tr>
 			</form>
-		<? } ?>
 		</table>
 	</div>
 	
 	<?
 	
-	} else { /* if there's no id, continue */
+		} /* closes the check for the author */
+		elseif(!in_array("m_posts2", $sessionAccess) && !in_array($sessionCrewid, $tempAuthors))
+		{
+			echo "<div class='body'>";
+			echo "<strong class='fontMedium orange'>You only have permission to edit your own posts!</strong>";
+			echo "</div>";
+		}
+	}
+	elseif(!isset($id) && in_array("m_posts2", $sessionAccess))
+	{
 	
 		$posts_array = array(
 			'activated' => array(),
@@ -490,4 +504,19 @@ if( in_array( "m_posts2", $sessionAccess ) ) {
 		
 	</div>
 
-<? } } else { errorMessage( "post management" ); } ?>
+<?php
+
+	}
+	elseif(!isset($id) && !in_array("m_posts2", $sessionAccess))
+	{
+		echo "<div class='body'>";
+		echo "<strong class='fontMedium orange'>You do not have permission to edit posts other than your own!</strong>";
+		echo "</div>";
+	}
+}
+else
+{
+	errorMessage( "post management" );
+}
+
+?>
