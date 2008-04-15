@@ -1,4 +1,4 @@
-Last updated: 2008.04.13 1146 EST
+Last updated: 2008.04.14 2123 EST
 
 NEW FEATURES
 ===
@@ -51,6 +51,7 @@ ENHANCEMENTS
 *	Default skin now uses some fancy dynamic location stuff so that the code could be moved to another directory and keep working
 *	Default skin now uses UTF-8 for character encoding and English as the language by default
 *	Version history page now uses tabs
+*	Management pages for posts, logs, and news items now use tabs to separate activated, saved, and pending entries, plus it lists entries instead of providing "mini editing"
 
 FIXES
 ===
