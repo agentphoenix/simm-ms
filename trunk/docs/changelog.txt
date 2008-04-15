@@ -1,4 +1,4 @@
-Last updated: 2008.04.14 2123 EST
+Last updated: 2008.04.15 0103 EST
 
 NEW FEATURES
 ===
@@ -16,6 +16,7 @@ NEW FEATURES
 *	NPCs can now be given in character awards
 *	Departmental databases
 *	Completely new install process that's clearer and with much better instructions
+*	Users (with proper permissions) can edit their own posts (except which mission the post is in)
 
 ENHANCEMENTS
 ===
@@ -71,3 +72,6 @@ FIXES
 *	Fixed bug where reset password form wouldn't send the email out to the appropriate person (or update it in the database either)
 *	Fixed bug where mission order wouldn't be updated
 *	Fixed bug that would allow pending, inactive, and NPC characters to log in
+*	Removed unused System Catalogues item from access levels management
+*	Removed unused Skin Development item from access levels management
+*	Removed unnecessary access checks on the admin subsection pages
