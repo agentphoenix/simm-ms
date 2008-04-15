@@ -10,27 +10,31 @@ File: admin/manage.php
 Purpose: Page to pull in the necessary manage page
 
 System Version: 2.6.0
-Last Modified: 2007-11-08 1103 EST
+Last Modified: 2008-04-15 0016 EST
 **/
 
 /* define the page class and the vars */
 $pageClass = "admin";
 $subMenuClass = "manage";
-$sub = $_GET['sub'];
+
+if(isset($_GET['sub'])) {
+	$sub = $_GET['sub'];
+} else {
+	$sub = NULL;
+}
 
 /* if they have a session, continue */
-if( isset( $sessionCrewid ) && in_array( "manage", $sessionAccess ) ) {
-
+if(isset($sessionCrewid))
+{
 	/* pull in the main navigation */
-	include_once( 'skins/' . $sessionDisplaySkin . '/menu.php' );
+	include_once('skins/' . $sessionDisplaySkin . '/menu.php');
 	
 	/* pull in the requested page */
-	if( file_exists( $pageClass . '/' . $subMenuClass . '/' . $sub . '.php' ) ) {
+	if(file_exists($pageClass . '/' . $subMenuClass . '/' . $sub . '.php')) {
 		include_once( $subMenuClass . '/' . $sub . '.php' );
 	} else {
-		include_once( 'error.php' );
+		include_once('error.php');
 	}
-
 }
 
 ?>

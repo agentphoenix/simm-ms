@@ -10,17 +10,22 @@ File: admin/post.php
 Purpose: Page to pull in the necessary post page
 
 System Version: 2.6.0
-Last Modified: 2007-11-07 1536 EST
+Last Modified: 2008-04-15 0102 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "admin";
 $subMenuClass = "post";
-$sub = $_GET['sub'];
+
+if(isset($_GET['sub'])) {
+	$sub = $_GET['sub'];
+} else {
+	$sub = NULL;
+}
 
 /* if they have a session, continue */
-if( isset( $sessionCrewid ) && in_array( "post", $sessionAccess ) ) {
-
+if(isset($sessionCrewid))
+{
 	/* pull in the main navigation */
 	include_once( 'skins/' . $sessionDisplaySkin . '/menu.php' );
 	

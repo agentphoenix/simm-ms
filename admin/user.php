@@ -10,17 +10,22 @@ File: admin/user.php
 Purpose: Page to pull in the necessary user page
 
 System Version: 2.6.0
-Last Modified: 2007-11-08 1103 EST
+Last Modified: 2008-04-15 0102 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "admin";
 $subMenuClass = "user";
-$sub = $_GET['sub'];
+
+if(isset($_GET['sub'])) {
+	$sub = $_GET['sub'];
+} else {
+	$sub = NULL;
+}
 
 /* if they have a session, continue */
-if( isset( $sessionCrewid ) && in_array( "user", $sessionAccess ) ) {
-
+if(isset($sessionCrewid))
+{
 	/* pull in the main navigation */
 	include_once( 'skins/' . $sessionDisplaySkin . '/menu.php' );
 	
