@@ -10,7 +10,7 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.0
-Last Modified: 2008-04-14 2350 EST
+Last Modified: 2008-04-14 2357 EST
 **/
 
 /* access check */
@@ -23,8 +23,7 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 	$query = FALSE;
 	$result = FALSE;
 	
-	if(isset($_GET['id']))
-	{
+	if(isset($_GET['id'])) {
 		if(is_numeric($_GET['id'])) {
 			$id = $_GET['id'];
 		} else {
@@ -33,8 +32,7 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		}
 	}
 	
-	if(isset($_GET['remove']))
-	{
+	if(isset($_GET['remove'])) {
 		if(is_numeric($_GET['remove'])) {
 			$remove = $_GET['remove'];
 		} else {
@@ -43,8 +41,7 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		}
 	}
 	
-	if(isset($_GET['delete']))
-	{
+	if(isset($_GET['delete'])) {
 		if(is_numeric($_GET['delete'])) {
 			$delete = $_GET['delete'];
 		} else {
@@ -53,8 +50,7 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		}
 	}
 	
-	if(isset($_GET['add']))
-	{
+	if(isset($_GET['add'])) {
 		if(is_numeric($_GET['add'])) {
 			$add = $_GET['add'];
 		} else {
@@ -84,8 +80,8 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		$postAuthor = FALSE;
 	}
 	
-	if( isset( $_POST['action_update_x'] ) ) {
-		
+	if(isset($_POST['action_update_x']))
+	{
 		if(isset($_POST['postid']) && is_numeric($_POST['postid'])) {
 			$postid = $_POST['postid'];
 		} else {
@@ -113,10 +109,9 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "update";
-	
-	} elseif( isset( $_POST['action_delete_x'] ) ) {
-		
-		/* do the delete query */
+	}
+	elseif(isset( $_POST['action_delete_x']))
+	{
 		$query = "DELETE FROM sms_posts WHERE postid = '$postid' LIMIT 1";
 		$result = mysql_query( $query );
 		
@@ -124,10 +119,9 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "delete";
-		
-	} elseif( isset( $remove ) ) {
-		
-		/* do the delete query */
+	}
+	elseif(isset($remove))
+	{
 		$query = "DELETE FROM sms_posts WHERE postid = '$remove' LIMIT 1";
 		$result = mysql_query( $query );
 		
@@ -135,10 +129,9 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "delete";
-	
-	} elseif( isset( $delete ) ) {
-		
-		/* define the vars */
+	}
+	elseif(isset($delete))
+	{
 		if(isset($_GET))
 		{
 			if(is_numeric($_GET['postid'])) {
@@ -176,15 +169,26 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "remove";
-		
-	} elseif( isset( $add ) ) {
-		
-		/* define the vars */
-		$postid = $_GET['postid'];
-		$arrayid = $_GET['add'];
+	}
+	elseif(isset($add))
+	{
+		if(isset($_GET))
+		{
+			if(is_numeric($_GET['postid'])) {
+				$postid = $_GET['postid'];
+			} else {
+				$postid = FALSE;
+			}
+			
+			if(is_numeric($_GET['add'])) {
+				$arrayid = $_GET['add'];
+			} else {
+				$arrayid = FALSE;
+			}
+		}
 		
 		/* pull the authors for the specific post */
-		$getAuthors = "SELECT postAuthor FROM sms_posts WHERE postid = '$postid' LIMIT 1";
+		$getAuthors = "SELECT postAuthor FROM sms_posts WHERE postid = $postid LIMIT 1";
 		$getAuthorsResult = mysql_query( $getAuthors );
 		
 		while( $authorAdjust = mysql_fetch_assoc( $getAuthorsResult ) ) {
@@ -204,7 +208,6 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "add";
-		
 	}
 	
 	/* if there's an id in the URL, proceed */
@@ -215,8 +218,10 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		$fetch = mysql_fetch_assoc($postsResult);
 		$tempAuthors = explode(",", $fetch['postAuthor']);
 		
-		if(!in_array("m_posts2", $sessionAccess) && in_array($sessionCrewid, $tempAuthors))
-		{
+		if(
+			in_array("m_posts2", $sessionAccess) ||
+			(!in_array("m_posts2", $sessionAccess) && in_array($sessionCrewid, $tempAuthors))
+		) {
 			
 ?>
 
