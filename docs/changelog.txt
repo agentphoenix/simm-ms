@@ -1,4 +1,4 @@
-Last updated: 2008.04.17 1807 EST
+Last updated: 2008.04.17 1918 EST
 
 NEW FEATURES
 ===
@@ -16,7 +16,8 @@ NEW FEATURES
 *	NPCs can now be given in character awards
 *	Departmental databases
 *	Completely new install process that's clearer and with much better instructions
-*	Users (with proper permissions) can edit their own posts (except which mission the post is in)
+*	Users (with proper permissions) can edit their own mission posts (except which mission the post is in and the post status)
+*	Users (with proper permissions) can edit their own personal logs (except the author and log status)
 
 ENHANCEMENTS
 ===
@@ -76,3 +77,4 @@ FIXES
 *	Removed unused System Catalogues item from access levels management
 *	Removed unused Skin Development item from access levels management
 *	Removed unnecessary access checks on the admin subsection pages
+*	Worked around Webkit bug where post edit icon wouldn't show up
