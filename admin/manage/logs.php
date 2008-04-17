@@ -82,18 +82,6 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 		
 		$action = "delete";
 	}
-	elseif( isset( $remove ) )
-	{
-	
-		$query = "DELETE FROM sms_personallogs WHERE logid = '$remove' LIMIT 1";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_personallogs" );
-		
-		$action = "remove";
-	
-	}
 	
 	if(isset($id))
 	{
