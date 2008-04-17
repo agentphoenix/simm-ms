@@ -1,4 +1,4 @@
-Last Update: 2008.04.15 0100 EST
+Last Update: 2008.04.17 1806 EST
 
 IN PROGRESS
 =====
@@ -14,6 +14,7 @@ IN PROGRESS
 				x	missions.php
 				x	database.php
 				x	departments.php
+				x	ranks.php
 		*	/admin/post
 				x	addjp.php
 		x	/admin/reports
@@ -29,7 +30,7 @@ IN PROGRESS
 #	HUD windows
 		*	Creation
 				x	Missions
-				@	Ranks
+				x	Ranks
 				x	Departments
 				@	Positions
 				@	Awards
