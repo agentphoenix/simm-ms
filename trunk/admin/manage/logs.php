@@ -5,72 +5,85 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/logs.php
 Purpose: If there is an ID in the URL, the page will display the personal log
-	with that ID number, otherwise, it'll display a list of the 5 most recent
+	with that ID number, otherwise, it'll display a list of the 25 most recent
 	personal logs for moderation
 
-System Version: 2.5.0
-Last Modified: 2007-06-18 1142 EST
+System Version: 2.6.0
+Last Modified: 2008-04-17 1910 EST
 **/
 
 /* access check */
-if( in_array( "m_logs", $sessionAccess ) ) {
-
+if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
+{
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$actionUpdate = $_POST['action_update_x'];
-	$actionDelete = $_POST['action_delete_x'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "personal log editing page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$id = $_GET['id'];
+	if(isset($_GET['id'])) {
+		if(is_numeric($_GET['id'])) {
+			$id = $_GET['id'];
+		} else {
+			errorMessageIllegal( "personal log editing page" );
+			exit();
+		}
 	}
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['remove'] ) && preg_match( "/^\d+$/", $_GET['remove'], $matches ) == 0 ) {
-		errorMessageIllegal( "personal log editing page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$remove = $_GET['remove'];
+	if(isset($_GET['remove'])) {
+		if(is_numeric($_GET['remove'])) {
+			$remove = $_GET['remove'];
+		} else {
+			errorMessageIllegal( "personal log editing page" );
+			exit();
+		}
 	}
-
-	$logAuthor = $_POST['logAuthor'];
-	$logTitle = addslashes( $_POST['logTitle'] );
-	$logContent = addslashes( $_POST['logContent'] );
-	$logid = $_POST['logid'];
-	$logStatus = $_POST['logStatus'];
 	
-	if( $actionUpdate ) {
+	if(isset($_POST['action_update_x']))
+	{
+		if(!in_array("m_logs2", $sessionAccess))
+		{
+			$update = "UPDATE sms_personallogs SET logTitle = %s, logContent = %s WHERE logid = $id";
+			$query = sprintf(
+				$update,
+				escape_string($_POST['logTitle']),
+				escape_string($_POST['logContent'])
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_personallogs SET logAuthor = %d, logTitle = %s, logContent = %s, logStatus = %s WHERE logid = $id";
+			$query = sprintf(
+				$update,
+				escape_string($_POST['logAuthor']),
+				escape_string($_POST['logTitle']),
+				escape_string($_POST['logContent']),
+				escape_string($_POST['logStatus'])
+			);
+		}
 		
-		$query = "UPDATE sms_personallogs SET logAuthor = '$logAuthor', ";
-		$query.= "logTitle = '$logTitle', logContent = '$logContent', logStatus = '$logStatus' ";
-		$query.= "WHERE logid = '$logid' LIMIT 1";
-		$result = mysql_query( $query );
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_personallogs" );
 		
 		$action = "update";
-	
-	} elseif( $actionDelete ) {
-		
-		$query = "DELETE FROM sms_personallogs WHERE logid = '$logid' LIMIT 1";
+	}
+	elseif(isset($_POST['action_delete_x']))
+	{
+		$query = "DELETE FROM sms_personallogs WHERE logid = $id LIMIT 1";
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_personallogs" );
 		
 		$action = "delete";
-		
-	} elseif( isset( $remove ) ) {
+	}
+	elseif( isset( $remove ) )
+	{
 	
 		$query = "DELETE FROM sms_personallogs WHERE logid = '$remove' LIMIT 1";
 		$result = mysql_query( $query );
@@ -82,34 +95,36 @@ if( in_array( "m_logs", $sessionAccess ) ) {
 	
 	}
 	
-	$logTitle = stripslashes( $logTitle );
-	$logContent = stripslashes( $logContent );
+	if(isset($id))
+	{
 	
-	/* if there's an id in the URL, proceed */
-	if( $id ) {
-
 ?>
-
 	<div class="body">
-		
-		<?
-		
+		<?php
+
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $query );
-		
+
 		if( !empty( $check->query ) ) {
 			$check->message( "personal log", $action );
 			$check->display();
 		}
 		
 		?>
-		
 		<span class="fontTitle">Manage Personal Log</span><br /><br />
+		<?php if(in_array("m_logs2", $sessionAccess)) { ?>
+		<a href="<?=$webLocation;?>admin.php?page=manage&sub=logs"><strong class="fontMedium">&laquo; Back to Personal Logs</strong></a>
+		<br /><br />
+		<?php } ?>
+		
+		<?php if(!in_array("m_logs2", $sessionAccess)) { ?>
+		<strong class="orange fontMedium">You are allowed to edit the title and content of your personal log. If you want to change the author or status, please contact the CO.</strong><br /><br />
+		<?php } ?>
 		
 		<table cellpadding="2" cellspacing="2">
 		<?
 		
-			$logs = "SELECT * FROM sms_personallogs WHERE logid = '$id'";
+			$logs = "SELECT * FROM sms_personallogs WHERE logid = $id";
 			$logsResult = mysql_query( $logs );
 			
 			while( $logFetch = mysql_fetch_assoc( $logsResult ) ) {
@@ -124,10 +139,12 @@ if( in_array( "m_logs", $sessionAccess ) ) {
 					<input type="hidden" name="logid" value="<?=$logid;?>" />
 				</td>
 			</tr>
+			
+			<?php if(in_array("m_logs2", $sessionAccess)) { ?>
 			<tr>
 				<td valign="middle">
 					<b>Author</b><br />
-					<? print_active_crew_select_menu( "log", $logAuthor, $logid, "", "" ); ?>
+					<?php print_active_crew_select_menu( "log", $logAuthor, $logid, "", "" ); ?>
 				</td>
 				<td valign="middle">
 					<span class="fontNormal"><b>Status</b></span><br />
@@ -138,6 +155,8 @@ if( in_array( "m_logs", $sessionAccess ) ) {
 					</select>
 				</td>
 			</tr>
+			<?php } ?>
+				
 			<tr>
 				<td colspan="2">
 					<b>Content</b><br />
@@ -168,17 +187,52 @@ if( in_array( "m_logs", $sessionAccess ) ) {
 	</div>
 	<?
 		
-		/* if there is no ID in the URL, show a list of the last 5 personal logs */
-		} elseif( !$id ) {
+	}
+	elseif(!isset($id) && in_array("m_logs2", $sessionAccess))
+	{
+	
+		$posts_array = array(
+			'activated' => array(),
+			'saved' => array(),
+			'pending' => array()
+		);
 		
-		$getLogs = "SELECT * FROM sms_personallogs ORDER BY logPosted DESC LIMIT 5";
-		$getLogsResult = mysql_query( $getLogs );
+		$getPostsA = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'activated' ORDER BY logPosted DESC LIMIT 25";
+		$getPostsAR = mysql_query($getPostsA);
+		
+		$getPostsS = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'saved' ORDER BY logPosted DESC";
+		$getPostsSR = mysql_query($getPostsS);
+		
+		$getPostsP = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'pending' ORDER BY logPosted DESC";
+		$getPostsPR = mysql_query($getPostsP);
+		
+		while($fetch_a = mysql_fetch_array($getPostsAR)) {
+			extract($fetch_a, EXTR_OVERWRITE);
+			
+			$posts_array['activated'][] = array('id' => $fetch_a[0], 'title' => $fetch_a[1]);
+		}
+		
+		while($fetch_s = mysql_fetch_array($getPostsSR)) {
+			extract($fetch_s, EXTR_OVERWRITE);
+			
+			$posts_array['saved'][] = array('id' => $fetch_s[0], 'title' => $fetch_s[1]);
+		}
+		
+		while($fetch_p = mysql_fetch_array($getPostsPR)) {
+			extract($fetch_p, EXTR_OVERWRITE);
+			
+			$posts_array['pending'][] = array('id' => $fetch_p[0], 'title' => $fetch_p[1]);
+		}
 	
 	?>
-	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#container-1 > ul').tabs();
+			$('.zebra tr:nth-child(even)').addClass('alt');
+		});
+	</script>
 	<div class="body">
-		
-		<?
+		<?php
 		
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $query );
@@ -191,63 +245,129 @@ if( in_array( "m_logs", $sessionAccess ) ) {
 		?>
 		
 		<span class="fontTitle">Manage Personal Logs</span><br /><br />
-		<table>
-			<?
-			
-			while( $logFetch = mysql_fetch_assoc( $getLogsResult ) ) {
-				extract( $logFetch, EXTR_OVERWRITE );
-			
-			?>
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=logs">
-			<tr>
-				<td valign="top">
-					<b class="fontNormal">Title</b><br />
-					<input type="text" class="name" maxlength="100" name="logTitle" value="<?=stripslashes( $logTitle );?>" />
-				</td>
-				<td rowspan="3" width="70%" align="center" valign="top">
-					<b class="fontNormal">Content</b><br />
-					<textarea class="desc" rows="10" name="logContent"><?=stripslashes( $logContent );?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b class="fontNormal">Author</b><br />
-					<? print_active_crew_select_menu( "log", $logAuthor, $logid, "", "" ); ?>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<span class="fontNormal"><b>Status</b></span><br />
-					<select name="logStatus">
-						<option value="pending"<? if( $logStatus == "pending" ) { echo " selected"; } ?>>Pending</option>
-						<option value="saved"<? if( $logStatus == "saved" ) { echo " selected"; } ?>>Saved</option>
-						<option value="activated"<? if( $logStatus == "activated" ) { echo " selected"; } ?>>Activated</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td valign="top" align="center">
-					<input type="hidden" name="logid" value="<?=$logid;?>" />
+		<div id="container-1">
+			<ul>
+				<li><a href="#one"><span>Activated</span></a></li>
+				<li><a href="#two"><span>Saved (<?php echo count($posts_array['saved']);?>)</span></a></li>
+				<li><a href="#three"><span>Pending (<?php echo count($posts_array['pending']);?>)</span></a></li>
+			</ul>
 	
-					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\" />" );
-					</script>
-					<noscript>
-						<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
-					</noscript>
-	
-					&nbsp;&nbsp;
-					<input type="image" src="<?=path_userskin;?>buttons/update.png" name="action_update" class="button" value="Update" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="25"></td>
-			</tr>
-			</form>
-			<? } ?>
-		</table>
+			<div id="one" class="ui-tabs-container ui-tabs-hide">
+				<?
+				
+				if(count($posts_array['activated']) == 0)
+				{
+					echo "<strong class='fontLarge orange'>No activated personal logs found</strong>";
+				}
+				else
+				{
+				
+				?>
+				
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<tr class="fontMedium">
+						<th width="34%">Title</th>
+						<th width="44%">Author(s)</th>
+						<th width="2%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+					
+					<?php foreach($posts_array['activated'] as $value_a) { ?>
+					<tr class="fontNormal">
+						<td><? printText($value_a['title']);?></td>
+						<td><? printCrewName($value_a['id'], 'rank', 'link');?></td>
+						<td></td>
+						<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$value_a['id'];?>"><strong>View Log</strong></a></td>
+						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&id=<?=$value_a['id'];?>" class="edit"><strong>Edit</strong></a></td>
+					</tr>
+					<?php } ?>
+				</table>
+				
+				<? } ?>
+			</div>
 		
+			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<?
+			
+				if(count($posts_array['saved']) == 0)
+				{
+					echo "<strong class='fontLarge orange'>No saved personal logs found</strong>";
+				}
+				else
+				{
+			
+				?>
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<tr class="fontMedium">
+						<th width="34%">Title</th>
+						<th width="44%">Author(s)</th>
+						<th width="2%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				
+					<?php foreach($posts_array['saved'] as $value_s) { ?>
+					<tr class="fontNormal">
+						<td><? printText($value_s['title']);?></td>
+						<td><? printCrewName($value_s['id'], 'rank', 'link');?></td>
+						<td></td>
+						<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$value_s['id'];?>"><strong>View Log</strong></a></td>
+						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&id=<?=$value_s['id'];?>" class="edit"><strong>Edit</strong></a></td>
+					</tr>
+					<?php } ?>
+				</table>
+				<?php } ?>
+			</div>
+		
+			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<?
+			
+				if(count($posts_array['pending']) == 0)
+				{
+					echo "<strong class='fontLarge orange'>No pending personal logs found</strong>";
+				}
+				else
+				{
+			
+				?>
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<tr class="fontMedium">
+						<th width="34%">Title</th>
+						<th width="44%">Author(s)</th>
+						<th width="2%"></th>
+						<th width="10%"></th>
+						<th width="10%"></th>
+					</tr>
+				
+					<?php foreach($posts_array['pending'] as $value_p) { ?>
+					<tr class="fontNormal">
+						<td><? printText($value_p['title']);?></td>
+						<td><? printCrewName($value_p['id'], 'rank', 'link');?></td>
+						<td></td>
+						<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$value_p['id'];?>"><strong>View Log</strong></a></td>
+						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&id=<?=$value_p['id'];?>" class="edit"><strong>Edit</strong></a></td>
+					</tr>
+					<?php } ?>
+				</table>
+				<?php } ?>
+			</div>
+		</div> <!-- close #container-1 -->
 	</div>
 	
-<? } } else { errorMessage( "personal log management" ); } ?>
+<?php
+
+	}
+	elseif(!isset($id) && !in_array("m_logs2", $sessionAccess))
+	{
+		echo "<div class='body'>";
+		echo "<strong class='fontMedium orange'>You do not have permission to edit personal logs other than your own!</strong>";
+		echo "</div>";
+	}
+}
+else
+{
+	errorMessage( "personal log management" );
+}
+
+?>
