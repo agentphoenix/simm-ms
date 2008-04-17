@@ -10,7 +10,7 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.0
-Last Modified: 2008-04-14 2357 EST
+Last Modified: 2008-04-17 1916 EST
 **/
 
 /* access check */
@@ -88,20 +88,37 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 			$postid = FALSE;
 		}
 		
-		$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, ";
-		$update.= "postAuthor = %s, postContent = %s, postStatus = %s, postMission = %d ";
-		$update.= "WHERE postid = $postid LIMIT 1";
+		if(!in_array("m_posts2", $sessionAccess))
+		{
+			$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, ";
+			$update.= "postAuthor = %s, postContent = %s WHERE postid = $postid LIMIT 1";
 		
-		$query = sprintf(
-			$update,
-			escape_string($_POST['postTitle']),
-			escape_string($_POST['postLocation']),
-			escape_string($_POST['postTimeline']),
-			escape_string($postAuthor),
-			escape_string($_POST['postContent']),
-			escape_string($_POST['postStatus']),
-			escape_string($_POST['postMission'])
-		);
+			$query = sprintf(
+				$update,
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($postAuthor),
+				escape_string($_POST['postContent'])
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, ";
+			$update.= "postAuthor = %s, postContent = %s, postStatus = %s, postMission = %d ";
+			$update.= "WHERE postid = $postid LIMIT 1";
+		
+			$query = sprintf(
+				$update,
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($postAuthor),
+				escape_string($_POST['postContent']),
+				escape_string($_POST['postStatus']),
+				escape_string($_POST['postMission'])
+			);
+		}
 		
 		$result = mysql_query($query);
 		
@@ -285,12 +302,14 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 					<input type="hidden" name="authorCount" value="<?=$authorCount;?>" />
 				</td>
 				<td>
+					<?php if(in_array("m_posts2", $sessionAccess)) { ?>
 					<b>Status</b><br />
 					<select name="postStatus">
 						<option value="pending"<? if( $fetch['postStatus'] == "pending" ) { echo " selected"; } ?>>Pending</option>
 						<option value="saved"<? if( $fetch['postStatus'] == "saved" ) { echo " selected"; } ?>>Saved</option>
 						<option value="activated"<? if( $fetch['postStatus'] == "activated" ) { echo " selected"; } ?>>Activated</option>
 					</select>
+					<?php } ?>
 				</td>
 			</tr>
 			<tr>
@@ -323,8 +342,6 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 						echo "<em>";
 						printText($fetchMission['missionTitle']);
 						echo "</em>";
-						
-						echo "<input type='hidden' name='postMission' value='" . $fetchMission['missionid'] . "' />";
 					}
 						
 					?>
