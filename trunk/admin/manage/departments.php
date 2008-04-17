@@ -159,7 +159,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 		?>
 		
 		<span class="fontTitle">Department Management</span><br /><br />
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br /><br />
+		Use the fields below to manage your departments. You can add a new department using the appropriate link below, or, you can manage which departments have access to departmental databases from the appropriate link. <strong class="yellow">Important</strong> &ndash; if you want to create a new rank, you will need to create a new department before you attempt to create the rank. (You can also use an existing department as well.)<br /><br />
 		
 		<a href="#" rel="facebox" class="fontMedium add" myAction="add"><strong>Add New Department &raquo;</strong></a><br />
 		<a href="#" rel="facebox" class="fontMedium add" myAction="database"><strong>Update Departmental Database Access &raquo;</strong></a><br /><br />
