@@ -10,7 +10,7 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2008-04-14 2200 EST
+Last Modified: 2008-04-17 1833 EST
 **/
 
 /* define the page class */
@@ -136,9 +136,8 @@ if( isset( $sessionCrewid ) ) {
 		
 		?>
 	</span>
+	
 	<p><? printText( $cpMessage ); ?></p>
-	
-	
 	<p>Use these links to get started:
 
 	<ul class="list-dark">
@@ -249,7 +248,7 @@ if( isset( $sessionCrewid ) ) {
 					
 					?>
 					&nbsp;
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
+					<a href="<?=WEB_LOC;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
 						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
 					</a>
 					<?php } ?>
@@ -307,9 +306,16 @@ if( isset( $sessionCrewid ) ) {
 				<span class="fontMedium">
 					<b><?php printText( $logTitle ); ?></b>
 					
-					<?php if( in_array( "m_logs", $sessionAccess ) ) { ?>
+					<?php
+					
+					if(
+						in_array("m_logs2", $sessionAccess) ||
+						(in_array("m_logs1", $sessionAccess) && $sessionCrewid == $logs['logAuthor'])
+					) {
+						
+					?>
 					&nbsp;
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>">
+					<a href="<?=WEB_LOC;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>">
 						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
 					</a>
 					<?php } ?>
