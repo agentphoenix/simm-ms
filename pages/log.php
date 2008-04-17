@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: Nathan Wharry [ mail@herschwolf.net ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/log.php
 Purpose: To display the individual personal logs
 
 System Version: 2.6.0
-Last Modified: 2008-02-25 1657 EST
+Last Modified: 2008-04-17 1924 EST
 **/
 
 /* define the page class */
@@ -22,7 +22,7 @@ if(isset($_GET['id']) && is_numeric($_GET['id']))
 }
 else
 {
-	$pl_id = "";
+	$pl_id = NULL;
 }
 
 /* pull in the menu */
@@ -33,18 +33,15 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* get post id for individual message display */
-if( !empty( $pl_id ) ) {
+if(isset($pl_id))
+{
 
 	/* pull all the information relating to the post */
-	$getlog = "SELECT * FROM sms_personallogs ";
-	$getlog.= "WHERE logid = '$pl_id' LIMIT 1";
+	$getlog = "SELECT * FROM sms_personallogs WHERE logid = $pl_id LIMIT 1";
 	$getlogResult = mysql_query ( $getlog );
 	
 	/* pull all posts to create the next and prev post links */
-	$getlogs = "SELECT logid ";
-	$getlogs.= "FROM sms_personallogs ";
-	$getlogs.= "WHERE logStatus = 'activated' ";
-	$getlogs.= "ORDER BY logPosted ASC";
+	$getlogs = "SELECT logid FROM sms_personallogs WHERE logStatus = 'activated' ORDER BY logPosted ASC";
 	$getlogsResult = mysql_query ( $getlogs );
 	
 	/* extract the post data into the MySQL field name variables */
@@ -103,8 +100,15 @@ if( !empty( $pl_id ) ) {
 				<b>Log Details</b><br />
 				<?
 			
-				if( in_array( "m_logs", $sessionAccess ) ) {
+				if(
+					in_array("m_logs2", $sessionAccess) ||
+					(in_array("m_logs1", $sessionAccess) && $sessionCrewid == $logAuthor)
+				) {
 					echo "<a href='" . $webLocation . "admin.php?page=manage&sub=logs&id=" . $pl_id . "' class='edit'><b>Edit</b></a>";
+				}
+				
+				if(in_array("m_logs2", $sessionAccess))
+				{
 					echo "&nbsp; &middot; &nbsp;";
 	
 				?>	
@@ -118,11 +122,10 @@ if( !empty( $pl_id ) ) {
 					
 				<?
 					
-					if( $loginfo['logStatus'] == "pending" ) {
-					
+					if( $loginfo['logStatus'] == "pending" )
+					{
 						echo "&nbsp; &middot; &nbsp;";
-						echo "<a href='" . $webLocation . "admin.php?page=manage&sub=activate&type=log&id=" . $pl_id . "&action=activate'><b>Activate</b></a>";
-					
+						echo "<a href='" . $webLocation . "admin.php?page=manage&sub=activate'><b>Activate</b></a>";
 					}
 				}
 				
