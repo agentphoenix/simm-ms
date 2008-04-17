@@ -1,4 +1,4 @@
-Last Update: 2008.04.17 1806 EST
+Last Update: 2008.04.17 1926 EST
 
 IN PROGRESS
 =====
@@ -15,6 +15,7 @@ IN PROGRESS
 				x	database.php
 				x	departments.php
 				x	ranks.php
+				x	logs.php
 		*	/admin/post
 				x	addjp.php
 		x	/admin/reports
@@ -43,10 +44,6 @@ IN PROGRESS
 				x	Database
 
 #	Update skins
-
-#	Ability for crew to edit their posts and logs
-		x	Mission posts
-		*	Personal logs
 
 #	Access changes need to filter down to all the access pages
 		x	admin/manage/access.php
@@ -137,3 +134,5 @@ X	Toggle boxes should use jQuery instead of the custom Javascript code
 X	Departmental databases
 
 X	Nominated awards to queue for CO approval
+
+X	Ability for crew to edit their posts and logs
