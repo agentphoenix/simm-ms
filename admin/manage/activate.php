@@ -10,7 +10,7 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-03-29 1629 EST
+Last Modified: 2008-04-17 1653 EST
 **/
 
 /* access check */
@@ -382,7 +382,7 @@ Tag: " . $fetchPost['postTag'] . "
 					$result = mysql_query($query);
 					
 					/* optimize the table */
-					optimizeSQLTable( "sms_awards_queue" );
+					optimizeSQLTable("sms_awards_queue");
 					
 					break;
 			}
@@ -529,10 +529,10 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 	<?php
 	
 	$check = new QueryCheck;
-	$check->checkQuery( $result, $query );
+	$check->checkQuery($result, $query);
 	
-	if( !empty( $check->query ) ) {
-		$check->message( $action_category, $action_type );
+	if(!empty($check->query)) {
+		$check->message($action_category, $action_type);
 		$check->display();
 	}
 	
