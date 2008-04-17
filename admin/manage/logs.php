@@ -12,7 +12,7 @@ Purpose: If there is an ID in the URL, the page will display the personal log
 	personal logs for moderation
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 1910 EST
+Last Modified: 2008-04-17 1923 EST
 **/
 
 /* access check */
@@ -76,6 +76,16 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 	{
 		$query = "DELETE FROM sms_personallogs WHERE logid = $id LIMIT 1";
 		$result = mysql_query( $query );
+		
+		/* optimize the table */
+		optimizeSQLTable( "sms_personallogs" );
+		
+		$action = "delete";
+	}
+	elseif(isset($remove))
+	{
+		$query = "DELETE FROM sms_personallogs WHERE logid = $remove LIMIT 1";
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_personallogs" );
