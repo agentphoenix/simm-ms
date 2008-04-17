@@ -10,7 +10,7 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 1833 EST
+Last Modified: 2008-04-17 1908 EST
 **/
 
 /* define the page class */
@@ -248,7 +248,7 @@ if( isset( $sessionCrewid ) ) {
 					
 					?>
 					&nbsp;
-					<a href="<?=WEB_LOC;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
+					<a href="<? WEB_LOC;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
 						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
 					</a>
 					<?php } ?>
@@ -315,7 +315,7 @@ if( isset( $sessionCrewid ) ) {
 						
 					?>
 					&nbsp;
-					<a href="<?=WEB_LOC;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>">
+					<a href="<? WEB_LOC;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>">
 						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
 					</a>
 					<?php } ?>
