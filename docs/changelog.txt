@@ -1,4 +1,4 @@
-Last updated: 2008.04.15 0103 EST
+Last updated: 2008.04.17 1807 EST
 
 NEW FEATURES
 ===
@@ -10,7 +10,7 @@ NEW FEATURES
 *	Added stardate script and the ability to turn it on and off (through site globals)
 *	Admins can now choose whether or not they want to be notified of SMS updates
 *	Admins can now set the email subject lines (default is [Ship Name])
-*	Acceptance and rejection messages now take wild card variables for automatically inserting things like name, rank, positions, and ship name
+*	Acceptance and rejection messages now use wild card variables for dynamically inserting things like name, rank, positions, and ship name
 *	If a query fails, it'll display an SMS Error Report that someone can copy and paste to the forums
 *	Personalized menus
 *	NPCs can now be given in character awards
@@ -44,7 +44,7 @@ ENHANCEMENTS
 *	Added a lightbox to the tour images to make a mini gallery
 *	Replying to a private message will show the content of the message you're replying to below the compose box
 *	A ton of commenting in the default skin to (hopefully) help out people who are trying to create their own skins
-*	SMS now uses AXAH (Asynchronous XHTML and HTTP) for creating, editing, and deleting some items (menu items, departments, activations, etc.)
+*	SMS now uses AXAH (Asynchronous XHTML and HTTP) for creating, editing, and deleting some items (menu items, departments, activations, ranks, etc.)
 *	Consolidated menu management into a single page instead of two
 *	Removed unused images
 *	Adding system plugins to the About SMS page
@@ -53,6 +53,7 @@ ENHANCEMENTS
 *	Default skin now uses UTF-8 for character encoding and English as the language by default
 *	Version history page now uses tabs
 *	Management pages for posts, logs, and news items now use tabs to separate activated, saved, and pending entries, plus it lists entries instead of providing "mini editing"
+*	Got rid of the confusing CLASS field in rank management, replacing it with a drop-down of the class groups to make it a little more self-explanatory
 
 FIXES
 ===
