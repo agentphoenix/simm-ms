@@ -10,7 +10,7 @@ File: pages/news.php
 Purpose: Page to display the news items
 
 System Version: 2.6.0
-Last Modified: 2007-12-27 0957 EST
+Last Modified: 2008-04-17 2308 EST
 **/
 
 /* define the page class and vars */
@@ -195,7 +195,7 @@ if( isset( $sessionCrewid ) ) {
 				?>	
 	
 					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=news&remove=<?=$id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\">Delete</a>" );
+						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=news&remove=<?=$id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\"><b>Delete</b></a>" );
 					</script>
 					<noscript>
 						<a href="<?=$webLocation;?>admin.php?page=manage&sub=news&remove=<?=$id;?>" class="delete"><b>Delete</b></a>
@@ -206,7 +206,7 @@ if( isset( $sessionCrewid ) ) {
 					if( $loginfo['newsStatus'] == "pending" ) {
 					
 						echo "&nbsp; &middot; &nbsp;";
-						echo "<a href='" . $webLocation . "admin.php?page=manage&sub=activate&type=news&id=" . $id . "&action=activate'><b>Activate</b></a>";
+						echo "<a href='" . $webLocation . "admin.php?page=manage&sub=activate'><b>Activate</b></a>";
 					
 					}
 				}
