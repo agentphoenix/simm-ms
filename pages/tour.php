@@ -10,7 +10,7 @@ File: pages/tour.php
 Purpose: Page to display the tour items
 
 System Version: 2.6.0
-Last Modified: 2008-02-29 1015 EST
+Last Modified: 2008-04-18 1508 EST
 **/
 
 /* define the page class and vars */
@@ -72,9 +72,9 @@ if( !empty( $tour ) ) {
 		if the person is logged in and has level 5 access, display an icon
 		that will take them to edit the entry
 	*/
-	if( isset( $sessionCrewid ) && in_array( "m_tour", $sessionAccess ) ) {
+	if(isset($sessionCrewid) && in_array("m_tour", $sessionAccess)) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour&entry=" . $tourid . "'>";
+		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour'>";
 		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
 		echo "</a>";
 	}
