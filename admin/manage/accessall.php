@@ -9,21 +9,19 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/accessall.php
 Purpose: Page to display all of a user's access levels
 
-System Version: 2.5.2
-Last Modified: 2007-08-08 2150 EST
+System Version: 2.6.0
+Last Modified: 2008-04-18 1902 EST
 **/
 
 /* set the page class */
 $pageClass = "admin";
 $subMenuClass = "user";
+$query = FALSE;
+$result = FALSE;
 
 /* access check */
-if( in_array( "x_access", $sessionAccess ) ) {
-
-	/* set up the vars */
-	$actionAdd = $_POST['action_add_x'];
-	$actionRemove = $_POST['action_remove_x'];
-	
+if(in_array("x_access", $sessionAccess))
+{
 	/* set up an array of the different access sections */
 	$arrayAccessGroups = array(
 		0 => "post",
@@ -52,32 +50,34 @@ if( in_array( "x_access", $sessionAccess ) ) {
 			1 => array( "m_coc", "Chain of Command" ),
 			2 => array( "m_crew", "All Characters" ),
 			3 => array( "m_createcrew", "Add Character" ),
-			4 => array( "m_database", "Database" ),
-			5 => array( "m_decks", "Deck Listing" ),
-			6 => array( "m_departments", "Departments" ),
-			7 => array( "m_docking", "Starship Docking" ),
-			8 => array( "m_giveaward", "Give Crew Award" ),
-			9 => array( "m_missionnotes", "Mission Notes" ),
-			10 => array( "m_posts", "Mission Posts" ),
-			11 => array( "m_missionsummaries", "Mission Summaries" ),
-			12 => array( "m_missions", "Missions" ),
-			13 => array( "m_newscat1", "News Category 1" ),
-			14 => array( "m_newscat2", "News Category 2" ),
-			15 => array( "m_newscat3", "News Category 3" ),
-			16 => array( "m_news", "News Items" ),
-			17 => array( "m_npcs1", "NPCs 1" ),
-			18 => array( "m_npcs2", "NPCs 2" ),
-			19 => array( "m_logs", "Personal Logs" ),
-			20 => array( "m_positions", "Positions" ),
-			21 => array( "m_ranks", "Ranks" ),
-			22 => array( "m_removeaward", "Remove Award" ),
-			23 => array( "m_globals", "Site Globals" ),
-			24 => array( "m_messages", "Site Messages" ),
-			25 => array( "m_specs", "Specifications" ),
-			26 => array( "m_strike", "Strikes" ),
-			27 => array( "m_catalogue", "System Catalogues (disabled)" ),
-			28 => array( "m_tour", "Tour" ),
-			29 => array( "m_moderation", "User Moderation" )
+			4 => array( "m_database1", "Database-1" ),
+			5 => array( "m_database2", "Database-2" ),
+			6 => array( "m_decks", "Deck Listing" ),
+			7 => array( "m_departments", "Departments" ),
+			8 => array( "m_docking", "Starship Docking" ),
+			9 => array( "m_giveaward", "Give Crew Award" ),
+			10 => array( "m_missionnotes", "Mission Notes" ),
+			11 => array( "m_posts1", "Mission Posts-1" ),
+			12 => array( "m_posts2", "Mission Posts-2" ),
+			13 => array( "m_missionsummaries", "Mission Summaries" ),
+			14 => array( "m_missions", "Missions" ),
+			15 => array( "m_newscat1", "News Category-1" ),
+			16 => array( "m_newscat2", "News Category-2" ),
+			17 => array( "m_newscat3", "News Category-3" ),
+			18 => array( "m_news", "News Items" ),
+			19 => array( "m_npcs1", "NPC-1" ),
+			20 => array( "m_npcs2", "NPC-2" ),
+			21 => array( "m_logs1", "Personal Logs-1" ),
+			22 => array( "m_logs2", "Personal Logs-2" ),
+			23 => array( "m_positions", "Positions" ),
+			24 => array( "m_ranks", "Ranks" ),
+			25 => array( "m_removeaward", "Remove Award" ),
+			26 => array( "m_globals", "Site Globals" ),
+			27 => array( "m_messages", "Site Messages" ),
+			28 => array( "m_specs", "Specifications" ),
+			29 => array( "m_strike", "Strikes" ),
+			30 => array( "m_tour", "Tour" ),
+			31 => array( "m_moderation", "User Moderation" )
 		),
 		"reports" => array(
 			0 => array( "r_about", "About SMS" ),
@@ -111,163 +111,129 @@ if( in_array( "x_access", $sessionAccess ) ) {
 		)
 	);
 	
-	/* explode the access fields into arrays */
-	$postAccess = explode( ",", $accessPost );
-	$manageAccess = explode( ",", $accessManage );
-	$reportsAccess = explode( ",", $accessReports );
-	$userAccess = explode( ",", $accessUser );
-	$otherAccess = explode( ",", $accessOthers );
-	
-	if( isset( $actionAdd ) || isset( $actionRemove ) ) {
+	if(isset($_POST['action_add_x']) || isset($_POST['action_remove_x']))
+	{
+		$post = $_POST;
 		
-		/* pop the last 3 items off the POST array (x, y, and value) */
-		for( $i=1; $i<4; $i++ ) {
-			array_pop( $_POST );
+		/* drop the last 3 items off the list (x, y, and value) */
+		array_pop( $post );
+		array_pop( $post );
+		array_pop( $post );
+		
+		/* building the variables we'll need */
+		$location = strpos($post['access'], "_");
+		$location_offset = $location +1;
+		$type = substr($post['access'], 0, $location);
+		$value = $post['access'];
+		$value = substr_replace($value, '', 0, $location_offset);
+		
+		switch($type)
+		{
+			case 'post':
+				$field = 'accessPost';
+				break;
+			case 'manage':
+				$field = 'accessManage';
+				break;
+			case 'reports':
+				$field = 'accessReports';
+				break;
+			case 'user':
+				$field = 'accessUser';
+				break;
+			case 'other':
+				$field = 'accessOthers';
+				break;
 		}
-		
-		/* set up the type being updated */
-		$type = ucfirst( $_POST['type'] );
-		$typeL = strtolower( $type );
 		
 		/* get the active crew */
 		$get = "SELECT * FROM sms_crew WHERE crewType = 'active'";
-		$getR = mysql_query( $get );
+		$getR = mysql_query($get);
 		
 		/* loop through the results */
-		while( $fetch = mysql_fetch_assoc( $getR ) ) {
-			extract( $fetch, EXTR_OVERWRITE );
+		while($fetch = mysql_fetch_assoc($getR)) {
+			extract($fetch, EXTR_OVERWRITE);
 			
-			/* break the string into an array */
-			${access.$type} = explode( ",", ${access.$type} );
+			/* take the item we need ($field) and break it into an array */
+			$array = explode(',', $$field);
 			
 			/* find out if the one we're trying to add is already there or not */
-			$keyNum = array_search( $_POST[$typeL], ${access.$type} );
+			$key_num = array_search($value, $array);
 			
-			/* if the item was found in the array, remove it */
-			if( $keyNum === NULL || $keyNum === FALSE || $keyNum === "" || $keyNum === 0 ) {
-				/*
-				php does something strange here where it doesn't properly evaluate the
-				outcome of the array_search() function and causes LOTS of problems, so
-				we have to set this up to do nothing if the result of the array_search()
-				is NULL, FALSE, blank or a zero
-				*/
-			} else {
-				unset( ${access.$type}[$keyNum] );
-				${access.$type} = array_values( ${access.$type} );
+			/* if the item isn't in the array */
+			if($key_num === NULL || $key_num === FALSE || $key_num === "" || $key_num === 0)
+			{
+				if(isset($_POST['action_add_x']))
+				{
+					$array[] = $value;
+				}
+				elseif(isset($_POST['action_remove_x']))
+				{}
 			}
-			
-			/* if we're trying to add, push it onto the end of the array */
-			if( isset( $actionAdd ) ) {
-				array_push( ${access.$type}, $_POST[$typeL] );
+			else
+			{
+				if(isset($_POST['action_add_x']))
+				{}
+				elseif(isset($_POST['action_remove_x']))
+				{
+					unset($array[$key_num]);
+					$array = array_values($array);
+				}
 			}
 			
 			/* implode the array into a string */
-			$string = implode( ",", ${access.$type} );
+			$string = implode(',', $array);
 			
 			/* update each crew member */
-			$query = "UPDATE sms_crew SET access$type = '$string' WHERE crewid = '$crewid'";
-			$result = mysql_query( $query );
+			$query = "UPDATE sms_crew SET $field = '$string' WHERE crewid = '$crewid'";
+			$result = mysql_query($query);
 			
 			/* set the appropriate action */
-			if( isset( $actionAdd ) ) {
+			if( isset($_POST['action_add_x']) ) {
 				$action = "add";
-			} elseif( isset( $actionRemove ) ) {
+			} elseif( isset($_POST['action_remove_x']) ) {
 				$action = "remove";
 			}
-		
 		}
-	
 	}
 
 ?>
 
 	<div class="body">
-		
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $query );
+		$check->checkQuery($result, $query);
 				
-		if( !empty( $check->query ) ) {
-			$check->message( "crew access levels", $action );
+		if(!empty($check->query))
+		{
+			$check->message("crew access levels", $action);
 			$check->display();
 		}
 		
 		?>
 		
 		<span class="fontTitle">Crew Access Levels</span><br /><br />
-		From here you can add or remove an access level for every member of the active crew. Currently
-		only one item can be added or removed at a time from this list. <b class="yellow">Use great
-		caution when adding or removing access for the entire crew!</b> The same rules/notes that apply
-		for access levels also apply here. Please see the notes associated with the access levels for
-		more information.<br /><br />
+		From here you can add or remove an access level for every member of the active crew. Just select an access level from the drop down and whether you want to add or remove that access level. <strong class="yellow">Use great caution when adding or removing access for the entire crew!</strong> The same rules/notes that apply for access levels also apply here. Please see the notes associated with the access levels for more information.<br /><br />
 		
-		<table>
-			<? foreach( $arrayAccessGroups as $key1 => $value1 ) { ?>
-			<form method="post" name="form1" action="<?=$webLocation;?>admin.php?page=manage&sub=accessall">
-			<tr>
-				<td class="fontLarge" align="right"><b><?=ucfirst( $value1 );?></b></td>
-				<td></td>
-				<td>
-					<?php if( $value1 == "others" ) {} else { ?>
-					<input type="radio" name="<?=$value1;?>" value="<?=$value1;?>" />
+		<p>&nbsp;</p>
+		
+		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=accessall">
+			<select name="access">
+				<?php foreach($arrayAccessGroups as $k1 => $v1) { ?>
+				<optgroup label="<?php echo ucfirst($v1);?>">
+					<?php foreach($arrayAccessLevels[$v1] as $k2 => $v2) { ?>
+					<option value="<?=$v1;?>_<?=$v2[0];?>"><?php echo $v2[1];?></option>
 					<?php } ?>
-				</td>
-			</tr>
+				</optgroup>
+				<?php } ?>
+			</select>
+			<br /><br />
 			
-			<? foreach( $arrayAccessLevels[$value1] as $key2 => $value2 ) { ?>
-			<tr>
-				<td class="tableCellLabel"><?=( $value2[1] );?></td>
-				<td></td>
-				<td>
-					<input type="radio" name="<?=$value1;?>" value="<?=$value2[0];?>" />
-				</td>
-			</tr>
-			<? } ?>
-			
-			<tr>
-				<td colspan="3" height="10"></td>
-			</tr>
-			<tr>
-				<td colspan="3">
-					<input type="hidden" name="type" value="<?=$value1;?>" />
-					<input type="image" src="<?=path_userskin;?>buttons/reset.png" class="button" onClick="clear_radio_buttons();" />
-					
-					<!-- add button -->
-					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/add.png\" name=\"action_add\" value=\"Add\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to add this <?=strtoupper( $value1 );?> privilege for the entire crew?')\" />" );
-					</script>
-					<noscript>
-						<input type="image" src="<?=path_userskin;?>buttons/add.png" name="action_add" value="Add" class="button" />
-					</noscript>
-					
-					<!-- remove button -->
-					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/remove.png\" name=\"action_remove\" value=\"Remove\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to remove this <?=strtoupper( $value1 );?> privilege for the entire crew?')\" />" );
-					</script>
-					<noscript>
-						<input type="image" src="<?=path_userskin;?>buttons/remove.png" name="action_remove" value="Remove" class="button" />
-					</noscript>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="20"></td>
-			</tr>
-			</form>
-			<? } /* close the group foreach */ ?>
-		</table>
-		
-		<script language="JavaScript">
-			<!--
-			function clear_radio_buttons()
-			{
-				 for (var i = 0; i < document.form1.radio1.length; i++)
-				 {
-					  document.form1.radio1[i].checked = false;
-				 }
-			}
-			//-->
-		</script>
+			<input type="image" src="<?=path_userskin;?>buttons/remove.png" name="action_remove" value="Remove" class="button" />
+			&nbsp;&nbsp;
+			<input type="image" src="<?=path_userskin;?>buttons/add.png" name="action_add" value="Add" class="button" />
+		</form>
 		
 	</div>
 
