@@ -101,7 +101,7 @@ class QueryCheck
 		if( $this->result == TRUE ) {
 			
 			/* define the successful message */
-			$this->message = ucfirst( $object ) . " " . $verb . " successfully " . $actions[$action]['1'] . "!";
+			$this->message = ucfirst( $object ) . " " . $verb . " successfully " . $actions[$action][1] . "!";
 			
 			/* this phrase should be added for skin and rank set updates */
 			if( $object == "skin" || $object == "rank set" ) {
