@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: Nathan Wharry [ mail@herschwolf.net ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/dockingrequest.php
 Purpose: To display the form for ships to request docking permission at the starbase
 
 System Version: 2.6.0
-Last Modified: 2007-08-21 0935 EST
+Last Modified: 2008-04-18 1915 EST
 **/
 
 /* check the simm type */
@@ -18,88 +18,82 @@ if( $simmType == "starbase" ) {
 
 	/* define the page class and vars */
 	$pageClass = "ship";
-	$action = $_POST['action_x'];
 	
 	/* pull in the menu */
 	if( isset( $sessionCrewid ) ) {
 		include_once( 'skins/' . $sessionDisplaySkin . '/menu.php' );
-	} else {
-		include_once( 'skins/' . $skin . '/menu.php' );
-	}
-	
-	/* do logic to check for which skin to use */
-	if( isset( $sessionCrewid ) ) {
 		$skinChoice = $sessionDisplaySkin;
 	} else {
+		include_once( 'skins/' . $skin . '/menu.php' );
 		$skinChoice = $skin;
 	}
 	
 	/* determine if request form is being sumbitted */
-	if ( $action ) {
-	
-		/* addslashes for sql entry */
-		$dockingShipName = addslashes($_POST['dockingShipName']);
-		$dockingShipRegistry = addslashes($_POST['dockingShipRegistry']);
-		$dockingShipClass = addslashes($_POST['dockingShipClass']);
-		$dockingShipURL = addslashes($_POST['dockingShipURL']);
-		$dockingShipCO = addslashes($_POST['dockingShipCO']);
-		$dockingShipCOEmail = addslashes($_POST['dockingShipCOEmail']);
-		$dockingDuration = addslashes($_POST['dockingDuration']);
-		$dockingDesc = addslashes($_POST['dockingDesc']);
+	if(isset($_POST['action_x']))
+	{
+		$insert = "INSERT INTO sms_starbase_docking (dockingShipName, dockingShipRegistry, dockingShipClass, dockingShipURL, ";
+		$insert.= "dockingShipCO, dockingShipCOEmail, dockingDuration, dockingDesc, dockingStatus) VALUES (%s, %s, %s, %s, %s, ";
+		$insert.= "%s, %s, %s, %s)";
 		
-		$dockShip = "INSERT INTO sms_starbase_docking ";
-		$dockShip.= "(dockingShipName, dockingShipRegistry, dockingShipClass, dockingShipURL, dockingShipCO, dockingShipCOEmail, dockingDuration, dockingDesc, dockingStatus) ";
-		$dockShip.= "VALUES ('$dockingShipName','$dockingShipRegistry','$dockingShipClass','$dockingShipURL','$dockingShipCO','$dockingShipCOEmail','$dockingDuration','$dockingDesc','pending') ";
-		$result = mysql_query( $dockShip );
+		$query = sprintf(
+			$insert,
+			escape_string($_POST['dockingShipName']),
+			escape_string($_POST['dockingShipRegistry']),
+			escape_string($_POST['dockingShipClass']),
+			escape_string($_POST['dockingShipURL']),
+			escape_string($_POST['dockingShipCO']),
+			escape_string($_POST['dockingShipCOEmail']),
+			escape_string($_POST['dockingDuration']),
+			escape_string($_POST['dockingDesc']),
+			escape_string('pending')
+		);
+		
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_starbase_docking" );
-	
-		/* stripslashes for emailing request */
-		$dockingShipName = stripslashes( $_POST['dockingShipName'] );
-		$dockingShipRegistry = stripslashes( $_POST['dockingShipRegistry'] );
-		$dockingShipClass = stripslashes( $_POST['dockingShipClass'] );
-		$dockingShipURL = stripslashes( $_POST['dockingShipURL'] );
-		$dockingShipCO = stripslashes( $_POST['dockingShipCO'] );
-		$dockingShipCOEmail = stripslashes( $_POST['dockingShipCOEmail'] );
-		$dockingDuration = stripslashes( $_POST['dockingDuration'] );
-		$dockingDesc = stripslashes( $_POST['dockingDesc'] );
 		
-		if( !empty( $result ) ) {
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
+		
+		if(!empty($result))
+		{
 			/* email the ship CO */
 			$subject1 = $emailSubject . " Docking Request";
 			$to1 = $dockingShipCOEmail;
+			$from1 = printCO . " < " . printCOEmail() . " >";
 			$message1 = $dockingShipCO . ", thank you for submitting a request to dock with " . $shipPrefix . " " . $shipName . ".  The CO has been sent a copy of your request and will be reviewing it shortly.  In the meantime, please feel free to browse our site (" . $webLocation . ") until the CO reviews your request.
 	
 This is an automatically generated message, please do not respond.";
 		
-			mail( $to1, $subject1, $message1, "From: " . $shipPrefix . " " . $shipName . "< donotreply >\nX-Mailer: PHP/" . phpversion() );
+			mail($to1, $subject1, $message1, "From: " . $from1 . "\nX-Mailer: PHP/" . phpversion());
 			
 			/* email the CO */
 			$subject2 = $emailSubject . " Docking Request";
 			$to2 = printCOEmail();
+			$from2 = $dockingShipCO . " < " . $dockingShipCOEmail . " >";
 			$message2 = "Greetings " . printCO() . ",
 		
 $dockingShipCO of the $dockingShipName has sent a request to dock with the $shipName.  To answer the Commanding Officer and premit or deny his request please log in to your Control Panel.
 	
 " . $webLocation . "login.php?action=login";
 		
-			mail( $to2, $subject2, $message2, "From: " . $dockingShipCO . " < " . $dockingShipCOEmail . ">\nX-Mailer: PHP/" . phpversion() );
+			mail($to2, $subject2, $message2, "From: " . $from2 . "\nX-Mailer: PHP/" . phpversion());
 		}
-	
-	}  /* close if action statement */
+	}
 
 ?>
 
 	<div class="body">
-	
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $dockShip );
+		$check->checkQuery($result, $query);
 				
-		if( !empty( $check->query ) ) {
-			$check->message( "docking request", "submit" );
+		if(!empty($check->query)) {
+			$check->message("docking request", "submit");
 			$check->display();
 		}
 		
