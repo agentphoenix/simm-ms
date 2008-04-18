@@ -1,4 +1,4 @@
-Last updated: 2008.04.17 1918 EST
+Last updated: 2008.04.17 2313 EST
 
 NEW FEATURES
 ===
@@ -78,3 +78,4 @@ FIXES
 *	Removed unused Skin Development item from access levels management
 *	Removed unnecessary access checks on the admin subsection pages
 *	Worked around Webkit bug where post edit icon wouldn't show up
+*	Fixed bug where using the delete link for an individual news item (on the news item page) wouldn't do anything at all
