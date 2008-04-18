@@ -1,4 +1,4 @@
-Last Update: 2008.04.17 1926 EST
+Last Update: 2008.04.17 2314 EST
 
 IN PROGRESS
 =====
@@ -16,6 +16,7 @@ IN PROGRESS
 				x	departments.php
 				x	ranks.php
 				x	logs.php
+				x	news.php
 		*	/admin/post
 				x	addjp.php
 		x	/admin/reports
