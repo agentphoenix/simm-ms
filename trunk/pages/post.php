@@ -10,7 +10,7 @@ File: pages/post.php
 Purpose: To display the individual posts to a mission
 
 System Version: 2.6.0
-Last Modified: 2008-04-14 2342 EST
+Last Modified: 2008-04-17 2309 EST
 **/
 
 /* define the page class */
@@ -133,7 +133,7 @@ if(isset($mp_id))
 				if( $postinfo['postStatus'] == "pending" )
 				{
 					echo "&nbsp; &middot; &nbsp;";
-					echo "<a href='" . $webLocation . "admin.php?page=manage&sub=activate&type=post&id=" . $mp_id . "&action=activate'><b>Activate</b></a>";
+					echo "<a href='" . $webLocation . "admin.php?page=manage&sub=activate'><b>Activate</b></a>";
 				}
 			}
 			
