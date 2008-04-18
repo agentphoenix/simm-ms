@@ -1,4 +1,4 @@
-Last updated: 2008.04.17 2313 EST
+Last updated: 2008.04.18 1951 EST
 
 NEW FEATURES
 ===
@@ -45,7 +45,7 @@ ENHANCEMENTS
 *	Added a lightbox to the tour images to make a mini gallery
 *	Replying to a private message will show the content of the message you're replying to below the compose box
 *	A ton of commenting in the default skin to (hopefully) help out people who are trying to create their own skins
-*	SMS now uses AXAH (Asynchronous XHTML and HTTP) for creating, editing, and deleting some items (menu items, departments, activations, ranks, etc.)
+*	SMS now uses AXAH (Asynchronous XHTML and HTTP) for creating, editing, and deleting some items (menu items, departments, activations, ranks, positions, crew awards, tour items, missions, and docked ships)
 *	Consolidated menu management into a single page instead of two
 *	Removed unused images
 *	Adding system plugins to the About SMS page
@@ -55,6 +55,8 @@ ENHANCEMENTS
 *	Version history page now uses tabs
 *	Management pages for posts, logs, and news items now use tabs to separate activated, saved, and pending entries, plus it lists entries instead of providing "mini editing"
 *	Got rid of the confusing CLASS field in rank management, replacing it with a drop-down of the class groups to make it a little more self-explanatory
+*	Re-wrote page for setting access levels for entire crew to make it better (it just plain sucked before)
+*	Gave the starbase-specific pages a little love to bring them more in line with the rest of the system
 
 FIXES
 ===

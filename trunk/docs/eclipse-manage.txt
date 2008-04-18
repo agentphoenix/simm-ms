@@ -1,4 +1,4 @@
-Last Update: 2008.04.17 2314 EST
+Last Update: 2008.04.18 1948 EST
 
 IN PROGRESS
 =====
@@ -17,6 +17,13 @@ IN PROGRESS
 				x	ranks.php
 				x	logs.php
 				x	news.php
+				x	positions.php
+				x	tour.php
+				x	awards.php
+				x	docking.php
+				x	accessall.php
+				x	accesslevels.php
+				x	access.php
 		*	/admin/post
 				x	addjp.php
 		x	/admin/reports
@@ -28,35 +35,8 @@ IN PROGRESS
 		*	Add a step at the beginning of the installation which checks for any
 			compatibility issues using ini_get()
 		*	Add a page to the reports section to do the same thing
-		
-#	HUD windows
-		*	Creation
-				x	Missions
-				x	Ranks
-				x	Departments
-				@	Positions
-				@	Awards
-				x	Database
-		*	Editing
-				@	Docked Ships
-				x	Database
-				x	Departmental Database Access
-		*	Deleting
-				x	Database
 
 #	Update skins
-
-#	Access changes need to filter down to all the access pages
-		x	admin/manage/access.php
-		*	admin/manage/accessall.php
-		*	admin/manage/accesslevels.php
-		*	admin/user/access.php
-		
-			@	m_database1 and m_database2
-			@	m_posts1 and m_posts2
-			@	m_logs1 and m_logs2
-			@	Remove m_database
-			@	Make sure r_security is removed
 		
 IN QUEUE
 =====
@@ -137,3 +117,7 @@ X	Departmental databases
 X	Nominated awards to queue for CO approval
 
 X	Ability for crew to edit their posts and logs
+
+X	AXAH HUD windows
+
+X	Access changes need to filter down to all the access pages
