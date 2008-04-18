@@ -12,7 +12,7 @@ Purpose: If there is an ID in the URL, the page will display the personal log
 	personal logs for moderation
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 1923 EST
+Last Modified: 2008-04-17 2259 EST
 **/
 
 /* access check */
@@ -195,31 +195,31 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 			'pending' => array()
 		);
 		
-		$getPostsA = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'activated' ORDER BY logPosted DESC LIMIT 25";
+		$getPostsA = "SELECT logid, logTitle, logAuthor FROM sms_personallogs WHERE logStatus = 'activated' ORDER BY logPosted DESC LIMIT 25";
 		$getPostsAR = mysql_query($getPostsA);
 		
-		$getPostsS = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'saved' ORDER BY logPosted DESC";
+		$getPostsS = "SELECT logid, logTitle, logAuthor FROM sms_personallogs WHERE logStatus = 'saved' ORDER BY logPosted DESC";
 		$getPostsSR = mysql_query($getPostsS);
 		
-		$getPostsP = "SELECT logid, logTitle FROM sms_personallogs WHERE logStatus = 'pending' ORDER BY logPosted DESC";
+		$getPostsP = "SELECT logid, logTitle, logAuthor FROM sms_personallogs WHERE logStatus = 'pending' ORDER BY logPosted DESC";
 		$getPostsPR = mysql_query($getPostsP);
 		
 		while($fetch_a = mysql_fetch_array($getPostsAR)) {
 			extract($fetch_a, EXTR_OVERWRITE);
 			
-			$posts_array['activated'][] = array('id' => $fetch_a[0], 'title' => $fetch_a[1]);
+			$posts_array['activated'][] = array('id' => $fetch_a[0], 'title' => $fetch_a[1], 'author' => $fetch_a[2]);
 		}
 		
 		while($fetch_s = mysql_fetch_array($getPostsSR)) {
 			extract($fetch_s, EXTR_OVERWRITE);
 			
-			$posts_array['saved'][] = array('id' => $fetch_s[0], 'title' => $fetch_s[1]);
+			$posts_array['saved'][] = array('id' => $fetch_s[0], 'title' => $fetch_s[1], 'author' => $fetch_s[2]);
 		}
 		
 		while($fetch_p = mysql_fetch_array($getPostsPR)) {
 			extract($fetch_p, EXTR_OVERWRITE);
 			
-			$posts_array['pending'][] = array('id' => $fetch_p[0], 'title' => $fetch_p[1]);
+			$posts_array['pending'][] = array('id' => $fetch_p[0], 'title' => $fetch_p[1], 'author' => $fetch_p[2]);
 		}
 	
 	?>
@@ -265,7 +265,7 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 				<table class="zebra" cellpadding="3" cellspacing="0">
 					<tr class="fontMedium">
 						<th width="34%">Title</th>
-						<th width="44%">Author(s)</th>
+						<th width="44%">Author</th>
 						<th width="2%"></th>
 						<th width="10%"></th>
 						<th width="10%"></th>
@@ -274,7 +274,7 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 					<?php foreach($posts_array['activated'] as $value_a) { ?>
 					<tr class="fontNormal">
 						<td><? printText($value_a['title']);?></td>
-						<td><? printCrewName($value_a['id'], 'rank', 'link');?></td>
+						<td><? printCrewName($value_a['author'], 'rank', 'link');?></td>
 						<td></td>
 						<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$value_a['id'];?>"><strong>View Log</strong></a></td>
 						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&id=<?=$value_a['id'];?>" class="edit"><strong>Edit</strong></a></td>
@@ -299,7 +299,7 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 				<table class="zebra" cellpadding="3" cellspacing="0">
 					<tr class="fontMedium">
 						<th width="34%">Title</th>
-						<th width="44%">Author(s)</th>
+						<th width="44%">Author</th>
 						<th width="2%"></th>
 						<th width="10%"></th>
 						<th width="10%"></th>
@@ -308,7 +308,7 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 					<?php foreach($posts_array['saved'] as $value_s) { ?>
 					<tr class="fontNormal">
 						<td><? printText($value_s['title']);?></td>
-						<td><? printCrewName($value_s['id'], 'rank', 'link');?></td>
+						<td><? printCrewName($value_s['author'], 'rank', 'link');?></td>
 						<td></td>
 						<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$value_s['id'];?>"><strong>View Log</strong></a></td>
 						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&id=<?=$value_s['id'];?>" class="edit"><strong>Edit</strong></a></td>
@@ -332,7 +332,7 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 				<table class="zebra" cellpadding="3" cellspacing="0">
 					<tr class="fontMedium">
 						<th width="34%">Title</th>
-						<th width="44%">Author(s)</th>
+						<th width="44%">Author</th>
 						<th width="2%"></th>
 						<th width="10%"></th>
 						<th width="10%"></th>
@@ -341,7 +341,7 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 					<?php foreach($posts_array['pending'] as $value_p) { ?>
 					<tr class="fontNormal">
 						<td><? printText($value_p['title']);?></td>
-						<td><? printCrewName($value_p['id'], 'rank', 'link');?></td>
+						<td><? printCrewName($value_p['author'], 'rank', 'link');?></td>
 						<td></td>
 						<td align="center"><a href="<?=$webLocation;?>index.php?page=log&id=<?=$value_p['id'];?>"><strong>View Log</strong></a></td>
 						<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&id=<?=$value_p['id'];?>" class="edit"><strong>Edit</strong></a></td>
