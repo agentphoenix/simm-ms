@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: Nathan Wharry [ mail@herschwolf.net ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/dockedships.php
 Purpose: To display the ships currently docked at the starbase
 
 System Version: 2.6.0
-Last Modified: 2007-10-10 1002 EST
+Last Modified: 2008-04-18 1930 EST
 **/
 
 /* define the page class */
@@ -23,15 +23,19 @@ if( isset( $sessionCrewid ) ) {
 	include_once( 'skins/' . $skin . '/menu.php' );
 }
 
-if( $simmType == "starbase" ) {
-	
-	/* define the vars */
-	$ship = $_GET['ship'];
+if($simmType == "starbase")
+{	
+	if(isset($_GET['ship']) && is_numeric($_GET['ship']))
+	{
+		$ship = $_GET['ship'];
+	}
+	else
+	{
+		$ship = NULL;
+	}
 	
 	/* pull in the docked ships */
-	$getShips = "SELECT * ";
-	$getShips.= "FROM sms_starbase_docking ";
-	$getShips.= "WHERE dockingStatus = 'activated' ORDER BY dockid ASC";
+	$getShips = "SELECT * FROM sms_starbase_docking WHERE dockingStatus = 'activated' ORDER BY dockid ASC";
 	$getShipsResult = mysql_query( $getShips );
 	
 	/* code to decide whether to view all ships or specific ship docked */
@@ -96,9 +100,7 @@ if( $simmType == "starbase" ) {
 	} else { 
 		
 		/* pull specific ship information based on dockid */
-		$getShip = "SELECT * ";
-		$getShip.= "FROM sms_starbase_docking ";
-		$getShip.= "WHERE dockid = '$ship' LIMIT 1";
+		$getShip = "SELECT * FROM sms_starbase_docking WHERE dockid = '$ship' LIMIT 1";
 		$getShipResult = mysql_query( $getShip );
 		
 		while( $shipinfo = mysql_fetch_array( $getShipResult ) ) {
@@ -123,18 +125,21 @@ if( $simmType == "starbase" ) {
 			echo "</a>";
 		}
 		
-		?>
+		switch($dockingStatus)
+		{
+			case 'pending':
+				echo "<br />";
+				echo "<strong class='yellow'>[ Activation Pending ]</strong>";
+				break;
+			case 'departed':
+				echo "<br />";
+				echo "<strong class='red'>[ Inactive ]</strong>";
+				break;
+			default:
+				echo "";
+		}
 		
-		<? if( $dockingStatus == "pending" ) { ?>
-		<br />
-		<b class="yellow">[ Activation Pending ]</b>
-		<? } ?>
-		
-		<? if( $dockingStatus == "departed" ) { ?>
-		<br />
-		<b class="red">[ Inactive ]</b>
-		<? } ?>
-		<br /><br />
+		?><br /><br />
 		
 		<table>
 			<tr>
@@ -197,7 +202,7 @@ if( $simmType == "starbase" ) {
 		
 		<br /><br />
 		<b class="fontMedium">
-			<a href="<?=$weblocation;?>index.php?page=dockedships">&laquo; Return to Docked Ship Listing</a>
+			<a href="<?=$webLocation;?>index.php?page=dockedships">&laquo; Return to Docked Ship Listing</a>
 		</b>
 	</div>
 	
