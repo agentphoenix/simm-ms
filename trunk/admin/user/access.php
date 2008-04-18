@@ -10,7 +10,7 @@ File: admin/user/access.php
 Purpose: Page to display all of a user's access levels
 
 System Version: 2.6.0
-Last Modified: 2008-04-06 2122 EST
+Last Modified: 2008-04-18 1803 EST
 **/
 
 if( isset( $_GET['crew'] ) && is_numeric( $_GET['crew'] ) )
@@ -68,31 +68,35 @@ if( in_array( "x_access", $sessionAccess ) ) {
 				1 => array( "m_coc", "Chain of Command" ),
 				2 => array( "m_crew", "All Characters" ),
 				3 => array( "m_createcrew", "Add Character" ),
-				4 => array( "m_database", "Database" ),
-				5 => array( "m_decks", "Deck Listing" ),
-				6 => array( "m_departments", "Departments" ),
-				7 => array( "m_docking", "Starship Docking" ),
-				8 => array( "m_giveaward", "Give Crew Award" ),
-				9 => array( "m_missionnotes", "Mission Notes" ),
-				10 => array( "m_posts", "Mission Posts" ),
-				11 => array( "m_missionsummaries", "Mission Summaries" ),
-				12 => array( "m_missions", "Missions" ),
-				13 => array( "m_newscat1", "News Category 1" ),
-				14 => array( "m_newscat2", "News Category 2" ),
-				15 => array( "m_newscat3", "News Category 3" ),
-				16 => array( "m_news", "News Items" ),
-				17 => array( "m_npcs1", "NPCs 1" ),
-				18 => array( "m_npcs2", "NPCs 2" ),
-				19 => array( "m_logs", "Personal Logs" ),
-				20 => array( "m_positions", "Positions" ),
-				21 => array( "m_ranks", "Ranks" ),
-				22 => array( "m_removeaward", "Remove Award" ),
-				23 => array( "m_globals", "Site Globals" ),
-				24 => array( "m_messages", "Site Messages" ),
-				25 => array( "m_specs", "Specifications" ),
-				26 => array( "m_strike", "Strikes" ),
-				27 => array( "m_tour", "Tour" ),
-				28 => array( "m_moderation", "User Moderation" )
+				4 => array( "m_database1", "Database-1" ),
+				5 => array( "m_database2", "Database-2" ),
+				
+				6 => array( "m_decks", "Deck Listing" ),
+				7 => array( "m_departments", "Departments" ),
+				8 => array( "m_docking", "Starship Docking" ),
+				9 => array( "m_giveaward", "Give Crew Award" ),
+				10 => array( "m_missionnotes", "Mission Notes" ),
+				11 => array( "m_posts1", "Mission Posts-1" ),
+				12 => array( "m_posts2", "Mission Posts-2" ),
+				13 => array( "m_missionsummaries", "Mission Summaries" ),
+				14 => array( "m_missions", "Missions" ),
+				15 => array( "m_newscat1", "News Category-1" ),
+				16 => array( "m_newscat2", "News Category-2" ),
+				17 => array( "m_newscat3", "News Category-3" ),
+				18 => array( "m_news", "News Items" ),
+				19 => array( "m_npcs1", "NPC-1" ),
+				20 => array( "m_npcs2", "NPC-2" ),
+				21 => array( "m_logs1", "Personal Logs-1" ),
+				22 => array( "m_logs2", "Personal Logs-2" ),
+				23 => array( "m_positions", "Positions" ),
+				24 => array( "m_ranks", "Ranks" ),
+				25 => array( "m_removeaward", "Remove Award" ),
+				26 => array( "m_globals", "Site Globals" ),
+				27 => array( "m_messages", "Site Messages" ),
+				28 => array( "m_specs", "Specifications" ),
+				29 => array( "m_strike", "Strikes" ),
+				30 => array( "m_tour", "Tour" ),
+				31 => array( "m_moderation", "User Moderation" )
 			),
 			"reports" => array(
 				0 => array( "r_about", "About SMS" ),
@@ -104,11 +108,11 @@ if( in_array( "x_access", $sessionAccess ) ) {
 				6 => array( "r_versions", "Version History" )
 			),
 			"user" => array(
-				0 => array( "u_account1", "User Account 1" ),
-				1 => array( "u_account2", "User Account 2" ),
-				2 => array( "u_bio1", "Biography 1" ),
-				3 => array( "u_bio2", "Biography 2" ),
-				4 => array( "u_bio3", "Biography 3" ),
+				0 => array( "u_account1", "User Account-1" ),
+				1 => array( "u_account2", "User Account-2" ),
+				2 => array( "u_bio1", "Biography-1" ),
+				3 => array( "u_bio2", "Biography-2" ),
+				4 => array( "u_bio3", "Biography-3" ),
 				5 => array( "u_inbox", "Private Messages" ),
 				6 => array( "u_status", "Status Change" ),
 				7 => array( "u_site", "Site Options" ),
