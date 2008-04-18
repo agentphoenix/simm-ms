@@ -70,7 +70,6 @@ if( in_array( "x_access", $sessionAccess ) ) {
 				3 => array( "m_createcrew", "Add Character" ),
 				4 => array( "m_database1", "Database-1" ),
 				5 => array( "m_database2", "Database-2" ),
-				
 				6 => array( "m_decks", "Deck Listing" ),
 				7 => array( "m_departments", "Departments" ),
 				8 => array( "m_docking", "Starship Docking" ),
