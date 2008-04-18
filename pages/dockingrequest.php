@@ -10,7 +10,7 @@ File: pages/dockingrequest.php
 Purpose: To display the form for ships to request docking permission at the starbase
 
 System Version: 2.6.0
-Last Modified: 2008-04-18 1921 EST
+Last Modified: 2008-04-18 1953 EST
 **/
 
 /* check the simm type */
@@ -70,7 +70,7 @@ if($simmType == "starbase")
 	
 This is an automatically generated message, please do not respond.";
 		
-			//mail($to1, $subject1, $message1, "From: " . $from1 . "\nX-Mailer: PHP/" . phpversion());
+			mail($to1, $subject1, $message1, "From: " . $from1 . "\nX-Mailer: PHP/" . phpversion());
 			
 			/* email the CO */
 			$subject2 = $emailSubject . " Docking Request";
@@ -82,7 +82,7 @@ $dockingShipCO of the $dockingShipName has sent a request to dock with the $ship
 	
 " . $webLocation . "login.php?action=login";
 		
-			//mail($to2, $subject2, $message2, "From: " . $from2 . "\nX-Mailer: PHP/" . phpversion());
+			mail($to2, $subject2, $message2, "From: " . $from2 . "\nX-Mailer: PHP/" . phpversion());
 		}
 	}
 
