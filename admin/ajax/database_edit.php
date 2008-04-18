@@ -41,7 +41,7 @@ if(in_array("m_database1", $sessionAccess) || in_array("m_database2",$sessionAcc
 ?>
 
 	<h2>Edit Database Entry</h2>
-	<p>Use the fields below to create a new database entry. <strong class="yellow">Note:</strong> For off-site URL forwarding entries, give the full URL (e.g. http://www.something.com/), for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest). For reference with on-site entries, your web location is: <strong><?php echo WEBLOC; ?></strong>.</p>
+	<p>Use the fields below to edit your database entry. <strong class="yellow">Note:</strong> For off-site URL forwarding entries, give the full URL (e.g. http://www.something.com/), for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest). For reference with on-site entries, your web location is: <strong><?php echo WEBLOC; ?></strong>.</p>
 	<p>
 		<em><sup>&dagger;</sup>Applies only to on-site &amp; off-site entries</em><br />
 		<em><sup>&Dagger;</sup>Applies only to entries</em>
