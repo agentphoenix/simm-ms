@@ -10,14 +10,16 @@ File: pages/dockingrequest.php
 Purpose: To display the form for ships to request docking permission at the starbase
 
 System Version: 2.6.0
-Last Modified: 2008-04-18 1915 EST
+Last Modified: 2008-04-18 1921 EST
 **/
 
 /* check the simm type */
-if( $simmType == "starbase" ) {
-
+if($simmType == "starbase")
+{
 	/* define the page class and vars */
 	$pageClass = "ship";
+	$query = FALSE;
+	$result = FALSE;
 	
 	/* pull in the menu */
 	if( isset( $sessionCrewid ) ) {
@@ -63,12 +65,12 @@ if( $simmType == "starbase" ) {
 			/* email the ship CO */
 			$subject1 = $emailSubject . " Docking Request";
 			$to1 = $dockingShipCOEmail;
-			$from1 = printCO . " < " . printCOEmail() . " >";
+			$from1 = printCO() . " < " . printCOEmail() . " >";
 			$message1 = $dockingShipCO . ", thank you for submitting a request to dock with " . $shipPrefix . " " . $shipName . ".  The CO has been sent a copy of your request and will be reviewing it shortly.  In the meantime, please feel free to browse our site (" . $webLocation . ") until the CO reviews your request.
 	
 This is an automatically generated message, please do not respond.";
 		
-			mail($to1, $subject1, $message1, "From: " . $from1 . "\nX-Mailer: PHP/" . phpversion());
+			//mail($to1, $subject1, $message1, "From: " . $from1 . "\nX-Mailer: PHP/" . phpversion());
 			
 			/* email the CO */
 			$subject2 = $emailSubject . " Docking Request";
@@ -80,7 +82,7 @@ $dockingShipCO of the $dockingShipName has sent a request to dock with the $ship
 	
 " . $webLocation . "login.php?action=login";
 		
-			mail($to2, $subject2, $message2, "From: " . $from2 . "\nX-Mailer: PHP/" . phpversion());
+			//mail($to2, $subject2, $message2, "From: " . $from2 . "\nX-Mailer: PHP/" . phpversion());
 		}
 	}
 
@@ -109,24 +111,24 @@ $dockingShipCO of the $dockingShipName has sent a request to dock with the $ship
 			<tr>
 				<td class="tableCellLabel">Ship Name</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="text" name="dockingShipName" size="20" maxlength="100" /></td>
+				<td><input type="text" class="image" name="dockingShipName" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Ship Registry</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="text" name="dockingShipRegistry" size="20" maxlength="32" /></td>
+				<td><input type="text" class="image" name="dockingShipRegistry" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Ship Class</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="text" name="dockingShipClass" size="20" maxlength="50" /></td>
+				<td><input type="text" class="image" name="dockingShipClass" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Ship Website</td>
 				<td>&nbsp;</td>
 				<td>
-					<input type="text" class="text" name="dockingShipURL" size="20" maxlength="128" />
-					&nbsp;&nbsp;&nbsp;<span class="fontSmall">*Note: Please include the "http://" in your website*</span>
+					<input type="text" class="image" name="dockingShipURL" />
+					&nbsp;&nbsp;&nbsp;<span class="fontSmall orange">*Note: Please include the "http://" in your website*</span>
 				</td>
 			</tr>
 			<tr>
@@ -139,12 +141,12 @@ $dockingShipCO of the $dockingShipName has sent a request to dock with the $ship
 			<tr>
 				<td class="tableCellLabel">Commanding Officer</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="text" name="dockingShipCO" size="20" maxlength="128" /></td>
+				<td><input type="text" class="image" name="dockingShipCO" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Email</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="text" name="dockingShipCOEmail" size="20" maxlength="50" /></td>
+				<td><input type="text" class="image" name="dockingShipCOEmail" /></td>
 			</tr>
 			<tr>
 				<td colspan="3" height="10">&nbsp;</td>
@@ -155,12 +157,12 @@ $dockingShipCO of the $dockingShipName has sent a request to dock with the $ship
 			<tr>
 				<td class="tableCellLabel">Duration</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="text" name="dockingDuration" size="20" maxlength="20" /></td>
+				<td><input type="text" class="image" name="dockingDuration" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Docking Purpose</td>
 				<td>&nbsp;</td>
-				<td><textarea name="dockingDesc" rows="5"></textarea></td>
+				<td><textarea name="dockingDesc" rows="5" class="desc"></textarea></td>
 			</tr>
 			<tr>
 				<td colspan="3" height="25">&nbsp;</td>
