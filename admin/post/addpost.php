@@ -1,5 +1,7 @@
 <?php
 
+error_report();
+
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -10,7 +12,7 @@ File: admin/manage/addpost.php
 Purpose: Page to add a mission post
 
 System Version: 2.6.0
-Last Modified: 2007-08-21 0907 EST
+Last Modified: 2008-04-19 1336 EST
 **/
 
 /* access check */
@@ -19,48 +21,70 @@ if( in_array( "p_addmission", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "post";
-	$add = $_POST['action_x'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	if( $add ) {
+	if(isset($_POST['action_x']))
+	{
+		$today = getdate();
 		
-		/* add the necessary slashes */
-		$postTitle = addslashes( $_POST['postTitle'] );
-		$postLocation = addslashes( $_POST['postLocation'] );
-		$postTimeline = addslashes( $_POST['postTimeline'] );
-		$postContent = addslashes( $_POST['postContent'] );
-		$postTag = addslashes( $_POST['postTag'] );
-		$postAuthor = $_POST['postAuthor'];
+		$insert = "INSERT INTO sms_posts (postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, ";
+		$insert.= "postStatus, postTag) VALUES (%d, %s, %s, %s, %s, %d, %d, %s, %s)";
+		
+		$query = sprintf(
+			$insert,
+			escape_string($_POST['postAuthor']),
+			escape_string($_POST['postTitle']),
+			escape_string($_POST['postLocation']),
+			escape_string($_POST['postTimeline']),
+			escape_string($_POST['postContent']),
+			escape_string($today[0]),
+			escape_string($_POST['postMission']),
+			escape_string('activated'),
+			escape_string($_POST['postTag'])
+		);
 	
-		$postMissionEntry = "INSERT INTO sms_posts ( postid, postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, postStatus, postTag ) ";
-		$postMissionEntry.= "VALUES ( '', '$postAuthor', '$postTitle', '$postLocation', '$postTimeline', '$postContent', UNIX_TIMESTAMP(), '$_POST[postMission]', 'activated', '$postTag' )";
-		$result = mysql_query( $postMissionEntry );
+		$result = mysql_query($query);
 		
-		/* strip the slashes added for the query */
-		$postTitle = stripslashes( $_POST['postTitle'] );
-		$postLocation = stripslashes( $_POST['postLocation'] );
-		$postTimeline = stripslashes( $_POST['postTimeline'] );
-		$postContent = stripslashes( $_POST['postContent'] );
-		$postTag = stripslashes( $_POST['postTag'] );
+		/* update the last post for the author */
+		if(isset($_POST['postAuthor']) && is_numeric($_POST['postAuthor']))
+		{
+			$postAuthor = $_POST['postAuthor'];
+		}
+		else
+		{
+			$postAuthor = NULL;
+		}
+		
+		$update = "UPDATE sms_crew SET lastPost = %d WHERE crewid = $postAuthor LIMIT 1";
+		
+		$query2 = sprintf(
+			$update,
+			escape_string($today[0])
+		);
+		
+		$result2 = mysql_query($query2);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
-		
-		/* update the player's last post time stamp */
-		$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = '$postAuthor' LIMIT 1";
-		$updateTimestampResult = mysql_query( $updateTimestamp );
-		
-		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
 		
 		/* if they sendEmail box is checked, send the email */
-		if( $_POST['sendEmail'] == "y" ) {
+		if(isset($_POST['sendEmail']))
+		{
+			foreach($_POST as $key => $value)
+			{
+				$$key = $value;
+			}
 			
-			/** EMAIL THE POST **/
+			if(!is_numeric($postAuthor)) {
+				$postAuthor = NULL;
+			}
 			
 			/* set the email author */
 			$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 			$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-			$userFetch.= "WHERE crew.crewid = '$postAuthor' AND crew.rankid = rank.rankid LIMIT 1";
+			$userFetch.= "WHERE crew.crewid = $postAuthor AND crew.rankid = rank.rankid LIMIT 1";
 			$userFetchResult = mysql_query( $userFetch );
 			
 			while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
@@ -73,9 +97,9 @@ if( in_array( "p_addmission", $sessionAccess ) ) {
 			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 			
 			/* define the variables */
-			$to = getCrewEmails( "emailPosts" );
-			$subject = $emailSubject . " " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle;
-			$message = "A Post By " . printCrewNameEmail( $postAuthor ) . "
+			$to = getCrewEmails("emailPosts");
+			$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle;
+			$message = "A Post By " . printCrewNameEmail($postAuthor) . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
 Tag: " . $postTag . "
@@ -84,22 +108,20 @@ Tag: " . $postTag . "
 				
 			/* send the email */
 			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
 		}
-			
 	}
 	
 	?>
 	
 	<div class="body">
-	
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $postMissionEntry );
+		$check->checkQuery($result, $query);
 				
-		if( !empty( $check->query ) ) {
-			$check->message( "mission entry", "add" );
+		if(!empty($check->query))
+		{
+			$check->message("mission entry", "add");
 			$check->display();
 		}
 		
@@ -107,12 +129,7 @@ Tag: " . $postTag . "
 	
 		<span class="fontTitle">Add Mission Entry</span><br /><br />
 	
-		This page should be used in the event that a member of the crew has accidentally
-		posted incorrectly.  For instance, if a player has replied to one of the emails
-		sent out to the system instead of logging in and posting, you can copy and paste
-		the contents of their email into this form and put the entry into the system. For
-		all other mission posts, please use the <a href="<?=$webLocation;?>admin.php?page=post&sub=mission">
-		Write Mission Post</a> page.<br /><br />
+		This page should be used in the event that a member of the crew has accidentally posted incorrectly.  For instance, if a player has replied to one of the emails sent out to the system instead of logging in and posting, you can copy and paste the contents of their email into this form and put the entry into the system. For all other mission posts, please use the <a href="<?=$webLocation;?>admin.php?page=post&sub=mission"> Write Mission Post</a> page.<br /><br />
 		
 		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=addpost">
 		<table>
@@ -162,7 +179,7 @@ Tag: " . $postTag . "
 						extract( $titleArray, EXTR_OVERWRITE );
 					}
 					
-					if( $missionCount == "0" ) {
+					if( $missionCount == 0 ) {
 						echo "<b>Please create a mission before posting!</b>";
 					} else {
 					
@@ -232,7 +249,7 @@ Tag: " . $postTag . "
 				<td colspan="3" height="20"></td>
 			</tr>
 			
-			<? if( $missionCount > "0" ) { ?>
+			<? if( $missionCount > 0 ) { ?>
 			<tr>
 				<td colspan="2">&nbsp;</td>
 				<td>
@@ -243,4 +260,5 @@ Tag: " . $postTag . "
 		</table>
 		</form>
 	</div>
+	
 <? } else { errorMessage( "add mission entry" ); } ?>
