@@ -10,15 +10,15 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-04-05 1636 EST
+Last Modified: 2008-04-19 1633 EST
 **/
 
 /* insert data into the access levels table */
 mysql_query( "INSERT INTO `sms_accesslevels` (`id`, `post`, `manage`, `reports`, `user`, `other`) 
-VALUES (1, 'post,p_addjp,p_missionnotes,p_jp,p_addlog,p_pm,p_log,p_addmission,p_mission,p_addnews,p_news', 'manage,m_globals,m_messages,m_specs,m_posts,m_logs,m_news,m_missionsummaries,m_missionnotes,m_createcrew,m_crew,m_coc,m_npcs2,m_removeaward,m_strike,m_giveaward,m_missions,m_departments,m_moderation,m_ranks,m_awards,m_positions,m_tour,m_decks,m_database,m_newscat3,m_docking,m_catalogue', 'reports,r_about,r_count,r_strikes,r_activity,r_progress,r_versions,r_milestones', 'user,u_nominate,u_inbox,u_account2,u_status,u_options,u_bio3,u_stats,u_site', 'x_approve_posts,x_skindev,x_approve_logs,x_approve_users,x_update,x_approve_news,x_menu,x_access'),
-(2, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', 'manage,m_posts,m_logs,m_news,m_createcrew,m_npcs2,m_newscat2', 'reports,r_count,r_strikes,r_activity,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2,u_stats', 'x_approve_posts,x_approve_logs,x_approve_news'),
-(3, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', 'manage,m_createcrew,m_npcs1,m_newscat2', 'reports,r_count,r_strikes,r_activity,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2', ''),
-(4, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', '', 'reports,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options', '');" );
+VALUES (1, 'post,p_addjp,p_missionnotes,p_jp,p_addlog,p_pm,p_log,p_addmission,p_mission,p_addnews,p_news', 'manage,m_awards,m_logs2,m_coc,m_posts2,m_positions,m_crew,m_missions,m_ranks,m_createcrew,m_missionsummaries,m_removeaward,m_globals,m_database2,m_messages,m_decks,m_newscat3,m_specs,m_departments,m_news,m_strike,m_docking,m_tour,m_giveaward,m_npcs2,m_moderation,m_missionnotes', 'reports,r_about,r_count,r_strikes,r_activity,r_progress,r_versions,r_milestones', 'user,u_nominate,u_inbox,u_account2,u_status,u_options,u_bio3,u_stats,u_site', 'x_approve_docking,x_approve_posts,x_update,x_approve_logs,x_approve_users,x_access,x_approve_news,x_menu'),
+(2, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', 'manage,m_logs2,m_posts2,m_createcrew,m_database1,m_newscat2,m_news,m_npcs2', 'reports,r_count,r_strikes,r_activity,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2,u_stats', 'x_approve_posts,x_approve_logs,x_approve_news'),
+(3, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', 'manage,m_posts1,m_createcrew,m_database1,m_newscat2,m_npcs1,m_logs1', 'reports,r_count,r_strikes,r_activity,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio2', ''),
+(4, 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', 'm_posts1,m_newscat1,m_logs1', 'reports,r_progress,r_milestones', 'user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options', '');" );
 
 /* insert data into the coc table */
 mysql_query( "INSERT INTO `sms_coc` (`cocid`, `crewid`) VALUES (1, 1);" );
@@ -113,8 +113,8 @@ VALUES (1, 0, 0, 'Main', 'onsite', 'index.php?page=main', '', '', 'n', 'main'),
 (66, 1, 0, 'Missions', 'onsite', 'admin.php?page=manage&sub=missions', 'm_missions', 'manage', 'y', 'admin'),
 (67, 1, 1, 'Mission Notes', 'onsite', 'admin.php?page=manage&sub=missionnotes', 'm_missionnotes', 'manage', 'y', 'admin'),
 (68, 1, 2, 'Mission Summaries', 'onsite', 'admin.php?page=manage&sub=summaries', 'm_missionsummaries', 'manage', 'y', 'admin'),
-(69, 1, 3, 'Mission Posts', 'onsite', 'admin.php?page=manage&sub=posts', 'm_posts', 'manage', 'y', 'admin'),
-(70, 1, 4, 'Personal Logs', 'onsite', 'admin.php?page=manage&sub=logs', 'm_logs', 'manage', 'y', 'admin'),
+(69, 1, 3, 'Mission Posts', 'onsite', 'admin.php?page=manage&sub=posts', 'm_posts2', 'manage', 'y', 'admin'),
+(70, 1, 4, 'Personal Logs', 'onsite', 'admin.php?page=manage&sub=logs', 'm_logs2', 'manage', 'y', 'admin'),
 (71, 1, 5, 'News Items', 'onsite', 'admin.php?page=manage&sub=news', 'm_news', 'manage', 'y', 'admin'),
 (72, 1, 6, 'News Categories', 'onsite', 'admin.php?page=manage&sub=newscategories', 'm_newscat3', 'manage', 'y', 'admin'),
 (73, 2, 0, 'Create Character/NPC', 'onsite', 'admin.php?page=manage&sub=add', 'm_createcrew', 'manage', 'y', 'admin'),
