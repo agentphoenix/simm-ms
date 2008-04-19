@@ -1,4 +1,4 @@
-Last updated: 2008.04.18 1951 EST
+Last updated: 2008.04.19 0120 EST
 
 NEW FEATURES
 ===
@@ -6,7 +6,6 @@ NEW FEATURES
 *	Private news items (can only be seen when logged in)
 *	Added the jQuery Javascript library
 *	Tabs now use jQuery, meaning the content is available immediately after clicking
-*	Group access levels can now be set up by the admin
 *	Added stardate script and the ability to turn it on and off (through site globals)
 *	Admins can now choose whether or not they want to be notified of SMS updates
 *	Admins can now set the email subject lines (default is [Ship Name])
@@ -18,6 +17,7 @@ NEW FEATURES
 *	Completely new install process that's clearer and with much better instructions
 *	Users (with proper permissions) can edit their own mission posts (except which mission the post is in and the post status)
 *	Users (with proper permissions) can edit their own personal logs (except the author and log status)
+*	Admins can now set the defaults for the various access levels (CO, XO, Department Head, Standard Player)
 
 ENHANCEMENTS
 ===

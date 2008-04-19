@@ -1,4 +1,4 @@
-Last Update: 2008.04.18 1948 EST
+Last Update: 2008.04.19 0157 EST
 
 IN PROGRESS
 =====
@@ -29,12 +29,9 @@ IN PROGRESS
 		x	/admin/reports
 		x	/admin/user
 
-#	Global setting for default access levels
-
 #	Clean-up install and update files
 		*	Add a step at the beginning of the installation which checks for any
 			compatibility issues using ini_get()
-		*	Add a page to the reports section to do the same thing
 
 #	Update skins
 		
@@ -43,6 +40,8 @@ IN QUEUE
 #	Starbase menu items in place during install, but turned off
 
 #	Add cadet ranks (off by default)
+
+#	Short names in the ranks
 
 COMPLETED
 =====
@@ -121,3 +120,5 @@ X	Ability for crew to edit their posts and logs
 X	AXAH HUD windows
 
 X	Access changes need to filter down to all the access pages
+
+X	Global setting for default access levels
