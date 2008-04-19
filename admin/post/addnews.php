@@ -10,55 +10,61 @@ File: admin/post/addnews.php
 Purpose: Page to add a news item
 
 System Version: 2.6.0
-Last Modified: 2007-11-12 1533 EST
+Last Modified: 2008-04-19 1327 EST
 **/
 
 /* access check */
-if( in_array( "p_addnews", $sessionAccess ) ) {
-
+if(in_array("p_addnews", $sessionAccess))
+{
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "post";
-	$add = $_POST['action_x'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "add news item page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$id = $_GET['id'];
-	}
-	
-	if( $add ) {
+	if(isset($_POST['action_x']))
+	{
+		$today = getdate();
 		
-		/* add the necessary slashes */
-		$newsTitle = addslashes( $_POST['newsTitle'] );
-		$newsContent = addslashes( $_POST['newsContent'] );
-		$newsCat = $_POST['newsCat'];
-		$newsAuthor = $_POST['newsAuthor'];
-		$newsPrivate = $_POST['newsPrivate'];
+		$insert = "INSERT INTO sms_news (newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate) ";
+		$insert.= "VALUES (%d, %d, %d, %s, %s, %s, %s)";
+		
+		$query = sprintf(
+			$insert,
+			escape_string($_POST['newsCat']),
+			escape_string($_POST['newsAuthor']),
+			escape_string($today[0]),
+			escape_string($_POST['newsTitle']),
+			escape_string($_POST['newsContent']),
+			escape_string('activated'),
+			escape_string($_POST['newsPrivate'])
+		);
 	
-		$postNews = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate ) ";
-		$postNews.= "VALUES ( '', '$newsCat', '$newsAuthor', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', 'activated', '$newsPrivate' )";
-		$result = mysql_query( $postNews );
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_news" );
 		
-		/* strip the slashes added for the query */
-		$newsTitle = stripslashes( $newsTitle );
-		$newsContent = stripslashes( $newsContent );
-		
 		/* if the user wants the email sent out, do it */
-		if( $_POST['sendEmail'] == "y" ) {
-		
-			/** EMAIL THE NEWS **/
+		if(isset($_POST['sendEmail']))
+		{
+			foreach($_POST as $key => $value)
+			{
+				$$key = $value;
+			}
+			
+			if(!is_numeric($newsAuthor)) {
+				$newsAuthor = NULL;
+			}
+			
+			if(!is_numeric($newsCat)) {
+				$newsCat = NULL;
+			}
 			
 			/* set the email author */
 			$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 			$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-			$userFetch.= "WHERE crew.crewid = '$newsAuthor' AND crew.rankid = rank.rankid LIMIT 1";
+			$userFetch.= "WHERE crew.crewid = $newsAuthor AND crew.rankid = rank.rankid LIMIT 1";
 			$userFetchResult = mysql_query( $userFetch );
 			
 			while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
@@ -72,12 +78,12 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 			}
 			
 			/* pull the category name */
-			$getCategory = "SELECT catName FROM sms_news_categories WHERE catid = '$newsCat' LIMIT 1";
+			$getCategory = "SELECT catName FROM sms_news_categories WHERE catid = $newsCat LIMIT 1";
 			$getCategoryResult = mysql_query( $getCategory );
 			$category = mysql_fetch_assoc( $getCategoryResult );
 		
 			/* define the variables */
-			$to = getCrewEmails( "emailNews" );
+			$to = getCrewEmails("emailNews");
 			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle );
 			$message = "A News Item Posted By " . printCrewNameEmail( $newsAuthor ) . "
 				
@@ -85,22 +91,20 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 				
 			/* send the email */
 			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
 		}
-	
 	}
 	
 	?>
 	
 	<div class="body">
-	
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $postNews );
+		$check->checkQuery($result, $query);
 				
-		if( !empty( $check->query ) ) {
-			$check->message( "news item", "add" );
+		if(!empty($check->query))
+		{
+			$check->message("news item", "add");
 			$check->display();
 		}
 		
@@ -108,12 +112,7 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 	
 		<span class="fontTitle">Add News Item</span><br /><br />
 	
-		This page should be used in the event that a member of the crew has accidentally
-		posted incorrectly.  For instance, if a player has replied to one of the emails
-		sent out to the system instead of logging in and posting, you can copy and paste
-		the contents of their email into this form and put the entry into the system. For
-		all other news items, please use the <a href="<?=$webLocation;?>admin.php?page=post&sub=news">
-		Write News Item</a> page.<br /><br />
+		This page should be used in the event that a member of the crew has accidentally posted incorrectly.  For instance, if a player has replied to one of the emails sent out to the system instead of logging in and posting, you can copy and paste the contents of their email into this form and put the entry into the system. For all other news items, please use the <a href="<?=$webLocation;?>admin.php?page=post&sub=news"> Write News Item</a> page.<br /><br />
 	
 		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=addnews">
 		<table>
@@ -156,11 +155,11 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 						<?
 
 						if( in_array( "m_newscat1", $sessionAccess ) ) {
-							$userCatAccess = "1";
+							$userCatAccess = 1;
 						} if( in_array( "m_newscat2", $sessionAccess ) ) {
-							$userCatAccess = "2";
+							$userCatAccess = 2;
 						} if( in_array( "m_newscat3", $sessionAccess ) ) {
-							$userCatAccess = "3";
+							$userCatAccess = 3;
 						} 
 						
 						$availableCats = "SELECT * FROM sms_news_categories WHERE ";
@@ -217,4 +216,5 @@ if( in_array( "p_addnews", $sessionAccess ) ) {
 		</table>
 		</form>
 	</div>
+
 <? } else { errorMessage( "add news item" ); } ?>
