@@ -10,7 +10,7 @@ File: admin/manage/addaward.php
 Purpose: Page that allows an admin to add an award for a player
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1450 EST
+Last Modified: 2008-04-19 1825 EST
 **/
 
 /* access check */
@@ -19,7 +19,8 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_POST['action_add_x'];
+	$query = FALSE;
+	$result = FALSE;
 	
 	/* do some checking to make sure someone's not trying to do a SQL injection */
 	if( isset( $_GET['crew'] ) && !is_numeric( $_GET['crew'] ) ) {
@@ -37,46 +38,48 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 	}
 		
 	/* if an award key is in the URL */
-	if( isset( $action ) ) {
-		/* define the POST vars */
-		$giveCrew = $_POST['crew'];
-		$giveAward = $_POST['award'];
-		$giveReason = $_POST['reason'];
-		
-		if( !get_magic_quotes_gpc() ) {
-			$reason = addslashes( $giveReason );
-		} else {
-			$reason = $giveReason;
+	if(isset($_POST['action_type']) && $_POST['action_type'] == "give")
+	{
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
 		}
 		
-		/* fetch the awards from the db */
-		$pullAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
-		$pullAwardsResult = mysql_query( $pullAwards );
-		$stringAwards = mysql_fetch_array( $pullAwardsResult );
+		if(!is_numeric($action_crew)) {
+			$action_crew = NULL;
+		}
+		
+		$pullAwards = "SELECT awards FROM sms_crew WHERE crewid = $action_crew LIMIT 1";
+		$pullAwardsResult = mysql_query($pullAwards);
+		$stringAwards = mysql_fetch_array($pullAwardsResult);
 		
 		/* don't explode the array if there's nothing there to start with */
-		if( !empty( $stringAwards[0] ) ) {
-			$arrayAwards = explode( ";", $stringAwards[0] );
+		if(!empty($stringAwards[0])) {
+			$arrayAwards = explode(";", $stringAwards[0]);
+		} else {
+			$arrayAwards = array();
 		}
 		
 		/* get the date info from PHP */
 		$now = getdate();
 		
 		/* build the new award entry */
-		$arrayAwards[] = $giveAward . "," . $now[0] . "," . $giveReason;
+		$arrayAwards[] = $action_award . "," . $now[0] . "," . $reason;
 
 		/* put the string back together */
-		$joinedString = implode( ";", $arrayAwards );
+		$joinedString = implode(";", $arrayAwards);
 		
 		/* dump the comma separated field back into the db */
-		$updateAwards = "UPDATE sms_crew SET awards = '$joinedString' WHERE crewid = '$giveCrew' LIMIT 1";
-		$result = mysql_query( $updateAwards );
+		$update = "UPDATE sms_crew SET awards = %s WHERE crewid = $action_crew LIMIT 1";
+		$query = sprintf($update, escape_string($joinedString));
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
-			
-	} if( !isset( $crew ) ) {
-		
+	}
+	
+	if(!isset($crew))
+	{
 		/* active crew */
 		$getActive = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
 		$getActive.= "FROM sms_crew AS crew, sms_ranks AS rank ";
@@ -100,6 +103,9 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		$getNPC.= "ORDER BY crew.rankid ASC";
 		$getNPCResult = mysql_query( $getNPC );
 		$npcCount = mysql_num_rows( $getNPCResult );
+		
+		$disableInactive = NULL;
+		$disableNPC = NULL;
 		
 		if( $inactiveCount == 0 ) {
 			$disableInactive = "2, ";
@@ -161,6 +167,7 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 					?>
 				</ul>
 			</div>
+			
 			<div id="three" class="ui-tabs-container ui-tabs-hide">
 				<b class="fontLarge">Non-Playing Characters</b>
 				<ul class="list-dark">
@@ -179,13 +186,30 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		</div>
 		
 	</div>
-	<? } elseif( isset( $crew ) ) { ?>
+	<? } elseif(isset($crew)) { ?>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.zebra tr:nth-child(odd)').addClass('alt');
+			
+			$("a[rel*=facebox]").click(function() {
+				var award = $(this).attr("myAward");
+				var crew = $(this).attr("myID");
+
+				jQuery.facebox(function() {
+					jQuery.get('admin/ajax/award_give.php?c=' + crew + '&a=' + award, function(data) {
+						jQuery.facebox(data);
+					});
+				});
+				return false;
+			});
+		});
+	</script>
 	
 	<div class="body">
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateAwards );
+		$check->checkQuery( $result, $query );
 		
 		if( !empty( $check->query ) ) {
 			$check->message( "player award", "add" );
@@ -197,86 +221,14 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		<span class="fontTitle">Give Award To <? printCrewName( $crew, "rank", "noLink" ); ?></span><br /><br />
 		<b class="fontMedium">
 			<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward">&laquo; Back to Crew List</a>
-		</b>
-		<br /><br />
+		</b><br /><br />
 		
-		<?php
-		
-		if( isset( $award ) ) {
-			
-			$getAward = "SELECT * FROM sms_awards WHERE awardid = $award LIMIT 1";
-			$getAwardResult = mysql_query( $getAward );
-			$awardFetch = mysql_fetch_assoc( $getAwardResult );
-			
-			$getCrew = "SELECT crewType FROM sms_crew WHERE crewid = $crew LIMIT 1";
-			$getCrewResult = mysql_query( $getCrew );
-			$crewFetch = mysql_fetch_array( $getCrewResult );
-		
-		?>
-		
-		<div class="update-new notify-normal">
-			<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>"><b style="float:right; padding-right:.5em;" class="fontLarge">x</b></a>
-			<b class="fontLarge">Confirm Giving Award</b><br />
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>">
-				<table>
-					<tr>
-						<td class="tableCellLabel">Recipient</td>
-						<td></td>
-						<td>
-							<?
-							
-							printCrewName( $crew, "rank", "noLink" );
-							
-							switch( $crewFetch[0] )
-							{
-								case 'inactive':
-									echo " <b class='orange'>[ Inactive ]";
-									break;
-								case 'pending':
-									echo " <b class='yellow'>[ Pending ]";
-									break;
-								case 'npc':
-									echo " <b class='blue'>[ NPC ]";
-									break;
-								default:
-									echo "";
-							}
-							
-							?>
-							<input type="hidden" name="crew" value="<?=$crew;?>" />
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Award</td>
-						<td></td>
-						<td>
-							<? printText( $awardFetch['awardName'] ); ?>
-							<input type="hidden" name="award" value="<?=$awardFetch['awardid'];?>" />
-						</td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Reason</td>
-						<td></td>
-						<td><textarea name="reason" rows="5"></textarea></td>
-					</tr>
-					<tr>
-						<td colspan="3" height="15"></td>
-					</tr>
-					<tr>
-						<td colspan="2"></td>
-						<td><input type="image" src="<?=path_userskin;?>buttons/add.png" name="action_add" value="Add" class="button" /></td>
-				</table>
-			</form>
-		</div><br />
-			
-		<? } ?>
-		
-		<table>
+		<table class="zebra" cellpadding="3" cellspacing="0">
 		<?
 		
 		$getCrew = "SELECT crewType FROM sms_crew WHERE crewid = $crew LIMIT 1";
-		$getCrewResult = mysql_query( $getCrew );
-		$crewFetch = mysql_fetch_array( $getCrewResult );
+		$getCrewResult = mysql_query($getCrew);
+		$crewFetch = mysql_fetch_array($getCrewResult);
 		
 		if( $crewFetch[0] == "npc" ) {
 			$tail = "WHERE awardCat = 'ic' ORDER BY awardOrder ASC";
@@ -293,17 +245,16 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 	
 		?>
 	
-			<tr class="fontNormal">
-				<td width="70" valign="middle">
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>&award=<?=$awardid;?>">
-						<img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" class="image" />
-					</a>
+			<tr height="40">
+				<td width="70" align="center" valign="middle">
+					<img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" class="image" />
 				</td>
 				<td valign="top">
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward&crew=<?=$crew;?>&award=<?=$awardid;?>">
-						<? printText( $awardName ); ?>
-					</a><br />
-					<? printText( $awardDesc ); ?>
+					<strong><? printText( $awardName ); ?></strong><br />
+					<span class="fontSmall"><? printText( $awardDesc ); ?></span>
+				</td>
+				<td width="10%" align="center">
+					<a href="#" rel="facebox" myAward="<?=$awardid;?>" myID="<?=$crew;?>" class="add"><strong>Give Award</strong></a>
 				</td>
 			</tr>
 	
