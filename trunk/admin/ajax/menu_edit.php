@@ -25,6 +25,55 @@ if(in_array("x_menu", $sessionAccess))
 	$get = "SELECT * FROM sms_menu_items WHERE menuid = $id LIMIT 1";
 	$getR = mysql_query( $get );
 	$pendingArray = mysql_fetch_assoc( $getR );
+	
+	switch($pendingArray['menuCat'])
+	{
+		case 'main':
+			$action_tab = 1;
+			break;
+		case 'general':
+			$action_tab = 2;
+			$action_tab_sub_a = 1;
+			
+			switch($pendingArray['menuMainSec'])
+			{
+				case 'main':
+					$action_tab_sub = 1;
+					break;
+				case 'personnel':
+					$action_tab_sub = 2;
+					break;
+				case 'ship':
+					$action_tab_sub = 4;
+					break;
+				case 'simm':
+					$action_tab_sub = 3;
+					break;
+			}
+			
+			break;
+		case 'admin':
+			$action_tab = 3;
+			$action_tab_sub = 1;
+			
+			switch($pendingArray['menuMainSec'])
+			{
+				case 'post':
+					$action_tab_sub_a = 1;
+					break;
+				case 'manage':
+					$action_tab_sub_a = 2;
+					break;
+				case 'reports':
+					$action_tab_sub_a = 4;
+					break;
+				case 'user':
+					$action_tab_sub_a = 3;
+					break;
+			}
+			
+			break;
+	}
 
 ?>
 	<script type="text/javascript">
@@ -167,6 +216,9 @@ if(in_array("x_menu", $sessionAccess))
 		<div>
 			<input type="hidden" name="action_id" value="<?=$pendingArray['menuid'];?>" />
 			<input type="hidden" name="action_type" value="edit" />
+			<input type="hidden" name="action_tab" value="<?=$action_tab;?>" />
+			<input type="hidden" name="action_tab_sub" value="<?=$action_tab_sub;?>" />
+			<input type="hidden" name="action_tab_sub_a" value="<?=$action_tab_sub_a;?>" />
 			
 			<input type="image" src="<?=$webLocation;?>images/hud_button_ok.png" name="activate" value="Activate" />
 		</div>
