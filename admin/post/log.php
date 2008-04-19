@@ -10,88 +10,97 @@ File: admin/post/log.php
 Purpose: Page to post a personal log
 
 System Version: 2.6.0
-Last Modified: 2007-08-21 0910 EST
+Last Modified: 2008-04-19 1540 EST
 **/
 
 /* access check */
-if( in_array( "p_log", $sessionAccess ) ) {
-
+if(in_array("p_log", $sessionAccess))
+{
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "post";
-	$actionPost = $_POST['action_post_x'];
-	$actionSave = $_POST['action_save_x'];
-	$actionDelete = $_POST['action_delete_x'];
+	$query = FALSE;
+	$result = FALSE;
+	$today = getdate();
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "post personal log page" );
-		exit();
-	} else {
-		/* set the GET variable */
+	if(isset($_GET['id']) && is_numeric($_GET['id']))
+	{
 		$id = $_GET['id'];
 	}
+	else
+	{
+		$id = NULL;
+	}
 
-	if( $actionPost ) {
-		
-		/* add the necessary slashes */
-		$logTitle = addslashes( $_POST['logTitle'] );
-		$logContent = addslashes( $_POST['logContent'] );
-	
+	if(isset($_POST['action_post_x']))
+	{
 		/** check to see if the user is moderated **/
 		$getModerated = "SELECT crewid FROM sms_crew WHERE moderateLogs = 'y'";
 		$getModeratedResult = mysql_query( $getModerated );
+		$modArray = array();
 	
 		while( $moderated = mysql_fetch_array( $getModeratedResult ) ) {
 			extract( $moderated, EXTR_OVERWRITE );
 	
-			$modArray[] = $moderated['0'];
-	
+			$modArray[] = $moderated[0];
 		}
 		/** end moderation check **/
 		
-		if( count( $modArray ) > "0" && in_array( $sessionCrewid, $modArray ) ) {
+		if(count($modArray) > 0 && in_array($sessionCrewid, $modArray)) {
 			$logStatus = "pending";
-		} elseif( $sessionCrewid == "" ) {
+		} elseif($sessionCrewid == "") {
 			$logStatus = "pending";
-		} elseif( $sessionCrewid == "0" ) {
+		} elseif($sessionCrewid == 0) {
 			$logStatus = "pending";
-		} elseif( $sessionCrewid > "0" ) {
+		} elseif($sessionCrewid > 0) {
 			$logStatus = "activated";
 		}
-	
-		if( !$id ) {
-			$query = "INSERT INTO sms_personallogs ( logid, logAuthor, logTitle, logContent, logPosted, logStatus ) ";
-			$query.= "VALUES ( '', '$sessionCrewid', '$logTitle', '$logContent', UNIX_TIMESTAMP(), '$logStatus' )";
-			$result = mysql_query( $query );
-		} else {
-			$query = "UPDATE sms_personallogs SET logTitle = '$logTitle', logContent = '$logContent', ";
-			$query.= "logStatus = '$logStatus', logPosted = UNIX_TIMESTAMP() WHERE logid = '$id' LIMIT 1";
-			$result = mysql_query( $query );
+		
+		/* build the queries */
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_personallogs (logAuthor, logTitle, logContent, logPosted, logStatus) VALUES (%d, %s, %s, %d, %s)";
+			
+			$query = sprintf(
+				$insert,
+				escape_string($sessionCrewid),
+				escape_string($_POST['logTitle']),
+				escape_string($_POST['logContent']),
+				escape_string($today[0]),
+				escape_string($logStatus)
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_personallogs SET logTitle = %s, logContent = %s, logStatus = %s, logPosted = %d WHERE logid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['logTitle']),
+				escape_string($_POST['logContent']),
+				escape_string($logStatus),
+				escape_string($today[0])
+			);
 		}
 		
-		/* optimize the table */
-		optimizeSQLTable( "sms_personallogs" );
+		$result = mysql_query($query);
 		
 		$action = "post";
 		
-		/* strip the slashes added for the query */
-		$logTitle = stripslashes( $logTitle );
-		$logContent = stripslashes( $logContent );
-		
 		/* update the player's last post timestamp */
-		$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = '$sessionCrewid' LIMIT 1";
-		$updateTimestampResult = mysql_query( $updateTimestamp );
+		$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = $sessionCrewid LIMIT 1";
+		$updateTimestampResult = mysql_query($updateTimestamp);
 		
 		/*optimize the table */
 		optimizeSQLTable( "sms_crew" );
+		optimizeSQLTable( "sms_personallogs" );
 		
 		/** EMAIL THE LOG **/
 		
 		/* set the email author */
 		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
+		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
 		
 		while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
@@ -103,45 +112,60 @@ if( in_array( "p_log", $sessionAccess ) ) {
 			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 			$name = $userFetchArray['rankName'] . " " . $userFetchArray['firstName'] . " " . $userFetchArray['lastName'];
 	
-		}	
-		
-		/* if the post has an activated status */
-		if( $logStatus == "activated" ) {
-		
-			/* define the variables */
-			$to = getCrewEmails( "emailLogs" );
-			$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $logTitle );
-			$message = stripslashes( $logContent );
-			
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $logStatus == "pending" ) {
-		
-			/* define the variables */
-			$to = printCOEmail();
-			$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes( $logTitle ) . " (Awaiting Approval)";
-			$message = stripslashes( $logContent ) . "
-	
-Please log in to approve this log.  " . $webLocation . "login.php?action=login";
-			
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
 		}
 		
-	} if( $actionSave ) {
-	
-		/* add the necessary slashes */
-		$logTitle = addslashes( $_POST['logTitle'] );
-		$logContent = addslashes( $_POST['logContent'] );
-	
-		if( !$id ) {
-			$query = "INSERT INTO sms_personallogs ( logid, logAuthor, logTitle, logContent, logPosted, logStatus ) ";
-			$query.= "VALUES ( '', '$sessionCrewid', '$logTitle', '$logContent', UNIX_TIMESTAMP(), 'saved' )";
-		} else {
-			$query = "UPDATE sms_personallogs SET logTitle = '$logTitle', logContent = '$logContent', ";
-			$query.= "logStatus = 'saved', logPosted = UNIX_TIMESTAMP() WHERE logid = '$id' LIMIT 1";
+		foreach($_POST as $k => $v)
+		{
+			$$k = $v;
+		}
+		
+		/* if the post has an activated status */
+		switch($logStatus)
+		{
+			case 'activated':
+				$to = getCrewEmails("emailLogs");
+				$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes($logTitle);
+				$message = stripslashes($logContent);
+				break;
+				
+			case 'pending':
+				$to = printCOEmail();
+				$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes($logTitle) . " (Awaiting Approval)";
+				$message = stripslashes($logContent) . "
+
+Please log in to approve this log.  " . $webLocation . "login.php?action=login";
+				break;
+		}
+		
+		/* send the email */
+		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+	}
+	elseif(isset($_POST['action_save_x']))
+	{
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_personallogs (logAuthor, logTitle, logContent, logPosted, logStatus) VALUES (%d, %s, %s, %d, %s)";
+			
+			$query = sprintf(
+				$insert,
+				escape_string($sessionCrewid),
+				escape_string($_POST['logTitle']),
+				escape_string($_POST['logContent']),
+				escape_string($today[0]),
+				escape_string('saved')
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_personallogs SET logTitle = %s, logContent = %s, logStatus = %s, logPosted = %d WHERE logid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['logTitle']),
+				escape_string($_POST['logContent']),
+				escape_string('saved'),
+				escape_string($today[0])
+			);
 		}
 		
 		$result = mysql_query( $query );
@@ -150,29 +174,22 @@ Please log in to approve this log.  " . $webLocation . "login.php?action=login";
 		optimizeSQLTable( "sms_personallogs" );
 		
 		$action = "save";
-		
-		/* strip the slashes added for the query */
-		$logTitle = stripslashes( $logTitle );
-		$logContent = stripslashes( $logContent );
-	
-	} if( $actionDelete ) {
-	
-		/* delete the log */
-		$query = "DELETE FROM sms_personallogs WHERE logid = '$id' LIMIT 1";
-		$result = mysql_query( $query );
+	}
+	elseif(isset($_POST['action_delete_x']))
+	{
+		$query = "DELETE FROM sms_personallogs WHERE logid = $id LIMIT 1";
+		$result = mysql_query($query);
 	
 		/* optimize the table */
 		optimizeSQLTable( "sms_personallogs" );
 		
 		$action = "delete";
-	
 	}
 	
-	?>
+?>
 	
 	<div class="body">
-		
-		<?
+		<?php
 		
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $query );
@@ -186,7 +203,7 @@ Please log in to approve this log.  " . $webLocation . "login.php?action=login";
 		
 		<span class="fontTitle">Post Personal Log</span><br /><br />
 	
-		<? if( !$id ) { ?>
+		<? if(!isset($id)) { ?>
 		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=log">
 		<table>
 			<tr>
@@ -220,13 +237,14 @@ Please log in to approve this log.  " . $webLocation . "login.php?action=login";
 		
 		<?
 		
-		} elseif( $id && !$actionDelete ) {
-	
-			$getLog = "SELECT * FROM sms_personallogs WHERE logid = '$id' LIMIT 1";
-			$getLogResults = mysql_query( $getLog );
+		}
+		elseif(isset($id) && !isset($_POST['action_delete_x']))
+		{
+			$getLog = "SELECT * FROM sms_personallogs WHERE logid = $id LIMIT 1";
+			$getLogResults = mysql_query($getLog);
 			
-			while( $fetchLog = mysql_fetch_array( $getLogResults ) ) {
-				extract( $fetchLog, EXTR_OVERWRITE );
+			while($fetchLog = mysql_fetch_array($getLogResults)) {
+				extract($fetchLog, EXTR_OVERWRITE);
 			}
 	
 		?>
@@ -268,7 +286,7 @@ Please log in to approve this log.  " . $webLocation . "login.php?action=login";
 		</table>
 		</form>
 	
-		<? } elseif( $id && $actionDelete ) { ?>
+		<? } elseif(isset($id) && isset($_POST['action_delete_x'])) { ?>
 	
 		Please return to the Control Panel to continue.
 	
