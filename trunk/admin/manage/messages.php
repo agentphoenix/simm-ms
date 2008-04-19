@@ -10,7 +10,7 @@ File: admin/manage/messages.php
 Purpose: Page that moderates the various messages found throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2007-08-21 1006 EST
+Last Modified: 2008-04-19 1847 EST
 **/
 
 /* access check */
@@ -19,49 +19,35 @@ if( in_array( "m_messages", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_POST['action_update_x'];
+	$query = FALSE;
+	$result = FALSE;
 
 	/* if the POST action is update */
-	if( $action ) {
-	
-		/* define the POST variables */
-		$welcomeMessage = addslashes( $_POST['welcomeMessage'] );
-		$shipMessage = addslashes( $_POST['shipMessage'] );
-		$simmMessage = addslashes( $_POST['simmMessage'] );
-		$shipHistory = addslashes( $_POST['shipHistory'] );
-		$cpMessage = addslashes( $_POST['cpMessage'] );
-		$joinDisclaimer = addslashes( $_POST['joinDisclaimer'] );
-		$samplePostQuestion = addslashes( $_POST['samplePostQuestion'] );
-		$rules = addslashes( $_POST['rules'] );
-		$acceptMessage = addslashes( $_POST['acceptMessage'] );
-		$rejectMessage = addslashes( $_POST['rejectMessage'] );
-		$siteCredits = addslashes( $_POST['siteCredits'] );
+	if(isset($_POST['action_update_x']))
+	{
+		$update = "UPDATE sms_messages SET welcomeMessage = %s, shipMessage = %s, simmMessage = %s, shipHistory = %s, ";
+		$update.= "cpMessage = %s, joinDisclaimer = %s, samplePostQuestion = %s, rules = %s, acceptMessage = %s, ";
+		$update.= "rejectMessage = %s, siteCredits = %s WHERE messageid = 1 LIMIT 1";
 		
-		/* do the update query */
-		$updateMessages = "UPDATE sms_messages SET ";
-		$updateMessages.= "welcomeMessage = '$welcomeMessage', shipMessage = '$shipMessage', ";
-		$updateMessages.= "simmMessage = '$simmMessage', shipHistory = '$shipHistory', cpMessage = '$cpMessage', ";
-		$updateMessages.= "joinDisclaimer = '$joinDisclaimer', samplePostQuestion = '$samplePostQuestion', ";
-		$updateMessages.= "rules = '$rules', acceptMessage = '$acceptMessage', rejectMessage = '$rejectMessage', ";
-		$updateMessages.= "siteCredits = '$siteCredits' WHERE messageid = '1' LIMIT 1";
-		$result = mysql_query( $updateMessages );
+		$query = sprintf(
+			$update,
+			escape_string($_POST['welcomeMessage']),
+			escape_string($_POST['shipMessage']),
+			escape_string($_POST['simmMessage']),
+			escape_string($_POST['shipHistory']),
+			escape_string($_POST['cpMessage']),
+			escape_string($_POST['joinDisclaimer']),
+			escape_string($_POST['samplePostQuestion']),
+			escape_string($_POST['rules']),
+			escape_string($_POST['acceptMessage']),
+			escape_string($_POST['rejectMessage']),
+			escape_string($_POST['siteCredits'])
+		);
 		
-		/* strip the slashes from the vars */
-		$welcomeMessage = stripslashes( $welcomeMessage );
-		$shipMessage = stripslashes( $shipMessage );
-		$simmMessage = stripslashes( $simmMessage );
-		$shipHistory = stripslashes( $shipHistory );
-		$cpMessage = stripslashes( $cpMessage );
-		$joinDisclaimer = stripslashes( $joinDisclaimer );
-		$samplePostQuestion = stripslashes( $samplePostQuestion );
-		$rules = stripslashes( $rules );
-		$acceptMessage = stripslashes( $acceptMessage );
-		$rejectMessage = stripslashes( $rejectMessage );
-		$siteCredits = stripslashes( $siteCredits );
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_messages" );
-		
 	}
 	
 	/* strip the slashes from the vars */
@@ -80,11 +66,10 @@ if( in_array( "m_messages", $sessionAccess ) ) {
 ?>
 
 	<div class="body">
-	
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateMessages );
+		$check->checkQuery( $result, $query );
 		
 		if( !empty( $check->query ) ) {
 			$check->message( "site messages", "update" );
