@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/coc.php
 Purpose: Page to change the order of the chain of command
 
-System Version: 2.5.0
-Last Modified: 2007-04-22 1608 EST
+System Version: 2.6.0
+Last Modified: 2008-04-19 1713 EST
 **/
 
 /* access check */
@@ -19,54 +19,61 @@ if( in_array( "m_coc", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_GET['action'];
+	$sql = FALSE;
+	$result = FALSE;
 	
-	/* if the POST action is update */
-	if( $action == "update" ) {
-		
-		/* set the variables */
+	if(isset($_GET['action']) && ($_GET['action'] == "create" || $_GET['action'] == "delete")) {
+		$action = $_GET['action'];
+	}
+	
+	if(isset($_POST['action_update_x']))
+	{
 		$cocid = $_POST['cocid'];
 		$userid = $_POST['crewid'];
 		
+		if(!is_numeric($cocid)) {
+			$cocid = NULL;
+		}
+		
+		if(!is_numeric($userid)) {
+			$userid = NULL;
+		}
+		
 		/* do the SQL Update query */
-		$sql = "UPDATE sms_coc SET crewid = '$userid' WHERE cocid = '$cocid' LIMIT 1";
-		$result = mysql_query( $sql );
+		$sql = "UPDATE sms_coc SET crewid = $userid WHERE cocid = $cocid LIMIT 1";
+		$result = mysql_query($sql);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_coc" );
-	
-	/* if the POST action is create */
-	} elseif( $action == "create" ) {
 		
-		/* do the SQL Update query */
-		$sql = "INSERT INTO sms_coc ( cocid, crewid ) VALUES ( '', '0' )";
-		$result = mysql_query( $sql );
+		$action = "update";
+	}
+	
+	if(isset($action) && $action == "create")
+	{
+		$sql = "INSERT INTO sms_coc (cocid, crewid) VALUES ('', '0')";
+		$result = mysql_query($sql);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_coc" );
-	
-	/* if the POST action is delete */
-	} elseif( $action == "delete" ) {
-		
-		/* get the last cocid */
+	}
+	if(isset($action) && $action == "delete")
+	{
 		$getLastId = "SELECT cocid FROM sms_coc ORDER BY cocid DESC LIMIT 1";
-		$getLastIdResult = mysql_query( $getLastId );
-		$lastID = mysql_fetch_assoc( $getLastIdResult );
+		$getLastIdResult = mysql_query($getLastId);
+		$lastID = mysql_fetch_assoc($getLastIdResult);
 		
-		/* do the SQL Update query */
-		$sql = "DELETE FROM sms_coc WHERE cocid = '$lastID[cocid]' LIMIT 1";
-		$result = mysql_query( $sql );
+		$sql = "DELETE FROM sms_coc WHERE cocid = $lastID[cocid] LIMIT 1";
+		$result = mysql_query($sql);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_coc" );
-
 	}
 
 ?>
 
 	<div class="body">
-		
-		<?
+		<?php
 		
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $sql );
@@ -80,9 +87,9 @@ if( in_array( "m_coc", $sessionAccess ) ) {
 		
 		<span class="fontTitle">Manage the Chain of Command</span><br /><br />
 		
-		<a href="<?=$webLocation;?>admin.php?page=manage&sub=coc&action=create">Add CoC Position &raquo;</a>
+		<a href="<?=$webLocation;?>admin.php?page=manage&sub=coc&action=create" class="add fontMedium"><strong>Add CoC Position &raquo;</strong></a>
 		<br />
-		<a href="<?=$webLocation;?>admin.php?page=manage&sub=coc&action=delete">Remove Last CoC Position &raquo;</a>
+		<a href="<?=$webLocation;?>admin.php?page=manage&sub=coc&action=delete" class="delete fontMedium"><strong>Remove Last CoC Position &raquo;</strong></a>
 		<br /><br />
 		
 		<table cellspacing="1">
@@ -102,11 +109,11 @@ if( in_array( "m_coc", $sessionAccess ) ) {
 		
 		?>
 			
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=coc&action=update">
+			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=coc">
 			<tr>
 				<td valign="middle" align="center" width="30%"><b>CoC Position #<?=$i;?></b></td>
 				<td width="30%">
-					<input type="hidden" name="cocid" value="<?=$cocList['0'];?>" />
+					<input type="hidden" name="cocid" value="<?=$cocList[0];?>" />
 					<select name="crewid">
 					
 					<?
@@ -134,7 +141,7 @@ if( in_array( "m_coc", $sessionAccess ) ) {
 				</td>
 				<td>&nbsp;</td>
 				<td width="30%" valign="middle">
-					<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action" value="Update" />
+					<input type="image" src="<?=path_userskin;?>buttons/update.png" class="button" name="action_update" value="Update" />
 				</td>
 			</form>
 			</tr>
