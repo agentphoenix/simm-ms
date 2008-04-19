@@ -10,7 +10,7 @@ File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-03-27 1821 EST
+Last Modified: 2008-04-18 2017 EST
 **/
 
 /* access check */
@@ -22,6 +22,9 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 	$query = FALSE;
 	$result = FALSE;
 	$action_type = FALSE;
+	$tab = 1;
+	$sub_tab = 1;
+	$sub_tab_a = 1;
 	
 	if(isset($_POST))
 	{
@@ -95,6 +98,21 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 				/* set the action */
 				$action = "update";
 				
+				if(isset($_POST['action_tab']) && is_numeric($_POST['action_tab']))
+				{
+					$tab = $_POST['action_tab'];
+				}
+				
+				if(isset($_POST['action_tab_sub']) && is_numeric($_POST['action_tab_sub']))
+				{
+					$sub_tab = $_POST['action_tab_sub'];
+				}
+				
+				if(isset($_POST['action_tab_sub_a']) && is_numeric($_POST['action_tab_sub_a']))
+				{
+					$sub_tab_a = $_POST['action_tab_sub_a'];
+				}
+				
 				break;
 			case 'delete':
 				
@@ -106,6 +124,21 @@ if( in_array( "x_menu", $sessionAccess ) ) {
 				
 				/* set the action */
 				$action = $action_type;
+				
+				if(isset($_POST['action_tab']) && is_numeric($_POST['action_tab']))
+				{
+					$tab = $_POST['action_tab'];
+				}
+				
+				if(isset($_POST['action_tab_sub']) && is_numeric($_POST['action_tab_sub']))
+				{
+					$sub_tab = $_POST['action_tab_sub'];
+				}
+				
+				if(isset($_POST['action_tab_sub_a']) && is_numeric($_POST['action_tab_sub_a']))
+				{
+					$sub_tab_a = $_POST['action_tab_sub_a'];
+				}
 				
 				break;
 		}
@@ -166,9 +199,9 @@ while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#container-1 > ul').tabs();
-		$('#container-2 > ul').tabs();
-		$('#container-3 > ul').tabs();
+		$('#container-1 > ul').tabs(<?php echo $tab;?>);
+		$('#container-2 > ul').tabs(<?php echo $sub_tab;?>);
+		$('#container-3 > ul').tabs(<?php echo $sub_tab_a;?>);
 		
 		$('.zebra tr:odd').addClass('alt');
 
