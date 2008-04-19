@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/specifications.php
 Purpose: Page that moderates the specs
 
-System Version: 2.5.0
-Last Modified: 2007-06-18 0914 EST
+System Version: 2.6.0
+Last Modified: 2008-04-19 1748 EST
 **/
 
 /* access check */
@@ -19,103 +19,78 @@ if( in_array( "m_specs", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_POST['action_update_x'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	if( $action ) {
+	if(isset($_POST['action_update_x']))
+	{
+		$update = "UPDATE sms_specs SET shipClass = %s, shipRole = %s, duration = %d, durationUnit = %s, refit = %d, refitUnit = %s, ";
+		$update.= "resupply = %d, resupplyUnit = %s, length = %d, width = %d, height = %d, decks = %d, complimentEmergency = %s, ";
+		$update.= "complimentOfficers = %s, complimentEnlisted = %s, complimentMarines = %s, complimentCivilians = %s, warpCruise = %s, ";
+		$update.= "warpMaxCruise = %s, warpEmergency = %s, warpMaxTime = %s, warpEmergencyTime = %s, phasers = %s, torpedoLaunchers = %s, ";
+		$update.= "torpedoCompliment = %s, defensive = %s, shields = %s, shuttlebays = %s, hasShuttles = %s, hasRunabouts = %s, ";
+		$update.= "hasFighters = %s, shuttles = %s, runabouts = %s, fighters = %s, hasTransports = %s, transports = %s WHERE specid = 1 LIMIT 1";
 		
-		/* define the POST variables */
-		$shipClass = $_POST['shipClass'];
-		$shipRole = $_POST['shipRole'];
-		$duration = $_POST['duration'];
-		$durationUnit = addslashes( $_POST['durationUnit'] );
-		$refit = $_POST['refit'];
-		$refitUnit = addslashes( $_POST['refitUnit'] );
-		$resupply = $_POST['resupply'];
-		$resupplyUnit = addslashes( $_POST['resupplyUnit'] );
-		$length = $_POST['length'];
-		$width = $_POST['width'];
-		$height = $_POST['height'];
-		$decks = $_POST['decks'];
-		$complimentEmergency = $_POST['complimentEmergency'];
-		$complimentOfficers = $_POST['complimentOfficers'];
-		$complimentEnlisted = $_POST['complimentEnlisted'];
-		$complimentMarines = $_POST['complimentMarines'];
-		$complimentCivilians = $_POST['complimentCivilians'];
-		$warpCruise = addslashes( $_POST['warpCruise'] );
-		$warpMaxCruise = addslashes( $_POST['warpMaxCruise'] );
-		$warpEmergency = addslashes( $_POST['warpEmergency'] );
-		$warpMaxTime = addslashes( $_POST['warpMaxTime'] );
-		$warpEmergencyTime = addslashes( $_POST['warpEmergencyTime'] );
-		$phasers = addslashes( $_POST['phasers'] );
-		$torpedoLaunchers = addslashes( $_POST['torpedoLaunchers'] );
-		$torpedoCompliment = addslashes( $_POST['torpedoCompliment'] );
-		$defensive = addslashes( $_POST['defensive'] );
-		$shields = addslashes( $_POST['shields'] );
-		$shuttlebays = $_POST['shuttlebays'];
-		$hasShuttles = $_POST['hasShuttles'];
-		$hasRunabouts = $_POST['hasRunabouts'];
-		$hasFighters = $_POST['hasFighters'];
-		$hasTransports = $_POST['hasTransports'];
-		$shuttles = addslashes( $_POST['shuttles'] );
-		$runabouts = addslashes( $_POST['runabouts'] );
-		$fighters = addslashes( $_POST['fighters'] );
-		$transports = addslashes( $_POST['transports'] );
+		$query = sprintf(
+			$update,
+			escape_string($_POST['shipClass']),
+			escape_string($_POST['shipRole']),
+			escape_string($_POST['duration']),
+			escape_string($_POST['durationUnit']),
+			escape_string($_POST['refit']),
+			escape_string($_POST['refitUnit']),
+			escape_string($_POST['resupply']),
+			escape_string($_POST['resupplyUnit']),
+			escape_string($_POST['length']),
+			escape_string($_POST['width']),
+			escape_string($_POST['height']),
+			escape_string($_POST['decks']),
+			escape_string($_POST['complimentEmergency']),
+			escape_string($_POST['complimentOfficers']),
+			escape_string($_POST['complimentEnlisted']),
+			escape_string($_POST['complimentMarines']),
+			escape_string($_POST['complimentCivilians']),
+			escape_string($_POST['warpCruise']),
+			escape_string($_POST['warpMaxCruise']),
+			escape_string($_POST['warpEmergency']),
+			escape_string($_POST['warpMaxTime']),
+			escape_string($_POST['warpEmergencyTime']),
+			escape_string($_POST['phasers']),
+			escape_string($_POST['torpedoLaunchers']),
+			escape_string($_POST['torpedoCompliment']),
+			escape_string($_POST['defensive']),
+			escape_string($_POST['shields']),
+			escape_string($_POST['shuttlebays']),
+			escape_string($_POST['hasShuttles']),
+			escape_string($_POST['hasRunabouts']),
+			escape_string($_POST['hasFighters']),
+			escape_string($_POST['shuttles']),
+			escape_string($_POST['runabouts']),
+			escape_string($_POST['fighters']),
+			escape_string($_POST['hasTransports']),
+			escape_string($_POST['transports'])
+		);
 		
-		/* do the update query */
-		$updateSpecs = "UPDATE sms_specs SET ";
-		$updateSpecs.= "shipClass = '$shipClass', shipRole = '$shipRole', duration = '$duration', ";
-		$updateSpecs.= "durationUnit = '$durationUnit', refit = '$refit', refitUnit = '$refitUnit', ";
-		$updateSpecs.= "resupply = '$resupply', resupplyUnit = '$resupplyUnit', length = '$length', ";
-		$updateSpecs.= "width = '$width', height = '$height', decks = '$decks', complimentEmergency = '$complimentEmergency', ";
-		$updateSpecs.= "complimentOfficers = '$complimentOfficers', complimentEnlisted = '$complimentEnlisted', ";
-		$updateSpecs.= "complimentMarines = '$complimentMarines', complimentCivilians = '$complimentCivilians', ";
-		$updateSpecs.= "warpCruise = '$warpCruise', warpMaxCruise = '$warpMaxCruise', warpEmergency = '$warpEmergency', ";
-		$updateSpecs.= "warpMaxTime = '$warpMaxTime', warpEmergencyTime = '$warpEmergencyTime', ";
-		$updateSpecs.= "phasers = '$phasers', torpedoLaunchers = '$torpedoLaunchers', torpedoCompliment = '$torpedoCompliment', ";
-		$updateSpecs.= "defensive = '$defensive', shields = '$shields', shuttlebays = '$shuttlebays', ";
-		$updateSpecs.= "hasShuttles = '$hasShuttles', hasRunabouts = '$hasRunabouts', hasFighters = '$hasFighters', ";
-		$updateSpecs.= "shuttles = '$shuttles', runabouts = '$runabouts', fighters = '$fighters', hasTransports = '$hasTransports', transports = '$transports' ";
-		$updateSpecs.= "WHERE specid = '1' LIMIT 1";
-		$result = mysql_query( $updateSpecs );
+		$result = mysql_query($query);
 		
 		/* optimize table */
 		optimizeSQLTable( "sms_specs" );
-		
 	}
 	
-	$getSpecs = "SELECT * FROM sms_specs WHERE specid = '1'";
+	$getSpecs = "SELECT * FROM sms_specs WHERE specid = 1";
 	$getSpecsResult = mysql_query( $getSpecs );
 	
 	while( $specFetch = mysql_fetch_array( $getSpecsResult ) ) {
 		extract( $specFetch, EXTR_OVERWRITE );
 	}
-	
-	/* strip the slashes from the vars */
-	$durationUnit = stripslashes( $durationUnit );
-	$refitUnit = stripslashes( $refitUnit );
-	$resupplyUnit = stripslashes( $resupplyUnit );
-	$warpCruise = stripslashes( $warpCruise );
-	$warpMaxCruise = stripslashes( $warpMaxCruise );
-	$warpEmergency = stripslashes( $warpEmergency );
-	$warpMaxTime = stripslashes( $warpMaxTime );
-	$warpEmergencyTime = stripslashes( $warpEmergencyTime );
-	$phasers = stripslashes( $phasers );
-	$torpedoLaunchers = stripslashes( $torpedoLaunchers );
-	$torpedoCompliment = stripslashes( $torpedoCompliment );
-	$defensive = stripslashes( $defensive );
-	$shields = stripslashes( $shields );
-	$shuttles = stripslashes( $shuttles );
-	$runabouts = stripslashes( $runabouts );
-	$fighters = stripslashes( $fighters );
 
 ?>
 
 	<div class="body">
-	
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateSpecs );
+		$check->checkQuery( $result, $query );
 		
 		if( !empty( $check->query ) ) {
 			$check->message( "specifications", "update" );
