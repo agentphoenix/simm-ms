@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/strikes.php
 Purpose: Page to add and remove strikes against players
 
-System Version: 2.5.0
-Last Modified: 2007-04-23 2013 EST
+System Version: 2.6.0
+Last Modified: 2008-04-19 1722 EST
 **/
 
 /* access check */
@@ -19,44 +19,54 @@ if( in_array( "m_strike", $sessionAccess ) ) {
 	/* set the page class and variables */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_POST['action'];
-	$button = $_POST['button_x'];
-	$strikeCrewid = $_POST['crew'];
-	$reason = addslashes( $_POST['reason'] );
+	$query = FALSE;
+	$result = FALSE;
+	$today = getdate();
 	
-	if( $button ) {
+	if(isset($_POST['button_x']))
+	{
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
 		
-		/* pull how many strikes the player has from the db */
-		$strikes = "SELECT strikes FROM sms_crew WHERE crewid = '$strikeCrewid' LIMIT 1";
+		if(!is_numeric($crew))
+		{
+			$crew = NULL;
+		}
+		
+		$strikes = "SELECT strikes FROM sms_crew WHERE crewid = $crew LIMIT 1";
 		$strikesResult = mysql_query( $strikes );
 		$strikeVar = mysql_fetch_row( $strikesResult );
 			
 		/* do logic to figure out how to change the number of strikes */
-		if( $action == "add" ) {
+		if($action == "add") {
 			$strikesNew = ( $strikeVar['0'] + 1 );
-		} elseif( $action == "delete" ) {
+		} elseif($action == "delete") {
 			$strikesNew = ( $strikeVar['0'] - 1 );
 		}
 			
-		/* insert a new row into the strikes table */
-		$strikeTable = "INSERT INTO sms_strikes ( strikeid, crewid, strikeDate, reason, number ) ";
-		$strikeTable.= "VALUES ( '', '$strikeCrewid', UNIX_TIMESTAMP(), '$reason', '$strikesNew' )";
-		$result = mysql_query( $strikeTable );
-			
-		/* optimize table */
-		optimizeSQLTable( "sms_strikes" );
+		$insert = "INSERT INTO sms_strikes (crewid, strikeDate, reason, number) VALUES (%d, %d, %s, %d)";
 		
+		$query = sprintf(
+			$insert,
+			escape_string($crew),
+			escape_string($today[0]),
+			escape_string($_POST['reason']),
+			escape_string($strikesNew)
+		);
+		
+		$result = mysql_query($query);
+			
 		/* update the user table to give the player the new number of strikes */
-		$userTable = "UPDATE sms_crew SET strikes = '$strikesNew' WHERE crewid = '$strikeCrewid' LIMIT 1";
-		$userTableResult = mysql_query( $userTable );
+		$update = "UPDATE sms_crew SET strikes = %d WHERE crewid = $crew LIMIT 1";
+		$query2 = sprintf($update, escape_string($strikesNew));
+		$result2 = mysql_query($query2);
 		
 		/* optimize table */
 		optimizeSQLTable( "sms_crew" );
-		
+		optimizeSQLTable( "sms_strikes" );
 	}
-	
-	/* strip the slashes */
-	$reason = stripslashes( $reason );
 	
 ?>
 	
@@ -65,7 +75,7 @@ if( in_array( "m_strike", $sessionAccess ) ) {
 		<?
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $strikeTable );
+		$check->checkQuery( $result, $query );
 		
 		if( !empty( $check->query ) ) {
 			$check->message( "strike", $action );
