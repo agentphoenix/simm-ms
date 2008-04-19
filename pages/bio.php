@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-04-10 2052 EST
+Last Modified: 2008-04-19 1824 EST
 **/
 
 /* define the page class and set the vars */
@@ -403,6 +403,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	
 				/* explode the string at the semicolon */
 				$awardsRaw = explode( ";", $fetchAwards[0] );
+				$awardsRaw = array_reverse($awardsRaw);
 				
 				/* explode the array again */
 				foreach($awardsRaw as $a => $b)
