@@ -10,7 +10,7 @@ File: admin/manage/summaries.php
 Purpose: Page that moderates the various messages found throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2008-02-25 1325 EST
+Last Modified: 2008-04-19 1734 EST
 **/
 
 /* access check */
@@ -19,36 +19,35 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$actionUpdate = $_POST['action_update_x'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	if(isset($_GET['t']) && is_numeric($_GET['t']))
-	{
+	if(isset($_GET['t']) && is_numeric($_GET['t'])) {
 		$tab = $_GET['t'];
-	}
-	else
-	{
+	} else {
 		$tab = 1;
 	}
 	
 	/* if the POST action is update */
-	if( $actionUpdate ) {
+	if(isset($_POST['action_update_x']))
+	{
+		if(isset($_POST['missionid']) && is_numeric($_POST['missionid'])) {
+			$missionid = $_POST['missionid'];
+		} else {
+			$missionid = NULL;
+		}
 		
-		/* define the POST variables */
-		$missionid = $_POST['missionid'];
-		$missionSummary = addslashes( $_POST['missionSummary'] );
-		
-		/* do the update query */
-		$updateSummary = "UPDATE sms_missions SET ";
-		$updateSummary.= "missionSummary = '$missionSummary' WHERE missionid = '$missionid' LIMIT 1";
-		$result = mysql_query( $updateSummary );
+		$update = "UPDATE sms_missions SET missionSummary = %s WHERE missionid = $missionid LIMIT 1";
+		$query = sprintf($update, escape_string($_POST['missionSummary']));
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_missions" );
-		
-		/* strip the slashes from the vars */
-		$missionSummary = stripslashes( $missionSummary );
-		
 	}
+	
+	$currentCount = "SELECT * FROM sms_missions WHERE missionStatus = 'current'";
+	$currentCountR = mysql_query($currentCount);
+	$current = mysql_num_rows($currentCountR);
 	
 	$completedCount = "SELECT * FROM sms_missions WHERE missionStatus = 'completed'";
 	$completedCountR = mysql_query( $completedCount );
@@ -57,14 +56,6 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 	$upcomingCount = "SELECT * FROM sms_missions WHERE missionStatus = 'upcoming'";
 	$upcomingCountR = mysql_query( $upcomingCount );
 	$upcoming = mysql_num_rows( $upcomingCountR );
-	
-	if( $complete == 0 ) {
-		$disableCompleted = "2, ";
-	} if( $upcoming == 0 ) {
-		$disableUpcoming = "3";
-	}
-
-	$disable = $disableCompleted . $disableUpcoming;
 
 ?>
 
@@ -73,7 +64,7 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 		<?
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateSummary );
+		$check->checkQuery( $result, $query );
 		
 		if( !empty( $check->query ) ) {
 			$check->message( "mission summary", "update" );
@@ -84,14 +75,12 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 		
 		<script type="text/javascript">
 			$(document).ready(function(){
-				$('#container-1 > ul').tabs(<?php echo $tab; ?>, {disabled: [<?php echo $disable; ?>]});
+				$('#container-1 > ul').tabs(<?php echo $tab; ?>);
 			});
 		</script>
 		
 		<span class="fontTitle">Manage Mission Summaries</span><br /><br />
-		Mission summaries allow you to summarize your past and current missions so that new users can
-		get a feel for what your crew has done in-character.  It's also a great way for players that enter
-		during a mission or current players who have fallen behind to get caught up quickly.<br /><br />
+		Mission summaries allow you to summarize your past and current missions so that new users can get a feel for what your crew has done in-character.  It's also a great way for players that enter during a mission or current players who have fallen behind to get caught up quickly.<br /><br />
 		
 		<div id="container-1">
 			<ul>
@@ -101,16 +90,21 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 			</ul>
 			
 			<div id="one" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if($current == 0)
+				{
+					echo "<strong class='orange fontMedium'>No current missions</strong>";
+				}
+				else
+				{
+				
+				?>
 				<table>
-					<?
+					<?php
 
-					$missions = "SELECT missionid, missionTitle, missionSummary ";
-					$missions.= "FROM sms_missions WHERE missionStatus = 'current' ";
-					$missions.= "ORDER BY missionOrder DESC";
-					$missionsResult = mysql_query($missions);
-
-					while( $summary = mysql_fetch_array( $missionsResult ) ) {
-						extract( $summary, EXTR_OVERWRITE );
+					while($summary = mysql_fetch_array($currentCountR)) {
+						extract($summary, EXTR_OVERWRITE);
 
 					?>
 					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries&t=1">
@@ -134,22 +128,27 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 						</td>
 					</tr>
 					</form>
-				<? } ?>
-
+				<?php } ?>
 				</table>
+				<?php } ?>
 			</div>
 			
 			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if($complete == 0)
+				{
+					echo "<strong class='orange fontMedium'>No completed missions</strong>";
+				}
+				else
+				{
+				
+				?>
 				<table>
-					<?
+					<?php
 
-					$missions = "SELECT missionid, missionTitle, missionSummary ";
-					$missions.= "FROM sms_missions WHERE missionStatus = 'completed' ";
-					$missions.= "ORDER BY missionOrder DESC";
-					$missionsResult = mysql_query($missions);
-
-					while( $summary = mysql_fetch_array( $missionsResult ) ) {
-						extract( $summary, EXTR_OVERWRITE );
+					while($summary = mysql_fetch_array($completedCountR)) {
+						extract($summary, EXTR_OVERWRITE);
 
 					?>
 					<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=summaries&t=2">
@@ -176,21 +175,26 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 						<td colspan="3" height="25"></td>
 					</tr>
 					</form>
-				<? } ?>
-
+				<?php } ?>
 				</table>
+				<?php } ?>
 			</div>
 			
 			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if($upcoming == 0)
+				{
+					echo "<strong class='orange fontMedium'>No upcoming missions</strong>";
+				}
+				else
+				{
+				
+				?>
 				<table>
-					<?
+					<?php
 
-					$missions = "SELECT missionid, missionTitle, missionSummary ";
-					$missions.= "FROM sms_missions WHERE missionStatus = 'upcoming' ";
-					$missions.= "ORDER BY missionOrder DESC";
-					$missionsResult = mysql_query($missions);
-
-					while( $summary = mysql_fetch_array( $missionsResult ) ) {
+					while( $summary = mysql_fetch_array( $upcomingCountR ) ) {
 						extract( $summary, EXTR_OVERWRITE );
 
 					?>
@@ -218,9 +222,9 @@ if( in_array( "m_missionsummaries", $sessionAccess ) ) {
 						<td colspan="3" height="25"></td>
 					</tr>
 					</form>
-				<? } ?>
-
+				<?php } ?>
 				</table>
+				<?php } ?>
 			</div>
 		</div>
 		
