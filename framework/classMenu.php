@@ -11,7 +11,7 @@ Purpose: Page with the menu class that is called by the skin to build the variou
 	menus used throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2008-03-06 1704 EST
+Last Modified: 2008-04-19 0129 EST
 **/
 
 class Menu
@@ -168,14 +168,14 @@ class Menu
 			
 			} /* close the foreach */
 			
-			/* figure out which arrow image to use */
-			if(!array_key_exists($this->skin, $this->arrow))
+			/* figure out if the current skin uses a special arrow */
+			if(file_exists('skins/' . $this->skin . '/images/arrow.png'))
 			{
-				$image = 'images/arrow.png';
+				$image = 'skins/' . $this->skin . '/images/arrow.png';
 			}
 			else
 			{
-				$image = $this->arrow[$this->skin];
+				$image = 'images/arrow.png';
 			}
 			
 			/* open the unordered list */
