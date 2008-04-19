@@ -10,7 +10,7 @@ File: pages/post.php
 Purpose: To display the individual posts to a mission
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 2309 EST
+Last Modified: 2008-04-19 1338 EST
 **/
 
 /* define the page class */
@@ -122,7 +122,7 @@ if(isset($mp_id))
 			?>	
 
 				<script type="text/javascript">
-					document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=posts&remove=<?=$mp_id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission entry?')\">Delete</a>" );
+					document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=posts&remove=<?=$mp_id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission entry?')\"><b>Delete</b></a>" );
 				</script>
 				<noscript>
 					<a href="<?=$webLocation;?>admin.php?page=manage&sub=posts&remove=<?=$mp_id;?>" class="delete">Delete</a>
