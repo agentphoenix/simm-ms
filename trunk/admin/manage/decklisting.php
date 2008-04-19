@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/decklisting.php
 Purpose: Page that moderates the ship deck listing page
 
-System Version: 2.5.2
-Last Modified: 2007-08-03 1829 EST
+System Version: 2.6.0
+Last Modified: 2008-04-19 1836 EST
 **/
 
 /* access check */
@@ -19,8 +19,8 @@ if( in_array( "m_decks", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$actionUpdate = $_POST['action_update_x'];
-	$actionReset = $_POST['action_reset_x'];
+	$query = FALSE;
+	$result = FALSE;
 
 	/* check how many rows exist in the db */
 	$checkRows = "SELECT * FROM sms_tour_decks";
@@ -28,70 +28,63 @@ if( in_array( "m_decks", $sessionAccess ) ) {
 	$checkRowsCount = mysql_num_rows( $checkRowsResult );
 	
 	/* pull the number of decks the ship/starbase has from the db */
-	$getDecks = "SELECT decks FROM sms_specs WHERE specid = '1' LIMIT 1";
+	$getDecks = "SELECT decks FROM sms_specs WHERE specid = 1 LIMIT 1";
 	$getDecksResult = mysql_query( $getDecks );
 	$deckCount = mysql_fetch_array( $getDecksResult );
 	
-	if( $checkRowsCount == 0 ) {
-
+	if($checkRowsCount == 0)
+	{
 		/*
 			if there is a # of decks in the specs table, use that number to
 			populate the decks table, otherwise, spit back an error
 		*/
-		if( !empty( $deckCount['0'] ) ) {
-	
+		if(!empty($deckCount[0]))
+		{
 			/* loop through that many times and create rows in the db */
-			for( $i = 1; $i <= $deckCount['0']; $i++ ) {
-		
-				/* insert a row for the decks */
+			for($i=1; $i<=$deckCount[0]; $i++)
+			{
 				$insertDecks = "INSERT INTO sms_tour_decks ( deckid, deckContent ) VALUES ( '', '' )";
 				$insertDecksResult = mysql_query( $insertDecks );
-		
 			}
 		
-			echo "<span class='fontLarge'><b>Deck insert complete.  Please refresh the page.</b></span>";
-
-		} else {
-
-			echo "<span class='fontLarge'><b>Error! Your specifications do not list the number of decks. In order to use the SMS deck listing feature, you must specify a number of decks in the specifications. Please go to the <a href='" . $webLocation . "admin.php?page=manage&sub=specifications'>specifications management page</a> and add the number of decks.</b></span>";
-
+			echo "<strong class='fontLarge'>Deck insert complete.  Please refresh the page.</strong>";
 		}
-	
-	} else {
-
-		if( $actionUpdate ) {
-
-			for( $j = 1; $j <= $deckCount['0']; $j++ ) {
-
-				/* add the appropriate slashes */
-				$deckContent = addslashes( $_POST[$j . '_content'] );
-
-				$query = "UPDATE sms_tour_decks SET deckContent = '$deckContent' WHERE deckid = '$j' LIMIT 1";
+		else
+		{
+			echo "<span class='fontLarge'><b>Error! Your specifications do not list the number of decks. In order to use the SMS deck listing feature, you must specify a number of decks in the specifications. Please go to the <a href='" . $webLocation . "admin.php?page=manage&sub=specifications'>specifications management page</a> and add the number of decks.</b></span>";
+		}
+	}
+	else
+	{
+		if(isset($_POST['action_update_x']))
+		{
+			for($j=1; $j<=$deckCount[0]; $j++)
+			{
+				$update = "UPDATE sms_tour_decks SET deckContent = %s WHERE deckid = $j LIMIT 1";
+				$query = sprintf($update, escape_string($_POST[$j.'_content']));
 				$result = mysql_query( $query );
-
 			}
 
 			/* optimize the SQL table */
 			optimizeSQLTable( "sms_tour_decks" );
 			
 			$action = "update";
-
-		} if( $actionReset ) {
-
+		}
+		elseif(isset($_POST['action_reset_x']))
+		{
 			$query = "TRUNCATE TABLE sms_tour_decks";
-			$result = mysql_query( $query );
+			$result = mysql_query($query);
 
 			/* optimize the SQL table */
 			optimizeSQLTable( "sms_tour_decks" );
 
 			$action = "reset";
-
 		}
 	
 ?>
 	
 	<div class="body">
-		<?
+		<?php
 		
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $query );
@@ -104,11 +97,7 @@ if( in_array( "m_decks", $sessionAccess ) ) {
 		?>
 		
 		<span class="fontTitle">Manage Deck Listing</span><br /><br />
-		Use this feature to define the deck listing for your sim's vessel. The number of
-		decks is determined by what is found in your specifications page. If you change
-		your class of ship/starbase and need to reset your deck listing, use the button to
-		the right.  <b class="red">WARNING:</b> you will lose all data in the deck listing
-		by reseting it.<br /><br />
+		Use this feature to define the deck listing for your sim's vessel. The number of decks is determined by what is found in your specifications page. If you change your class of ship/starbase and need to reset your deck listing, use the button to the right.  <b class="red">WARNING:</b> you will lose all data in the deck listing by reseting it.<br /><br />
 		
 		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=decklisting">
 		
