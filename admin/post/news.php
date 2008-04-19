@@ -10,66 +10,80 @@ File: admin/post/news.php
 Purpose: Page to post a news item
 
 System Version: 2.6.0
-Last Modified: 2007-11-12 1525 EST
+Last Modified: 2008-04-19 1616 EST
 **/
 
 /* access check */
-if( in_array( "p_news", $sessionAccess ) ) {
-
+if(in_array("p_news", $sessionAccess))
+{
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "post";
-	$actionPost = $_POST['action_post_x'];
-	$actionSave = $_POST['action_save_x'];
-	$actionDelete = $_POST['action_delete_x'];
+	$query = FALSE;
+	$result = FALSE;
+	$today = getdate();
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "post news item page" );
-		exit();
-	} else {
+	if(isset($_GET['id']) && is_numeric($_GET['id'])) {
 		$id = $_GET['id'];
+	} else {
+		$id = NULL;
 	}
 	
-	if( $actionPost ) {
-		
-		/* add the necessary slashes */
-		$newsTitle = addslashes( $_POST['newsTitle'] );
-		$newsContent = addslashes( $_POST['newsContent'] );
-		$newsCat = $_POST['newsCat'];
-		$newsPrivate = $_POST['newsPrivate'];
-	
-		/* check to see if the user is moderated */
+	if(isset($_POST['action_post_x']))
+	{
 		$getModerated = "SELECT crewid FROM sms_crew WHERE moderateNews = 'y'";
 		$getModeratedResult = mysql_query( $getModerated );
+		$modArray = array();
 	
 		while( $moderated = mysql_fetch_array( $getModeratedResult ) ) {
 			extract( $moderated, EXTR_OVERWRITE );
 	
-			$modArray[] = $moderated['0'];
-	
+			$modArray[] = $moderated[0];
 		}
 		/* end moderation check */
 	
-		if( count( $modArray ) > "0" && in_array( $sessionCrewid, $modArray ) ) {
+		if(count($modArray) > 0 && in_array($sessionCrewid, $modArray)) {
 			$newsStatus = "pending";
-		} elseif( $sessionCrewid == "" ) {
+		} elseif($sessionCrewid == "") {
 			$newsStatus = "pending";
-		} elseif( $sessionCrewid == "0" ) {
+		} elseif($sessionCrewid == 0) {
 			$newsStatus = "pending";
-		} elseif( $sessionCrewid > "0" ) {
+		} elseif($sessionCrewid > 0) {
 			$newsStatus = "activated";
-		} elseif( $newsCat == "0" || $newsCat == "" ) {
+		} elseif($newsCat == 0 || $newsCat == "") {
 			$newsStatus = "pending";
 		}
 	
-		if( !isset( $id ) ) {
-			$query = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate ) ";
-			$query.= "VALUES ( '', '$newsCat', '$sessionCrewid', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', '$newsStatus', '$newsPrivate' )";
-		} else {
-			$query = "UPDATE sms_news SET newsCat = '$newsCat', newsTitle = '$newsTitle', ";
-			$query.= "newsContent = '$newsContent', newsStatus = '$newsStatus', ";
-			$query.= "newsPrivate = '$newsPrivate', newsPosted = UNIX_TIMESTAMP() WHERE newsid = '$id' LIMIT 1";
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_news (newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate) ";
+			$insert.= "VALUES (%d, %d, %d, %s, %s, %s, %s)";
+			
+			$query = sprintf(
+				$insert,
+				escape_string($_POST['newsCat']),
+				escape_string($sessionCrewid),
+				escape_string($today[0]),
+				escape_string($_POST['newsTitle']),
+				escape_string($_POST['newsContent']),
+				escape_string($newsStatus),
+				escape_string($_POST['newsPrivate'])
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_news SET newsCat = %d, newsPosted = %d, newsTitle = %s, newsContent = %s, newsStatus = %s, ";
+			$update.= "newsPrivate = %s WHERE newsid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['newsCat']),
+				escape_string($today[0]),
+				escape_string($_POST['newsTitle']),
+				escape_string($_POST['newsContent']),
+				escape_string($newsStatus),
+				escape_string($_POST['newsPrivate'])
+			);
 		}
 		
 		$result = mysql_query( $query );
@@ -79,16 +93,12 @@ if( in_array( "p_news", $sessionAccess ) ) {
 		
 		$action = "post";
 		
-		/* strip the slashes added for the query */
-		$newsTitle = stripslashes( $newsTitle );
-		$newsContent = stripslashes( $newsContent );
-		
 		/** EMAIL THE NEWS **/
 		
 		/* set the email author */
 		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
+		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
 		
 		while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
@@ -101,78 +111,95 @@ if( in_array( "p_news", $sessionAccess ) ) {
 	
 		}
 		
-		/* pull the category name */
-		$getCategory = "SELECT catName FROM sms_news_categories WHERE catid = '$newsCat' LIMIT 1";
-		$getCategoryResult = mysql_query( $getCategory );
-		$category = mysql_fetch_assoc( $getCategoryResult );
-	
-		if( $newsStatus == "activated" ) {
+		foreach($_POST as $k => $v)
+		{
+			$$k = $v;
+		}
 		
-			/* define the variables */
-			$to = getCrewEmails( "emailNews" );
-			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle );
-			$message = "A News Item Posted By " . printCrewNameEmail( $sessionCrewid ) . "
-			
+		if(!is_numeric($newsCat))
+		{
+			$newsCat = NULL;
+		}
+		
+		/* pull the category name */
+		$getCategory = "SELECT catName FROM sms_news_categories WHERE catid = $newsCat LIMIT 1";
+		$getCategoryResult = mysql_query($getCategory);
+		$category = mysql_fetch_assoc($getCategoryResult);
+		
+		switch($newsStatus)
+		{
+			case 'activated':
+				$to = getCrewEmails("emailNews");
+				$subject = $emailSubject . " " . stripslashes($category['catName']) . " - " . stripslashes($newsTitle);
+				$message = "A News Item Posted By " . printCrewNameEmail($sessionCrewid) . "
+
 " . stripslashes( $newsContent );
-			
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-	
-		} elseif( $newsStatus == "pending" ) {
-	
-			/* define the variables  */
-			$to = printCOEmail();
-			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle ) . " (Awaiting Approval)";
-			$message = "A News Item Posted By " . printCrewNameEmail( $sessionCrewid ) . "
-			
+				break;
+				
+			case 'pending':
+				$to = printCOEmail();
+				$subject = $emailSubject . " " . stripslashes($category['catName']) . " - " . stripslashes($newsTitle) . " (Awaiting Approval)";
+				$message = "A News Item Posted By " . printCrewNameEmail($sessionCrewid) . "
+
 " . stripslashes( $newsContent ) . "
 
 Please log in to approve this news item.  " . $webLocation . "login.php?action=login";
-			
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-	
+				break;
 		}
+		
+		/* send the email */
+		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+	}
+	elseif(isset($_POST['action_save_x']))
+	{
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_news (newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate) ";
+			$insert.= "VALUES (%d, %d, %d, %s, %s, %s, %s)";
 			
-	} if( $actionSave ) {
-	
-		/* add the necessary slashes */
-		$newsTitle = addslashes( $_POST['newsTitle'] );
-		$newsContent = addslashes( $_POST['newsContent'] );
-		$newsCat = $_POST['newsCat'];
-		$newsPrivate = $_POST['newsPrivate'];
-	
-		if( !isset( $id ) ) {
-			$query = "INSERT INTO sms_news ( newsid, newsCat, newsAuthor, newsPosted, newsTitle, newsContent, newsStatus, newsPrivate ) ";
-			$query.= "VALUES ( '', '$newsCat', '$sessionCrewid', UNIX_TIMESTAMP(), '$newsTitle', '$newsContent', 'saved', '$newsPrivate' )";
-		} else {
-			$query = "UPDATE sms_news SET newsCat = '$newsCat', newsTitle = '$newsTitle', ";
-			$query.= "newsContent = '$newsContent', newsStatus = 'saved', ";
-			$query.= "newsPrivate = '$newsPrivate', newsPosted = UNIX_TIMESTAMP() WHERE newsid = '$id' LIMIT 1";
+			$query = sprintf(
+				$insert,
+				escape_string($_POST['newsCat']),
+				escape_string($sessionCrewid),
+				escape_string($today[0]),
+				escape_string($_POST['newsTitle']),
+				escape_string($_POST['newsContent']),
+				escape_string('saved'),
+				escape_string($_POST['newsPrivate'])
+			);
 		}
-	
+		else
+		{
+			$update = "UPDATE sms_news SET newsCat = %d, newsPosted = %d, newsTitle = %s, newsContent = %s, newsStatus = %s, ";
+			$update.= "newsPrivate = %s WHERE newsid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['newsCat']),
+				escape_string($today[0]),
+				escape_string($_POST['newsTitle']),
+				escape_string($_POST['newsContent']),
+				escape_string('saved'),
+				escape_string($_POST['newsPrivate'])
+			);
+		}
+		
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_news" );
 		
 		$action = "save";
-		
-		/* strip the slashes added for the query */
-		$newsTitle = stripslashes( $newsTitle );
-		$newsContent = stripslashes( $newsContent );
-	
-	} if( $actionDelete ) {
-	
-		/* delete the news item */
-		$query = "DELETE FROM sms_news WHERE newsid = '$id' LIMIT 1";
-		$result = mysql_query( $query );
+	}
+	elseif(isset($_POST['action_delete_x']))
+	{
+		$query = "DELETE FROM sms_news WHERE newsid = $id LIMIT 1";
+		$result = mysql_query($query);
 	
 		/* optimize the table */
 		optimizeSQLTable( "sms_news" );
 		
 		$action = "delete";
-	
 	}
 	
 ?>
@@ -193,7 +220,7 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 	
 		<span class="fontTitle">Post News Item</span><br /><br />
 	
-		<? if( !$id ) { ?>
+		<? if(!isset($id)) { ?>
 		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=news">
 		<table>
 			<tr>
@@ -210,14 +237,15 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 	
 						/* do some logic to make sure that the system is pulling the right categories */
 						if( in_array( "m_newscat1", $sessionAccess ) ) {
-							$catLevel = "1";
+							$catLevel = 1;
 						} if( in_array( "m_newscat2", $sessionAccess ) ) {
-							$catLevel = "2";
+							$catLevel = 2;
 						} if( in_array( "m_newscat3", $sessionAccess ) ) {
-							$catLevel = "3";
+							$catLevel = 3;
 						}
 						
-						$availableCats = "SELECT * FROM sms_news_categories WHERE catUserLevel <= '$catLevel' AND catVisible = 'y' ORDER BY catid ASC";
+						$availableCats = "SELECT * FROM sms_news_categories WHERE catUserLevel <= '$catLevel' ";
+						$availableCats.= "AND catVisible = 'y' ORDER BY catid ASC";
 						$availableCatsResult = mysql_query( $availableCats );
 						
 						while( $available = mysql_fetch_assoc( $availableCatsResult ) ) {
@@ -265,9 +293,10 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 	
 		<?
 		
-		} elseif( $id && !$actionDelete ) {
-	
-			$getNews = "SELECT * FROM sms_news WHERE newsid = '$id' LIMIT 1";
+		}
+		elseif(isset($id) && !isset($_POST['action_delete_x']))
+		{
+			$getNews = "SELECT * FROM sms_news WHERE newsid = $id LIMIT 1";
 			$getNewsResults = mysql_query( $getNews );
 			
 			while( $fetchNews = mysql_fetch_array( $getNewsResults ) ) {
@@ -291,14 +320,15 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 						
 						/* do some logic to make sure that the system is pulling the right categories */
 						if( in_array( "m_newscat1", $sessionAccess ) ) {
-							$catLevel = "1";
+							$catLevel = 1;
 						} if( in_array( "m_newscat2", $sessionAccess ) ) {
-							$catLevel = "2";
+							$catLevel = 2;
 						} if( in_array( "m_newscat3", $sessionAccess ) ) {
-							$catLevel = "3";
+							$catLevel = 3;
 						}
 						
-						$availableCats = "SELECT * FROM sms_news_categories WHERE catUserLevel <= '$catLevel' AND catVisible = 'y' ORDER BY catid ASC";
+						$availableCats = "SELECT * FROM sms_news_categories WHERE catUserLevel <= '$catLevel' ";
+						$availableCats.= "AND catVisible = 'y' ORDER BY catid ASC";
 						$availableCatsResult = mysql_query( $availableCats );
 						
 						while( $available = mysql_fetch_assoc( $availableCatsResult ) ) {
@@ -351,7 +381,7 @@ Please log in to approve this news item.  " . $webLocation . "login.php?action=l
 		</table>
 		</form>
 	
-		<? } elseif( $id && $actionDelete ) { ?>
+		<? } elseif(isset($id) && isset($_POST['action_delete_x'])) { ?>
 	
 		Please return to the Control Panel to continue.
 	
