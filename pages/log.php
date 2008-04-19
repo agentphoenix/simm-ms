@@ -10,7 +10,7 @@ File: pages/log.php
 Purpose: To display the individual personal logs
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 1924 EST
+Last Modified: 2008-04-19 1338 EST
 **/
 
 /* define the page class */
@@ -114,7 +114,7 @@ if(isset($pl_id))
 				?>	
 	
 					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=logs&remove=<?=$pl_id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\">Delete</a>" );
+						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=logs&remove=<?=$pl_id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\"><b>Delete</b></a>" );
 					</script>
 					<noscript>
 						<a href="<?=$webLocation;?>admin.php?page=manage&sub=logs&remove=<?=$pl_id;?>" class="delete"><b>Delete</b></a>
