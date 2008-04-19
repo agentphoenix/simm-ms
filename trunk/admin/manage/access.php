@@ -10,7 +10,7 @@ File: admin/manage/access.php
 Purpose: Page to access levels for individual users
 
 System Version: 2.6.0
-Last Modified: 2008-04-15 0056 EST
+Last Modified: 2008-04-19 0154 EST
 **/
 
 /* access check */
@@ -252,6 +252,7 @@ if(in_array("x_access", $sessionAccess))
 					<li>In order for a player to be able to edit their own posts, they need to have the Mission Posts-1 privilege</li>
 					<li>In order for a player to be able to edit their own personal logs, they need to have the Personal Logs-1 privilege</li>
 					<li>In order to approve award nominations, the user must have Give Crew Award privileges</li>
+					<li>If access is given to Database-1, the user will also need access to Manage privileges</li>
 				</ul>
 		
 				<div class="pmHeader">
