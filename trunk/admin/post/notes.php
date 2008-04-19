@@ -5,20 +5,19 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/notes.php
 Purpose: Page that displays the mission notes for the current mission
 
-System Version: 2.5.0
-Last Modified: 2007-04-03 1921 EST
+System Version: 2.6.0
+Last Modified: 2008-04-19 1617 EST
 **/
 
 /* set the page class */
 $pageClass = "admin";
 $subMenuClass = "post";
 
-$getNotes = "SELECT missionid, missionNotes FROM sms_missions ";
-$getNotes.= "WHERE missionStatus = 'current' LIMIT 1";
+$getNotes = "SELECT missionid, missionNotes FROM sms_missions WHERE missionStatus = 'current' LIMIT 1";
 $getNotesResult = mysql_query( $getNotes );
 $notes = mysql_fetch_array( $getNotesResult );
 
@@ -26,7 +25,7 @@ $notes = mysql_fetch_array( $getNotesResult );
 
 <div class="body">
 	<span class="fontTitle">
-		Mission Notes - <i><?=printMissionTitle( $notes['0'] ); ?></i>
+		Mission Notes - <i><?=printMissionTitle( $notes[0] ); ?></i>
 		
 		<? if( in_array( "m_missionnotes", $sessionAccess ) ) { ?>
 		&nbsp;
@@ -36,5 +35,5 @@ $notes = mysql_fetch_array( $getNotesResult );
 		<? } ?>
 		
 	</span><br /><br />
-	<? printText( $notes['1'] ); ?>
+	<? printText( $notes[1] ); ?>
 </div>
