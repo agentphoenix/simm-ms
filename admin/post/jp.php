@@ -10,127 +10,106 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-03-27 1819 EST
+Last Modified: 2008-04-19 1500 EST
 **/
 
 /* access check */
-if( in_array( "p_jp", $sessionAccess ) ) {
-
+if(in_array("p_jp", $sessionAccess))
+{
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "post";
-	$actionPost = $_POST['action_post_x'];
-	$actionSave = $_POST['action_save_x'];
-	$actionDelete = $_POST['action_delete_x'];
+	$query = FALSE;
+	$result = FALSE;
+	$today = getdate();
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "post JP page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$id = $_GET['id'];
-	}
-	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['number'] ) && preg_match( "/^\d+$/", $_GET['number'], $matches ) == 0 ) {
-		errorMessageIllegal( "post JP page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$number = $_GET['number'];
-	}
-	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['delete'] ) && preg_match( "/^\d+$/", $_GET['delete'], $matches ) == 0 ) {
-		errorMessageIllegal( "post JP page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$delete = $_GET['delete'];
-	}
-	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['add'] ) && preg_match( "/^\d+$/", $_GET['add'], $matches ) == 0 ) {
-		errorMessageIllegal( "post JP page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$add = $_GET['add'];
-	}
-	
-	if( $actionPost ) {
-		
-		/* add the necessary slashes */
-		$postTitle = addslashes( $_POST['postTitle'] );
-		$postLocation = addslashes( $_POST['postLocation'] );
-		$postTimeline = addslashes( $_POST['postTimeline'] );
-		$postContent = addslashes( $_POST['postContent'] );
-		$postMission = $_POST['postMission'];
-		$postTag = addslashes( $_POST['postTag'] );
-		
-		/* create the jp author variable */
-		$jpNumber = $_GET['number'];
-	
-		if( !$jpNumber ) {
-			$jpNumber = "2";
-		}
-		
-		if( $id ) {
-			if( $_POST['authorCount'] == "2" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1'];
-			} if( $_POST['authorCount'] == "3" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2'];
-			} if( $_POST['authorCount'] == "4" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3'];
-			} if( $_POST['authorCount'] == "5" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'];
-			} if( $_POST['authorCount'] == "6" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'] . "," . $_POST['postAuthor5'];
-			} if( $_POST['authorCount'] == "7" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'] . "," . $_POST['postAuthor5'] . "," . $_POST['postAuthor6'];
-			} if( $_POST['authorCount'] == "8" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'] . "," . $_POST['postAuthor5'] . "," . $_POST['postAuthor6'] . "," . $_POST['postAuthor7'];
-			}
+	if(isset($_GET['id'])) {
+		if(is_numeric($_GET['id'])) {
+			$id = $_GET['id'];
 		} else {
-			if( $jpNumber == "2" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2'];
-			} elseif( $jpNumber == "3" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3'];
-			} elseif( $jpNumber == "4" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4'];
-			} elseif( $jpNumber == "5" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'];
-			} elseif( $jpNumber == "6" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'];
-			} elseif( $jpNumber == "7" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'];
-			} elseif( $jpNumber == "8" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'] . "," . $_POST['author8'];
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
+	}
+	
+	if(isset($_GET['number'])) {
+		if(is_numeric($_GET['number'])) {
+			$number = $_GET['number'];
+		} else {
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
+	}
+	
+	if(isset($_GET['delete'])) {
+		if(is_numeric($_GET['delete'])) {
+			$delete = $_GET['delete'];
+		} else {
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
+	}
+	
+	if(isset($_GET['add'])) {
+		if(is_numeric($_GET['add'])) {
+			$add = $_GET['add'];
+		} else {
+			errorMessageIllegal( "add JP page" );
+			exit();
+		}
+	}
+	
+	if(!isset($number)) {
+		$number = 2;
+	} elseif( $number > 8 ) {
+		$number = 8;
+	}
+	
+	if(isset($_POST['action_post_x']))
+	{
+		$author_count = $_POST['authorCount'];
+		$authors_array = array();
+		
+		if(isset($id)) /* if the post has been saved and is now being posted */
+		{
+			for($a=0; $a<$author_count; $a++)
+			{
+				$authors_array[] = $_POST['postAuthor'.$a];
 			}
 		}
+		else /* if the post is NOT saved (straight posting) */
+		{
+			$authors_array[] = $sessionCrewid;
+			
+			for($a=2; $a<=$number; $a++)
+			{
+				$authors_array[] = $_POST['author'.$a];
+			}
+		}
+		
+		/* make the array a string */
+		$postAuthors = implode(',', $authors_array);
 	
 		/** check to see if the user is moderated **/
 		$getModerated = "SELECT crewid FROM sms_crew WHERE moderatePosts = 'y'";
 		$getModeratedResult = mysql_query( $getModerated );
+		$modArray = array();
+		$arrayModerate = array();
 	
-		while( $moderated = mysql_fetch_array( $getModeratedResult ) ) {
+		while($moderated = mysql_fetch_array($getModeratedResult)) {
 			extract( $moderated, EXTR_OVERWRITE );
 	
-			$modArray[] = $moderated['0'];
-	
+			$modArray[] = $moderated[0];
 		}
 	
-		/* explode the postAuthors string */
-		$authorsExploded = explode( ",", $postAuthors );
-	
 		/*
-			loop through the authors array and search for any of the items
+			loop through the authors and search for any of the items
 			in the array of moderated users. if any are found, set the last
 			key of the array to "y", otherwise, set it to "n"
 		*/
-		foreach( $authorsExploded as $key => $value ) {
-			if( count( $modArray ) > "0" && in_array( $value, $modArray ) ) {
+		foreach($authors_array as $key => $value)
+		{
+			if(count($modArray) > 0 && in_array($value, $modArray)) {
 				$arrayModerate[] = "y";
 			} else {
 				$arrayModerate[] = "n";
@@ -142,91 +121,76 @@ if( in_array( "p_jp", $sessionAccess ) ) {
 			the value of "y", set the post to pending, otherwise, go through
 			with the standard post status checks
 		*/
-		if( count( $modArray ) > "0" && in_array( "y", $arrayModerate ) ) {
+		if(count($modArray) > 0 && in_array("y", $arrayModerate)) {
 			$postStatus = "pending";
 		} else {
-			if( ( $sessionCrewid == "" ) || ( $sessionCrewid == "0" ) ) {
+			if(($sessionCrewid == "") || ($sessionCrewid == 0)) {
 				$postStatus = "pending";
-			} elseif( $sessionCrewid > "0" ) {
+			} elseif($sessionCrewid > 0) {
 				$postStatus = "activated";
-			} if( $_POST['postMission'] == "" ) {
+			} if($_POST['postMission'] == "") {
 				$postStatus = "pending";
 			}
 		}
 		/** end user moderation **/
-	
-		if( !$id ) {
-			$query = "INSERT INTO sms_posts ( postid, postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, postStatus, postTag ) ";
-			$query.= "VALUES ( '', '$postAuthors', '$postTitle', '$postLocation', '$postTimeline', '$postContent', UNIX_TIMESTAMP(), '$postMission', '$postStatus', '$postTag' )";
-			$result = mysql_query( $query );
-		} else {
-			$query = "UPDATE sms_posts SET postAuthor = '$postAuthors', postTitle = '$postTitle', ";
-			$query.= "postLocation = '$postLocation', postTimeline = '$postTimeline', ";
-			$query.= "postContent = '$postContent', postStatus = '$postStatus', postTag = '$postTag', ";
-			$query.= "postPosted = UNIX_TIMESTAMP() WHERE postid = '$id' LIMIT 1";
-			$result = mysql_query( $query );
+		
+		/* build the queries */
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_posts (postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, ";
+			$insert.= "postStatus, postTag) VALUES (%s, %s, %s, %s, %s, %d, %d, %s, %s)";
+			
+			$query = sprintf(
+				$insert,
+				escape_string($postAuthors),
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string($_POST['postMission']),
+				escape_string('activated'),
+				escape_string($_POST['postTag'])
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_posts SET postAuthor = %s, postTitle = %s, postLocation = %s, postTimeline = %s, postContent = %s, ";
+			$update.= "postPosted = %d, postStatus = %s, postTag = %s WHERE postid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($postAuthors),
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string($postStatus),
+				escape_string($_POST['postTag'])
+			);
+		}
+		
+		$result = mysql_query($query);
+		
+		/* update the crew timestamps */
+		foreach($authors_array as $k => $v)
+		{
+			$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = $v LIMIT 1";
+			$updateTimestampResult = mysql_query($updateTimestamp);
 		}
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
-		
-		$action = "post";
-	
-		/* update the crew timestamps */
-		if( !$id ) {
-			
-			/* update the main author's last post timestamp */
-			$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() ";
-			$updateTimestamp.= "WHERE crewid = '$sessionCrewid' LIMIT 1";
-			$updateTimestampResult = mysql_query( $updateTimestamp );
-	
-			for( $i = 2; $i <= $jpNumber; $i++ ) {
-	
-				/* set the author var */
-				$author = $_POST['author' . $i];
-	
-				/* update the player's last post timestamp */
-				$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() ";
-				$updateTimestamp.= "WHERE crewid = '$author' LIMIT 1";
-				$updateTimestampResult = mysql_query( $updateTimestamp );
-	
-			}
-	
-		} elseif( $id ) {
-	
-			/* set the number of authors */
-			$number = $_POST['authorCount'];
-	
-			for( $i = 0; $i <= $number; $i++ ) {
-	
-				/* set the author var */
-				$author = $_POST['postAuthor' . $i];
-	
-				/* update the player's last post timestamp */
-				$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() ";
-				$updateTimestamp.= "WHERE crewid = '$author' LIMIT 1";
-				$updateTimestampResult = mysql_query( $updateTimestamp );
-	
-			}
-	
-		}
-	
-		/* optimize the crew table */
 		optimizeSQLTable( "sms_crew" );
 		
-		/* strip the slashes added for the query */
-		$postTitle = stripslashes( $_POST['postTitle'] );
-		$postLocation = stripslashes( $_POST['postLocation'] );
-		$postTimeline = stripslashes( $_POST['postTimeline'] );
-		$postContent = stripslashes( $_POST['postContent'] );
-		$postTag = stripslashes( $_POST['postTag'] );
+		$action = "post";
 		
 		/** EMAIL THE POST **/
-		
 		/* set the email author */
 		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
+		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
 		
 		while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
@@ -238,28 +202,29 @@ if( in_array( "p_jp", $sessionAccess ) ) {
 		
 		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
-		/* if the post has an activated status */
-		if( $postStatus == "activated" ) {
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
 		
-			/* define the variables */
-			$to = getCrewEmails( "emailPosts" );
-			$subject = "[" . $shipPrefix . " " . $shipName . "] " . printMissionTitle( $postMission ) . " - " . $postTitle;
-			$message = "A Post By " . displayEmailAuthors( $postAuthors, 'noLink' ) . "
+		/* if the post has an activated status */
+		switch($postStatus)
+		{
+			case 'activated':
+				$to = getCrewEmails( "emailPosts" );
+				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle;
+				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
 Tag: " . $postTag . "
 
-" . $postContent . "";
-			
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $postStatus == "pending" ) {
-		
-			/* define the variables */
-			$to = printCOEmail();
-			$subject = "[" . $shipPrefix . " " . $shipName . "] " . printMissionTitle( $postMission ) . " - " . $postTitle . " (Awaiting Approval)";
-			$message = "A Post By " . displayEmailAuthors( $postAuthors, 'noLink' ) . "
+" . $postContent;
+				break;
+				
+			case 'pending':
+				$to = printCOEmail();
+				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle . " (Awaiting Approval)";
+				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
 Tag: " . $postTag . "
@@ -267,139 +232,134 @@ Tag: " . $postTag . "
 " . $postContent . "
 
 Please log in to approve this post.  " . $webLocation . "login.php?action=login";
+				break;
+		}
+		
+		/* send the nomination email */
+		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+		
+	}
+	elseif(isset($_POST['action_save_x']))
+	{
+		$author_count = $_POST['authorCount'];
+		$authors_array = array();
+		$authors_emails = array();
+		
+		if(isset($id)) /* if the post has been saved before and it's being edited */
+		{
+			for($a=0; $a<$author_count; $a++)
+			{
+				$authors_array[] = $_POST['postAuthor'.$a];
+			}
+		}
+		else /* if the post is NOT saved already */
+		{
+			$authors_array[] = $sessionCrewid;
 			
-			/* send the nomination email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		}
-		
-	} elseif( $actionSave ) {
-	
-		/* add the necessary slashes */
-		$postTitle = addslashes( $_POST['postTitle'] );
-		$postLocation = addslashes( $_POST['postLocation'] );
-		$postTimeline = addslashes( $_POST['postTimeline'] );
-		$postContent = addslashes( $_POST['postContent'] );
-		$postMission = $_POST['postMission'];
-		$postTag = addslashes( $_POST['postTag'] );
-		
-		/* create the jp author variable */
-		if( !$id ) {
-			$jpNumber = $_POST['jpNumber'];
-		} else {
-			$getAuthor = "SELECT postAuthor FROM sms_posts WHERE postid = '$id' LIMIT 1";
-			$getAuthorResult = mysql_query( $getAuthor );
-			$author = mysql_fetch_array( $getAuthorResult );
-	
-			$arrayAuthors = explode( ",", $author['0'] );
-			$jpNumber = count( $arrayAuthors );
-		}
-	
-		if( $id ) {
-			if( $jpNumber == "2" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1'];
-			} elseif( $jpNumber == "3" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2'];
-			} elseif( $jpNumber == "4" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3'];
-			} elseif( $jpNumber == "5" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'];
-			} elseif( $jpNumber == "6" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'] . "," . $_POST['postAuthor5'];
-			} elseif( $jpNumber == "7" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'] . "," . $_POST['postAuthor5'] . "," . $_POST['postAuthor6'];
-			} elseif( $jpNumber == "8" ) {
-				$postAuthors = $_POST['postAuthor0'] . "," . $_POST['postAuthor1']  . "," . $_POST['postAuthor2']  . "," . $_POST['postAuthor3']  . "," . $_POST['postAuthor4'] . "," . $_POST['postAuthor5'] . "," . $_POST['postAuthor6'] . "," . $_POST['postAuthor7'];
-			}
-		} else {
-			if( $jpNumber == "2" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2'];
-			} elseif( $jpNumber == "3" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3'];
-			} elseif( $jpNumber == "4" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4'];
-			} elseif( $jpNumber == "5" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'];
-			} elseif( $jpNumber == "6" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'];
-			} elseif( $jpNumber == "7" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'];
-			} elseif( $jpNumber == "8" ) {
-				$postAuthors = $sessionCrewid . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'] . "," . $_POST['author8'];
+			for($a=2; $a<=$number; $a++)
+			{
+				$authors_array[] = $_POST['author'.$a];
 			}
 		}
-	
-		if( $id ) {
-			$query = "UPDATE sms_posts SET postAuthor = '$postAuthors', postTitle = '$postTitle', ";
-			$query.= "postLocation = '$postLocation', postTimeline = '$postTimeline', ";
-			$query.= "postContent = '$postContent', postStatus = 'saved', postTag = '$postTag', ";
-			$query.= "postPosted = UNIX_TIMESTAMP(), postSave = '$sessionCrewid' WHERE postid = '$id' LIMIT 1";
-			$result = mysql_query( $query );
-		} else {
-			$query = "INSERT INTO sms_posts ( postid, postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, postStatus, postTag, postSave ) ";
-			$query.= "VALUES ( '', '$postAuthors', '$postTitle', '$postLocation', '$postTimeline', '$postContent', UNIX_TIMESTAMP(), '$postMission', 'saved', '$postTag', '$sessionCrewid' )";
-			$result = mysql_query( $query );
+		
+		/* make the array a string */
+		$postAuthors = implode(',', $authors_array);
+		
+		/* build the queries */
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_posts (postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, ";
+			$insert.= "postStatus, postTag, postSave) VALUES (%s, %s, %s, %s, %s, %d, %d, %s, %s, %d)";
+			
+			$query = sprintf(
+				$insert,
+				escape_string($postAuthors),
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string($_POST['postMission']),
+				escape_string('saved'),
+				escape_string($_POST['postTag']),
+				escape_string($sessionCrewid)
+			);
 		}
+		else
+		{
+			$update = "UPDATE sms_posts SET postAuthor = %s, postTitle = %s, postLocation = %s, postTimeline = %s, postContent = %s, ";
+			$update.= "postPosted = %d, postStatus = %s, postTag = %s, postSave = %d WHERE postid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($postAuthors),
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string('saved'),
+				escape_string($_POST['postTag']),
+				escape_string($sessionCrewid)
+			);
+		}
+		
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "save";
 		
-		/* strip the slashes added for the query */
-		$postTitle = stripslashes( $_POST['postTitle'] );
-		$postLocation = stripslashes( $_POST['postLocation'] );
-		$postTimeline = stripslashes( $_POST['postTimeline'] );
-		$postContent = stripslashes( $_POST['postContent'] );
-		$postTag = stripslashes( $_POST['postTag'] );
-	
-		/* send an email out to notify the people there have been changes made */
-	
-		/* build the author emails and explode the string at the comma */
-		$rawAuthors = explode( ",", $postAuthors );
-		
 		/*
 			start the loop based on whether there are key/value pairs
 			and keep doing 'something' until you run out of pairs
 		*/
-		foreach( $rawAuthors as $key => $value ) {
+		foreach($authors_array as $key => $value)
+		{
+			if(is_numeric($value))
+			{
+				$getSelectEmails = "SELECT email FROM sms_crew WHERE crewid = $value";
+				$getSelectEmailsResult = mysql_query($getSelectEmails);
 			
-			/* do the database query */
-			$getSelectEmails = "SELECT email FROM sms_crew WHERE crewid = '$value'";
-			$getSelectEmailsResult = mysql_query( $getSelectEmails );
-			
-			/* Start pulling the array and populate the variables */
-			while( $authorsEmails = mysql_fetch_array( $getSelectEmailsResult ) ) {
-				extract( $authorsEmails, EXTR_OVERWRITE );
+				/* Start pulling the array and populate the variables */
+				while($authorsEmails = mysql_fetch_array($getSelectEmailsResult)) {
+					extract($authorsEmails, EXTR_OVERWRITE);
 				
-				$authors_array[] = $authorsEmails['0'];
-				
-				$authors_string = implode( ",", $authors_array );
-				
-			}	/* close the while loop */
-		}	/* close the foreach loop */
+					$authors_emails[] = $authorsEmails[0];
+				}
+			}
+		}
+		
+		/* put the email array into a string */
+		$authors_email_string = implode(',', $authors_emails);
 	
 		/* set the email author */
 		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
-		$userFetchResult = mysql_query( $userFetch );
+		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
+		$userFetchResult = mysql_query($userFetch);
 		
-		while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
-			extract( $userFetchArray, EXTR_OVERWRITE );
+		while($userFetchArray = mysql_fetch_array($userFetchResult)) {
+			extract($userFetchArray, EXTR_OVERWRITE);
 		}
 		
 		$firstName = str_replace( "'", "", $firstName );
 		$lastName = str_replace( "'", "", $lastName );
 		
+		foreach($_POST as $k => $v)
+		{
+			$$k = $v;
+		}
+		
 		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
 		/* define the variables */
-		$to = $authors_string;
-		$subject = "[" . $shipPrefix . " " . $shipName . "] " . printMissionTitle( $postMission ) . " - " . $postTitle . " (Saved Joint Post)";
+		$to = $authors_email_string;
+		$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle . " (Saved Joint Post)";
 		$message = "This email is to notify you that your joint post, " . $postTitle . ", has recently been updated.  Please log in to make any changes you want before it is posted.  The content of the new post is below.  This is an automatically generated email.  Please log in to continue working on this post: " . $webLocation . "login.php?action=login
 	
-A Post By " . displayEmailAuthors( $postAuthors, 'noLink' ) . "
+A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
 Tag: " . $postTag . "
@@ -408,44 +368,34 @@ Tag: " . $postTag . "
 	
 		/* send the email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-	
-	} if( $delete ) {
-			
-		/* define the vars */
-		$postid = $_GET['id'];
-		$arrayid = $_GET['delete'];
+	}
+	elseif(isset($delete))
+	{
+		$getAuthors = "SELECT postAuthor FROM sms_posts WHERE postid = $id LIMIT 1";
+		$getAuthorsResult = mysql_query($getAuthors);
 		
-		/* pull the authors for the specific post */
-		$getAuthors = "SELECT postAuthor FROM sms_posts WHERE postid = '$postid' LIMIT 1";
-		$getAuthorsResult = mysql_query( $getAuthors );
-		
-		while( $authorAdjust = mysql_fetch_assoc( $getAuthorsResult ) ) {
-			extract( $authorAdjust, EXTR_OVERWRITE );
+		while($authorAdjust = mysql_fetch_assoc($getAuthorsResult)) {
+			extract($authorAdjust, EXTR_OVERWRITE);
 		}
 		
 		/* create the new array */
-		$authorArray = explode( ",", $postAuthor );
-		unset( $authorArray[$arrayid] );
-		$authorArray = array_values( $authorArray );
-		$newAuthors = implode( ",", $authorArray );
+		$authorArray = explode(",", $postAuthor);
+		unset($authorArray[$delete]);
+		$authorArray = array_values($authorArray);
+		$newAuthors = implode(",", $authorArray);
 		
 		/* update the post */
-		$query = "UPDATE sms_posts SET postAuthor = '$newAuthors' WHERE postid = '$postid' LIMIT 1";
-		$result = mysql_query( $query );
+		$query = "UPDATE sms_posts SET postAuthor = '$newAuthors' WHERE postid = $id LIMIT 1";
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
 	
 		$action = "remove";
-		
-	} elseif( $add ) {
-		
-		/* define the vars */
-		$postid = $_GET['id'];
-		$arrayid = $_GET['add'];
-		
-		/* pull the authors for the specific post */
-		$getAuthors = "SELECT postAuthor FROM sms_posts WHERE postid = '$postid' LIMIT 1";
+	}
+	elseif(isset($add))
+	{
+		$getAuthors = "SELECT postAuthor FROM sms_posts WHERE postid = $id LIMIT 1";
 		$getAuthorsResult = mysql_query( $getAuthors );
 		
 		while( $authorAdjust = mysql_fetch_assoc( $getAuthorsResult ) ) {
@@ -453,28 +403,27 @@ Tag: " . $postTag . "
 		}
 		
 		/* create the new array */
-		$authorArray = explode( ",", $postAuthor );
+		$authorArray = explode(",", $postAuthor);
 		$authorArray[] = 0;
-		$newAuthors = implode( ",", $authorArray );
+		$newAuthors = implode(",", $authorArray);
 		
 		/* update the post */
-		$query = "UPDATE sms_posts SET postAuthor = '$newAuthors' WHERE postid = '$postid' LIMIT 1";
+		$query = "UPDATE sms_posts SET postAuthor = '$newAuthors' WHERE postid = $id LIMIT 1";
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
 	
 		$action = "add";
-		
-	} if( $actionDelete ) {
-	
-		/* get the authors */
-		$getAuthors = "SELECT postAuthor, postTitle FROM sms_posts WHERE postid = '$id' LIMIT 1";
-		$getAuthorsResult = mysql_query( $getAuthors );
-		$authorFetch = mysql_fetch_array( $getAuthorsResult );
+	}
+	elseif(isset($_POST['action_delete_x']))
+	{
+		$getAuthors = "SELECT postAuthor, postTitle FROM sms_posts WHERE postid = $id LIMIT 1";
+		$getAuthorsResult = mysql_query($getAuthors);
+		$authorFetch = mysql_fetch_array($getAuthorsResult);
 	
 		/* delete the JP */
-		$query = "DELETE FROM sms_posts WHERE postid = '$id' LIMIT 1";
+		$query = "DELETE FROM sms_posts WHERE postid = $id LIMIT 1";
 		$result = mysql_query( $query );
 		
 		/* optimize the table */
@@ -483,35 +432,34 @@ Tag: " . $postTag . "
 		$action = "delete";
 	
 		/* send an email out to notify the people there have been changes made */
-	
 		/* build the author emails and explode the string at the comma */
-		$rawAuthors = explode( ",", $authorFetch['0'] );
+		$rawAuthors = explode(",", $authorFetch[0]);
+		$authors_array = array();
 		
 		/*
 			start the loop based on whether there are key/value pairs
 			and keep doing 'something' until you run out of pairs
 		*/
-		foreach( $rawAuthors as $key => $value ) {
-			
-			/* do the database query */
-			$getSelectEmails = "SELECT email FROM sms_crew WHERE crewid = '$value'";
+		foreach($rawAuthors as $key => $value)
+		{
+			$getSelectEmails = "SELECT email FROM sms_crew WHERE crewid = $value";
 			$getSelectEmailsResult = mysql_query( $getSelectEmails );
 			
 			/* Start pulling the array and populate the variables */
-			while( $authorsEmails = mysql_fetch_array( $getSelectEmailsResult ) ) {
-				extract( $authorsEmails, EXTR_OVERWRITE );
+			while($authorsEmails = mysql_fetch_array($getSelectEmailsResult)) {
+				extract($authorsEmails, EXTR_OVERWRITE);
 				
-				$authors_array[] = $authorsEmails['0'];
-				
-				$authors_string = implode( ",", $authors_array );
-				
-			}	/* close the while loop */
-		}	/* close the foreach loop */
+				$authors_array[] = $authorsEmails[0];
+			}
+		}
+		
+		/* make the array a string */
+		$authors_string = implode( ",", $authors_array );
 	
 		/* set the email author */
 		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
+		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
 		
 		while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
@@ -525,46 +473,37 @@ Tag: " . $postTag . "
 		
 		/* define the variables */
 		$to = $authors_string;
-		$subject = "[" . $shipPrefix . " " . $shipName . "] Saved Post Update Notification";
-		$message = "This email is to notify you that your joint post, " . $authorFetch['1'] . ", has been deleted by " . displayEmailAuthors( $sessionCrewid, 'noLink' ) . ".";
+		$subject = $emailSubject . " Saved Post Deletion Notification";
+		$message = "This email is to notify you that your joint post, " . $authorFetch[1] . ", has been deleted by " . displayEmailAuthors($sessionCrewid, 'noLink') . ".";
 	
 		/* send the email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-	
-	}
-	
-	$number = $_GET['number'];
-	
-	if( !$number ) {
-		$number = "2";
-	} elseif( $number > "8" ) {
-		$number = "8";
 	}
 	
 ?>
 	
 	<div class="body">
-		
-		<?
+		<?php
 		
 		/* set the type */
-		if( isset( $delete ) || isset( $add ) ) {
+		if(isset($delete) || isset($add)) {
 			$type = "joint post author";
 		} else {
 			$type = "joint mission post";
 		}
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $query );
+		$check->checkQuery($result, $query);
 				
-		if( !empty( $check->query ) ) {
-			$check->message( $type, $action );
+		if(!empty($check->query))
+		{
+			$check->message($type, $action);
 			$check->display();
 		}
 		
 		?>
 	
-		<? if( $useMissionNotes == "y" ) { ?>
+		<? if($useMissionNotes == "y") { ?>
 		
 		<script type="text/javascript">
 			$(document).ready(function() {
@@ -594,7 +533,7 @@ Tag: " . $postTag . "
 		</div><br />
 		<? } ?>
 	
-		<? if( !$id ) { ?>
+		<? if(!isset($id)) { ?>
 		<span class="fontTitle">Post <?=$number;?>-Way Joint Mission Entry</span><br /><br />
 		<span class="fontNormal">
 			<b>Select the number of participants:</b> &nbsp;
@@ -631,7 +570,7 @@ Tag: " . $postTag . "
 			<tr>
 				<td class="narrowLabel tableCellLabel">
 					<b>Author #<?=$authorNum;?></b>
-					<input type="hidden" name="jpNumber" value="<?=$number;?>" />
+					<input type="hidden" name="authorCount" value="<?=$number;?>" />
 				</td>
 				<td>&nbsp;</td>
 				<td>
@@ -738,7 +677,7 @@ Tag: " . $postTag . "
 		</table>
 		</form>
 	
-		<? } elseif( $id && !$actionDelete ) { ?>
+		<? } elseif(isset($id) && !isset($_POST['action_delete_x'])) { ?>
 		<span class="fontTitle">Edit Saved Joint Post</span><br /><br />
 		<table cellpadding="2" cellspacing="2">
 		<?
@@ -848,11 +787,12 @@ Tag: " . $postTag . "
 			</form>
 		<? } ?>
 		</table>
-		<? } elseif( $id && $actionDelete ) { ?>
+		<? } elseif(isset($id) && isset($_POST['action_delete_x'])) { ?>
 	
 		Please return to the Control Panel to continue.
 	
 		<? } ?>
 		
 	</div>
+	
 <? } else { errorMessage( "mission posting" ); } ?>
