@@ -8,7 +8,7 @@ File: skins/default/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
 Skin Version: 2.5
-Last Modified: 2008-01-30 1050 EST
+Last Modified: 2008-04-19 0130 EST
 **/
 
 ?>
@@ -24,7 +24,11 @@ Last Modified: 2008-01-30 1050 EST
 
 /* create a new instance of the menu class */
 $menu = new Menu;
-$menu->skin = $sessionDisplaySkin;
+
+if(isset($sessionCrewid))
+{
+	$menu->skin = $sessionDisplaySkin;
+}
 
 ?>
 
@@ -33,8 +37,9 @@ $menu->skin = $sessionDisplaySkin;
 	
 	$menu->main();
 	
-	if( isset( $sessionCrewid ) ) {
-		$menu->user( $sessionCrewid );
+	if(isset($sessionCrewid))
+	{
+		$menu->user($sessionCrewid);
 	}
 	
 	?>
