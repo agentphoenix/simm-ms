@@ -10,87 +10,98 @@ File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
 System Version: 2.6.0
-Last Modified: 2008-03-27 1818 EST
+Last Modified: 2008-04-19 1601 EST
 **/
 
 /* access check */
-if( in_array( "p_mission", $sessionAccess ) ) {
-	
+if(in_array("p_mission", $sessionAccess))
+{	
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "post";
-	$actionPost = $_POST['action_post_x'];
-	$actionSave = $_POST['action_save_x'];
-	$actionDelete = $_POST['action_delete_x'];
-	$id = $_GET['id'];
+	$query = FALSE;
+	$result = FALSE;
+	$today = getdate();
 	
 	/* check to make sure the id is legit */
-	if( isset( $id ) && !is_numeric( $id ) ) {
-		errorMessageIllegal( "post mission entry page" );
-		exit();
+	if(isset($_GET['id']) && is_numeric($_GET['id']))
+	{
+		$id = $_GET['id'];
+	}
+	else
+	{
+		$id = NULL;
 	}
 	
-	if( $actionPost ) {
-		
-		/* add the necessary slashes */
-		$postTitle = addslashes( $_POST['postTitle'] );
-		$postLocation = addslashes( $_POST['postLocation'] );
-		$postTimeline = addslashes( $_POST['postTimeline'] );
-		$postContent = addslashes( $_POST['postContent'] );
-		$postTag = addslashes( $_POST['postTag'] );
-	
-		/** check to see if the user is moderated **/
+	if(isset($_POST['action_post_x']))
+	{
 		$getModerated = "SELECT crewid FROM sms_crew WHERE moderatePosts = 'y'";
 		$getModeratedResult = mysql_query( $getModerated );
+		$modArray = array();
 	
 		while( $moderated = mysql_fetch_array( $getModeratedResult ) ) {
 			extract( $moderated, EXTR_OVERWRITE );
 	
 			$modArray[] = $moderated['0'];
-	
 		}
 		/** end moderation check **/
 		
-		if( count( $modArray ) > "0" && in_array( $sessionCrewid, $modArray ) ) {
+		if(count($modArray) > 0 && in_array($sessionCrewid, $modArray)) {
 			$postStatus = "pending";
-		} elseif( ( $sessionCrewid == "" ) || ( $sessionCrewid == "0" ) ) {
+		} elseif($sessionCrewid == "" || $sessionCrewid == 0) {
 			$postStatus = "pending";
-		} elseif( $sessionCrewid > "0" ) {
+		} elseif($sessionCrewid > 0) {
 			$postStatus = "activated";
-		} if( $_POST['postMission'] == "" ) {
+		} if($_POST['postMission'] == "") {
 			$postStatus = "pending";
 		}
 	
-		if( !$id ) {
-			$query = "INSERT INTO sms_posts ( postid, postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, postStatus, postTag ) ";
-			$query.= "VALUES ( '', '$sessionCrewid', '$postTitle', '$postLocation', '$postTimeline', '$postContent', UNIX_TIMESTAMP(), '$_POST[postMission]', '$postStatus', '$postTag' )";
-		} else {
-			$query = "UPDATE sms_posts SET postTitle = '$postTitle', postLocation = '$postLocation', ";
-			$query.= "postTimeline = '$postTimeline', postContent = '$postContent', ";
-			$query.= "postStatus = '$postStatus', postTag = '$postTag',  ";
-			$query.= "postPosted = UNIX_TIMESTAMP() WHERE postid = '$id' LIMIT 1";
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_posts (postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, ";
+			$insert.= "postStatus, postTag) VALUES (%d, %s, %s, %s, %s, %d, %d, %s, %s)";
+			
+			$query = sprintf(
+				$insert,
+				escape_string($sessionCrewid),
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string($_POST['postMission']),
+				escape_string($postStatus),
+				escape_string($_POST['postTag'])
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, postContent = %s, postPosted = %d, ";
+			$update.= "postStatus = %s, postTag = %s WHERE postid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string($postStatus),
+				escape_string($_POST['postTag'])
+			);
 		}
 	
-		$result = mysql_query( $query );
-		
-		/* strip the slashes added for the query */
-		$postTitle = stripslashes( $_POST['postTitle'] );
-		$postLocation = stripslashes( $_POST['postLocation'] );
-		$postTimeline = stripslashes( $_POST['postTimeline'] );
-		$postContent = stripslashes( $_POST['postContent'] );
-		$postTag = stripslashes( $_POST['postTag'] );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_posts" );
+		$result = mysql_query($query);
 		
 		$action = "post";
 		
 		/* update the player's last post time stamp */
-		$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = '$sessionCrewid' LIMIT 1";
-		$updateTimestampResult = mysql_query( $updateTimestamp );
+		$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = $sessionCrewid LIMIT 1";
+		$updateTimestampResult = mysql_query($updateTimestamp);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
+		optimizeSQLTable( "sms_posts" );
 		
 		/** EMAIL THE POST **/
 		
@@ -109,28 +120,28 @@ if( in_array( "p_mission", $sessionAccess ) ) {
 		
 		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
-		/* if the post has an activated status */
-		if( $postStatus == "activated" ) {
+		foreach($_POST as $k => $v)
+		{
+			$$k = $v;
+		}
 		
-			/* define the variables */
-			$to = getCrewEmails( "emailPosts" );
-			$subject = $emailSubject . " " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle;
-			$message = "A Post By " . printCrewNameEmail( $sessionCrewid ) . "
+		switch($postStatus)
+		{
+			case 'activated':
+				$to = getCrewEmails( "emailPosts" );
+				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle;
+				$message = "A Post By " . printCrewNameEmail($sessionCrewid) . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
 Tag: " . $postTag . "
 
-" . $postContent . "";
-			
-			/* send the email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		} elseif( $postStatus == "pending" ) {
-		
-			/* define the variables */
-			$to = printCOEmail();
-			$subject = $emailSubject . " " . printMissionTitle( $_POST['postMission'] ) . " - " . $postTitle . " (Awaiting Approval)";
-			$message = "A Post By " . printCrewNameEmail( $sessionCrewid ) . "
+" . $postContent;
+				break;
+				
+			case 'pending':
+				$to = printCOEmail();
+				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle . " (Awaiting Approval)";
+				$message = "A Post By " . printCrewNameEmail($sessionCrewid) . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
 Tag: " . $postTag . "
@@ -138,63 +149,71 @@ Tag: " . $postTag . "
 " . $postContent . "
 
 Please log in to approve this post.  " . $webLocation . "login.php?action=login";
-			
-			/* send the nomination email */
-			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
-		}
-			
-	} if( $actionSave ) {
-	
-		/* add the necessary slashes */
-		$postTitle = addslashes( $_POST['postTitle'] );
-		$postLocation = addslashes( $_POST['postLocation'] );
-		$postTimeline = addslashes( $_POST['postTimeline'] );
-		$postContent = addslashes( $_POST['postContent'] );
-		$postTag = addslashes( $_POST['postTag'] );
-	
-		if( !$id ) {
-			$query = "INSERT INTO sms_posts ( postid, postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, postStatus, postTag ) ";
-			$query.= "VALUES ( '', '$sessionCrewid', '$postTitle', '$postLocation', '$postTimeline', '$postContent', UNIX_TIMESTAMP(), '$_POST[postMission]', 'saved', '$postTag' )";
-		} else {
-			$query = "UPDATE sms_posts SET postTitle = '$postTitle', postLocation = '$postLocation', ";
-			$query.= "postTimeline = '$postTimeline', postContent = '$postContent', ";
-			$query.= "postStatus = 'saved', postTag = '$postTag', ";
-			$query.= "postPosted = UNIX_TIMESTAMP() WHERE postid = '$id' LIMIT 1";
+				break;
 		}
 		
-		$result = mysql_query( $query );
-		
-		/* strip the slashes added for the query */
-		$postTitle = stripslashes( $_POST['postTitle'] );
-		$postLocation = stripslashes( $_POST['postLocation'] );
-		$postTimeline = stripslashes( $_POST['postTimeline'] );
-		$postContent = stripslashes( $_POST['postContent'] );
-		$postTag = stripslashes( $_POST['postTag'] );
+		/* send the email */
+		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+	}
+	elseif(isset($_POST['action_save_x']))
+	{
+		if(!isset($id))
+		{
+			$insert = "INSERT INTO sms_posts (postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, ";
+			$insert.= "postStatus, postTag) VALUES (%d, %s, %s, %s, %s, %d, %d, %s, %s)";
+			
+			$query = sprintf(
+				$insert,
+				escape_string($sessionCrewid),
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string($_POST['postMission']),
+				escape_string('saved'),
+				escape_string($_POST['postTag'])
+			);
+		}
+		else
+		{
+			$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, postContent = %s, postPosted = %d, ";
+			$update.= "postStatus = %s, postTag = %s WHERE postid = $id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['postTitle']),
+				escape_string($_POST['postLocation']),
+				escape_string($_POST['postTimeline']),
+				escape_string($_POST['postContent']),
+				escape_string($today[0]),
+				escape_string('saved'),
+				escape_string($_POST['postTag'])
+			);
+		}
+	
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "save";
-	
-	} if( $actionDelete ) {
-	
-		/* delete the entry */
-		$query = "DELETE FROM sms_posts WHERE postid = '$id' LIMIT 1";
-		$result = mysql_query( $query );
+	}
+	elseif(isset($_POST['action_delete_x']))
+	{
+		$query = "DELETE FROM sms_posts WHERE postid = $id LIMIT 1";
+		$result = mysql_query($query);
 	
 		/* optimize the table */
 		optimizeSQLTable( "sms_posts" );
 		
 		$action = "delete";
-	
 	}
 	
 ?>
 	
 	<div class="body">
-	
-		<?
+		<?php
 		
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $query );
@@ -204,9 +223,10 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 			$check->display();
 		}
 		
+		if( $useMissionNotes == "y" && !isset($_POST['action_delete_x']))
+		{
+		
 		?>
-	
-		<? if( $useMissionNotes == "y" && $action != "Delete" ) { ?>
 			
 		<script type="text/javascript">
 			$(document).ready(function() {
@@ -238,7 +258,7 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 	
 		<span class="fontTitle">Post Mission Entry</span><br /><br />
 	
-		<? if( !$id ) { ?>
+		<? if(!isset($id)) { ?>
 		
 		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=mission">
 		<table>
@@ -316,9 +336,10 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 		
 		<?
 	
-		} elseif( $id && !$actionDelete ) {
-	
-			$getPost = "SELECT * FROM sms_posts WHERE postid = '$id' LIMIT 1";
+		}
+		elseif(isset($id) && !isset($_POST['action_delete_x']))
+		{
+			$getPost = "SELECT * FROM sms_posts WHERE postid = $id LIMIT 1";
 			$getPostResults = mysql_query( $getPost );
 			
 			while( $fetchPost = mysql_fetch_array( $getPostResults ) ) {
@@ -408,7 +429,7 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 		</table>
 		</form>
 		
-		<? } elseif( $id && $actionDelete ) { ?>
+		<? } elseif(isset($id) && isset($_POST['action_delete_x'])) { ?>
 	
 		Please return to the Control Panel to continue.
 	
