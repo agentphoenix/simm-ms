@@ -10,7 +10,7 @@ File: admin/post/addjp.php
 Purpose: Page to add a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-04-11 2210 EST
+Last Modified: 2008-04-19 1342 EST
 **/
 
 /* access check */
@@ -118,6 +118,10 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 		{
 			/* set the author var */
 			$author = $_POST['author' . $i];
+			
+			if(!is_numeric($author)) {
+				$author = NULL;
+			}
 	
 			/* update the player's last post timestamp */
 			$updateTimestamp = "UPDATE sms_crew SET lastPost = UNIX_TIMESTAMP() WHERE crewid = $author LIMIT 1";
@@ -129,14 +133,21 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 		optimizeSQLTable( "sms_posts" );
 		
 		/* if the user wants to send the email out, do it */
-		if(isset($_POST['sendEmail'])) {
-		
-			/** EMAIL THE POST **/
+		if(isset($_POST['sendEmail']))
+		{
+			foreach($_POST as $key => $value)
+			{
+				$$key = $value;
+			}
+			
+			if(is_numeric($_POST['author1'])) {
+				$emailAuthor = $_POST['author1'];
+			}
 			
 			/* set the email author */
 			$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
 			$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-			$userFetch.= "WHERE crew.crewid = '$_POST[author1]' AND crew.rankid = rank.rankid LIMIT 1";
+			$userFetch.= "WHERE crew.crewid = $emailAuthor AND crew.rankid = rank.rankid LIMIT 1";
 			$userFetchResult = mysql_query( $userFetch );
 			
 			while( $userFetchArray = mysql_fetch_array( $userFetchResult ) ) {
@@ -148,17 +159,10 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 			
 			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 			
-			$postMission = $_POST['postMission'];
-			$postTitle = $_POST['postTitle'];
-			$postLocation = $_POST['postLocation'];
-			$postTimeline = $_POST['postTimeline'];
-			$postTag = $_POST['postTag'];
-			$postContent = $_POST['postContent'];
-			
 			/* define the variables */
 			$to = getCrewEmails("emailPosts");
 			$subject = $emailSubject . " " . printMissionTitle( $postMission ) . " - " . $postTitle;
-			$message = "A Post By " . displayEmailAuthors( $postAuthors, 'noLink' ) . "
+			$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
 Location: " . $postLocation . "
 Timeline: " . $postTimeline . "
 Tag: " . $postTag . "
@@ -167,16 +171,13 @@ Tag: " . $postTag . "
 				
 			/* send the email */
 			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
 		}
-			
 	}
 	
 	?>
 	
 	<div class="body">
-	
-		<?
+		<?php
 		
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $query );
@@ -190,12 +191,7 @@ Tag: " . $postTag . "
 	
 		<span class="fontTitle">Add Joint Mission Entry</span><br /><br />
 	
-		This page should be used in the event that a member of the crew has accidentally
-		posted incorrectly.  For instance, if a player has replied to one of the emails
-		sent out to the system instead of logging in and posting, you can copy and paste
-		the contents of their email into this form and put the entry into the system. For
-		all other joint posts, please use the <a href="<?=$webLocation;?>admin.php?page=post&sub=jp">
-		Write Joint Post</a> page.<br /><br />
+		This page should be used in the event that a member of the crew has accidentally posted incorrectly.  For instance, if a player has replied to one of the emails sent out to the system instead of logging in and posting, you can copy and paste the contents of their email into this form and put the entry into the system. For all other joint posts, please use the <a href="<?=$webLocation;?>admin.php?page=post&sub=jp"> Write Joint Post</a> page.<br /><br />
 	
 		<span class="fontNormal">
 			<b>Select the number of participants:</b> &nbsp;
@@ -360,4 +356,5 @@ Tag: " . $postTag . "
 		</table>
 		</form>
 	</div>
+	
 <? } else { errorMessage( "add joint post" ); } ?>
