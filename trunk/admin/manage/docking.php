@@ -10,7 +10,7 @@ File: admin/manage/docking.php
 Purpose: Page to manage the docked ships at a starbase
 
 System Version: 2.6.0
-Last Modified: 2008-04-18 1721 EST
+Last Modified: 2008-04-18 1959 EST
 **/
 
 /* access check */
@@ -63,7 +63,11 @@ if(in_array("m_docking", $sessionAccess))
 				$result = mysql_query($query);
 				
 				$action = "update";
-				$tab = $_POST['action_tab'];
+				
+				if(isset($_POST['action_tab']) && is_numeric($_POST['action_tab']))
+				{
+					$tab = $_POST['action_tab'];
+				}
 				
 				break;
 			case 'delete':
@@ -72,7 +76,11 @@ if(in_array("m_docking", $sessionAccess))
 				$result = mysql_query($query);
 				
 				$action = "delete";
-				$tab = $_POST['action_tab'];
+				
+				if(isset($_POST['action_tab']) && is_numeric($_POST['action_tab']))
+				{
+					$tab = $_POST['action_tab'];
+				}
 				
 				break;
 		}
