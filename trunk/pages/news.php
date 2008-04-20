@@ -10,7 +10,7 @@ File: pages/news.php
 Purpose: Page to display the news items
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 2308 EST
+Last Modified: 2008-04-20 1927 EST
 **/
 
 /* define the page class and vars */
@@ -163,7 +163,9 @@ if( isset( $sessionCrewid ) ) {
 			
 			while ( $myrow = mysql_fetch_array( $getNewsResult ) ) {
 				$idNumbers[] = $myrow['newsid'];
-			}	
+			}
+			
+			$arrayCount = count($idNumbers) -1;	
 			
 			foreach( $idNumbers as $key => $value ) {
 				if( $id == $value ) {
@@ -171,12 +173,12 @@ if( isset( $sessionCrewid ) ) {
 					$nextKey = $key+1;
 					$prevKey = $key-1;
 			
-				/* display the previous and next links in the post details box */
-				if( $idNumbers[$prevKey] != '' ) {
+					/* display the previous and next links in the post details box */
+					if( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) {
 						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$prevKey]'><img src='" . $webLocation . "images/previous.png' alt='Previous Entry' border='0' class='image' /></a>" );
-					} if( ($idNumbers[$prevKey] != '') && ($idNumbers[$nextKey] != '') ) {
+					} if( ( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) && ( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) ) {
 						echo "&nbsp;";
-					} if( $idNumbers[$nextKey] != '' ) {
+					} if( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) {
 						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$nextKey]'><img src='" . $webLocation . "images/next.png' alt='Next Entry' border='0' class='image' /></a>" );
 					}
 				}
@@ -203,7 +205,7 @@ if( isset( $sessionCrewid ) ) {
 					
 				<?
 					
-					if( $loginfo['newsStatus'] == "pending" ) {
+					if( $newsList['newsStatus'] == "pending" ) {
 					
 						echo "&nbsp; &middot; &nbsp;";
 						echo "<a href='" . $webLocation . "admin.php?page=manage&sub=activate'><b>Activate</b></a>";
