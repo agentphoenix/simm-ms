@@ -10,7 +10,7 @@ File: admin/post/addnews.php
 Purpose: Page to add a news item
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1327 EST
+Last Modified: 2008-04-20 1936 EST
 **/
 
 /* access check */
@@ -137,7 +137,7 @@ if(in_array("p_addnews", $sessionAccess))
 					while( $myrow = mysql_fetch_array( $result ) ) {
 						extract( $myrow, EXTR_OVERWRITE );
 						
-						$authorNumber = $author . $authorNum;
+						/* $authorNumber = $author . $authorNum; */
 						$authorNumber = $rankName . " " . $firstName . " " . $lastName;
 						
 						echo "<option value='" . $myrow['crewid'] . "'>" . $authorNumber . "</option>";

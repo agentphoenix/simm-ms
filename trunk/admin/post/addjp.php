@@ -10,7 +10,7 @@ File: admin/post/addjp.php
 Purpose: Page to add a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1342 EST
+Last Modified: 2008-04-20 1935 EST
 **/
 
 /* access check */
@@ -243,7 +243,7 @@ Tag: " . $postTag . "
 					while( $myrow = mysql_fetch_array( $result ) ) {
 						extract( $myrow, EXTR_OVERWRITE );
 						
-						$authorNumber = $author . $authorNum;
+						/* $authorNumber = $author . $authorNum; */
 						$authorNumber = $rankName . " " . $firstName . " " . $lastName;
 						
 						echo "<option value='" . $myrow['crewid'] . "'>" . $authorNumber . "</option>";

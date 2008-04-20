@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1500 EST
+Last Modified: 2008-04-20 1934 EST
 **/
 
 /* access check */
@@ -561,7 +561,7 @@ Tag: " . $postTag . "
 			</tr>
 			<?
 			
-			$authorNum = "2";
+			$authorNum = 2;
 			
 			for( $i=1; $i<$number; $i++ ) {
 			
@@ -591,7 +591,7 @@ Tag: " . $postTag . "
 					while( $myrow = mysql_fetch_array( $result ) ) {
 						extract( $myrow, EXTR_OVERWRITE );
 						
-						$authorNumber = $author . $authorNum;
+						/* $authorNumber = $author . $authorNum; */
 						$authorNumber = $rankName . " " . $firstName . " " . $lastName;
 						
 						echo "<option value='" . $myrow['crewid'] . "'>" . $authorNumber . "</option>";
