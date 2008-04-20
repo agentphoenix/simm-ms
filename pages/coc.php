@@ -10,7 +10,7 @@ File: pages/coc.php
 Purpose: Page to display the chain of command
 
 System Version: 2.6.0
-Last Modified: 2008-03-16 0049 EST
+Last Modified: 2008-04-20 1409 EST
 **/
 
 /* define the page class */
@@ -77,11 +77,11 @@ if( isset( $sessionCrewid ) ) {
 			<td width="37" align="center">
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$crewid;?>">
 				<? if($loa == 1) { ?>
-					<img src="images/combadge-loa.jpg" border="0" alt="loa" class="image" />
+					<img src="images/combadge-loa.png" border="0" alt="loa" class="image" />
 				<? } elseif($loa == 0) { ?>
-					<img src="images/combadge.jpg" border="0" alt="combadge" class="image" />
+					<img src="images/combadge.png" border="0" alt="combadge" class="image" />
 				<? } elseif($loa == 2) { ?>
-					<img src="images/combadge-eloa.jpg" border="0" alt="combadge" class="image" />
+					<img src="images/combadge-eloa.png" border="0" alt="combadge" class="image" />
 				<? } ?>
 				</a>
 			</td>
