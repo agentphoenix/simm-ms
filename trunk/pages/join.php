@@ -5,12 +5,12 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: Nathan Wharry [ mail@herschwolf.net ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/join.php
 Purpose: To display the join application and submit it
 
 System Version: 2.6.0
-Last Modified: 2007-12-22 2227 EST
+Last Modified: 2008-04-20 1929 EST
 **/
 
 /* define the page class and vars */
@@ -26,13 +26,10 @@ if( isset( $_POST['action_x'] ) ) {
 	$action = $_POST['action_x'];
 }
 
-if( isset( $_GET['position'] ) ) {
+if(isset($_GET['position']) && is_numeric($_GET['position'])) {
 	$pid = $_GET['position'];
-}
-
-if( isset( $pid ) && !is_numeric( $pid ) ) {
-	errorMessageIllegal( __FILE__, $sessionCrewid, 'number', $pid );
-	exit();
+} else {
+	$pid = NULL;
 }
 
 /* pull in the menu */
@@ -344,12 +341,10 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 				<?
 				
 				/* get position id if applying through the open positions page */
-				if( $pid ) {
+				if(isset($pid)) {
 				
 				/* setup sql query for specific position */
-				$getPosition = "SELECT * ";
-				$getPosition.= "FROM sms_positions ";
-				$getPosition.= "WHERE positionid = '$pid'";
+				$getPosition = "SELECT * FROM sms_positions WHERE positionid = $pid";
 				$getPositionResult = mysql_query( $getPosition ); 
 				
 				/* extract variables */
@@ -366,10 +361,10 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 				$deptinfo = mysql_fetch_array( $getDeptResult );
 					extract ( $deptinfo, EXTR_OVERWRITE );
 				
-				/* set the department name if command/dept head position */
-				if( $positionType == "senior" ) {
-					$deptName = "Senior Staff";
-				}
+					/* set the department name if command/dept head position */
+					if( $positionType == "senior" ) {
+						$deptName = "Senior Staff";
+					}
 						
 				?>	
 	
