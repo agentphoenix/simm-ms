@@ -1,7 +1,5 @@
 <?php
 
-error_report();
-
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -12,7 +10,7 @@ File: admin/manage/addpost.php
 Purpose: Page to add a mission post
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1336 EST
+Last Modified: 2008-04-20 1934 EST
 **/
 
 /* access check */
@@ -154,7 +152,7 @@ Tag: " . $postTag . "
 					while( $myrow = mysql_fetch_array( $result ) ) {
 						extract( $myrow, EXTR_OVERWRITE );
 						
-						$authorNumber = $author . $authorNum;
+						/* $authorNumber = $author . $authorNum; */
 						$authorNumber = $rankName . " " . $firstName . " " . $lastName;
 						
 						echo "<option value='" . $myrow['crewid'] . "'>" . $authorNumber . "</option>";

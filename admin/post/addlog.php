@@ -10,7 +10,7 @@ File: admin/post/addlog.php
 Purpose: Page to add a personal log
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1319 EST
+Last Modified: 2008-04-20 1936 EST
 **/
 
 /* access check */
@@ -144,7 +144,7 @@ if(in_array("p_addlog", $sessionAccess))
 					while( $myrow = mysql_fetch_array( $result ) ) {
 						extract( $myrow, EXTR_OVERWRITE );
 						
-						$authorNumber = $author . $authorNum;
+						/* $authorNumber = $author . $authorNum; */
 						$authorNumber = $rankName . " " . $firstName . " " . $lastName;
 						
 						echo "<option value='" . $myrow['crewid'] . "'>" . $authorNumber . "</option>";
