@@ -13,20 +13,29 @@ Purpose: The file that controls logging in, logging out, and checking the
 	displaySkin.
 
 System Version: 2.6.0
-Last Modified: 2008-04-13 1144 EST
+Last Modified: 2008-04-19 1916 EST
 **/
 
 /* start the session */
 session_start();
 
 /* get the referenced page from the URL */
-$action = $_GET['action'];
-$error = $_GET['error'];
-
-/* if there is no action set, set it to login */
-if( !isset( $action ) ) {
-	$action = "login";
+if(isset($_GET['action'])) {
+	$action = $_GET['action'];
+} else {
+	$action = 'login';
 }
+
+if(isset($_GET['error'])) {
+	$error = $_GET['error'];
+} else {
+	$error = NULL;
+}
+
+/* define the variables */
+$login = NULL;
+$redirectLocation = NULL;
+$redirectTime = NULL;
 
 /* pull in the global functions files */
 include_once( 'framework/functionsGlobal.php' );
@@ -212,7 +221,7 @@ This is an automatically generated email, please do not reply.";
 	<form method="post" action="<?=$webLocation;?>login.php?action=checkLogin">
 		<div class="content">
 		
-			<? if( $_GET['login'] == "false" ) { ?>
+			<? if( $login == "false" ) { ?>
 			<div class="error" style="margin:0 auto; width:50%;">
 				<?
 				
