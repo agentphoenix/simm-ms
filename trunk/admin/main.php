@@ -10,14 +10,14 @@ File: admin/main.php
 Purpose: Main page of the administrative control panel
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 1908 EST
+Last Modified: 2008-04-20 1922 EST
 **/
 
 /* define the page class */
 $pageClass = "admin";
 
 /* fetch the user's information for their display preferences */
-$userFetch = "SELECT rank.rankImage, crew.positionid, crew.positionid2, crew.cpShowPosts, ";
+$userFetch = "SELECT rank.rankImage, rank.rankName, crew.positionid, crew.positionid2, crew.cpShowPosts, ";
 $userFetch.= "crew.cpShowPostsNum, crew.cpShowLogs, crew.cpShowLogsNum, crew.cpShowNews, ";
 $userFetch.= "crew.cpShowNewsNum, crew.loa FROM sms_crew AS crew, ";
 $userFetch.= "sms_ranks AS rank, sms_positions AS position WHERE crew.crewid = '$sessionCrewid' ";
@@ -248,7 +248,7 @@ if( isset( $sessionCrewid ) ) {
 					
 					?>
 					&nbsp;
-					<a href="<? WEB_LOC;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
+					<a href="<?=WEBLOC;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
 						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
 					</a>
 					<?php } ?>
@@ -315,7 +315,7 @@ if( isset( $sessionCrewid ) ) {
 						
 					?>
 					&nbsp;
-					<a href="<? WEB_LOC;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>">
+					<a href="<? WEBLOC;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>">
 						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
 					</a>
 					<?php } ?>
