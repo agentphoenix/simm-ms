@@ -10,7 +10,7 @@ File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
 System Version: 2.6.0
-Last Modified: 2008-04-06 2116 EST
+Last Modified: 2008-04-20 1939 EST
 **/
 
 /* access check */
@@ -149,8 +149,6 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 							$getCrew.= "crew.crewid != '$sessionCrewid' ORDER BY crew.rankid ASC";
 							$getCrewResult = mysql_query( $getCrew );
 
-							$author = $firstName . " " . $lastName;
-
 							while( $crewArray = mysql_fetch_array( $getCrewResult ) ) {
 								extract( $crewArray, EXTR_OVERWRITE );
 
@@ -231,8 +229,6 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 							$getCrew.= "crew.crewType = 'npc' AND crew.rankid = rank.rankid AND ";
 							$getCrew.= "crew.crewid != '$sessionCrewid' ORDER BY crew.rankid ASC";
 							$getCrewResult = mysql_query( $getCrew );
-
-							$author = $firstName . " " . $lastName;
 
 							while( $crewArray = mysql_fetch_array( $getCrewResult ) ) {
 								extract( $crewArray, EXTR_OVERWRITE );
