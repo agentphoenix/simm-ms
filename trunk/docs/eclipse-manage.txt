@@ -1,4 +1,4 @@
-Last Update: 2008.04.19 1847 EST
+Last Update: 2008.04.21 0204 EST
 
 IN PROGRESS
 =====
@@ -47,11 +47,17 @@ IN PROGRESS
 		x	/admin/reports
 		x	/admin/user
 
-#	Clean-up install and update files
-		*	Add a step at the beginning of the installation which checks for any
-			compatibility issues using ini_get()
+#	Install File
+		*	Figure out defaults for personalized menu items
+		*	Add beginning step with compatibility test [using ini_get()]
+		*	Verify plugins
+		*	Verify menu changes
+		*	Ranks
 
-#	Update skins
+#	Update File
+		*	Ranks
+		*	Verify menu changes
+		*	Verify plugins
 		
 IN QUEUE
 =====
@@ -63,36 +69,25 @@ IN QUEUE
 
 #	Remove the error_report() function from functionsUtility.php
 
+#	Update skins
+
 COMPLETED
 =====
 X	[BUG] Database uses integer fields for the crew compliment section
-
 X	[BUG] Rank drop down menus need to respect the rankDisplay flag
-
 X	[BUG] If the large version of an award image doesn't exist, it won't fall back to the small version
-
 X	[BUG] Player stats page doesn't have logic against blank timestamps
-
 X	[BUG] Account page - changing user's crewType to pending doesn't affect the position count
-
 X	[BUG] Weird fading issue on some pages with tabs
 
 X	Dynamic acceptance and rejection messages
-
 X	SMS Personalized Menu
-
 X	Customizable message subject lines
-
 X	Error catching page
-
 X	"Private" news messages
-
 X	jQuery-ify departments page to use toggling
-
 X	Accessing database entries in personalized menus
-
 X	Re-build site options page
-
 X	Clean up icons included with SMS
 		*	Remove icons
 				@	update.png
@@ -114,31 +109,17 @@ X	Clean up icons included with SMS
 				@	remove.png (gray + color)
 
 X	Ability to specify more options for the personalized menu arrow graphic
-
 X	Tab content immediately available
-
 X	Extra information on award (id, timestamp, reason;)
-
 X	Finish re-writing the menu management AJAX pages
-
 X	SMS Update options
-
 X	Award categories (in character, out of character, both)
-
 X	Need update logic so that all commas in sms_crew[awards] get converted to semicolons
-
 X	Re-write activation page
-
 X	Toggle boxes should use jQuery instead of the custom Javascript code
-
 X	Departmental databases
-
 X	Nominated awards to queue for CO approval
-
 X	Ability for crew to edit their posts and logs
-
 X	AXAH HUD windows
-
 X	Access changes need to filter down to all the access pages
-
 X	Global setting for default access levels
