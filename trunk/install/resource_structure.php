@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2008-04-03 1917 EST
+Last Modified: 2008-04-21 0140 EST
 **/
 
 /* query the database for the mysql version */
@@ -153,7 +153,7 @@ mysql_query( "CREATE TABLE `sms_database` (
 	`dbTitle` varchar(200) NOT NULL default '',
 	`dbDesc` text NOT NULL,
 	`dbContent` text NOT NULL,
-	`dbType` enum('onsite','offsite','entry') NOT NULL default 'onsite',
+	`dbType` enum('onsite','offsite','entry') NOT NULL default 'entry',
 	`dbURL` varchar(255) NOT NULL default '',
 	`dbOrder` int(4) NOT NULL default '0',
 	`dbDisplay` enum('y','n') NOT NULL default 'y',
