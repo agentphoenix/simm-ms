@@ -30,6 +30,8 @@ if(in_array("x_menu", $sessionAccess))
 	{
 		case 'main':
 			$action_tab = 1;
+			$action_tab_sub = 1;
+			$action_tab_sub_a = 1;
 			break;
 		case 'general':
 			$action_tab = 2;
