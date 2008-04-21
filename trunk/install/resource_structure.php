@@ -134,16 +134,16 @@ mysql_query( "CREATE TABLE `sms_crew` (
   `accessReports` text NOT NULL,
   `accessUser` text NOT NULL,
   `accessOthers` text NOT NULL,
-  `menu1` int(5) NOT NULL DEFAULT '1',
-  `menu2` int(5) NOT NULL DEFAULT '2',
-  `menu3` int(5) NOT NULL DEFAULT '3',
-  `menu4` int(5) NOT NULL DEFAULT '4',
-  `menu5` int(5) NOT NULL DEFAULT '5',
-  `menu6` int(5) NOT NULL DEFAULT '7',
-  `menu7` int(5) NOT NULL DEFAULT '7',
-  `menu8` int(5) NOT NULL DEFAULT '7',
-  `menu9` int(5) NOT NULL DEFAULT '7',
-  `menu10` int(5) NOT NULL DEFAULT '7'
+  `menu1` varchar(8) NOT NULL DEFAULT '0',
+  `menu2` varchar(8) NOT NULL DEFAULT '0',
+  `menu3` varchar(8) NOT NULL DEFAULT '0',
+  `menu4` varchar(8) NOT NULL DEFAULT '0',
+  `menu5` varchar(8) NOT NULL DEFAULT '0',
+  `menu6` varchar(8) NOT NULL DEFAULT '0',
+  `menu7` varchar(8) NOT NULL DEFAULT '0',
+  `menu8` varchar(8) NOT NULL DEFAULT '0',
+  `menu9` varchar(8) NOT NULL DEFAULT '0',
+  `menu10` varchar(8) NOT NULL DEFAULT '0'
   PRIMARY KEY  (`crewid`)
 ) " . $tail . " ;" );
 
