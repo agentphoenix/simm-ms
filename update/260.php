@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-04-19 1631 EST
+Last Modified: 2008-04-21 0204 EST
 **/
 
 /*
@@ -61,6 +61,7 @@ mysql_query( "UPDATE sms_globals SET manifest_defaults = '$defaults' WHERE globa
 
 /* get rid of the manifest display field now */
 mysql_query( "ALTER TABLE `sms_globals` DROP `manifestDisplay`" );
+mysql_query( "ALTER TABLE `sms_globals` DROP `useArchive`" );
 
 
 /*
@@ -167,18 +168,18 @@ VALUES ( 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_da
 |
 */
 /* add the user menu item preferences */
-mysql_query(
-	"ALTER TABLE  `sms_crew` ADD  `menu1` INT( 5 ) NOT NULL DEFAULT  '1',
-	ADD  `menu2` INT( 5 ) NOT NULL DEFAULT  '2',
-	ADD  `menu3` INT( 5 ) NOT NULL DEFAULT  '3',
-	ADD  `menu4` INT( 5 ) NOT NULL DEFAULT  '4',
-	ADD  `menu5` INT( 5 ) NOT NULL DEFAULT  '5',
-	ADD  `menu6` INT( 5 ) NOT NULL DEFAULT  '7',
-	ADD  `menu7` INT( 5 ) NOT NULL DEFAULT  '5',
-	ADD  `menu8` INT( 5 ) NOT NULL DEFAULT  '5',
-	ADD  `menu9` INT( 5 ) NOT NULL DEFAULT  '5',
-	ADD  `menu10` INT( 5 ) NOT NULL DEFAULT  '5'"
-);
+mysql_query("
+	ALTER TABLE  `sms_crew` ADD  `menu1` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu2` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu3` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu4` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu5` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu6` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu7` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu8` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu9` VARCHAR(8) NOT NULL DEFAULT '0',
+	ADD  `menu10` VARCHAR(8) NOT NULL DEFAULT '0'
+");
 
 
 /*
@@ -217,7 +218,7 @@ VALUES (1, 'post,p_addjp,p_missionnotes,p_jp,p_addlog,p_pm,p_log,p_addmission,p_
 | see those items.
 |
 */
-mysql_query( "ALTER TABLE `sms_news` ADD `newsPrivate` ENUM( 'y', 'n' ) NOT NULL DEFAULT 'n'" );
+mysql_query( "ALTER TABLE `sms_news` ADD `newsPrivate` ENUM('y', 'n') NOT NULL DEFAULT 'n'" );
 
 
 /*
@@ -266,8 +267,8 @@ mysql_query( "CREATE TABLE `sms_awards_queue` (
 | new fields in both the database table as well as the departments table.
 |
 */
-mysql_query( "ALTER TABLE `sms_database` ADD `dbDept` INT NOT NULL DEFAULT '0'" );
-mysql_query( "ALTER TABLE `sms_departments` ADD `deptDatabaseUse` ENUM( 'y', 'n' ) NOT NULL DEFAULT 'y'" );
+mysql_query( "ALTER TABLE `sms_database` ADD `dbDept` int(4) NOT NULL DEFAULT '0'" );
+mysql_query( "ALTER TABLE `sms_departments` ADD `deptDatabaseUse` enum('y', 'n') NOT NULL DEFAULT 'y'" );
 
 
 /*
@@ -285,6 +286,7 @@ mysql_query( "CREATE TABLE `sms_system_plugins` (
 	`pluginVersion` varchar(15) NOT NULL default '',
 	`pluginSite` varchar(200) NOT NULL default '',
 	`pluginUse` text NOT NULL,
+	`pluginFiles` text NOT NULL,
 	PRIMARY KEY  (`pid`)
 ) " . $tail . " ;" );
 
