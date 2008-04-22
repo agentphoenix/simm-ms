@@ -50,7 +50,6 @@ IN PROGRESS
 		x	/admin/user
 
 #	Install File
-		*	Figure out defaults for personalized menu items
 		*	Add beginning step with compatibility test [using ini_get()]
 		*	Verify plugins
 		*	Verify menu changes
