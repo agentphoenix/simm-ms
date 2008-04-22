@@ -201,11 +201,8 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 			</tr>
 			
 			<?php } ?>
-			
-			<tr>
-				<td colspan="6" height="15"></td>
-			</tr>
 		</table>
+		<p>&nbsp;</p>
 		<?php } /* end the if pending > 0 logic */ ?>
 		
 		<?php if(count($crew['active']) > 0) { ?>
@@ -277,11 +274,8 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 			</tr>
 			
 			<?php } ?>
-			
-			<tr>
-				<td colspan="6" height="15"></td>
-			</tr>
 		</table>
+		<p>&nbsp;</p>
 		<?php } /* end the if active > 0 logic */ ?>
 		
 		<?php if(count($crew['inactive']) > 0) { ?>
@@ -353,11 +347,8 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 			</tr>
 			
 			<?php } ?>
-			
-			<tr>
-				<td colspan="6" height="15"></td>
-			</tr>
 		</table>
+		<p>&nbsp;</p>
 		<?php } /* end the if inactive > 0 logic */ ?>
 		
 	</div>
