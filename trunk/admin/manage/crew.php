@@ -1,5 +1,7 @@
 <?php
 
+error_report();
+
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -9,8 +11,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/crew.php
 Purpose: Page to display the active, inactive, and pending crew on the sim
 
-System Version: 2.5.2
-Last Modified: 2007-08-09 0001 EST
+System Version: 2.6.0
+Last Modified: 2008-04-22 0133 EST
 **/
 
 /* access check */
@@ -19,490 +21,345 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_GET['action'];
-	$activate = $_POST['activate_x'];
+	$query = FALSE;
+	$result = FALSE;
+	$action_type = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "crew listing page" );
-		exit();
-	} else {
-		/* set the GET variable */
+	if(isset($_GET['id']) && is_numeric($_GET['id'])) {
 		$actionid = $_GET['id'];
+	} else {
+		$actionid = NULL;
 	}
 	
-	if( isset( $action ) ) {
+	if(isset($_GET['action'])) {
+		$action = $_GET['action'];
+	}
+	
+	if(isset($_POST))
+	{
+		/* define the POST variables */
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
 		
-		/* determine what the user level should be */
-		if( $action == "activate" ) {
-			
-			/* set the standard user levels */
-			$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
+		/* protecting against SQL injection */
+		if(isset($action_id) && !is_numeric($action_id))
+		{
+			$action_id = FALSE;
+			exit();
+		}
+		
+		if($action_type == 'deactivate')
+		{
+			$levelsPost = "";
 			$levelsManage = "";
-			$levelsReports = "reports,r_progress,r_milestones";
-			$levelsUser = "user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options";
+			$levelsReports = "";
+			$levelsUser = "";
 			$levelsOther = "";
+			$today = getdate();
 			
-			/* do the update query */
-			$query = "UPDATE sms_crew SET crewType = 'active', accessPost = '$levelsPost', ";
-			$query.= "accessManage = '$levelsManage', accessReports = '$levelsReports', ";
-			$query.= "accessUser = '$levelsUser', accessOthers = '$levelsOther' ";
-			$query.= "WHERE crewid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
+			$update = "UPDATE sms_crew SET crewType = %s, accessPost = %s, accessManage = %s, accessReports = %s, ";
+			$update.= "accessUser = %s, accessOthers = %s, leaveDate = %d WHERE crewid = $action_id LIMIT 1";
 			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['type']),
+				escape_string($levelsPost),
+				escape_string($levelsManage),
+				escape_string($levelsReports),
+				escape_string($levelsUser),
+				escape_string($levelsOther),
+				escape_string($today[0])
+			);
+
+			$result = mysql_query($query);
+
 			/* optimize the table */
 			optimizeSQLTable( "sms_crew" );
 
+			/* set the action */
+			$action = $action_type;
+			
 			/* get the user's old position */
-			$getPos = "SELECT positionid, positionid2 FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
-			$getPosResult = mysql_query( $getPos );
-			$oldPosition = mysql_fetch_assoc( $getPosResult );
+			$getPos = "SELECT positionid, positionid2 FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+			$getPosResult = mysql_query($getPos);
+			$oldPosition = mysql_fetch_array($getPosResult);
 			
-     		/* update the position */
-			$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-			$positionFetch.= "WHERE positionid = '$oldPosition[positionid]' LIMIT 1";
-			$positionFetchResult = mysql_query( $positionFetch );
-			$positionX = mysql_fetch_row( $positionFetchResult );
-			$open = $positionX[1];
-			$revised = ( $open - 1 );
-			$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-			$updatePosition.= "WHERE positionid = '$oldPosition[positionid]' LIMIT 1";
-			$updatePositionResult = mysql_query( $updatePosition );			
+			/* update the position they're being given */
+			update_position($oldPosition[0], 'take');
 			
-			if( !empty( $oldPosition['positionid2'] ) ) {
-				
-				/* update the position they had */
-				$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-				$positionFetch.= "WHERE positionid = '$oldPosition[positionid2]' LIMIT 1";
-				$positionFetchResult = mysql_query( $positionFetch );
-				$positionX = mysql_fetch_row( $positionFetchResult );
-				$open = $positionX[1];
-				$revised = ( $open - 1 );
-				$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-				$updatePosition.= "WHERE positionid = '$oldPosition[positionid2]' LIMIT 1";
-				$updatePositionResult = mysql_query( $updatePosition );
-				
+			if(!empty($oldPosition[1]))
+			{
+				update_position($oldPosition[1], 'take');
 			}
 			
 			/* optimize the table */
 			optimizeSQLTable( "sms_positions" );
-			
-		} elseif( $action == "delete" ) {
-        	
-			/* get the user's old position */
-			$getPos = "SELECT positionid, positionid2, crewType FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
-			$getPosResult = mysql_query( $getPos );
-			$oldPosition = mysql_fetch_assoc( $getPosResult );
-			
-			/* if they're active, deal with the positions */
-			if( $oldPosition['crewType'] == "pending" || $oldPosition['crewType'] == "inactive" ) {} else {
-			
-				/* update the position */
-				$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-				$positionFetch.= "WHERE positionid = '$oldPosition[positionid]' LIMIT 1";
-				$positionFetchResult = mysql_query( $positionFetch );
-				$positionX = mysql_fetch_row( $positionFetchResult );
-				$open = $positionX[1];
-				$revised = ( $open + 1 );
-				$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-				$updatePosition.= "WHERE positionid = '$oldPosition[positionid]' LIMIT 1";
-				$updatePositionResult = mysql_query( $updatePosition );
-				
-				if( !empty( $oldPosition['positionid2'] ) ) {
-					
-					/* update the position they had */
-					$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-					$positionFetch.= "WHERE positionid = '$oldPosition[positionid2]' LIMIT 1";
-					$positionFetchResult = mysql_query( $positionFetch );
-					$positionX = mysql_fetch_row( $positionFetchResult );
-					$open = $positionX[1];
-					$revised = ( $open + 1 );
-					$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-					$updatePosition.= "WHERE positionid = '$oldPosition[positionid2]' LIMIT 1";
-					$updatePositionResult = mysql_query( $updatePosition );
-					
-				}
-				
-				/* optimize the table */
-				optimizeSQLTable( "sms_positions" );
-				
-			}
-			
-			/* do the delete query */
-			$query = "DELETE FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
-			$result = mysql_query( $query );
-			
-			/* optimize the table */
-			optimizeSQLTable( "sms_crew" );
-            
-      } /* close the delete section */
-
-	} elseif( $activate ) {
-
-		/* define the POST vars */
-		$type = $_POST['type'];
-		$id = $_POST['crew'];
-		
-		/* set the access levels */
-		$levelsPost = "";
-		$levelsManage = "";
-		$levelsReports = "";
-		$levelsUser = "";
-		$levelsOther = "";
-		
-		/* do the update query */
-		$query = "UPDATE sms_crew SET crewType = '$type', accessPost = '$levelsPost', ";
-		$query.= "accessManage = '$levelsManage', accessReports = '$levelsReports', ";
-		$query.= "accessUser = '$levelsUser', accessOthers = '$levelsOther', ";
-		$query.= "leaveDate = UNIX_TIMESTAMP() WHERE crewid = '$id' LIMIT 1";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_crew" );
-
-		/* set the action */
-		$action = "deactivate";
-
-		/* get the user's old position */
-		$getPos = "SELECT positionid, positionid2 FROM sms_crew WHERE crewid = '$id' LIMIT 1";
-		$getPosResult = mysql_query( $getPos );
-		$oldPosition = mysql_fetch_assoc( $getPosResult );
-		
-		/* update the position */
-		$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-		$positionFetch.= "WHERE positionid = '$oldPosition[positionid]' LIMIT 1";
-		$positionFetchResult = mysql_query( $positionFetch );
-		$positionX = mysql_fetch_row( $positionFetchResult );
-		$open = $positionX[1];
-		$revised = ( $open + 1 );
-		$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-		$updatePosition.= "WHERE positionid = '$oldPosition[positionid]' LIMIT 1";
-		$updatePositionResult = mysql_query( $updatePosition );
-		
-		if( !empty( $oldPosition['positionid2'] ) ) {
-			
-			/* update the position they had */
-			$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-			$positionFetch.= "WHERE positionid = '$oldPosition[positionid2]' LIMIT 1";
-			$positionFetchResult = mysql_query( $positionFetch );
-			$positionX = mysql_fetch_row( $positionFetchResult );
-			$open = $positionX[1];
-			$revised = ( $open + 1 );
-			$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-			$updatePosition.= "WHERE positionid = '$oldPosition[positionid2]' LIMIT 1";
-			$updatePositionResult = mysql_query( $updatePosition );
-			
 		}
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_positions" );
+		if($action_type == 'activate')
+		{}
+		if($action_type == 'delete')
+		{}
+	}
 
-	} /* close the isset( $activate ) section */
+	/* build an array of all the positions to check for invalid ones */
+	$posArray = "SELECT p.positionid, p.positionName, d.deptColor FROM sms_positions AS p, sms_departments AS d ";
+	$posArray.= "WHERE p.positionDept = d.deptid ORDER BY p.positionid ASC";
+	$posArrayResult = mysql_query( $posArray );
+	$pos_array = array();
 
-?>
-
-	<div class="body">
+	while($myrow = mysql_fetch_array($posArrayResult)) {
+		$pos_array[$myrow[0]] = array($myrow[1], $myrow[2]);
+	}
 	
-		<? if( $action == "details" ) { ?>
-			<div class="update">
-				<span class="fontTitle">
-					Deactivation Options - 
-					<? printCrewName( $actionid, "noRank", "noLink" ); ?>
-				</span><br /><br />
+	/* build an array with all the crew in it */
+	$crew = array(
+		'pending' => array(),
+		'active' => array(),
+		'inactive' => array()
+	);
+	
+	$get = "SELECT crewid, crewType, rankid, positionid, positionid2 FROM sms_crew WHERE crewType != 'npc' ORDER BY crewid ASC";
+	$getR = mysql_query($get);
+	
+	while($fetch = mysql_fetch_array($getR)) {
+		extract($fetch, EXTR_OVERWRITE);
+		
+		$crew[$fetch[1]][] = array(
+			'id' => $fetch[0],
+			'rank' => $fetch[2],
+			'position1' => $fetch[3],
+			'position2' => $fetch[4]
+		);
+	}
+	
+?>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.zebra tr:nth-child(even)').addClass('alt');
+			
+			$("a[rel*=facebox]").click(function() {
+				var action = $(this).attr("myAction");
+				var id = $(this).attr("myID");
+
+				jQuery.facebox(function() {
+					jQuery.get('admin/ajax/crew_' + action + '.php?id=' + id, function(data) {
+						jQuery.facebox(data);
+					});
+				});
+				return false;
+			});
+		});
+	</script>
+	
+	<div class="body">
+		<?php
+		
+		$check = new QueryCheck;
+		$check->checkQuery( $result, $query );
 				
-				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=crew">
-					<table>
-						<tr>
-							<td class="tableCellLabel">Character Type</td>
-							<td>&nbsp;</td>
-							<td>
-								<input type="radio" id="typeNPC" name="type" value="npc" checked="yes" /> <label for="typeNPC">Make An NPC</label><br />
-								<input type="radio" id ="typeInactive" name="type" value="inactive" /> <label for="typeInactive">Add to Departed Crew Manifest</label>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="10">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="2">&nbsp;</td>
-							<td>
-								<input type="hidden" name="crew" value="<?=$actionid;?>" />
-								<input type="image" src="<?=path_userskin;?>buttons/deactivate.png" name="activate" class="button" value="Deactivate" />
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>
-			<br /><br />
-		<?
-		
-		} else {
-		
-			$check = new QueryCheck;
-			$check->checkQuery( $result, $query );
-					
-			if( !empty( $check->query ) ) {
-				$check->message( "player", $action );
-				$check->display();
-			}
-		
+		if( !empty( $check->query ) ) {
+			$check->message( "player", $action );
+			$check->display();
 		}
 		
 		?>
 		
 		<span class="fontTitle">Manage Playing Characters</span>
-		<p>From this page, you can select any of the playing characters that exist . You can edit their 
-		bios, promote (or demote) them to another position or rank. Additionaly, if need be, you can
-		deactivate the character if the player has retired or been removed.  By deactivating a character,
-		they will be moved to the Departed Crew Manifest.  Please note that only pending characters can
-		be deleted from the system, all other characters will be moved to inactive status.<br /><br />
+		<p>From this page, you can select any of the playing characters that exist . You can edit their bios, promote (or demote) them to another position or rank. Additionally, if need be, you can deactivate the character if the player has retired or been removed.  By deactivating a character, you will be given a choice of whether they should be sent to the Departed Crew Manifest or made an NPC.  <strong class="yellow">Please note</strong> that pending characters cannot be accepted from this page, you must use the <a href="<?=$webLocation;?>admin.php?page=manage&sub=activate">activation page</a>.</p>
 		
-		<a href="<?=$webLocation;?>admin.php?page=manage&sub=add" class="add">Add a Character &raquo;</a>
-		</p>
-		<table cellpadding="2" cellspacing="2">
-		<?
+		<a href="<?=$webLocation;?>admin.php?page=manage&sub=add" class="add fontMedium"><strong>Add a Character &raquo;</strong></a>
+		<br /><br />
 		
-		$crew = "SELECT crewid, firstName, lastName FROM sms_crew WHERE crewType = 'pending' ORDER BY crewid ASC";
-		$crewResult = mysql_query( $crew );
-		$pending = mysql_num_rows( $crewResult );
-		
-		$rowCount = "0";
-		$color1 = "rowColor1";
-		$color2 = "rowColor2";
-			
-		if( $pending > 0 ) {
-		
-		?>
-		
+		<?php if(count($crew['pending']) > 0) { ?>
+		<table class="zebra" cellpadding="3" cellspacing="0">
 			<tr>
-				<td class="fontLarge" colspan="6"><b>Pending Crew</b></td>
+				<td class="fontLarge" colspan="6"><strong>Pending Crew</strong></td>
 			</tr>
+			
+			<?php foreach($crew['pending'] as $key_p => $value_p) { ?>
 		
-		<?
-		
-			while( $players = mysql_fetch_assoc($crewResult) ) {
-				extract( $players, EXTR_OVERWRITE );
-				
-				$rowColor = ($rowCount % 2) ? $color1 : $color2;
-		
-		?>
-		
-			<tr class="fontSmall <?=$rowColor;?>">
-				<td width="30%"><b><? printText( $firstName . " " . $lastName ); ?></b></td>
-				<td width="30%">Unassigned</td>
-				<td width="10%" align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$players['crewid'];?>" class="edit">Edit Bio</a></td>
-				<td width="10%" align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$players['crewid'];?>" class="edit">Edit Account</a></td>
-				<td width="10%" align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=activate&activate=details&id=<?=$players['crewid'];?>" class="add">Approve</a></td>
-				<td width="10%" align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=crew&action=delete&id=<?=$players['crewid'];?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this crew member?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=crew&action=delete&id=<?=$players['crewid'];?>" class="delete">Delete</a>
-					</noscript>
+			<tr height="40">
+				<td width="50%">
+					<b><? printCrewName($value_p['id'], 'noRank', 'noLink', 'pending');?></b><br />
+					<span class="fontNormal">Unassigned</span>
+				</td>
+				<td width="10%"></td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_p['id'];?>" class="edit"><b>Edit Bio</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_p['id'];?>" class="edit"><b>Edit Account</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate" class="add"><b>Approve</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="#" rel="facebox" myAction="delete" myID="<?=$value_p['id'];?>" class="delete"><b>Delete</b></a>
 				</td>
 			</tr>
 			
-		<? $rowCount++; } ?>
+			<?php } ?>
 			
 			<tr>
 				<td colspan="6" height="15"></td>
 			</tr>
 		</table>
-			
-		<?
-		} /* end the if pending > 0 logic */
+		<?php } /* end the if pending > 0 logic */ ?>
 		
-		?>
-		
-		<table cellpadding="2" cellspacing="2">
+		<?php if(count($crew['active']) > 0) { ?>
+		<table class="zebra" cellpadding="3" cellspacing="0">
 			<tr>
-				<td class="fontLarge" colspan="7"><b>Active Crew</b></td>
+				<td class="fontLarge" colspan="6"><strong>Active Crew</strong></td>
 			</tr>
 			
-					<?
+			<?php foreach($crew['active'] as $key_a => $value_a) { ?>
+		
+			<tr height="40">
+				<td width="50%">
+					<b><? printCrewName($value_a['id'], 'rank', 'noLink');?></b><br />
+					<?php
 					
-					$crew = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.rankid, crew.positionid, ";
-					$crew.= "crew.positionid2, position.positionDept FROM sms_crew AS crew, sms_positions AS position ";
-					$crew.= "WHERE crewType = 'active' AND crew.positionid = position.positionid ORDER BY ";
-					$crew.= "position.positionDept, position.positionOrder, crew.rankid ASC";
-					$crewResult = mysql_query( $crew );
+					$key1 = array_key_exists($value_a['position1'], $pos_array);
 					
-					$rankArray = "SELECT rankid FROM sms_ranks ORDER BY rankid ASC";
-					$rankArrayResult = mysql_query( $rankArray );
-					
-					/* point the previous and next post buttons to the correct posts */
-					$rankList = array();
-					
-					while( $myrow = mysql_fetch_array( $rankArrayResult ) ) {
-						$rankList[] = $myrow['rankid'];
+					if(!empty($value_a['position2']))
+					{
+						$key2 = array_key_exists($value_a['position2'], $pos_array);
 					}
 					
-					$rowCount = "0";
-					$color1 = "rowColor1";
-					$color2 = "rowColor2";
-		
-					while( $player = mysql_fetch_assoc( $crewResult ) ) {
-						extract( $player, EXTR_OVERWRITE );
-						
-						$rowColor = ($rowCount % 2) ? $color1 : $color2;
-						
-						echo "<tr class='fontSmall " . $rowColor . "'>";
-							echo "<td width='30%'>";
-				
-						if( in_array( $player['rankid'], $rankList ) ) {
-							
-							$crewRank = "SELECT rankName FROM sms_ranks WHERE rankid = '$player[rankid]'";
-							$crewRankResult = mysql_query( $crewRank );
-							
-							while( $playerRank = mysql_fetch_assoc( $crewRankResult ) ) {
-								extract( $playerRank, EXTR_OVERWRITE );
-							
-								echo "<b>" . printText( $playerRank['rankName'] . " " . $firstName . " " . $lastName ) . "</b>";
-								
-							}
-							
-						} else {
-							echo "<b class='red'>[ Invalid Rank ]</b> ";
-							echo "<b>" . printText( $firstName . " " . $lastName ) . "</b>";
-						}				
+					/* check to see if the first position is legit */
+					if($key1 !== FALSE)
+					{
+						echo "<span class='fontNormal' style='color: #" . $pos_array[$value_a['position1']][1] . ";'>";
+						printText($pos_array[$value_a['position1']][0]);
+						echo "</span>";
+					}
+					else
+					{
+						echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+					}
 					
-					?>
-				</td>
-				<?
-				
-				$posArray = "SELECT positionid FROM sms_positions ORDER BY positionid ASC";
-				$posArrayResult = mysql_query( $posArray );
-				
-				/* point the previous and next post buttons to the correct posts */
-				$posList = array();
-				
-				while( $myrow = mysql_fetch_array( $posArrayResult ) ) {
-					$posList[] = $myrow['positionid'];
-				}
-				
-				if( in_array( $player['positionid'], $posList ) ) {
-				
-					$crewPos = "SELECT position.positionName, position.positionDept, dept.deptColor ";
-					$crewPos.= "FROM sms_positions AS position, sms_departments AS dept WHERE ";
-					$crewPos.= "position.positionid = '$player[positionid]' AND position.positionDept = dept.deptid";
-					$crewPosResult = mysql_query( $crewPos );
-					
-					while( $playerPos = mysql_fetch_assoc( $crewPosResult ) ) {
-						extract( $playerPos, EXTR_OVERWRITE );
-						
-				?>
-				<td width="30%">
-					<?
-					
-					echo "<span style='color: #" . $deptColor . ";'>";
-					printText( $positionName );
-					echo "</span>";
-					
-					if( !empty( $player['positionid2'] ) && in_array( $player['positionid2'], $posList ) ) {
-				
-						$crewPos2 = "SELECT position.positionName, position.positionDept, dept.deptColor ";
-						$crewPos2.= "FROM sms_positions AS position, sms_departments AS dept WHERE ";
-						$crewPos2.= "position.positionid = '$player[positionid2]' AND position.positionDept = dept.deptid";
-						$crewPos2Result = mysql_query( $crewPos2 );
-						
-						while( $playerPos2 = mysql_fetch_assoc( $crewPos2Result ) ) {
-							extract( $playerPos2, EXTR_OVERWRITE );
-														
-							echo " &amp; ";
-							echo "<span style='color: #" . $deptColor . ";'>";
-							printText( $positionName );
+					/* check to see if the second position is legit */
+					if(!empty($value_a['position2']))
+					{
+						if($key2 !== FALSE)
+						{
+							echo "<span class='fontNormal'> &amp; </span>";
+							echo "<span class='fontNormal' style='color: #" . $pos_array[$value_a['position2']][1] . ";'>";
+							printText($pos_array[$value_a['position2']][0]);
 							echo "</span>";
-							
 						}
-						
+						else
+						{
+							echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+						}
 					}
 					
 					?>
 				</td>
-				<? } } else { ?>
-				<td width="30%" class="red"><b>[ Invalid Position ]</b></td>
-				<? } ?>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$player[crewid];?>" class="edit">Edit Bio</a></td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$player['crewid'];?>" class="edit">Edit Account</a></td>
-				<td align="center">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$player['crewid'];?>" style="font-weight:bold;">Stats</a> &middot;
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$player['crewid'];?>" style="font-weight:bold;">Access</a>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_a['id'];?>" class="edit"><b>Edit Bio</b></a>
 				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=crew&action=details&id=<?=$player['crewid'];?>" class="delete">Deactivate</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=crew&action=delete&id=<?=$player['crewid'];?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this crew member?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=crew&action=delete&id=<?=$player['crewid'];?>" class="delete">Delete</a>
-					</noscript>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_a['id'];?>" class="edit"><b>Edit Account</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$value_a['id'];?>"><strong>Stats</strong></a> &middot;
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_a['id'];?>"><strong>Access</strong></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="#" rel="facebox" myAction="deactivate" myID="<?=$value_a['id'];?>" class="delete"><b>Deactivate</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="#" rel="facebox" myAction="delete" myID="<?=$value_a['id'];?>" class="delete"><b>Delete</b></a>
 				</td>
 			</tr>
 			
-		<? 
-		
-			$rowCount++;
-		
-		}
-		
-		$crew = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName, ";
-		$crew.= "position.positionName, dept.deptColor FROM sms_crew AS crew, sms_ranks AS rank, ";
-		$crew.= "sms_positions AS position, sms_departments AS dept WHERE crew.crewType = 'inactive' ";
-		$crew.= "AND crew.rankid = rank.rankid AND crew.positionid = position.positionid AND ";
-		$crew.= "position.positionDept = dept.deptid ORDER BY position.positionDept, position.positionOrder, crew.rankid ASC";
-		$crewResult = mysql_query( $crew );
-		$inactive = mysql_num_rows( $crewResult );
-		
-		if( $inactive > 0 ) {
-		
-		?>
+			<?php } ?>
+			
 			<tr>
-				<td colspan="7" height="15"></td>
+				<td colspan="6" height="15"></td>
 			</tr>
 		</table>
+		<?php } /* end the if active > 0 logic */ ?>
 		
-		<table cellpadding="2" cellspacing="2">
+		<?php if(count($crew['inactive']) > 0) { ?>
+		<table class="zebra" cellpadding="3" cellspacing="0">
 			<tr>
-				<td class="fontLarge" colspan="7"><b>Inactive Crew</b></td>
+				<td class="fontLarge" colspan="6"><strong>Inactive Crew</strong></td>
 			</tr>
-		
-		<?
 			
-			$rowCount = "0";
-			$color1 = "rowColor1";
-			$color2 = "rowColor2";
+			<?php foreach($crew['inactive'] as $key_i => $value_i) { ?>
+		
+			<tr height="40">
+				<td width="50%">
+					<b><? printCrewName($value_i['id'], 'rank', 'noLink');?></b><br />
+					<?php
 					
-			while( $players = mysql_fetch_assoc($crewResult) ) {
-				extract( $players, EXTR_OVERWRITE );
-				
-				$rowColor = ($rowCount % 2) ? $color1 : $color2;
-		
-		?>
-		
-			<tr class="fontSmall <?=$rowColor;?>">
-				<td width="30%"><b><? printText( $rankName . " " . $firstName . " " . $lastName ); ?></b></td>
-				<td width="30%" style="color: #<?=$deptColor;?>;"><? printText( $positionName ); ?></td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$players[crewid];?>" class="edit">Edit Bio</a></td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$players['crewid'];?>" class="edit">Edit Account</a></td>
-				<td align="center">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$players['crewid'];?>" style="font-weight:bold;">Stats</a> &middot;
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$players['crewid'];?>" style="font-weight:bold;">Access</a>
+					$key1 = array_key_exists($value_i['position1'], $pos_array);
+					
+					if(!empty($value_i['position2']))
+					{
+						$key2 = array_key_exists($value_i['position2'], $pos_array);
+					}
+					
+					/* check to see if the first position is legit */
+					if($key1 !== FALSE)
+					{
+						echo "<span class='fontNormal' style='color: #" . $pos_array[$value_i['position1']][1] . ";'>";
+						printText($pos_array[$value_i['position1']][0]);
+						echo "</span>";
+					}
+					else
+					{
+						echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+					}
+					
+					/* check to see if the second position is legit */
+					if(!empty($value_i['position2']))
+					{
+						if($key2 !== FALSE)
+						{
+							echo "<span class='fontNormal'> &amp; </span>";
+							echo "<span class='fontNormal' style='color: #" . $pos_array[$value_i['position2']][1] . ";'>";
+							printText($pos_array[$value_i['position2']][0]);
+							echo "</span>";
+						}
+						else
+						{
+							echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+						}
+					}
+					
+					?>
 				</td>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=crew&action=activate&id=<?=$players['crewid'];?>" class="add">Activate</a></td>
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=crew&action=delete&id=<?=$players['crewid'];?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this crew member?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=crew&action=delete&id=<?=$players['crewid'];?>" class="delete">Delete</a>
-					</noscript>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_i['id'];?>" class="edit"><b>Edit Bio</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_i['id'];?>" class="edit"><b>Edit Account</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$value_i['id'];?>"><strong>Stats</strong></a> &middot;
+					<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_i['id'];?>"><strong>Access</strong></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="#" rel="facebox" myAction="activate" myID="<?=$value_i['id'];?>" class="delete"><b>Activate</b></a>
+				</td>
+				<td width="10%" align="center" class="fontNormal">
+					<a href="#" rel="facebox" myAction="delete" myID="<?=$value_i['id'];?>" class="delete"><b>Delete</b></a>
 				</td>
 			</tr>
 			
-		<? $rowCount++; } } ?>
-		
+			<?php } ?>
+			
+			<tr>
+				<td colspan="6" height="15"></td>
+			</tr>
 		</table>
+		<?php } /* end the if inactive > 0 logic */ ?>
+		
 	</div>
 	
-<? } else { errorMessage( "crew management" ); } ?>
+<?php } else { errorMessage( "crew management" ); } ?>
