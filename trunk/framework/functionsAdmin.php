@@ -10,7 +10,7 @@ File: framework/functionsAdmin.php
 Purpose: List of functions specific to the administration control panel
 
 System Version: 2.6.0
-Last Modified: 2008-03-16 0133 EST
+Last Modified: 2008-04-22 0135 EST
 
 Included Functions:
 	printCrewName( $crewid, $rank, $link )
@@ -27,49 +27,73 @@ Included Functions:
 /**
 	Admin function that will pull the user's first name, last name, rank, and rank image
 **/
-function printCrewName( $crewid, $rank, $link ) {
+function printCrewName($crewid, $rank, $link, $type = "active")
+{
+	if($type == 'active')
+	{
+		$userFetch = "SELECT c.crewid, c.firstName, c.lastName, r.rankName FROM sms_crew AS c, sms_ranks AS r ";
+		$userFetch.= "WHERE c.crewid = '$crewid' AND c.rankid = r.rankid LIMIT 1";
+		$userFetchResult = mysql_query($userFetch);
+		$fetch = mysql_fetch_assoc($userFetchResult);
 	
-	if( $rank == "noRank" ) {
+		$name = array(
+			'rank' => $fetch['rankName'],
+			'first_name' => $fetch['firstName'],
+			'last_name' => $fetch['lastName']
+		);
+	}
+	elseif($type == 'pending')
+	{
 		$userFetch = "SELECT crewid, firstName, lastName FROM sms_crew WHERE crewid = '$crewid' LIMIT 1";
-		$userFetchResult = mysql_query( $userFetch );
-		
-		while( $userFetchArray = mysql_fetch_assoc( $userFetchResult ) ) {
-			extract( $userFetchArray, EXTR_OVERWRITE );
-		
-			if( $link == "noLink" ) {
-				echo stripslashes( $firstName . " " . $lastName );
-			} elseif( $link == "link" ) {
-				echo "<a href='" . WEBLOC . "index.php?page=bio&crew=" . $userFetchArray['crewid'] . "'>";
-				echo stripslashes( $firstName . " " . $lastName );
-				echo "</a>";
-			}
-			
-		}
-		
-	} elseif( $rank == "rank" ) {
-		
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
-		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$userFetch.= "WHERE crew.crewid = '$crewid' AND crew.rankid = rank.rankid LIMIT 1";
-		$userFetchResult = mysql_query( $userFetch );
-		
-		while( $userFetchArray = mysql_fetch_array($userFetchResult ) ) {
-			extract( $userFetchArray, EXTR_OVERWRITE );
-		
-			if( $link == "noLink" ) {
-				echo stripslashes( $rankName . " " . $firstName . " " . $lastName );
-			} elseif( $link == "link" ) {
-				echo "<a href='" . WEBLOC . "index.php?page=bio&crew=" . $userFetchArray['crewid'] . "'>";
-				echo stripslashes( $rankName . " " . $firstName . " " . $lastName );
-				echo "</a>";
-			}
-			
-		}
-		
+		$userFetchResult = mysql_query($userFetch);
+		$fetch = mysql_fetch_assoc($userFetchResult);
+	
+		$name = array(
+			'first_name' => $fetch['firstName'],
+			'last_name' => $fetch['lastName']
+		);
 	}
 	
+	foreach($name as $key => $value)
+	{
+		if(empty($value))
+		{
+			unset($name[$key]);
+		}
+	}
+	
+	if($rank == "noRank")
+	{
+		unset($name['rank']);
+		$name = implode(' ', $name);
+		
+		if($link == "noLink")
+		{
+			echo stripslashes($name);
+		}
+		elseif($link == "link")
+		{
+			echo "<a href='" . WEBLOC . "index.php?page=bio&crew=" . $fetch['crewid'] . "'>";
+			echo stripslashes($name);
+			echo "</a>";
+		}
+	}
+	elseif($rank == "rank")
+	{
+		$name = implode(' ', $name);
+		
+		if($link == "noLink")
+		{
+			echo stripslashes($name);
+		}
+		elseif($link == "link")
+		{
+			echo "<a href='" . WEBLOC . "index.php?page=bio&crew=" . $fetch['crewid'] . "'>";
+			echo stripslashes($name);
+			echo "</a>";
+		}
+	}
 }
-
 /** END FUNCTION **/
 
 /**
