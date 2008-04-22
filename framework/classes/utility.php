@@ -12,7 +12,7 @@ Purpose: Page with the class that is called by the system to check for the
 	messages
 
 System Version: 2.6.0
-Last Modified: 2008-03-29 1624 EST
+Last Modified: 2008-04-22 1937 EST
 
 Included Classes:
 	QueryCheck
@@ -65,7 +65,8 @@ class QueryCheck
 			3 => 'site options',
 			4 => 'private messages',
 			5 => 'player access levels',
-			6 => 'crew access levels'
+			6 => 'crew access levels',
+			7 => 'user moderation flags'
 		);
 		
 		/* verb tense logic */
