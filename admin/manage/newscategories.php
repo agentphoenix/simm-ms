@@ -5,88 +5,99 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/newscategories.php
 Purpose: Page that moderates the news categories
 
-System Version: 2.5.0
-Last Modified: 2007-06-18 1150 EST
+System Version: 2.6.0
+Last Modified: 2008-04-22 1909 EST
 **/
 
 /* access check */
-if( in_array( "m_newscat3", $sessionAccess ) ) {
-
+if(in_array("m_newscat3", $sessionAccess))
+{
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$update = $_POST['action_update_x'];
-	$create = $_POST['action_create_x'];
-	$delete = $_POST['action_delete_x'];
-
-	/* define the variables */
-	$catUserLevel = $_POST['catUserLevel'];
-	$catVisible = $_POST['catVisible'];
-	$catName = addslashes( $_POST['catName'] );
-	$catid = $_POST['catid'];
+	$query = FALSE;
+	$result = FALSE;
 	
-	if( $update ) {
+	if(isset($_POST['action_update_x']))
+	{
+		if(isset($_POST['catid']) && is_numeric($_POST['catid'])) {
+			$catid = $_POST['catid'];
+		} else {
+			$catid = NULL;
+		}
 		
-		/* do the update query */
-		$newsCatQuery = "UPDATE sms_news_categories SET catName = '$catName', ";
-		$newsCatQuery.= "catUserLevel = '$catUserLevel', catVisible = '$catVisible' ";
-		$newsCatQuery.= "WHERE catid = '$catid' LIMIT 1";
-		$result = mysql_query( $newsCatQuery );
+		$update = "UPDATE sms_news_categories SET catName = %s, catUserLevel = %d, catVisible = %s WHERE catid = $catid LIMIT 1";
+		
+		$query = sprintf(
+			$update,
+			escape_string($_POST['catName']),
+			escape_string($_POST['catUserLevel']),
+			escape_string($_POST['catVisible'])
+		);
+		
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_news_categories" );
 		
 		$action = "update";
-	
-	} elseif( $create ) {
+	}
+	elseif(isset($_POST['action_create_x']))
+	{
+		$insert = "INSERT INTO sms_news_categories (catName, catUserLevel, catVisible) VALUES (%s, %d, %s)";
 		
-		/* do the create query */
-		$newsCatQuery = "INSERT INTO sms_news_categories ( catid, catName, catUserLevel, catVisible ) ";
-		$newsCatQuery.= "VALUES( '', '$catName', '$catUserLevel', '$catVisible' )";
-		$result = mysql_query( $newsCatQuery );
+		$query = sprintf(
+			$insert,
+			escape_string($_POST['catName']),
+			escape_string($_POST['catUserLevel']),
+			escape_string($_POST['catVisible'])
+		);
+		
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_news_categories" );
 		
 		$action = "create";
-	
-	} elseif( $delete ) {
+	}
+	elseif(isset($_POST['action_delete_x']))
+	{
+		if(isset($_POST['catid']) && is_numeric($_POST['catid'])) {
+			$catid = $_POST['catid'];
+		} else {
+			$catid = NULL;
+		}
 		
-		/* do the delete query */
-		$newsCatQuery = "DELETE FROM sms_news_categories WHERE catid = '$catid' LIMIT 1";
-		$result = mysql_query( $newsCatQuery );
+		$query = "DELETE FROM sms_news_categories WHERE catid = $catid LIMIT 1";
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_news_categories" );
 		
 		$action = "delete";
-		
 	}
-	
-	/* strip the slashes */
-	$catName = stripslashes( $catName );
 
 ?>
 
 	<div class="body">
-		
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $newsCatQuery );
+		$check->checkQuery($result, $query);
 		
-		if( !empty( $check->query ) ) {
-			$check->message( "news category", $action );
+		if(!empty($check->query))
+		{
+			$check->message("news category", $action);
 			$check->display();
 		}
 		
 		?>
 		
-		<span class="fontTitle">Create New Site News Category</span><br /><br />
+		<span class="fontTitle">Create Site News Category</span><br /><br />
 		
 		<table cellpadding="2" cellspacing="2">
 			<form method="post" action="admin.php?page=manage&sub=newscategories">
@@ -140,9 +151,9 @@ if( in_array( "m_newscat3", $sessionAccess ) ) {
 				<td valign="middle">
 					<b>Required Access Level</b><br />
 					<select name="catUserLevel">
-						<option value="1" <? if( $catUserLevel == "1" ) { echo "selected"; } ?>>General User</option>
-						<option value="2" <? if( $catUserLevel == "2" ) { echo "selected"; } ?>>Power User</option>
-						<option value="3" <? if( $catUserLevel == "3" ) { echo "selected"; } ?>>Admin</option>
+						<option value="1" <? if( $catUserLevel == 1 ) { echo "selected"; } ?>>General User</option>
+						<option value="2" <? if( $catUserLevel == 2 ) { echo "selected"; } ?>>Power User</option>
+						<option value="3" <? if( $catUserLevel == 3 ) { echo "selected"; } ?>>Admin</option>
 					</select>
 				</td>
 				<td valign="middle">
