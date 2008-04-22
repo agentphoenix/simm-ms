@@ -1,7 +1,5 @@
 <?php
 
-error_report();
-
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -12,7 +10,7 @@ File: admin/manage/crew.php
 Purpose: Page to display the active, inactive, and pending crew on the sim
 
 System Version: 2.6.0
-Last Modified: 2008-04-22 1703 EST
+Last Modified: 2008-04-22 1859 EST
 **/
 
 /* access check */
@@ -33,6 +31,12 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 	
 	if(isset($_GET['action'])) {
 		$action = $_GET['action'];
+	}
+	
+	if(isset($_POST['action_tab']) && is_numeric($_POST['action_tab'])) {
+		$tab = $_POST['action_tab'];
+	} else {
+		$tab = 1;
 	}
 	
 	if(isset($_POST))
@@ -98,9 +102,75 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 			optimizeSQLTable( "sms_positions" );
 		}
 		if($action_type == 'activate')
-		{}
+		{
+			/* pull the default access levels from the db */
+			$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = 4 LIMIT 1";
+			$getGroupLevelsResult = mysql_query( $getGroupLevels );
+			$groups = mysql_fetch_array( $getGroupLevelsResult );
+			
+			$update = "UPDATE sms_crew SET crewType = %s, accessPost = %s, accessManage = %s, accessReports = %s, ";
+			$update.= "accessUser = %s, accessOthers = %s WHERE crewid = $action_id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string('active'),
+				escape_string($groups[1]),
+				escape_string($groups[2]),
+				escape_string($groups[3]),
+				escape_string($groups[4]),
+				escape_string($groups[5])
+			);
+
+			$result = mysql_query($query);
+
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+
+			/* set the action */
+			$action = $action_type;
+			
+			/* get the user's old position */
+			$getPos = "SELECT positionid, positionid2 FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+			$getPosResult = mysql_query($getPos);
+			$oldPosition = mysql_fetch_array($getPosResult);
+			
+			/* update the position they're being given */
+			update_position($oldPosition[0], 'give');
+			
+			if(!empty($oldPosition[1]))
+			{
+				update_position($oldPosition[1], 'give');
+			}
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_positions" );
+		}
 		if($action_type == 'delete')
-		{}
+		{
+			$get = "SELECT * FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+			$getR = mysql_query($get);
+			$fetch = mysql_fetch_assoc($getR);
+			
+			/* if the crew member is active, make sure to adjust the available positions */
+			if($fetch['crewType'] == 'active')
+			{
+				update_position($fetch['positionid'], 'take');
+
+				if(!empty($fetch['positionid2']))
+				{
+					update_position($fetch['positionid2'], 'take');
+				}
+			}
+			
+			$query = "DELETE FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+			$result = mysql_query($query);
+			
+			$action = $action_type;
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_positions" );
+			optimizeSQLTable( "sms_crew" );
+		}
 	}
 
 	/* build an array of all the positions to check for invalid ones */
@@ -134,30 +204,19 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 		);
 	}
 	
-	$disable = array();
-
-	if(count($crew['inactive']) == 0) {
-		$disable[] = 2;
-	}
-
-	if(count($crew['pending']) == 0) {
-		$disable[] = 3;
-	}
-
-	$disable_string = implode(",", $disable);
-	
 ?>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable_string; ?>] });
+			$('#container-1 > ul').tabs(<?=$tab;?>);
 			$('.zebra tr:nth-child(odd)').addClass('alt');
 			
 			$("a[rel*=facebox]").click(function() {
 				var action = $(this).attr("myAction");
 				var id = $(this).attr("myID");
+				var tab = $(this).attr("myTab");
 
 				jQuery.facebox(function() {
-					jQuery.get('admin/ajax/crew_' + action + '.php?id=' + id, function(data) {
+					jQuery.get('admin/ajax/crew_' + action + '.php?id=' + id + '&t=' + tab, function(data) {
 						jQuery.facebox(data);
 					});
 				});
@@ -172,8 +231,9 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 		$check = new QueryCheck;
 		$check->checkQuery( $result, $query );
 				
-		if( !empty( $check->query ) ) {
-			$check->message( "player", $action );
+		if(!empty($check->query))
+		{
+			$check->message("player", $action);
 			$check->display();
 		}
 		
@@ -249,10 +309,10 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 							<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_a['id'];?>"><strong>Access</strong></a>
 						</td>
 						<td width="10%" align="center" class="fontNormal">
-							<a href="#" rel="facebox" myAction="deactivate" myID="<?=$value_a['id'];?>" class="delete"><b>Deactivate</b></a>
+							<a href="#" rel="facebox" myAction="deactivate" myID="<?=$value_a['id'];?>" myTab="1" class="delete"><b>Deactivate</b></a>
 						</td>
 						<td width="10%" align="center" class="fontNormal">
-							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_a['id'];?>" class="delete"><b>Delete</b></a>
+							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_a['id'];?>" myTab="1" class="delete"><b>Delete</b></a>
 						</td>
 					</tr>
 
@@ -261,6 +321,16 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 			</div>
 			
 			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if(count($crew['inactive']) == 0)
+				{
+					echo "<strong class='orange fontLarge'>No inactive characters found</strong>";
+				}
+				else
+				{
+				
+				?>
 				<table class="zebra" cellpadding="3" cellspacing="0">
 					<?php foreach($crew['inactive'] as $key_i => $value_i) { ?>
 
@@ -317,23 +387,34 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 							<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_i['id'];?>"><strong>Access</strong></a>
 						</td>
 						<td width="10%" align="center" class="fontNormal">
-							<a href="#" rel="facebox" myAction="activate" myID="<?=$value_i['id'];?>" class="delete"><b>Activate</b></a>
+							<a href="#" rel="facebox" myAction="activate" myID="<?=$value_i['id'];?>" myTab="2" class="add"><b>Activate</b></a>
 						</td>
 						<td width="10%" align="center" class="fontNormal">
-							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_i['id'];?>" class="delete"><b>Delete</b></a>
+							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_i['id'];?>" myTab="2" class="delete"><b>Delete</b></a>
 						</td>
 					</tr>
 
 					<?php } ?>
 				</table>
+				<?php } ?>
 			</div>
 			
 			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if(count($crew['pending']) == 0)
+				{
+					echo "<strong class='orange fontLarge'>No pending characters found</strong>";
+				}
+				else
+				{
+				
+				?>
 				<table class="zebra" cellpadding="3" cellspacing="0">
 					<?php foreach($crew['pending'] as $key_p => $value_p) { ?>
 
 					<tr height="40">
-						<td width="50%">
+						<td width="60%">
 							<b><? printCrewName($value_p['id'], 'noRank', 'noLink', 'pending');?></b><br />
 							<span class="fontNormal">Unassigned</span>
 						</td>
@@ -345,15 +426,13 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 							<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_p['id'];?>" class="edit"><b>Edit Account</b></a>
 						</td>
 						<td width="10%" align="center" class="fontNormal">
-							<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate" class="add"><b>Approve</b></a>
-						</td>
-						<td width="10%" align="center" class="fontNormal">
-							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_p['id'];?>" class="delete"><b>Delete</b></a>
+							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_p['id'];?>" myTab="3" class="delete"><b>Delete</b></a>
 						</td>
 					</tr>
 
 					<?php } ?>
 				</table>
+				<?php } ?>
 			</div>
 		</div>
 		
