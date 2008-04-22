@@ -1,4 +1,4 @@
-Last Update: 2008.04.22 0137 EST
+Last Update: 2008.04.22 1941 EST
 
 IN PROGRESS
 =====
@@ -11,7 +11,7 @@ IN PROGRESS
 
 #	Take care of Apache errors throughout the system
 		x	/pages
-		*	/admin/manage (7)
+		*	/admin/manage (4)
 				x	access.php
 				x	accessall.php
 				x	accesslevels.php
@@ -20,9 +20,7 @@ IN PROGRESS
 				x	addaward.php
 				x	awards.php
 				x	coc.php
-					crew.php
-						-	Needs activation code
-						-	Needs deletion code
+				x	crew.php
 				x	database.php
 				x	decklisting.php
 				x	departments.php
@@ -33,9 +31,9 @@ IN PROGRESS
 				x	messages.php
 				x	missionnotes.php
 				x	missions.php
-					moderate.php
+				x	moderate.php
 				x	news.php
-					newscategories.php
+				x	newscategories.php
 					npcs.php
 				x	positions.php
 				x	posts.php
