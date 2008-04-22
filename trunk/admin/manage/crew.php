@@ -12,7 +12,7 @@ File: admin/manage/crew.php
 Purpose: Page to display the active, inactive, and pending crew on the sim
 
 System Version: 2.6.0
-Last Modified: 2008-04-22 0133 EST
+Last Modified: 2008-04-22 1703 EST
 **/
 
 /* access check */
@@ -134,10 +134,23 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 		);
 	}
 	
+	$disable = array();
+
+	if(count($crew['inactive']) == 0) {
+		$disable[] = 2;
+	}
+
+	if(count($crew['pending']) == 0) {
+		$disable[] = 3;
+	}
+
+	$disable_string = implode(",", $disable);
+	
 ?>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('.zebra tr:nth-child(even)').addClass('alt');
+			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable_string; ?>] });
+			$('.zebra tr:nth-child(odd)').addClass('alt');
 			
 			$("a[rel*=facebox]").click(function() {
 				var action = $(this).attr("myAction");
@@ -172,184 +185,177 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 		<a href="<?=$webLocation;?>admin.php?page=manage&sub=add" class="add fontMedium"><strong>Add a Character &raquo;</strong></a>
 		<br /><br />
 		
-		<?php if(count($crew['pending']) > 0) { ?>
-		<table class="zebra" cellpadding="3" cellspacing="0">
-			<tr>
-				<td class="fontLarge" colspan="6"><strong>Pending Crew</strong></td>
-			</tr>
+		<div id="container-1">
+			<ul>
+				<li><a href="#one"><span>Active Crew (<?php echo count($crew['active']);?>)</span></a></li>
+				<li><a href="#two"><span>Inactive Crew (<?php echo count($crew['inactive']);?>)</span></a></li>
+				<li><a href="#three"><span>Pending Crew (<?php echo count($crew['pending']);?>)</span></a></li>
+			</ul>
 			
-			<?php foreach($crew['pending'] as $key_p => $value_p) { ?>
-		
-			<tr height="40">
-				<td width="50%">
-					<b><? printCrewName($value_p['id'], 'noRank', 'noLink', 'pending');?></b><br />
-					<span class="fontNormal">Unassigned</span>
-				</td>
-				<td width="10%"></td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_p['id'];?>" class="edit"><b>Edit Bio</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_p['id'];?>" class="edit"><b>Edit Account</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate" class="add"><b>Approve</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="#" rel="facebox" myAction="delete" myID="<?=$value_p['id'];?>" class="delete"><b>Delete</b></a>
-				</td>
-			</tr>
+			<div id="one" class="ui-tabs-container ui-tabs-hide">
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<?php foreach($crew['active'] as $key_a => $value_a) { ?>
+
+					<tr height="40">
+						<td width="50%">
+							<b><? printCrewName($value_a['id'], 'rank', 'noLink');?></b><br />
+							<?php
+
+							$key1 = array_key_exists($value_a['position1'], $pos_array);
+
+							if(!empty($value_a['position2']))
+							{
+								$key2 = array_key_exists($value_a['position2'], $pos_array);
+							}
+
+							/* check to see if the first position is legit */
+							if($key1 !== FALSE)
+							{
+								echo "<span class='fontNormal' style='color: #" . $pos_array[$value_a['position1']][1] . ";'>";
+								printText($pos_array[$value_a['position1']][0]);
+								echo "</span>";
+							}
+							else
+							{
+								echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+							}
+
+							/* check to see if the second position is legit */
+							if(!empty($value_a['position2']))
+							{
+								if($key2 !== FALSE)
+								{
+									echo "<span class='fontNormal'> &amp; </span>";
+									echo "<span class='fontNormal' style='color: #" . $pos_array[$value_a['position2']][1] . ";'>";
+									printText($pos_array[$value_a['position2']][0]);
+									echo "</span>";
+								}
+								else
+								{
+									echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+								}
+							}
+
+							?>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_a['id'];?>" class="edit"><b>Edit Bio</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_a['id'];?>" class="edit"><b>Edit Account</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$value_a['id'];?>"><strong>Stats</strong></a> &middot;
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_a['id'];?>"><strong>Access</strong></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="#" rel="facebox" myAction="deactivate" myID="<?=$value_a['id'];?>" class="delete"><b>Deactivate</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_a['id'];?>" class="delete"><b>Delete</b></a>
+						</td>
+					</tr>
+
+					<?php } ?>
+				</table>
+			</div>
 			
-			<?php } ?>
-		</table>
-		<p>&nbsp;</p>
-		<?php } /* end the if pending > 0 logic */ ?>
-		
-		<?php if(count($crew['active']) > 0) { ?>
-		<table class="zebra" cellpadding="3" cellspacing="0">
-			<tr>
-				<td class="fontLarge" colspan="6"><strong>Active Crew</strong></td>
-			</tr>
+			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<?php foreach($crew['inactive'] as $key_i => $value_i) { ?>
+
+					<tr height="40">
+						<td width="50%">
+							<b><? printCrewName($value_i['id'], 'rank', 'noLink');?></b><br />
+							<?php
+
+							$key1 = array_key_exists($value_i['position1'], $pos_array);
+
+							if(!empty($value_i['position2']))
+							{
+								$key2 = array_key_exists($value_i['position2'], $pos_array);
+							}
+
+							/* check to see if the first position is legit */
+							if($key1 !== FALSE)
+							{
+								echo "<span class='fontNormal' style='color: #" . $pos_array[$value_i['position1']][1] . ";'>";
+								printText($pos_array[$value_i['position1']][0]);
+								echo "</span>";
+							}
+							else
+							{
+								echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+							}
+
+							/* check to see if the second position is legit */
+							if(!empty($value_i['position2']))
+							{
+								if($key2 !== FALSE)
+								{
+									echo "<span class='fontNormal'> &amp; </span>";
+									echo "<span class='fontNormal' style='color: #" . $pos_array[$value_i['position2']][1] . ";'>";
+									printText($pos_array[$value_i['position2']][0]);
+									echo "</span>";
+								}
+								else
+								{
+									echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
+								}
+							}
+
+							?>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_i['id'];?>" class="edit"><b>Edit Bio</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_i['id'];?>" class="edit"><b>Edit Account</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$value_i['id'];?>"><strong>Stats</strong></a> &middot;
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_i['id'];?>"><strong>Access</strong></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="#" rel="facebox" myAction="activate" myID="<?=$value_i['id'];?>" class="delete"><b>Activate</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_i['id'];?>" class="delete"><b>Delete</b></a>
+						</td>
+					</tr>
+
+					<?php } ?>
+				</table>
+			</div>
 			
-			<?php foreach($crew['active'] as $key_a => $value_a) { ?>
-		
-			<tr height="40">
-				<td width="50%">
-					<b><? printCrewName($value_a['id'], 'rank', 'noLink');?></b><br />
-					<?php
-					
-					$key1 = array_key_exists($value_a['position1'], $pos_array);
-					
-					if(!empty($value_a['position2']))
-					{
-						$key2 = array_key_exists($value_a['position2'], $pos_array);
-					}
-					
-					/* check to see if the first position is legit */
-					if($key1 !== FALSE)
-					{
-						echo "<span class='fontNormal' style='color: #" . $pos_array[$value_a['position1']][1] . ";'>";
-						printText($pos_array[$value_a['position1']][0]);
-						echo "</span>";
-					}
-					else
-					{
-						echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
-					}
-					
-					/* check to see if the second position is legit */
-					if(!empty($value_a['position2']))
-					{
-						if($key2 !== FALSE)
-						{
-							echo "<span class='fontNormal'> &amp; </span>";
-							echo "<span class='fontNormal' style='color: #" . $pos_array[$value_a['position2']][1] . ";'>";
-							printText($pos_array[$value_a['position2']][0]);
-							echo "</span>";
-						}
-						else
-						{
-							echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
-						}
-					}
-					
-					?>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_a['id'];?>" class="edit"><b>Edit Bio</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_a['id'];?>" class="edit"><b>Edit Account</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$value_a['id'];?>"><strong>Stats</strong></a> &middot;
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_a['id'];?>"><strong>Access</strong></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="#" rel="facebox" myAction="deactivate" myID="<?=$value_a['id'];?>" class="delete"><b>Deactivate</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="#" rel="facebox" myAction="delete" myID="<?=$value_a['id'];?>" class="delete"><b>Delete</b></a>
-				</td>
-			</tr>
-			
-			<?php } ?>
-		</table>
-		<p>&nbsp;</p>
-		<?php } /* end the if active > 0 logic */ ?>
-		
-		<?php if(count($crew['inactive']) > 0) { ?>
-		<table class="zebra" cellpadding="3" cellspacing="0">
-			<tr>
-				<td class="fontLarge" colspan="6"><strong>Inactive Crew</strong></td>
-			</tr>
-			
-			<?php foreach($crew['inactive'] as $key_i => $value_i) { ?>
-		
-			<tr height="40">
-				<td width="50%">
-					<b><? printCrewName($value_i['id'], 'rank', 'noLink');?></b><br />
-					<?php
-					
-					$key1 = array_key_exists($value_i['position1'], $pos_array);
-					
-					if(!empty($value_i['position2']))
-					{
-						$key2 = array_key_exists($value_i['position2'], $pos_array);
-					}
-					
-					/* check to see if the first position is legit */
-					if($key1 !== FALSE)
-					{
-						echo "<span class='fontNormal' style='color: #" . $pos_array[$value_i['position1']][1] . ";'>";
-						printText($pos_array[$value_i['position1']][0]);
-						echo "</span>";
-					}
-					else
-					{
-						echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
-					}
-					
-					/* check to see if the second position is legit */
-					if(!empty($value_i['position2']))
-					{
-						if($key2 !== FALSE)
-						{
-							echo "<span class='fontNormal'> &amp; </span>";
-							echo "<span class='fontNormal' style='color: #" . $pos_array[$value_i['position2']][1] . ";'>";
-							printText($pos_array[$value_i['position2']][0]);
-							echo "</span>";
-						}
-						else
-						{
-							echo "<strong class='fontNormal red'>[ Invalid Position ]</strong>";
-						}
-					}
-					
-					?>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_i['id'];?>" class="edit"><b>Edit Bio</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_i['id'];?>" class="edit"><b>Edit Account</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=stats&crew=<?=$value_i['id'];?>"><strong>Stats</strong></a> &middot;
-					<a href="<?=$webLocation;?>admin.php?page=user&sub=access&crew=<?=$value_i['id'];?>"><strong>Access</strong></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="#" rel="facebox" myAction="activate" myID="<?=$value_i['id'];?>" class="delete"><b>Activate</b></a>
-				</td>
-				<td width="10%" align="center" class="fontNormal">
-					<a href="#" rel="facebox" myAction="delete" myID="<?=$value_i['id'];?>" class="delete"><b>Delete</b></a>
-				</td>
-			</tr>
-			
-			<?php } ?>
-		</table>
-		<p>&nbsp;</p>
-		<?php } /* end the if inactive > 0 logic */ ?>
+			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<table class="zebra" cellpadding="3" cellspacing="0">
+					<?php foreach($crew['pending'] as $key_p => $value_p) { ?>
+
+					<tr height="40">
+						<td width="50%">
+							<b><? printCrewName($value_p['id'], 'noRank', 'noLink', 'pending');?></b><br />
+							<span class="fontNormal">Unassigned</span>
+						</td>
+						<td width="10%"></td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$value_p['id'];?>" class="edit"><b>Edit Bio</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=user&sub=account&crew=<?=$value_p['id'];?>" class="edit"><b>Edit Account</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="<?=$webLocation;?>admin.php?page=manage&sub=activate" class="add"><b>Approve</b></a>
+						</td>
+						<td width="10%" align="center" class="fontNormal">
+							<a href="#" rel="facebox" myAction="delete" myID="<?=$value_p['id'];?>" class="delete"><b>Delete</b></a>
+						</td>
+					</tr>
+
+					<?php } ?>
+				</table>
+			</div>
+		</div>
 		
 	</div>
 	
