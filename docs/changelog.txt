@@ -1,4 +1,4 @@
-Last updated: 2008.04.19 1849 EST
+Last updated: 2008.04.22 1651 EST
 
 NEW FEATURES
 ===
@@ -82,3 +82,4 @@ FIXES
 *	Removed unnecessary access checks on the admin subsection pages
 *	Worked around Webkit bug where post edit icon wouldn't show up
 *	Fixed bug where using the delete link for an individual news item (on the news item page) wouldn't do anything at all
+*	Fixed join page bug where height, weight, physical description, personality overview, and real name weren't be inserted into the database
