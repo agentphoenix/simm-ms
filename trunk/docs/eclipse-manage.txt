@@ -1,4 +1,4 @@
-Last Update: 2008.04.21 0204 EST
+Last Update: 2008.04.22 0137 EST
 
 IN PROGRESS
 =====
@@ -21,6 +21,8 @@ IN PROGRESS
 				x	awards.php
 				x	coc.php
 					crew.php
+						-	Needs activation code
+						-	Needs deletion code
 				x	database.php
 				x	decklisting.php
 				x	departments.php
