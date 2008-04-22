@@ -5,137 +5,164 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/moderate.php
 Purpose: Page to show who is moderated and who's not
 
-System Version: 2.5.0
-Last Modified: 2007-04-27 1217 EST
+System Version: 2.6.0
+Last Modified: 2008-04-22 1939 EST
 **/
 
 /* access check */
-if( in_array( "m_moderation", $sessionAccess ) ) {
-
+if(in_array("m_moderation", $sessionAccess))
+{
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_GET['action'];
-	$type = $_GET['type'];
+	$query = FALSE;
+	$result = FALSE;
+	$action_type = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['crew'] ) && preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
-		errorMessageIllegal( "post moderation page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$crew = $_GET['crew'];
+	if(isset($_POST))
+	{
+		/* define the POST variables */
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
+		
+		/* protecting against SQL injection */
+		if(isset($action_id) && !is_numeric($action_id))
+		{
+			$action_id = FALSE;
+			exit();
+		}
+		
+		if($action_type == 'moderate')
+		{
+			$update = "UPDATE sms_crew SET moderatePosts = %s, moderateLogs = %s, moderateNews = %s WHERE crewid = $action_id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string($_POST['m_posts']),
+				escape_string($_POST['m_logs']),
+				escape_string($_POST['m_news'])
+			);
+			
+			$result = mysql_query($query);
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+		}
 	}
+	
+	/* dump the crew data into an array */
+	$getCrew = "SELECT crewid, moderatePosts, moderateLogs, moderateNews FROM sms_crew ";
+	$getCrew.= "WHERE crewType = 'active' ORDER BY positionid, rankid ASC";
+	$getCrewResult = mysql_query($getCrew);
+	$crew = array();
 
-	if( $action ) {
-
-		if( $action == "moderate" ) {
-			$queryValue = "y";
-		} elseif( $action == "unmoderate" ) {
-			$queryValue = "n";
-		} else {
-			errorMessage( "postModeration" );
-			exit();
-		}
-
-		if( $type == "posts" ) {
-			$queryField = "moderatePosts";
-			$kind = "mission post moderation flag";
-		} elseif( $type == "logs" ) {
-			$queryField = "moderateLogs";
-			$kind = "personal log moderation flag";
-		} elseif( $type == "news" ) {
-			$queryField = "moderateNews";
-			$kind = "news item moderation flag";
-		} else {
-			errorMessage( "post moderation" );
-			exit();
-		}
-
-		$updateMod = "UPDATE sms_crew SET $queryField = '$queryValue' WHERE crewid = '$crew' LIMIT 1";
-		$result = mysql_query( $updateMod );
-
-		/* optimize the table */
-		optimizeSQLTable( "sms_crew" );
-
+	while($crewMod = mysql_fetch_array($getCrewResult)) {
+		extract( $crewMod, EXTR_OVERWRITE );
+		
+		$crew[$crewMod[0]] = array('posts' => $crewMod[1], 'logs' => $crewMod[2], 'news' => $crewMod[3]);
 	}
 
 ?>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.zebra tr:nth-child(odd)').addClass('alt');
+			
+			$("a[rel*=facebox]").click(function() {
+				var id = $(this).attr("myID");
 
+				jQuery.facebox(function() {
+					jQuery.get('admin/ajax/moderate_edit.php?id=' + id, function(data) {
+						jQuery.facebox(data);
+					});
+				});
+				return false;
+			});
+		});
+	</script>
+	
 	<div class="body">
-		<?
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateMod );
+		$check->checkQuery($result, $query);
 				
-		if( !empty( $check->query ) ) {
-			$check->message( $kind, "update" );
+		if(!empty($check->query))
+		{
+			$check->message("user moderation flags", "update");
 			$check->display();
 		}
 		
 		?>
 		
 		<span class="fontTitle">Crew Post Moderation</span><br /><br />
-		Use this page to set the moderation levels for various crew members. These values
-		can also be changed from each user's account.<br /><br />
+		From this page you can view and change the moderation levels for various players. A green icon means that the type of post (the column) is being moderated for that particular player, while nothing in the column means the type of post is not being moderated.<br /><br />
+		Moderated posts will require approval before being sent out to the crew. If a player is moderated and they attempted to post a joint post, the joint post will require approval before it is sent out to the crew, even if the other members are not moderated. Unmoderated posts will be sent out without any need for activation. These values can also be changed from each user&rsquo;s account page.<br /><br />
 	
-			<?
-	
-			$rowCount = "0";
-			$color1 = "rowColor1";
-			$color2 = "rowColor2";
-	
-			?>
-			<table>
-				<tr class="fontMedium">
-					<td><b>Crew Member</b></td>
-					<td align="center"><b>Mission Posts</b></td>
-					<td align="center"><b>Personal Logs</b></td>
-					<td align="center"><b>News Items</b></td>
-				</tr>
-				<?
-	
-				$getCrew = "SELECT crewid, moderatePosts, moderateLogs, moderateNews ";
-				$getCrew.= "FROM sms_crew WHERE crewType = 'active' ";
-				$getCrew.= "ORDER BY positionid, rankid ASC";
-				$getCrewResult = mysql_query( $getCrew );
-	
-				while( $crewMod = mysql_fetch_assoc( $getCrewResult ) ) {
-					extract( $crewMod, EXTR_OVERWRITE );
+		<table class="zebra" cellpadding="3" cellspacing="0">
+			<tr class="fontMedium">
+				<th>Crew Member</td>
+				<th>Mission Posts</td>
+				<th>Personal Logs</td>
+				<th>News Items</td>
+			</tr>
+			
+			<?php foreach($crew as $key => $value) { ?>
+			<tr height="30">
+				<td><? printCrewName( $key, "rank", "noLink" ); ?></td>
+				<td align="center" valign="middle">
+					<?php
 					
-					$rowColor = ($rowCount % 2) ? $color1 : $color2; 
-	
-				?>
-				<tr class="fontNormal <?=$rowColor;?>">
-					<td><? printCrewName( $crewid, "rank", "noLink" ); ?></td>
-					<td align="center">
-						<? if( $moderatePosts == "y" ) { ?>
-							<a href="<?=$webLocation;?>admin.php?page=manage&sub=moderate&crew=<?=$crewid;?>&type=posts&action=unmoderate">Moderated</a>
-						<? } else { ?>
-							<a href="<?=$webLocation;?>admin.php?page=manage&sub=moderate&crew=<?=$crewid;?>&type=posts&action=moderate">Not Moderated</a>
-						<? } ?>
-					</td>
-					<td align="center">
-						<? if( $moderateLogs == "y" ) { ?>
-							<a href="<?=$webLocation;?>admin.php?page=manage&sub=moderate&crew=<?=$crewid;?>&type=logs&action=unmoderate">Moderated</a>
-						<? } else { ?>
-							<a href="<?=$webLocation;?>admin.php?page=manage&sub=moderate&crew=<?=$crewid;?>&type=logs&action=moderate">Not Moderated</a>
-						<? } ?>
-					</td>
-					<td align="center">
-						<? if( $moderateNews == "y" ) { ?>
-							<a href="<?=$webLocation;?>admin.php?page=manage&sub=moderate&crew=<?=$crewid;?>&type=news&action=unmoderate">Moderated</a>
-						<? } else { ?>
-							<a href="<?=$webLocation;?>admin.php?page=manage&sub=moderate&crew=<?=$crewid;?>&type=news&action=moderate">Not Moderated</a>
-						<? } ?>
-					</td>
-				</tr>
-				<? $rowCount++; } ?>
-			</table>
+					if($value['posts'] == "y")
+					{
+						echo "<img src='images/message-unread-icon.png' border='0' alt='Moderated' />";
+					}
+					else
+					{
+						echo "&nbsp;";
+					}
+					
+					?>
+				</td>
+				<td align="center" valign="middle">
+					<?php
+					
+					if($value['logs'] == "y")
+					{
+						echo "<img src='images/message-unread-icon.png' border='0' alt='Moderated' />";
+					}
+					else
+					{
+						echo "&nbsp;";
+					}
+					
+					?>
+				</td>
+				<td align="center" valign="middle">
+					<?php
+					
+					if($value['news'] == "y")
+					{
+						echo "<img src='images/message-unread-icon.png' border='0' alt='Moderated' />";
+					}
+					else
+					{
+						echo "&nbsp;";
+					}
+					
+					?>
+				</td>
+				<td align="center">
+					<a href="#" rel="facebox" myID="<?=$key;?>" class="edit"><strong>Edit Moderation</strong></a>
+				</td>
+			</tr>
+			<?php } ?>
+		</table>
 			
 	</div>
 	
