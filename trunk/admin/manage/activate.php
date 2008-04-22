@@ -10,7 +10,7 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 1653 EST
+Last Modified: 2008-04-22 1649 EST
 **/
 
 /* access check */
@@ -450,7 +450,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 	/* get pending users */
 	$getPendingUsers = "SELECT crew.crewid, crew.firstName, crew.lastName, position.positionName ";
 	$getPendingUsers.= "FROM sms_crew AS crew, sms_positions AS position WHERE ";
-	$getPendingUsers.= "crew.positionid = position.positionid AND crewType = 'pending'";
+	$getPendingUsers.= "crew.positionid = position.positionid AND crew.crewType = 'pending'";
 	$getPendingUsersResult = mysql_query( $getPendingUsers );
 	$countPendingUsers = mysql_num_rows( $getPendingUsersResult );
 	
