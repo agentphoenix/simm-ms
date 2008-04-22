@@ -10,13 +10,13 @@ File: pages/join.php
 Purpose: To display the join application and submit it
 
 System Version: 2.6.0
-Last Modified: 2008-04-20 1929 EST
+Last Modified: 2008-04-22 1644 EST
 **/
 
 /* define the page class and vars */
 $pageClass = "simm";
-$query = "";
-$result = "";
+$query = FALSE;
+$result = FALSE;
 
 if( isset( $_GET['agree'] ) ) {
 	$agree = $_GET['agree'];
@@ -63,26 +63,26 @@ if( isset( $action ) ) {
 		escape_string( md5( $_POST['password'] ) ),
 		escape_string( 'pending' ),
 		escape_string( $_POST['email'] ),
-		escape_string( $_POST['realName'] ),
+		escape_string( $_POST['realname'] ),
 		escape_string( $_POST['aim'] ),
 		escape_string( $_POST['msn'] ),
 		escape_string( $_POST['yim'] ),
 		escape_string( $_POST['icq'] ),
-		escape_string( $_POST['positionid'] ),
+		escape_string( $_POST['position'] ),
 		escape_string( $_POST['rankid'] ),
 		escape_string( $_POST['firstName'] ),
 		escape_string( $_POST['middleName'] ),
 		escape_string( $_POST['lastName'] ),
 		escape_string( $_POST['gender'] ),
 		escape_string( $_POST['species'] ),
-		escape_string( $_POST['heightFeet'] ),
-		escape_string( $_POST['heightInches'] ),
+		escape_string( $_POST['feet'] ),
+		escape_string( $_POST['inches'] ),
 		escape_string( $_POST['weight'] ),
 		escape_string( $_POST['eyeColor'] ),
 		escape_string( $_POST['hairColor'] ),
 		escape_string( $_POST['age'] ),
-		escape_string( $_POST['physicalDesc'] ),
-		escape_string( $_POST['personalityOverview'] ),
+		escape_string( $_POST['appearance'] ),
+		escape_string( $_POST['personality'] ),
 		escape_string( $_POST['strengths'] ),
 		escape_string( $_POST['ambitions'] ),
 		escape_string( $_POST['hobbies'] ),
