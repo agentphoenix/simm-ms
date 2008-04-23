@@ -10,7 +10,7 @@ File: pages/tour.php
 Purpose: Page to display the tour items
 
 System Version: 2.6.0
-Last Modified: 2008-04-18 1508 EST
+Last Modified: 2008-04-23 1929 EST
 **/
 
 /* define the page class and vars */
