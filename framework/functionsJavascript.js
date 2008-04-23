@@ -9,7 +9,7 @@ Purpose: Handles all Javascript actions by the system, including pulling in
 	the various jQuery elements
 
 System Version: 2.6.0
-Last Modified: 2008-02-28 1622 EST
+Last Modified: 2008-04-23 1930 EST
 **/
 
 /**
@@ -43,12 +43,11 @@ function include_dom( type, script_filename )
 include_dom( 'js', 'framework/js/jquery.js' );
 include_dom( 'js', 'framework/js/ui.tabs.js' );
 include_dom( 'js', 'framework/js/clickmenu.js' );
-include_dom( 'js', 'framework/js/linkscrubber.js' );
-include_dom( 'js', 'framework/js/reflect.js' );
 include_dom( 'js', 'framework/js/shadowbox-jquery.js' );
 include_dom( 'js', 'framework/js/shadowbox.js' );
 include_dom( 'js', 'framework/js/facebox.js' );
-include_dom( 'js', 'framework/js/preload.js' );
+include_dom( 'js', 'framework/js/linkscrubber.js' );
+include_dom( 'js', 'framework/js/reflect.js' );
 
 /** pull in the CSS files **/
 include_dom( 'css', 'framework/css/shadowbox.css' );
