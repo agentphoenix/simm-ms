@@ -9,168 +9,149 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/npcs.php
 Purpose: Page to manage the NPCs on the simm
 
-System Version: 2.5.2
-Last Modified: 2007-08-09 0002 EST
+System Version: 2.6.0
+Last Modified: 2008-04-23 1811 EST
 **/
 
 /* access check */
-if( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess ) ) {
-
+if(in_array("m_npcs1", $sessionAccess) || in_array("m_npcs2", $sessionAccess))
+{
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$action = $_GET['action'];
-	$activate = $_POST['activate_x'];
+	$query = FALSE;
+	$result = FALSE;
+	$action_type = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['id'] ) && preg_match( "/^\d+$/", $_GET['id'], $matches ) == 0 ) {
-		errorMessageIllegal( "NPC management page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$actionid = $_GET['id'];
-	}
-
-	if( $action == "delete" ) {
-		
-		/* do the delete query */
-		$query = "DELETE FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
-		$result = mysql_query( $query );
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_crew" );
-		
-	} if( $activate && in_array( "m_npcs2", $sessionAccess ) ) {
-
+	if(isset($_POST))
+	{
 		/* define the POST variables */
-		$crew = $_POST['crew'];
-		$email = $_POST['email'];
-		$username = $_POST['username'];
-		$password = md5( $_POST['password'] );
-		$position = $_POST['position'];
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
 		
-		/* set the standard user levels */
-		$levelsPost = "post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes";
-		$levelsManage = "";
-		$levelsReports = "reports,r_progress,r_milestones";
-		$levelsUser = "user,u_account1,u_nominate,u_inbox,u_bio1,u_status,u_options";
-		$levelsOther = "";
-
-		/* do the delete query */
-		$query = "UPDATE sms_crew SET crewType = 'active', accessPost = '$levelsPost', ";
-		$query.= "accessManage = '$levelsManage', accessReports = '$levelsReports', ";
-		$query.= "accessUser = '$levelsUser', accessOthers = '$levelsOther', ";
-		$query.= "email = '$email', username = '$username', password = '$password' ";
-		$query.= "WHERE crewid = '$crew' LIMIT 1";
-		$result = mysql_query( $query );
+		/* protecting against SQL injection */
+		if(isset($action_id) && !is_numeric($action_id))
+		{
+			$action_id = FALSE;
+			exit();
+		}
 		
-		/* update the position they're being given */
-		$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-		$positionFetch.= "WHERE positionid = '$position' LIMIT 1";
-		$positionFetchResult = mysql_query( $positionFetch );
-		$positionX = mysql_fetch_row( $positionFetchResult );
-		$open = $positionX[1];
-		$revised = ( $open - 1 );
-		$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-		$updatePosition.= "WHERE positionid = '$position' LIMIT 1";
-		$updatePositionResult = mysql_query( $updatePosition );
+		if($action_type == 'activate' && in_array("m_npcs2", $sessionAccess))
+		{
+			if(isset($_POST['position1']) && is_numeric($_POST['position1'])) {
+				$position1 = $_POST['position1'];
+			} else {
+				$position1 = NULL;
+			}
+			
+			if(isset($_POST['position2']) && is_numeric($_POST['position2'])) {
+				$position2 = $_POST['position2'];
+			} else {
+				$position2 = NULL;
+			}
+			
+			update_position($position1, 'give');
 
-		/* set the action */
-		$action = "activate";
-		
-		/* optimize the table */
-		optimizeSQLTable( "sms_crew" );
-		optimizeSQLTable( "sms_positions" );
+			if(!empty($position2))
+			{
+				update_position($position2, 'give');
+			}
+			
+			/* pull the default access levels from the db */
+			$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = 4 LIMIT 1";
+			$getGroupLevelsResult = mysql_query( $getGroupLevels );
+			$groups = mysql_fetch_array( $getGroupLevelsResult );
+			
+			$update = "UPDATE sms_crew SET crewType = %s, accessPost = %s, accessManage = %s, accessReports = %s, ";
+			$update.= "accessUser = %s, accessOthers = %s, username = %s, password = %s, email = %s WHERE crewid = $action_id LIMIT 1";
+			
+			$query = sprintf(
+				$update,
+				escape_string('active'),
+				escape_string($groups[1]),
+				escape_string($groups[2]),
+				escape_string($groups[3]),
+				escape_string($groups[4]),
+				escape_string($groups[5]),
+				escape_string($_POST['username']),
+				escape_string(md5($_POST['password'])),
+				escape_string($_POST['email'])
+			);
 
+			$result = mysql_query($query);
+
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+			optimizeSQLTable( "sms_positions" );
+		}
+		if($action_type == 'delete')
+		{
+			$query = "DELETE FROM sms_crew WHERE crewid = $action_id LIMIT 1";
+			$result = mysql_query($query);
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+		}
 	}
 
-?>
+	/* build an array of all the positions to check for invalid ones */
+	$posArray = "SELECT p.positionid, p.positionName, d.deptColor FROM sms_positions AS p, sms_departments AS d ";
+	$posArray.= "WHERE p.positionDept = d.deptid ORDER BY p.positionid ASC";
+	$posArrayResult = mysql_query( $posArray );
+	$pos_array = array();
 
+	while($myrow = mysql_fetch_array($posArrayResult)) {
+		$pos_array[$myrow[0]] = array($myrow[1], $myrow[2]);
+	}
+	
+?>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("a[rel*=facebox]").click(function() {
+				var action = $(this).attr("myAction");
+				var id = $(this).attr("myID");
+
+				jQuery.facebox(function() {
+					jQuery.get('admin/ajax/npc_' + action + '.php?id=' + id, function(data) {
+						jQuery.facebox(data);
+					});
+				});
+				return false;
+			});
+		});
+	</script>
+	
 	<div class="body">
+		<?php
 		
-		<? if( $action == "details" ) { ?>
-	
-		<div class="update">
-			<?
-	
-			$details = "SELECT crewid, firstName, lastName, email, positionid FROM sms_crew WHERE crewid = '$actionid' LIMIT 1";
-			$detailResult = mysql_query( $details );
-	
-			while( $detailFetch = mysql_fetch_array( $detailResult ) ) {
-				extract( $detailFetch, EXTR_OVERWRITE );
-	
-			?>
-	
-			<span class="fontTitle">Activate <? printText( $detailFetch['firstName'] . " " . $detailFetch['lastName'] ); ?></span>
-			<br /><br />
-			
-			<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=npcs">
-				<table>
-					<tr>
-						<td class="tableCellLabel">Username</td>
-						<td>&nbsp;</td>
-						<td><input type="text" class="image" name="username" maxlength="32" value="<?=$detailFetch['username'];?>" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Password</td>
-						<td>&nbsp;</td>
-						<td><input type="password" class="image" name="password" maxlength="32" /></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Email Address</td>
-						<td>&nbsp;</td>
-						<td><input type="text" class="image" name="email" maxlength="64" value="<?=$detailFetch['email'];?>" /></td>
-					</tr>
-					<tr>
-						<td colspan="3" height="10"></td>
-					</tr>
-					<tr>
-						<td colspan="2">&nbsp;</td>
-						<td>
-							<input type="image" src="<?=path_userskin;?>buttons/activate.png" class="button" name="activate" value="Activate" />
-							<input type="hidden" name="crew" value="<?=$detailFetch['crewid'];?>" />
-							<input type="hidden" name="position" value="<?=$detailFetch['positionid'];?>" />
-						</td>
-					</tr>
-				</table>
-			</form>
-			
-			<? } ?>
-		</div><br /><br />
-	
-		<?
+		$check = new QueryCheck;
+		$check->checkQuery($result, $query);
 		
-		} else {
-		
-			$check = new QueryCheck;
-			$check->checkQuery( $result, $query );
-			
-			if( !empty( $check->query ) ) {
-				$check->message( "non-playing character", $action );
-				$check->display();
-			}
-		
+		if(!empty($check->query))
+		{
+			$check->message("non-playing character", $action_type);
+			$check->display();
 		}
 		
 		?>
 		
 		<span class="fontTitle">Manage Non-Playing Characters</span>
-		<p>From this page, you can select any of the NPCs that exist in your own department. You
-		can edit their bios, promote (or demote) them to another position or rank (below your own).
-		If you want to move an NPC from your own department to another department, please contact 
-		the CO or XO. In addition, you can also add your own NPCs for your department.
+		<p>From this page, you can select any of the NPCs that exist in your own department. You can edit their bios, promote (or demote) them to another position or rank (below your own). If you want to move an NPC from your own department to another department, please contact the CO or XO. In addition, you can also add your own NPCs for your department.
 		
-		<? if( in_array( "m_npcs2", $sessionAccess ) ) { ?>If you would like to make an NPC a 
-		playing character, simply activate them.  You will then be able to edit their account.
+		<? if( in_array( "m_npcs2", $sessionAccess ) ) { ?>
+			If you would like to make an NPC a playing character, simply activate them.  You will then be able to edit their account.
 		<? } ?><br /><br />
 		
-		<a href="<?=$webLocation;?>admin.php?page=manage&sub=add" class="add">Add Non-Playing Character &raquo;</a>
+		<a href="<?=$webLocation;?>admin.php?page=manage&sub=add" class="add fontLarge"><strong>Add Non-Playing Character &raquo;</strong></a>
 		</p>
-		<table cellpadding="2" cellspacing="2">
 		
-		<?
+		<table cellpadding="3" cellspacing="0">
+		
+		<?php
 	
-		 if( in_array( "m_npcs2", $sessionAccess ) ) {
+		if( in_array( "m_npcs2", $sessionAccess ) ) {
 			
 			$departments = "SELECT * FROM sms_departments WHERE deptDisplay = 'y' ORDER BY deptOrder ASC";
 			$deptResults = mysql_query( $departments );
@@ -186,122 +167,71 @@ if( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess
 			</tr>
 			<tr>
 				<td colspan="5">
-					<font class="fontNormal" color="#<?=$deptColor;?>">
+					<font color="#<?=$deptColor;?>">
 						<b><? printText( $deptName ); ?></b>
 					</font>
 				</td>
 			</tr>
 				
-			<?
-					
-			$npcs = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.rankid, crew.positionid ";
-			$npcs.= "FROM sms_crew AS crew, sms_positions AS position, sms_departments AS dept ";
-			$npcs.= "WHERE crew.crewType = 'npc' AND crew.positionid = position.positionid AND ";
-			$npcs.= "position.positionDept = dept.deptid AND dept.deptid = '$dept[0]' ";
-			$npcs.= "ORDER BY crew.positionid, crew.rankid ASC";
-			$npcsResult = mysql_query( $npcs );
-			$npcCount = mysql_num_rows( $npcsResult );
-					
-			$rankArray = "SELECT rankid FROM sms_ranks ORDER BY rankid ASC";
-			$rankArrayResult = mysql_query( $rankArray );
-					
-			/* point the previous and next post buttons to the correct posts */
-			$rankList = array();
-					
-			while( $myrow = mysql_fetch_array( $rankArrayResult ) ) {
-				$rankList[] = $myrow['rankid'];
-			}
+			<?php
 			
-			$rowCount = "0";
-			$color1 = "rowColor1";
-			$color2 = "rowColor2";
+			$npcs = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.rankid, crew.positionid FROM sms_crew AS crew, ";
+			$npcs.= "sms_positions AS position, sms_departments AS dept WHERE crew.crewType = 'npc' AND crew.positionid = position.positionid ";
+			$npcs.= "AND position.positionDept = dept.deptid AND dept.deptid = '$dept[0]' ORDER BY crew.positionid, crew.rankid ASC";
+			$npcsResult = mysql_query($npcs);
+			$npcCount = mysql_num_rows($npcsResult);
+			
+			$rowCount = 0;
+			$color1 = "rowColor2";
+			$color2 = "rowColor1";
 				
-			while( $npc = mysql_fetch_assoc( $npcsResult ) ) {
-				extract( $npc, EXTR_OVERWRITE );
+			while($npc = mysql_fetch_assoc($npcsResult)) {
+				extract($npc, EXTR_OVERWRITE);
 						
 				$rowColor = ($rowCount % 2) ? $color1 : $color2;
-				
-				echo "<tr class='fontNormal " . $rowColor . "'>";
-					echo "<td width='30%'>";
-		
-				if( in_array( $npc['rankid'], $rankList ) ) {
-					
-					$npcRanks = "SELECT rankName FROM sms_ranks WHERE rankid = '$npc[rankid]'";
-					$npcRanksResult = mysql_query( $npcRanks );
-					
-					while( $npcRank = mysql_fetch_assoc( $npcRanksResult ) ) {
-						extract( $npcRank, EXTR_OVERWRITE );
-					
-						echo "<b>" . printText( $npcRank['rankName'] . " " . $firstName . " " . $lastName ) . "</b>";
-						
-					}
-					
-				} else {
-					echo "<b class='red'>[ Invalid Rank ]</b> ";
-					echo "<b>" . printText( $firstName . " " . $lastName ) . "</b>";
-				}
-						
+			
 			?>
-			
-			</td>
-			
-			<?
 				
-				$posArray = "SELECT positionid FROM sms_positions ORDER BY positionid ASC";
-				$posArrayResult = mysql_query( $posArray );
+			<tr class="fontNormal <?=$rowColor;?>" height="25">
+				<td width="40%">
+					<strong><? printCrewName($npc['crewid'], 'rank', 'noLink');?></strong>
+				</td>
+				<td width="30%">
+				<?php
 				
-				/* point the previous and next post buttons to the correct posts */
-				$posList = array();
+				$key1 = array_key_exists($npc['positionid'], $pos_array);
 				
-				while( $myrow = mysql_fetch_array( $posArrayResult ) ) {
-					$posList[] = $myrow['positionid'];
+				if($key1 !== FALSE)
+				{
+					echo "<span style='color: #" . $pos_array[$npc['positionid']][1] . ";'>";
+					printText($pos_array[$npc['positionid']][0]);
+					echo "</span>";
+				}
+				else
+				{
+					echo "<strong class='red'>[ Invalid Position ]</strong>";
 				}
 				
-				if( in_array( $npc['positionid'], $posList ) ) {
-				
-					$npcPos = "SELECT position.positionName, position.positionDept, dept.deptColor ";
-					$npcPos.= "FROM sms_positions AS position, sms_departments AS dept WHERE ";
-					$npcPos.= "position.positionid = '$npc[positionid]' AND position.positionDept = dept.deptid";
-					$npcPosResult = mysql_query( $npcPos );
-					
-					while( $npcPos = mysql_fetch_assoc( $npcPosResult ) ) {
-						extract( $npcPos, EXTR_OVERWRITE );
-						
 				?>
 				
-				<td width="30%" style="color: #<?=$deptColor;?>;"><? printText( $positionName );?></td>
-				<? } } else { ?>
-				<td width="30%" class="red"><b>[ Invalid Position ]</b></td>
-				<? } ?>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$npc['crewid'];?>" class="edit">Edit</a></td>
-				
-				<? if( in_array( "m_npcs2", $sessionAccess ) ) { ?>
-					<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=npcs&id=<?=$npc['crewid'];?>&action=details" class="add">Activate</a></td>
-				<? } ?>
-				
-				<td align="center">
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=npcs&id=<?=$npc['crewid'];?>&action=delete\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this NPC?')\">Delete</a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=npcs&id=<?=$npc['crewid'];?>&action=delete" class="delete">Delete</a>
-					</noscript>
+				<td width="10%" align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$npc['crewid'];?>" class="edit"><strong>Edit</strong></a></td>
+				<td width="10%" align="center"><a href="#" rel="facebox" myAction="activate" myID="<?=$npc['crewid'];?>" class="add"><strong>Activate</strong></a></td>
+				<td width="10%" align="center">
+					<a href="#" rel="facebox" myAction="delete" myID="<?=$npc['crewid'];?>" class="delete"><strong>Delete</strong></a>
 				</td>
 			</tr>
 			
-		<?
+			<?php
 		
-				/* increase the row count by 1 */
 				$rowCount++;
 				
 			}
 			
 			} /* close the NPC position loop */
 		
-		} /* close the department check */
-		
-		if( in_array( "m_npcs1", $sessionAccess ) && !in_array( "m_npcs2", $sessionAccess ) ) {  
-					
+		} /* close the access check */
+		if( in_array( "m_npcs1", $sessionAccess ) && !in_array( "m_npcs2", $sessionAccess ) )
+		{  
 			$userDeptQuery = "SELECT crew.positionid, position.positionDept ";
 			$userDeptQuery.= "FROM sms_crew AS crew, sms_positions AS position ";
 			$userDeptQuery.= "WHERE crew.crewid = '$sessionCrewid' AND ";
@@ -318,26 +248,16 @@ if( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess
 			$npcCount = mysql_num_rows( $npcsResult );
 											
 		}
-				
-		$rankArray = "SELECT rankid FROM sms_ranks ORDER BY rankid ASC";
-		$rankArrayResult = mysql_query( $rankArray );
-					
-		/* point the previous and next post buttons to the correct posts */
-		$rankList = array();
 		
-		while( $myrow = mysql_fetch_array( $rankArrayResult ) ) {
-			$rankList[] = $myrow['rankid'];
-		}
-		
-		$rowCount = "0";
-		$color1 = "rowColor1";
-		$color2 = "rowColor2";
+		$rowCount = 0;
+		$color1 = "rowColor2";
+		$color2 = "rowColor1";
 		
 		/* make sure that a nasty SQL error doesn't get thrown back if there aren't any results */
 		if( $npcCount == 0 && in_array( "m_npcs1", $sessionAccess ) ) {
 		
 			echo "<tr class='fontNormal'>";
-				echo "<td colspan='5'>";
+				echo "<td colspan='4'>";
 					echo "<b>There are no NPCs to moderate in this department! You can create one by using the link above.</b>";
 				echo "</td>";
 			echo "</tr>";
@@ -348,78 +268,42 @@ if( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess
 			extract( $npc, EXTR_OVERWRITE );
 			
 			$rowColor = ($rowCount % 2) ? $color1 : $color2;
-						
-			echo "<tr class='fontNormal " . $rowColor . "'>";
-				echo "<td width='30%'>";
-	
-			if( in_array( $npc['rankid'], $rankList ) ) {
-				
-				$npcRanks = "SELECT rankName FROM sms_ranks WHERE rankid = '$npc[rankid]'";
-				$npcRanksResult = mysql_query( $npcRanks );
-				
-				while( $npcRank = mysql_fetch_assoc( $npcRanksResult ) ) {
-					extract( $npcRank, EXTR_OVERWRITE );
-							
-					echo "<b>" . printText( $npcRank['rankName'] . " " . $firstName . " " . $lastName ) . "</b>";
-					
-				}
-							
-				} else {
-					echo "<b class='red'>[ Invalid Rank ]</b> ";
-					echo "<b>" . printText( $firstName . " " . $lastName ) . "</b>";
-				}
-				
+			
 		?>
 		
+		<tr class="fontNormal <?=$rowColor;?>" height="25">
+			<td width="40%">
+				<strong><? printCrewName($npc['crewid'], 'rank', 'noLink');?></strong>
 			</td>
-		
-		<?
-				
-		$posArray = "SELECT positionid FROM sms_positions ORDER BY positionid ASC";
-		$posArrayResult = mysql_query( $posArray );
-				
-		/* point the previous and next post buttons to the correct posts */
-		$posList = array();
-		
-		while( $myrow = mysql_fetch_array( $posArrayResult ) ) {
-			$posList[] = $myrow['positionid'];
-		}
-		
-		if( in_array( $npc['positionid'], $posList ) ) {
-		
-			$npcPos = "SELECT position.positionName, position.positionDept, dept.deptColor ";
-			$npcPos.= "FROM sms_positions AS position, sms_departments AS dept WHERE ";
-			$npcPos.= "position.positionid = '$npc[positionid]' AND position.positionDept = dept.deptid";
-			$npcPosResult = mysql_query( $npcPos );
+			<td width="40%">
+			<?php
 			
-			while( $npcPos = mysql_fetch_assoc( $npcPosResult ) ) {
-				extract( $npcPos, EXTR_OVERWRITE );
-				
-		?>
-		
-			<td width="30%" style="color: #<?=$deptColor;?>;"><? printText( $positionName );?></td>
-			<? } } else { ?>
-			<td width="30%" class="red"><b>[ Invalid Position ]</b></td>
-			<? } ?>
-			<td align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$npc['crewid'];?>" class="edit">Edit</a></td>
+			$key1 = array_key_exists($npc['positionid'], $pos_array);
 			
-			<? if( in_array( "m_npcs2", $sessionAccess ) ) { ?>
-				<td align="center"><a href="<?=$webLocation;?>admin.php?page=manage&sub=npcs&id=<?=$npc['crewid'];?>&action=details" class="add">Activate</a></td>
-			<? } ?>
+			if($key1 !== FALSE)
+			{
+				echo "<span style='color: #" . $pos_array[$npc['positionid']][1] . ";'>";
+				printText($pos_array[$npc['positionid']][0]);
+				echo "</span>";
+			}
+			else
+			{
+				echo "<strong class='red'>[ Invalid Position ]</strong>";
+			}
 			
-			<td align="center">
-				<script type="text/javascript">
-					document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=npcs&id=<?=$npc['crewid'];?>&action=delete\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this NPC?')\">Delete</a>" );
-				</script>
-				<noscript>
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=npcs&id=<?=$npc['crewid'];?>&action=delete" class="delete">Delete</a>
-				</noscript>
+			?>
+			</td>
+			
+			<td width="10%" align="center"><a href="<?=$webLocation;?>admin.php?page=user&sub=bio&crew=<?=$npc['crewid'];?>" class="edit"><strong>Edit</strong></a></td>
+			<td width="10%" align="center">
+				<a href="#" rel="facebox" myAction="delete" myID="<?=$npc['crewid'];?>" class="delete"><strong>Delete</strong></a>
 			</td>
 		</tr>
 		
 		<? $rowCount++; } } ?>
 		
 		</table>
+		
 	</div>
 	
 <? } else { errorMessage( "NPC management" ); } ?>
