@@ -10,7 +10,7 @@ File: admin/manage/crew.php
 Purpose: Page to display the active, inactive, and pending crew on the sim
 
 System Version: 2.6.0
-Last Modified: 2008-04-22 1859 EST
+Last Modified: 2008-04-23 1802 EST
 **/
 
 /* access check */
@@ -190,7 +190,8 @@ if( in_array( "m_crew", $sessionAccess ) ) {
 		'inactive' => array()
 	);
 	
-	$get = "SELECT crewid, crewType, rankid, positionid, positionid2 FROM sms_crew WHERE crewType != 'npc' ORDER BY crewid ASC";
+	$get = "SELECT crewid, crewType, rankid, positionid, positionid2 FROM sms_crew ";
+	$get.= "WHERE crewType != 'npc' ORDER BY positionid, rankid ASC";
 	$getR = mysql_query($get);
 	
 	while($fetch = mysql_fetch_array($getR)) {
