@@ -5,17 +5,18 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
-File: framework/functionsAdmin.php
-Purpose: List of functions specific to the administration control panel
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: framework/functionsUtility.php
+Purpose: List of functions specific to the utility of the system
 
-System Version: 2.5.0
-Last Modified: 2007-06-23 1506 EST
+System Version: 2.6.0
+Last Modified: 2008-04-24 1139 EST
 
 Included Functions:
 	dateFormat( $type, $time )
 	optimizeSQLTable( $table )
 	printText( $object )
+	error_report()
 **/
 
 /**
@@ -85,10 +86,14 @@ function printText( $object ) {
 }
 /** END FUNCTION **/
 
+/**
+	Error reporting function
+**/
 function error_report()
 {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 }
+/** END FUNCTION **/
 
 ?>
