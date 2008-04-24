@@ -1,4 +1,4 @@
-Last Update: 2008.04.22 1941 EST
+Last Update: 2008.04.23 2044 EST
 
 IN PROGRESS
 =====
@@ -11,7 +11,7 @@ IN PROGRESS
 
 #	Take care of Apache errors throughout the system
 		x	/pages
-		*	/admin/manage (4)
+		*	/admin/manage (2)
 				x	access.php
 				x	accessall.php
 				x	accesslevels.php
@@ -34,11 +34,11 @@ IN PROGRESS
 				x	moderate.php
 				x	news.php
 				x	newscategories.php
-					npcs.php
+				x	npcs.php
 				x	positions.php
 				x	posts.php
 				x	ranks.php
-					removeaward.php
+				x	removeaward.php
 				x	specifications.php
 				x	strikes.php
 				x	summaries.php
