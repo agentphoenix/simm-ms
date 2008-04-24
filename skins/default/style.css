@@ -85,7 +85,7 @@ body {
 	height: 25px;
 	line-height: 25px;
 	margin: .5em 0 0 2em;
-	width: 60%;
+	width: auto;
 	
 	background: #000;
 }
