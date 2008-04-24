@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -10,7 +13,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 0146 EST
+Last Modified: 2008-04-24 1438 EST
 **/
 
 session_start();
@@ -511,7 +514,7 @@ $installSteps = array(
 			
 			Please provide the following information to continue with the installation.<br /><br />
 			
-			<form method="post" action="install.php?step=2">
+			<form method="post" action="install.php?step=3">
 				<table width="100%">
 					<tr>
 						<td colspan="3" class="fontLarge">Website URL</td>
@@ -650,12 +653,6 @@ $installSteps = array(
 		
 		?>
 			
-			<div align="center"><b>Installation Progress</b><br /></div>
-			<div class="status">
-				<div class="step2">&nbsp;</div>
-			</div>
-			<br /><br />
-			
 			<? if( isset( $varError ) ) { ?>
 			
 			<div class="code">
@@ -721,7 +718,7 @@ $installSteps = array(
 			Please proceed to the next step to build the SMS 2 database and create your character
 			which you'll use to administer SMS.<br /><br /><br />
 			
-			<form method="post" action="install.php?step=3">
+			<form method="post" action="install.php?step=4">
 				<input type="submit" name="submit" value="Next Step &raquo;" />
 			</form>
 			
@@ -732,15 +729,9 @@ $installSteps = array(
 		
 		?>
 			
-			<div align="center"><b>Installation Progress</b><br /></div>
-			<div class="status">
-				<div class="step3">&nbsp;</div>
-			</div>
-			<br /><br />
-			
 			You have successfully created the SMS database that will drive the site!<br /><br /><br />
 			
-			<form method="post" action="install.php?step=4">
+			<form method="post" action="install.php?step=5">
 				<input type="submit" name="submit" value="Next Step &raquo;" />
 			</form>
 			
@@ -751,20 +742,12 @@ $installSteps = array(
 		
 		?>
 			
-			<div align="center"><b>Installation Progress</b><br /></div>
-			<div class="status">
-				<div class="step4">&nbsp;</div>
-			</div>
-			<br /><br />
-			
-			Use this page to create your character. You will use the username and password to log in
-			to your SMS site, so make sure you remember it. Once you have set up SMS, you can edit 
-			your biography.
+			Use this page to create your character. You will use the username and password to log in to your SMS site, so make sure you remember it. Once you have set up SMS, you can edit your biography.
 			<br /><br />
 			
 			<br /><br />
 			
-			<form method="post" action="install.php?step=5">
+			<form method="post" action="install.php?step=6">
 				<table width="100%">
 					<tr>
 						<td class="label">Username</td>
@@ -885,13 +868,7 @@ $installSteps = array(
 			
 		?>
 					
-			<div align="center"><b>Installation Progress</b><br /></div>
-			<div class="status">
-				<div class="step5">&nbsp;</div>
-			</div>
-			<br /><br />
-			
-			<form method="post" action="install.php?step=6">
+			<form method="post" action="install.php?step=7">
 				<table width="100%">
 					<tr>
 						<td class="label">Ship Prefix</td>
@@ -927,13 +904,7 @@ $installSteps = array(
 		
 		?>
 			
-			<div align="center"><b>Installation Progress</b><br /></div>
-			<div class="status">
-				<div class="step6">&nbsp;</div>
-			</div>
-			<br /><br />
-			
-			<h1>Installation Complete!</h1>
+			<h2>Installation Complete!</h2>
 			
 			Congratulations, you have successfully installed SMS 2.6. If the install worked properly, you 
 			should now be able to see SMS running on your site. If you need technical support, please 
@@ -944,7 +915,7 @@ $installSteps = array(
 			install file and install folder from your server. Accessing it additional times can cause errors.
 			<br /><br />
 	
-			<h1><a href="<?=$webLocation;?>login.php?action=login">Login to your SMS site now &raquo;</a></h1>
+			<h2><a href="<?=$webLocation;?>login.php?action=login">Login to your SMS site now &raquo;</a></h2>
 			
 		<?php
 			

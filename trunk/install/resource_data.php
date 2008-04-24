@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1352 EST
+Last Modified: 2008-04-24 1439 EST
 **/
 
 /* insert data into the access levels table */
@@ -41,7 +41,7 @@ VALUES (1, 1, 1, 'Command', 'The Command department is ultimately responsible fo
 
 /* insert data into the globals table */
 mysql_query( "INSERT INTO `sms_globals` (`globalid`, `shipPrefix`, `shipName`, `shipRegistry`, `skin`, `allowedSkins`, `allowedRanks`, `fleet`, `fleetURL`, `tfMember`, `tfName`, `tfURL`, `tgMember`, `tgName`, `tgURL`, `hasWebmaster`, `webmasterName`, `webmasterEmail`, `showNews`, `showNewsNum`, `simmYear`, `rankSet`, `simmType`, `postCountDefault`, `manifest_defaults`, `useSamplePost`, `logList`, `bioShowPosts`, `bioShowLogs`, `bioShowPostsNum`, `bioShowLogsNum`, `jpCount`, `usePosting`, `useMissionNotes` ) 
-VALUES (1, '', '', '', 'default', 'default,cobalt,SMS_Lcars', 'default,dress', '', '', 'n', '', '', 'n', '', '', 'n', '', '', 'y', 3, '2384', 'default', 'ship', '14', '$('tr.active').show();,$('tr.npc').show();', 'y', 20, 'y', 'y', 5, 5, 'y', 'y', 'y' );" );
+VALUES (1, '', '', '', 'default', 'default,cobalt,SMS_Lcars', 'default,dress', '', '', 'n', '', '', 'n', '', '', 'n', '', '', 'y', 3, '2384', 'default', 'ship', '14', '$(\'tr.active\').show();,$(\'tr.npc\').show();', 'y', 20, 'y', 'y', 5, 5, 'y', 'y', 'y' );" );
 
 /* populate the menu items table */
 mysql_query( "INSERT INTO `sms_menu_items` ( `menuid`, `menuGroup`, `menuOrder`, `menuTitle`, `menuLinkType`, `menuLink`, `menuAccess`, `menuMainSec`, `menuLogin`, `menuCat` )
