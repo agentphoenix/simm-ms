@@ -10,7 +10,7 @@ File: admin/manage/ranks.php
 Purpose: Page that moderates the ranks
 
 System Version: 2.6.0
-Last Modified: 2008-04-17 1803 EST
+Last Modified: 2008-04-24 1232 EST
 **/
 
 /* access check */
@@ -51,8 +51,8 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 			$rankid = NULL;
 		}
 		
-		$update = "UPDATE sms_ranks SET rankOrder = %d, rankName = %s, rankImage = %s, rankDisplay = %s, rankClass = %d ";
-		$update.= "WHERE rankid = $rankid LIMIT 1";
+		$update = "UPDATE sms_ranks SET rankOrder = %d, rankName = %s, rankImage = %s, rankDisplay = %s, rankClass = %d, ";
+		$update.= "rankShortName = %s WHERE rankid = $rankid LIMIT 1";
 		
 		$query = sprintf(
 			$update,
@@ -60,7 +60,8 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 			escape_string($_POST['rankName']),
 			escape_string($_POST['rankImage']),
 			escape_string($_POST['rankDisplay']),
-			escape_string($_POST['rankClass'])
+			escape_string($_POST['rankClass']),
+			escape_string($_POST['rankShortName'])
 		);
 		
 		$result = mysql_query($query);
@@ -72,12 +73,14 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 	}
 	elseif(isset($_POST['action_type']) && $_POST['action_type'] == "create")
 	{	
-		$insert = "INSERT INTO sms_ranks (rankOrder, rankName, rankImage, rankDisplay, rankClass) VALUES(%d, %s, %s, %s, %d)";
+		$insert = "INSERT INTO sms_ranks (rankOrder, rankName, rankShortName, rankImage, rankDisplay, rankClass) ";
+		$insert.= "VALUES(%d, %s, %s, %s, %s, %d)";
 		
 		$query = sprintf(
 			$insert,
 			escape_string($_POST['rankOrder']),
 			escape_string($_POST['rankName']),
+			escape_string($_POST['rankShortName']),
 			escape_string($_POST['rankImage']),
 			escape_string($_POST['rankDisplay']),
 			escape_string($_POST['rankClass'])
@@ -243,6 +246,12 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 				<td>
 					<span class="fontNormal"><b>Image</b></span><br />
 					<span class="fontSmall">images/ranks/<?=trim( $set );?>/</span><input type="text" class="image" name="rankImage" value="<?=$rankImage;?>" />
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5">
+					<span class="fontNormal"><strong>Short Name</strong></span><br />
+					<input type="text" class="date" name="rankShortName" value="<?=$rankShortName;?>" />
 				</td>
 			</tr>
 			<tr>

@@ -31,6 +31,11 @@ if(in_array("m_departments", $sessionAccess))
 				<td></td>
 				<td><input type="text" class="image" name="rankName" /></td>
 			</tr>
+			<tr>
+				<td class="hudLabel">Short Name</td>
+				<td></td>
+				<td><input type="text" class="image" name="rankShortName" /></td>
+			</tr>
 			
 			<tr>
 				<td colspan="3" height="15"></td>
