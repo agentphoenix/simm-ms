@@ -3,8 +3,8 @@
 /**
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/254.php
-Purpose: Update page - 2.5.4 => Latest
-Last Modified: 2007-11-07 0829 EST
+Purpose: Update page to 2.5.5
+Last Modified: 2008-04-24 1243 EST
 **/
 
 /* add the data for FirstLaunch */

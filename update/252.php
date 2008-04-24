@@ -3,8 +3,8 @@
 /**
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/250.php
-Purpose: Update page - 2.5.2 => Latest
-Last Modified: 2007-08-13 1218 EST
+Purpose: Update page to 2.5.3
+Last Modified: 2008-04-24 1244 EST
 **/
 
 /* update the site permanent credits to make sure everyone has the right tou link */
