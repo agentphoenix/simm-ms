@@ -1,75 +1,25 @@
-Last Update: 2008.04.24 0148 EST
+Last Update: 2008.04.24 1243 EST
 
 IN PROGRESS
 =====
-#	Update system queries to protect against SQL injection
-		x	/pages
-		*	/admin/manage
-		x	/admin/post
-		x	/admin/reports
-		x	/admin/user
-
-#	Take care of Apache errors throughout the system
-		x	/pages
-		*	/admin/manage (2)
-				x	access.php
-				x	accessall.php
-				x	accesslevels.php
-				x	activate.php
-					add.php
-				x	addaward.php
-				x	awards.php
-				x	coc.php
-				x	crew.php
-				x	database.php
-				x	decklisting.php
-				x	departments.php
-				x	docking.php
-					globals.php
-				x	logs.php
-				x	menus.php
-				x	messages.php
-				x	missionnotes.php
-				x	missions.php
-				x	moderate.php
-				x	news.php
-				x	newscategories.php
-				x	npcs.php
-				x	positions.php
-				x	posts.php
-				x	ranks.php
-				x	removeaward.php
-				x	specifications.php
-				x	strikes.php
-				x	summaries.php
-				x	tour.php
-		x	/admin/post
-		x	/admin/reports
-		x	/admin/user
-
 #	Install File
 		x	Add beginning step with compatibility test [using ini_get()]
-		*	Verify plugins
-				@	Preload removed
+		x	Verify plugins
 		*	Verify menu changes
-		*	Ranks
+				@	Starbase menu items (off by default)
+		x	Ranks
 
 #	Update File
 		*	Ranks
+				@	Cadet ranks (off by default)
+				@	Update script
 		*	Verify menu changes
-		*	Verify plugins
-				@	Preload removed
+				@	Starbase menu items (off by default)
+		x	Verify plugins
+		x	Version Files
 		
 IN QUEUE
 =====
-#	Starbase menu items in place during install, but turned off
-
-#	Add cadet ranks (off by default)
-
-#	Short names in the ranks
-
-#	Remove the error_report() function from functionsUtility.php
-
 #	Update skins
 
 COMPLETED
@@ -124,3 +74,6 @@ X	Ability for crew to edit their posts and logs
 X	AXAH HUD windows
 X	Access changes need to filter down to all the access pages
 X	Global setting for default access levels
+X	Update system queries to protect against SQL injection
+X	Take care of Apache errors throughout the system
+X	Short names in the ranks (used in emails)
