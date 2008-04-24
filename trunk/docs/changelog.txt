@@ -1,4 +1,4 @@
-Last updated: 2008.04.22 1941 EST
+Last updated: 2008.04.24 1242 EST
 
 NEW FEATURES
 ===
@@ -59,6 +59,7 @@ ENHANCEMENTS
 *	Gave the starbase-specific pages a little love to bring them more in line with the rest of the system
 *	The bio page now displays awards from the most recent down instead of the oldest first
 *	Rewrote the user moderation page to be more secure
+*	Ranks now have short names (CAPT instead of Captain) that are used in emails to shorten the FROM field
 
 FIXES
 ===
