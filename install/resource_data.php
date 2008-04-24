@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1226 EST
+Last Modified: 2008-04-24 1352 EST
 **/
 
 /* insert data into the access levels table */
@@ -72,11 +72,11 @@ VALUES (1, 0, 0, 'Main', 'onsite', 'index.php?page=main', '', '', 'n', 'main'),
 (25, 0, 1, 'Mission Logs', 'onsite', 'index.php?page=missions', '', 'simm', 'n', 'general'),
 (26, 0, 2, 'Mission Summaries', 'onsite', 'index.php?page=summaries', '', 'simm', 'n', 'general'),
 (27, 1, 0, 'Personal Log List', 'onsite', 'index.php?page=loglist', '', 'simm', 'n', 'general'),
-(28, 1, 4, 'Crew Awards', 'onsite', 'index.php?page=crewawards', '', 'simm', 'n', 'general'),
-(29, 1, 5, 'Simm Statistics', 'onsite', 'index.php?page=statistics', '', 'simm', 'n', 'general'),
-(30, 1, 6, 'Simm Rules', 'onsite', 'index.php?page=rules', '', 'simm', 'n', 'general'),
-(31, 1, 7, 'Database', 'onsite', 'index.php?page=database', '', 'simm', 'n', 'general'),
-(32, 1, 8, 'Join', 'onsite', 'index.php?page=join', '', 'simm', 'n', 'general'),
+(28, 1, 1, 'Crew Awards', 'onsite', 'index.php?page=crewawards', '', 'simm', 'n', 'general'),
+(29, 1, 2, 'Simm Statistics', 'onsite', 'index.php?page=statistics', '', 'simm', 'n', 'general'),
+(30, 1, 3, 'Simm Rules', 'onsite', 'index.php?page=rules', '', 'simm', 'n', 'general'),
+(31, 1, 4, 'Database', 'onsite', 'index.php?page=database', '', 'simm', 'n', 'general'),
+(32, 1, 5, 'Join', 'onsite', 'index.php?page=join', '', 'simm', 'n', 'general'),
 (33, 0, 0, 'Write Mission Post', 'onsite', 'admin.php?page=post&sub=mission', 'p_mission', 'post', 'y', 'admin'),
 (34, 0, 1, 'Write Joint Mission Post', 'onsite', 'admin.php?page=post&sub=jp', 'p_jp', 'post', 'y', 'admin'),
 (35, 0, 2, 'Write Personal Log', 'onsite', 'admin.php?page=post&sub=log', 'p_log', 'post', 'y', 'admin'),
@@ -118,9 +118,9 @@ VALUES (1, 0, 0, 'Main', 'onsite', 'index.php?page=main', '', '', 'n', 'main'),
 (71, 1, 5, 'News Items', 'onsite', 'admin.php?page=manage&sub=news', 'm_news', 'manage', 'y', 'admin'),
 (72, 1, 6, 'News Categories', 'onsite', 'admin.php?page=manage&sub=newscategories', 'm_newscat3', 'manage', 'y', 'admin'),
 (73, 2, 0, 'Create Character/NPC', 'onsite', 'admin.php?page=manage&sub=add', 'm_createcrew', 'manage', 'y', 'admin'),
-(74, 2, 1, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs1', 'manage', 'y', 'admin'),
-(75, 2, 1, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs2', 'manage', 'y', 'admin'),
-(76, 2, 2, 'All Playing Characters', 'onsite', 'admin.php?page=manage&sub=crew', 'm_crew', 'manage', 'y', 'admin'),
+(74, 2, 1, 'All Playing Characters', 'onsite', 'admin.php?page=manage&sub=crew', 'm_crew', 'manage', 'y', 'admin'),
+(75, 2, 2, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs1', 'manage', 'y', 'admin'),
+(76, 2, 2, 'All NPCs', 'onsite', 'admin.php?page=manage&sub=npcs', 'm_npcs2', 'manage', 'y', 'admin'),
 (77, 2, 3, 'Chain of Command', 'onsite', 'admin.php?page=manage&sub=coc', 'm_coc', 'manage', 'y', 'admin'),
 (78, 2, 4, 'Strikes', 'onsite', 'admin.php?page=manage&sub=strikes', 'm_strike', 'manage', 'y', 'admin'),
 (79, 2, 5, 'User Post Moderation', 'onsite', 'admin.php?page=manage&sub=moderate', 'm_moderation', 'manage', 'y', 'admin'),
@@ -132,7 +132,21 @@ VALUES (1, 0, 0, 'Main', 'onsite', 'index.php?page=main', '', '', 'n', 'main'),
 (85, 4, 2, 'Deck Listing', 'onsite', 'admin.php?page=manage&sub=decklisting', 'm_decks', 'manage', 'y', 'admin'),
 (86, 5, 0, 'Departments', 'onsite', 'admin.php?page=manage&sub=departments', 'm_departments', 'manage', 'y', 'admin'),
 (87, 5, 1, 'Positions', 'onsite', 'admin.php?page=manage&sub=positions', 'm_positions', 'manage', 'y', 'admin'),
-(88, 5, 2, 'Ranks', 'onsite', 'admin.php?page=manage&sub=ranks', 'm_ranks', 'manage', 'y', 'admin')" );
+(88, 5, 2, 'Ranks', 'onsite', 'admin.php?page=manage&sub=ranks', 'm_ranks', 'manage', 'y', 'admin'),
+
+(89, 1, 0, 'Docking Request', 'onsite', 'index.php?page=dockingrequest', '', 'ship', 'n', 'general'),
+(90, 1, 1, 'Docked Ships', 'onsite', 'index.php?page=dockedships', '', 'ship', 'n', 'general'),
+(91, 4, 3, 'Docked Ships', 'onsite', 'admin.php?page=manage&sub=docking', 'm_docking', 'manage', 'y', 'admin'),
+(92, 0, 0, 'The Starbase', 'onsite', 'index.php?page=starbase', '', '', 'n', 'main'),
+(93, 0, 0, 'Starbase History', 'onsite', 'index.php?page=history', '', 'ship', 'n', 'general'),
+(94, 0, 2, 'Starbase Tour', 'onsite', 'index.php?page=tour', '', 'ship', 'n', 'general'),
+(95, 4, 1, 'Starbase Tour', 'onsite', 'admin.php?page=manage&sub=tour', 'm_tour', 'manage', 'y', 'admin')" );
+
+/* make sure the starbase menu items are off by default */
+for($i=89; $i>=95; $i++)
+{
+	mysql_query("UPDATE sms_menu_items SET menuAvailability = 'n' WHERE menuid = $i");
+}
 
 /* insert data into the messages table */
 mysql_query( "INSERT INTO `sms_messages` (`messageid`, `welcomeMessage`, `simmMessage`, `shipMessage`, `shipHistory`, `cpMessage`, `joinDisclaimer`, `samplePostQuestion`, `rules`, `acceptMessage`, `rejectMessage`, `siteCreditsPermanent`, `siteCredits` ) 
