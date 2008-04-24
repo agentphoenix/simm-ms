@@ -10,90 +10,112 @@ File: admin/manage/add.php
 Purpose: Page to add a player or NPC
 
 System Version: 2.6.0
-Last Modified: 2008-02-07 1140 EST
+Last Modified: 2008-04-24 1057 EST
 **/
 
 /* access check */
-if( in_array( "m_createcrew", $sessionAccess ) ) {
-
+if(in_array("m_createcrew", $sessionAccess))
+{
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
-	$create = $_POST['action_create_x'];
+	$query = FALSE;
+	$result = FALSE;
+	$today = getdate();
 	
-	/* define the POST vars */
-	$crewType = $_POST['crewType'];
-	$username = $_POST['username'];
-	$password = md5( $_POST['password'] );
-	$confirmPassword = md5( $_POST['confirmPassword'] );
-	$email = $_POST['email'];
-	$firstName = addslashes( $_POST['firstName'] );
-	$middleName = addslashes( $_POST['middleName'] );
-	$lastName = addslashes( $_POST['lastName'] );
-	$gender = $_POST['gender'];
-	$species = addslashes( $_POST['species'] );
-	$rankid = $_POST['rank'];
-	$position = $_POST['position'];
-	
-	/* if the passwords aren't the same, fail */
-	if( $password != $confirmPassword ) {
-		$result = "";
-	} else {
-		if( $create ) {
+	if(isset($_POST['action_create_x']))
+	{
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
 		
-			if( $crewType == "npc" && ( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess ) ) ) {
-				
-				/* do the insert query */
-				$query = "INSERT INTO sms_crew ( crewid, crewType, firstName, middleName, lastName, gender, species, rankid, positionid ) ";
-				$query.= "VALUES ( '', 'npc', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position' )";
-				$result = mysql_query( $query );
-				
-				/* optimize the table */
-				optimizeSQLTable( "sms_crew" );
+		if($crewType == 'npc' && (in_array("m_npcs1", $sessionAccess ) || in_array("m_npcs2", $sessionAccess)))
+		{
+			$insert = "INSERT INTO sms_crew (crewType, firstName, middleName, lastName, gender, species, rankid, positionid) ";
+			$insert.= "VALUES (%s, %s, %s, %s, %s, %s, %d, %d)";
 			
-			} elseif( $crewType == "active" && in_array( "m_crew", $sessionAccess ) ) {
+			$query = sprintf(
+				$insert,
+				escape_string('npc'),
+				escape_string($_POST['firstName']),
+				escape_string($_POST['middleName']),
+				escape_string($_POST['lastName']),
+				escape_string($_POST['gender']),
+				escape_string($_POST['species']),
+				escape_string($_POST['rank']),
+				escape_string($_POST['position'])
+			);
+			
+			$result = mysql_query($query);
+			
+			/* optimize the table */
+			optimizeSQLTable( "sms_crew" );
+			
+			$type = 'non-playing character';
+		}
+		elseif($crewType == "active" && in_array("m_crew", $sessionAccess))
+		{
+			if($password == $confirmPassword)
+			{
+				if(!is_numeric($position)) {
+					$position = NULL;
+				}
 				
 				/* get the position type from the database */
-				$getPosType = "SELECT positionType FROM sms_positions WHERE positionid = '$position' LIMIT 1";
-				$getPosTypeResult = mysql_query( $getPosType );
-				$positionType = mysql_fetch_row( $getPosTypeResult );
-				
+				$getPosType = "SELECT positionType FROM sms_positions WHERE positionid = $position LIMIT 1";
+				$getPosTypeResult = mysql_query($getPosType);
+				$positionType = mysql_fetch_row($getPosTypeResult);
+			
 				/* set the access levels accordingly */
-				if( $positionType[0] == "senior" ) {
+				if($positionType[0] == "senior") {
 					$accessID = 3;
 				} else {
 					$accessID = 4;
 				}
-				
+			
 				/* pull the default access levels from the db */
 				$getGroupLevels = "SELECT * FROM sms_accesslevels WHERE id = $accessID LIMIT 1";
-				$getGroupLevelsResult = mysql_query( $getGroupLevels );
-				$groups = mysql_fetch_array( $getGroupLevelsResult );
-			
-				/* do the insert query */
-				$query = "INSERT INTO sms_crew ( crewid, crewType, username, password, email, firstName, middleName, lastName, gender, species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, accessOthers ) ";
-				$query.= "VALUES ( '', 'active', '$username', '$password', '$email', '$firstName', '$middleName', '$lastName', '$gender', '$species', '$rankid', '$position', UNIX_TIMESTAMP(), '$groups[1]', '$groups[2]', '$groups[3]', '$groups[4]', '$groups[5]' )";
-				$result = mysql_query( $query );
+				$getGroupLevelsResult = mysql_query($getGroupLevels);
+				$groups = mysql_fetch_array($getGroupLevelsResult);
 				
+				$insert = "INSERT INTO sms_crew (crewType, username, password, email, firstName, middleName, lastName, gender, ";
+				$insert.= "species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, accessOthers) ";
+				$insert.= "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %d, %s, %s, %s, %s, %s)";
+				
+				$query = sprintf(
+					$insert,
+					escape_string('active'),
+					escape_string($_POST['username']),
+					escape_string(md5($_POST['password'])),
+					escape_string($_POST['email']),
+					escape_string($_POST['firstName']),
+					escape_string($_POST['middleName']),
+					escape_string($_POST['lastName']),
+					escape_string($_POST['gender']),
+					escape_string($_POST['species']),
+					escape_string($_POST['rank']),
+					escape_string($_POST['position']),
+					escape_string($today[0]),
+					escape_string($groups[1]),
+					escape_string($groups[2]),
+					escape_string($groups[3]),
+					escape_string($groups[4]),
+					escape_string($groups[5])
+				);
+		
+				$result = mysql_query($query);
+				
+				update_position($position, 'give');
+			
 				/* optimize the table */
 				optimizeSQLTable( "sms_crew" );
-				
-				/* update the position they're being given */
-				$positionFetch = "SELECT positionid, positionOpen FROM sms_positions ";
-				$positionFetch.= "WHERE positionid = '$position' LIMIT 1";
-				$positionFetchResult = mysql_query( $positionFetch );
-				$positionX = mysql_fetch_row( $positionFetchResult );
-				$open = $positionX[1];
-				$revised = ( $open - 1 );
-				$updatePosition = "UPDATE sms_positions SET positionOpen = '$revised' ";
-				$updatePosition.= "WHERE positionid = '$position' LIMIT 1";
-				$updatePositionResult = mysql_query( $updatePosition );
-				
-				/* optimize the table */
 				optimizeSQLTable( "sms_positions" );
 				
+				$type = 'character';
+			
 				/** EMAIL THE PLAYER **/
-	
+
 				/* define the variables */
 				$to = $email . ", " . printCOEmail();
 				$from = printCO() . " < " . printCOEmail() . " >";
@@ -102,37 +124,29 @@ if( in_array( "m_createcrew", $sessionAccess ) ) {
 
 USERNAME: " . $_POST['username'] . "
 PASSWORD: " . $_POST['password'] . "";
-			
+		
 				/* send the email */
 				mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-			
-			} /* close crewType == player */
-		} /* close action == Create */
-	} /* close the else logic */
-	
-	/* strip the slashes */
-	$firstName = stripslashes( $_POST['firstName'] );
-	$middleName = stripslashes( $_POST['middleName'] );
-	$lastName = stripslashes( $_POST['lastName'] );
-	$species = stripslashes( $_POST['species'] );
+			}
+			else
+			{
+				$result = FALSE;
+			}
+		
+		}
+	}
 
 ?>
 
 	<div class="body">
-	
-		<?
-		
-		if( $crewType == "npc" ) {
-			$type = "non-playing character";
-		} elseif( $crewType == "active" ) {
-			$type = "character";
-		}
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $query );
+		$check->checkQuery($result, $query);
 		
-		if( !empty( $check->query ) ) {
-			$check->message( $type, "create" );
+		if(!empty($check->query))
+		{
+			$check->message($type, "create");
 			$check->display();
 		}
 		
@@ -141,17 +155,10 @@ PASSWORD: " . $_POST['password'] . "";
 		<span class="fontTitle">Add Crew</span><br /><br />
 	
 		<? if( in_array( "m_npcs1", $sessionAccess ) ) { ?>
-		Department Heads are permitted to create NPCs for their own department and at ranks lower than
-		their own.  If you want an NPC to hold a rank equal to or higher than your own, please contact the
-		CO or XO.  Additionally, you can assign an NPC to any open position.  If you have questions or
-		problems, please contact the CO or XO.
+		Department Heads are permitted to create NPCs for their own department and at ranks lower than their own.  If you want an NPC to hold a rank equal to or higher than your own, please contact the CO or XO.  Additionally, you can assign an NPC to any open position.  If you have questions or problems, please contact the CO or XO.
 		
 		<? } elseif( in_array( "m_npcs2", $sessionAccess ) ) { ?>
-		Commanding Officers and Executive Officers are permitted to create NPCs for any department and 
-		at any rank.  Additionally, COs can assign an NPC to any open position in any department. COs are
-		also the only members of the crew authorized to create new playing characters.  New playing
-		characters that are created will still need to be approved through the Control Panel before the player
-		associated with the character can log in and begin simming.
+		Commanding Officers and Executive Officers are permitted to create NPCs for any department and at any rank.  Additionally, COs can assign an NPC to any open position in any department. COs are also the only members of the crew authorized to create new playing characters.  New playing characters that are created will still need to be approved through the Control Panel before the player associated with the character can log in and begin simming.
 		<? } ?><br /><br />
 		
 		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=add">
