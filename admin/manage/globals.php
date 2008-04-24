@@ -10,7 +10,7 @@ File: admin/manage/globals.php
 Purpose: Page that moderates the site globals
 
 System Version: 2.6.0
-Last Modified: 2008-01-12 1354 EST
+Last Modified: 2008-04-24 1132 EST
 **/
 
 /* access check */
@@ -19,6 +19,8 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	/* set the page class and vars */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
+	$result = FALSE;
+	$query = FALSE;
 	
 	if( isset( $_POST['action_update_simm_x'] ) ) {
 		$action_simm = $_POST['action_update_simm_x'];
@@ -38,86 +40,95 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		$sec = 1;
 	}
 	
-	$result = "";
-	$updateGlobals = "";
-	
 	/* crew count for the options section */
 	$crewCountRaw = "SELECT count(crewid) FROM sms_crew WHERE crewType = 'active'";
 	$crewCountRawResult = mysql_query( $crewCountRaw );
 	$crewCount = mysql_fetch_array( $crewCountRawResult );
 	
-	if( isset( $action_simm ) ) {
-		
+	if(isset($action_simm))
+	{
 		/* pop the x, y, and name values off the POST array */
-		array_pop( $_POST );
-		array_pop( $_POST );
-		array_pop( $_POST );
+		array_pop($_POST);
+		array_pop($_POST);
+		array_pop($_POST);
 		
-		foreach( $_POST as $key => $value )
+		foreach($_POST as $key => $value)
 		{
-			if( !get_magic_quotes_gpc() ) {
-				$$key = addslashes( $value );
-			} else {
-				$$key = $value;
-			}
+			$$key = $value;
 		}
+		
+		$update = "UPDATE sms_globals SET shipPrefix = %s, shipName = %s, shipRegistry = %s, simmYear = %d, ";
+		$update.= "simmType = %s WHERE globalid = 1 LIMIT 1";
+		
+		$query = sprintf(
+			$update,
+			escape_string($shipPrefix),
+			escape_string($shipName),
+			escape_string($shipRegistry),
+			escape_string($simmYear),
+			escape_string($simmType)
+		);
 
-		/* do the update query */
-		$updateGlobals = "UPDATE sms_globals SET ";
-		$updateGlobals.= "shipPrefix = '$shipPrefix', shipName = '$shipName', ";
-		$updateGlobals.= "shipRegistry = '$shipRegistry', simmYear = '$simmYear', ";
-		$updateGlobals.= "simmType = '$simmType' WHERE globalid = '1' LIMIT 1";
-		$result = mysql_query( $updateGlobals );
-		
-	} if( isset( $action_fleet ) ) {
-		
+		$result = mysql_query($query);
+	}
+	if(isset($action_fleet))
+	{
 		/* pop the x, y, and name values off the POST array */
-		array_pop( $_POST );
-		array_pop( $_POST );
-		array_pop( $_POST );
+		array_pop($_POST);
+		array_pop($_POST);
+		array_pop($_POST);
 		
-		foreach( $_POST as $key => $value )
+		foreach($_POST as $key => $value)
 		{
-			if( !get_magic_quotes_gpc() ) {
-				$$key = addslashes( $value );
-			} else {
-				$$key = $value;
-			}
+			$$key = $value;
 		}
+		
+		$update = "UPDATE sms_globals SET fleet = %s, fleetURL = %s, tfMember = %s, tfName = %s, tfURL = %s, tgMember = %s, ";
+		$update.= "tgName = %s, tgURL = %s WHERE globalid = 1 LIMIT 1";
+		
+		$query = sprintf(
+			$update,
+			escape_string($fleet),
+			escape_string($fleetURL),
+			escape_string($tfMember),
+			escape_string($tfName),
+			escape_string($tfURL),
+			escape_string($tgMember),
+			escape_string($tgName),
+			escape_string($tgURL)
+		);
 
-		/* do the update query */
-		$updateGlobals = "UPDATE sms_globals SET ";
-		$updateGlobals.= "fleet = '$fleet', fleetURL = '$fleetURL', ";
-		$updateGlobals.= "tfMember = '$tfMember', tfName = '$tfName', tfURL = '$tfURL', ";
-		$updateGlobals.= "tgMember = '$tgMember', tgName = '$tgName', tgURL = '$tgURL' ";
-		$updateGlobals.= "WHERE globalid = '1' LIMIT 1";
-		$result = mysql_query( $updateGlobals );
-		
-	} if( isset( $action_options ) ) {
-		
+		$result = mysql_query($query);
+	}
+	if(isset($action_options))
+	{
 		/* pop the x, y, and name values off the POST array */
-		array_pop( $_POST );
-		array_pop( $_POST );
-		array_pop( $_POST );
+		array_pop($_POST);
+		array_pop($_POST);
+		array_pop($_POST);
 		
-		foreach( $_POST as $key => $value )
+		foreach($_POST as $key => $value)
 		{
-			if( !get_magic_quotes_gpc() ) {
-				$$key = addslashes( $value );
-			} else {
-				$$key = $value;
-			}
+			$$key = $value;
 		}
+		
+		$update = "UPDATE sms_globals SET postCountDefault = %d, jpCount = %s, usePosting = %s, hasWebmaster = %s, webmasterName = %s, ";
+		$update.= "webmasterEmail = %s, useMissionNotes = %s, emailSubject = %s, updateNotify = %s WHERE globalid = 1 LIMIT 1";
+		
+		$query = sprintf(
+			$update,
+			escape_string($postCountDefault),
+			escape_string($jpCount),
+			escape_string($usePosting),
+			escape_string($hasWebmaster),
+			escape_string($webmasterName),
+			escape_string($webmasterEmail),
+			escape_string($useMissionNotes),
+			escape_string($emailSubject),
+			escape_string($updateNotify)
+		);
 
-		/* do the update query */
-		$updateGlobals = "UPDATE sms_globals SET ";
-		$updateGlobals.= "postCountDefault = '$postCountDefault', jpCount = '$jpCount', ";
-		$updateGlobals.= "usePosting = '$usePosting', ";
-		$updateGlobals.= "hasWebmaster = '$hasWebmaster', webmasterName = '$webmasterName', ";
-		$updateGlobals.= "webmasterEmail = '$webmasterEmail', useMissionNotes = '$useMissionNotes', ";
-		$updateGlobals.= "emailSubject = '$emailSubject', updateNotify = '$updateNotify' ";
-		$updateGlobals.= "WHERE globalid = '1' LIMIT 1";
-		$result = mysql_query( $updateGlobals );
+		$result = mysql_query($query);
 		
 		/*
 			if the sms posting system is being turned OFF,
@@ -125,46 +136,64 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 			if the sms posting system is being turned ON,
 			add basic access to the posting items in the system
 		*/
-		if( $oldPosting == "y" && $usePosting == "n" ) {
-		
+		if($oldPosting == "y" && $usePosting == "n")
+		{
 			$getCrew = "SELECT crewid FROM sms_crew WHERE crewType = 'active'";
-			$getCrewR = mysql_query( $getCrew );
+			$getCrewR = mysql_query($getCrew);
 			
-			while( $crewFetch = mysql_fetch_array( $getCrewR ) ) {
-				extract( $crewFetch, EXTR_OVERWRITE );
+			while($crewFetch = mysql_fetch_array($getCrewR)) {
+				extract($crewFetch, EXTR_OVERWRITE);
 				
-				mysql_query( "UPDATE sms_crew SET accessPost = '', cpShowPosts = 'n', cpShowLogs = 'n', cpShowNews = 'n' WHERE crewid = '$crewid' LIMIT 1" );
-				
-			}
-		
-		} if( $oldPosting == "n" && $usePosting == "y" ) {
-		
-			$getCrew = "SELECT crewid FROM sms_crew WHERE crewType = 'active'";
-			$getCrewR = mysql_query( $getCrew );
-			
-			while( $crewFetch = mysql_fetch_array( $getCrewR ) ) {
-				extract( $crewFetch, EXTR_OVERWRITE );
-				
-				mysql_query( "UPDATE sms_crew SET accessPost = 'post,p_log,p_pm,p_mission,p_jp,p_news,p_missionnotes', cpShowPosts = 'y', cpShowLogs = 'y', cpShowNews = 'y' WHERE crewid = '$crewid' LIMIT 1" );
-				
+				$query2 = "UPDATE sms_crew SET accessPost = '', cpShowPosts = 'n', cpShowLogs = 'n', cpShowNews = 'n' ";
+				$query2.= "WHERE crewid = $crewid LIMIT 1";
+				$result2 = mysql_query($query2);
 			}
 		
 		}
-		
-	} if( isset( $action_presentation ) ) {
-		
-		/* pop the x, y, and name values off the POST array */
-		array_pop( $_POST );
-		array_pop( $_POST );
-		array_pop( $_POST );
-		
-		foreach( $_POST as $key => $value )
+		if($oldPosting == "n" && $usePosting == "y")
 		{
-			if( !get_magic_quotes_gpc() ) {
-				$$key = addslashes( $value );
-			} else {
-				$$key = $value;
+			$getCrew = "SELECT crewid FROM sms_crew WHERE crewType = 'active'";
+			$getCrewR = mysql_query($getCrew);
+			
+			$access = "SELECT post FROM sms_accesslevels WHERE id = 4 LIMIT 1";
+			$accessR = mysql_query($access);
+			$levels = mysql_fetch_array($accessR);
+			
+			while($crewFetch = mysql_fetch_array($getCrewR)) {
+				extract($crewFetch, EXTR_OVERWRITE);
+				
+				$query2 = "UPDATE sms_crew SET accessPost = '$levels[0]', cpShowPosts = 'y', cpShowLogs = 'y', cpShowNews = 'y' ";
+				$query2.= "WHERE crewid = '$crewid' LIMIT 1";
+				$result2 = mysql_query($query2);
 			}
+		}
+	}
+	if(isset($action_presentation))
+	{
+		/* pop the x, y, and name values off the POST array */
+		array_pop($_POST);
+		array_pop($_POST);
+		array_pop($_POST);
+		
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
+		
+		if(!isset($cb_crew)) {
+			$cb_crew = FALSE;
+		}
+		
+		if(!isset($cb_npc)) {
+			$cb_npc = FALSE;
+		}
+		
+		if(!isset($cb_open)) {
+			$cb_open = FALSE;
+		}
+		
+		if(!isset($cb_inactive)) {
+			$cb_inactive = FALSE;
 		}
 		
 		/* build the manifest defaults array */
@@ -181,91 +210,104 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 		
 		/* make it a string to put into the db */
 		$manifest_values = implode(',', $manifest_defaults_raw);
+		
+		$update = "UPDATE sms_globals SET allowedSkins = %s, skin = %s, allowedRanks = %s, rankSet = %s, showInfoMission = %s, ";
+		$update.= "showInfoPosts = %s, showInfoPositions = %s, useSamplePost = %s, showNews = %s, showNewsNum = %d, logList = %d, ";
+		$update.= "bioShowPosts = %s, bioShowPostsNum = %d, bioShowLogs = %s, bioShowLogsNum = %d, stardateDisplaySD = %s, ";
+		$update.= "stardateDisplayDate = %s, manifest_defaults = %s WHERE globalid = 1 LIMIT 1";
+		
+		$query = sprintf(
+			$update,
+			escape_string($allowedSkins),
+			escape_string($skin),
+			escape_string($allowedRanks),
+			escape_string($rankSet),
+			escape_string($showInfoMission),
+			escape_string($showInfoPosts),
+			escape_string($showInfoPositions),
+			escape_string($useSamplePost),
+			escape_string($showNews),
+			escape_string($showNewsNum),
+			escape_string($logList),
+			escape_string($bioShowPosts),
+			escape_string($bioShowPostsNum),
+			escape_string($bioShowLogs),
+			escape_string($bioShowLogsNum),
+			escape_string($stardateDisplaySD),
+			escape_string($stardateDisplayDate),
+			escape_string($manifest_values)
+		);
 
-		/* do the update query */
-		$updateGlobals = "UPDATE sms_globals SET ";
-		$updateGlobals.= "allowedSkins = '$allowedSkins', skin = '$skin', ";
-		$updateGlobals.= "allowedRanks = '$allowedRanks', rankSet = '$rankSet', ";
-		$updateGlobals.= "manifestDisplay = '$manifestDisplay', showInfoMission = '$showInfoMission', ";
-		$updateGlobals.= "showInfoPosts = '$showInfoPosts', showInfoPositions = '$showInfoPositions', ";
-		$updateGlobals.= "useSamplePost = '$useSamplePost', showNews = '$showNews', ";
-		$updateGlobals.= "showNewsNum = '$showNewsNum', logList = '$logList', ";
-		$updateGlobals.= "bioShowPosts = '$bioShowPosts', bioShowPostsNum = '$bioShowPostsNum', ";
-		$updateGlobals.= "bioShowLogs = '$bioShowLogs', bioShowLogsNum = '$bioShowLogsNum', ";
-		$updateGlobals.= "stardateDisplaySD = '$stardateDisplaySD', stardateDisplayDate = '$stardateDisplayDate', ";
-		$updateGlobals.= "manifest_defaults = '$manifest_values' WHERE globalid = '1' LIMIT 1";
-		$result = mysql_query( $updateGlobals );
-		
-	} if( isset( $action_positions ) ) {
-		
+		$result = mysql_query($query);
+	}
+	if(isset($action_positions))
+	{
 		/* define the POST array */
 		$post = $_POST;
 		
 		/* pop the last 3 items off the array */
-		array_pop( $post );
-		array_pop( $post );
-		array_pop( $post );
+		array_pop($post);
+		array_pop($post);
+		array_pop($post);
 		
 		/* reset all of the positionMainPage flags */
 		$updatePos = "UPDATE sms_positions SET positionMainPage = 'n'";
-		$updatePosResult = mysql_query( $updatePos );
+		$updatePosResult = mysql_query($updatePos);
 		
 		/* loop through the array and update the positions specified */
-		foreach( $post as $key => $value ) {
+		foreach($post as $key => $value)
+		{
+			if(!is_numeric($value))
+			{
+				$value = NULL;
+			}
 			
-			$update = "UPDATE sms_positions SET positionMainPage = 'y' WHERE ";
-			$update.= "positionid = '$value' LIMIT 1";
-			$result = mysql_query( $update );
-			
+			$query = "UPDATE sms_positions SET positionMainPage = 'y' WHERE positionid = $value LIMIT 1";
+			$result = mysql_query($query);
 		}
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_positions" );
-
 	}
 
 	/* optimize the table */
 	optimizeSQLTable( "sms_globals" );
-		
-	/* strip the slashes from the necessary vars */
-	$shipName = stripslashes( $shipName );
-	$fleet = stripslashes( $fleet );
-	$tfName = stripslashes( $tfName );
-	$tgName = stripslashes( $tgName );
-	$webmasterName = stripslashes( $webmasterName );
 	
 	$manifest_defaults_array = explode(',', $manifest_defaults);
+	
+	if($showInfoPositions == "n")
+	{
+		$disable = 5;
+	}
+	else
+	{
+		$disable = NULL;
+	}
 
 ?>
-
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#container-1 > ul').tabs(<?php echo $sec; ?>, { disabled: [<?php echo $disable; ?>] });
+		});
+	</script>
+	
 	<div class="body">
 	
 		<?
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateGlobals );
+		$check->checkQuery($result, $query);
 		
-		if( !empty( $check->query ) ) {
-			$check->message( "site globals", "update" );
+		if(!empty($check->query))
+		{
+			$check->message("site globals", "update");
 			$check->display();
-		}
-		
-		if( $showInfoPositions == "n" ) {
-			$disable = 5;
-		} else {
-			$disable = "";
 		}
 		
 		?>
 	
 		<span class="fontTitle">Site Globals</span><br />
 	
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$('#container-1 > ul').tabs(<?php echo $sec; ?>, { disabled: [<?php echo $disable; ?>] });
-			});
-		</script>
-		
 		<div id="container-1">
 			<ul>
 				<li><a href="#one"><span>Simm</span></a></li>
@@ -515,7 +557,7 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	
 			<div id="four" class="ui-tabs-container ui-tabs-hide">
 				<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=globals&sec=4">
-				<table>
+				<table cellpadding="3" cellspacing="0">
 					<tr>
 						<td colspan="3" class="fontLarge"><b>Site Presentation</b></td>
 					</tr>
@@ -633,7 +675,8 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
-					<tr>
+					
+					<tr class="alt">
 						<td class="tableCellLabel">
 							Show Stardate?<br />
 							<span class="fontSmall yellow">Stardate display is only available if the
@@ -645,7 +688,7 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 							<input type="radio" id="displaySDN" name="stardateDisplaySD" value="n"<?php if( $stardateDisplaySD == "n" ) { echo " checked='yes'"; } ?>/><label for="displaySDN">No</label>
 						</td>
 					</tr>
-					<tr>
+					<tr class="alt">
 						<td class="tableCellLabel">Show Earth Date?</td>
 						<td>&nbsp;</td>
 						<td>
@@ -653,11 +696,13 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 							<input type="radio" id="displayEDN" name="stardateDisplayDate" value="n"<?php if( $stardateDisplayDate == "n" ) { echo " checked='yes'"; } ?>/><label for="displayEDN">No</label>
 						</td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
+					
 					<tr>
-						<td class="tableCellLabel">Show Current Mission on Main Page?</td>
+						<td class="tableCellLabel">Mission Info on Main Page?</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="radio" id="infoMissionY" name="showInfoMission" value="y"<? if( $showInfoMission == "y" ) { echo " checked"; } ?> /> <label for="infoMissionY">Yes</label>
@@ -665,7 +710,7 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 						</td>
 					</tr>
 					<tr>
-						<td class="tableCellLabel">Show Latest Posts on Main Page?</td>
+						<td class="tableCellLabel">Latest Posts on Main Page?</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="radio" id="infoPostsY" name="showInfoPosts" value="y"<? if( $showInfoPosts == "y" ) { echo " checked"; } ?> /> <label for="infoPostsY">Yes</label>
@@ -673,29 +718,33 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 						</td>
 					</tr>
 					<tr>
-						<td class="tableCellLabel">Show Open Positions on Main Page?</td>
+						<td class="tableCellLabel">Open Positions on Main Page?</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="radio" id="infoPosY" name="showInfoPositions" value="y"<? if( $showInfoPositions == "y" ) { echo " checked"; } ?> /> <label for="infoPosY">Yes</label>
 							<input type="radio" id="infoPosN" name="showInfoPositions" value="n"<? if( $showInfoPositions == "n" ) { echo " checked"; } ?> /> <label for="infoPosN">No</label>
 						</td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
-					<tr>
-						<td class="tableCellLabel">Use Sample Post on Join Page?</td>
+					
+					<tr class="alt">
+						<td class="tableCellLabel">Sample Post on Join Page?</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="radio" id="sampleY" name="useSamplePost" value="y"<? if( $useSamplePost == "y" ) { echo " checked"; } ?> /> <label for="sampleY">Yes</label>
 							<input type="radio" id="sampleN" name="useSamplePost" value="n"<? if( $useSamplePost == "n" ) { echo " checked"; } ?> /> <label for="sampleN">No</label>
 						</td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
+					
 					<tr>
-						<td class="tableCellLabel">Show News Items on Welcome Page?</td>
+						<td class="tableCellLabel">News on Welcome Page?</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="radio" id="newsY" name="showNews" value="y"<? if( $showNews == "y" ) { echo " checked"; } ?> /> <label for="newsY">Yes</label>
@@ -703,30 +752,31 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3" height="20"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Number of News Items to Show</td>
+						<td class="tableCellLabel">Number of News Items</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="text" class="order" name="showNewsNum" id="showNewsNum" value="<?=$showNewsNum;?>" />
 						</td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
-					<tr>
+					
+					<tr class="alt">
 						<td class="tableCellLabel">Number of Personal Logs to Show in Personal Logs Listing</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="text" class="order" name="logList" value="<?=$logList;?>" />
 						</td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
+					
 					<tr>
-						<td class="tableCellLabel">Show Player's Recent Posts in Bio?</td>
+						<td class="tableCellLabel">Player&rsquo;s Recent Posts in Bio?</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="radio" id="bioPostsY" name="bioShowPosts" value="y"<? if( $bioShowPosts == "y" ) { echo " checked"; } ?> /> <label for="bioPostsY">Yes</label>
@@ -734,29 +784,25 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3" height="10"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Number of Recent Posts to Show in Bio</td>
+						<td class="tableCellLabel">Number of Posts in Bio</td>
 						<td>&nbsp;</td>
 						<td><input type="text" class="order" name="bioShowPostsNum" value="<?=$bioShowPostsNum;?>" /></td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" height="20"></td>
 					</tr>
-					<tr>
-						<td class="tableCellLabel">Show Player's Recent Logs in Bio?</td>
+					
+					<tr class="alt">
+						<td class="tableCellLabel">Player&rsquo;s Recent Logs in Bio?</td>
 						<td>&nbsp;</td>
 						<td>
 							<input type="radio" id="bioLogsY" name="bioShowLogs" value="y"<? if( $bioShowLogs == "y" ) { echo " checked"; } ?> /> <label for="bioLogsY">Yes</label>
 							<input type="radio" id="bioLogsN" name="bioShowLogs" value="n"<? if( $bioShowLogs == "n" ) { echo " checked"; } ?> /> <label for="bioLogsN">No</label>
 						</td>
 					</tr>
-					<tr>
-						<td colspan="3" height="10"></td>
-					</tr>
-					<tr>
-						<td class="tableCellLabel">Number of Recent Logs to Show in Bio</td>
+					<tr class="alt">
+						<td class="tableCellLabel">Number of Logs in Bio</td>
 						<td>&nbsp;</td>
 						<td><input type="text" class="order" name="bioShowLogsNum" value="<?=$bioShowLogsNum;?>" /></td>
 					</tr>
