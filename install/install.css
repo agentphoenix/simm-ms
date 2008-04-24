@@ -2,7 +2,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install/install.css
 Purpose: Stylesheet that controls the look and feel of the install pages
-Last Modified: 2008-04-24 0140 EST
+Last Modified: 2008-04-24 1517 EST
 **/
 
 body {
@@ -50,7 +50,7 @@ a:hover { color: #ab1b00; }
 	margin-left: 20%;
 	background-color: #f1f1f1;
 	padding: 1em 1em 1em 3em;
-	min-height: 230px;
+	min-height: 360px;
 	border-left: 1px solid #a2a2a2;
 }
 
@@ -86,8 +86,9 @@ a:hover { color: #ab1b00; }
 
 .footer {
 	text-align: center;
-	font-size: 80%;
+	font-size: 10px;
 	padding: 2em 0;
+	clear: left;
 }
 
 input[type=submit] {
@@ -125,9 +126,8 @@ textarea {
 	font-weight: bold;
 }
 select {
-	background-color: #000;
 	border: 1px solid #666;
-	color: #f1f1f1;
+	color: #000;
 	padding: .2em .2em .2em 0;
 	font-size: 8.5pt;
 }
