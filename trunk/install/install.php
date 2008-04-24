@@ -10,59 +10,70 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-01-30 1157 EST
+Last Modified: 2008-04-24 0146 EST
 **/
 
 session_start();
 
+/* define variables */
+$varError = NULL;
+
 /* define the step var */
-$step = $_GET['step'];
-
-/* pull in the db connections */
-include_once( '../framework/variables.php' );
-
-/* do some logic based on the step */
-if( !isset( $step ) ) {
+if(isset($_GET['step']) && is_numeric($_GET['step']))
+{
+	$step = $_GET['step'];
+}
+else
+{
 	$step = 1;
 }
 
-/*
-some error checking in case someone hasn't taken care of
-the variables.php stuff
-*/
-if( $step > 2 && !isset( $webLocation ) ) {
-	$step = 2;
+/* pull in the db connections */
+include_once('../framework/variables.php');
+
+/* error checking in case someone hasn't taken care of the variables.php stuff */
+if($step > 3 && !isset($webLocation))
+{
+	$step = 3;
 	$varError = 1;
 }
 
-switch( $step ) {
-	
+switch($step)
+{	
 	/*
 		step 3 attempts to write the variables file that the admin provided
 		all the information for in the previous step
 	*/
-	case 2:
+	case 3:
 		/** ERROR CHECKING FOR USER INPUT FROM STEP 1 **/
 		
 		/* make sure the web location has a trailing slash */
-		if( substr( $_POST['webLocation'], -1 ) == "/" ) {
+		if(substr($_POST['webLocation'], -1) == "/")
+		{
 			$webLocation1 = $_POST['webLocation'];
-		} else {
+		}
+		else
+		{
 			$webLocation1 = $_POST['webLocation'] . "/";
 		}
 		
 		/* make sure the web location starts with http:// */
-		if( substr( $webLocation1, 0, 7 ) == "http://" ) {
-			/* don't do anything if this is right */
+		if(substr($webLocation1, 0, 7) == "http://")
+		{
 			$webLocation = $webLocation1;
-		} else {
+		}
+		else
+		{
 			$webLocation = "http://" . $webLocation1;
 		}
 		
 		/* make sure the database server doesn't start with http:// */
-		if( substr( $_POST['dbServer'], 0, 7 ) == "http://" ) {
-			$dbServer = str_replace( "http://", "", $_POST['dbServer'] );
-		} else {
+		if(substr($_POST['dbServer'], 0, 7) == "http://")
+		{
+			$dbServer = str_replace("http://", "", $_POST['dbServer']);
+		}
+		else
+		{
 			$dbServer = $_POST['dbServer'];
 		}
 		
@@ -83,8 +94,8 @@ switch( $step ) {
 
 ?>";
 
-		if( !isset( $varError ) ) {
-			/* set up session variables */
+		if(!isset($varError))
+		{
 			$_SESSION['webLocation'] = $webLocation;
 			$_SESSION['dbServer'] = $dbServer;
 			$_SESSION['dbName'] = $_POST['dbName'];
@@ -93,34 +104,43 @@ switch( $step ) {
 			$_SESSION['dbErrorMessage'] = $dbErrorMessage;
 		}
 		
-		if( is_writable( $filename ) ) {
+		if(is_writable($filename))
+		{
 			chmod( $filename, 0777 );
 			
-			if( chmod( $filename, 0777 ) === FALSE ) {
+			if(chmod($filename, 0777) === FALSE)
+			{
 				$write = "failed";
-			} else {
-				if( !$handle = fopen( $filename, 'w' ) ) {
+			}
+			else
+			{
+				if(!$handle = fopen($filename, 'w'))
+				{
 					$write = "failed";
-				} if( fwrite( $handle, $somecontent ) === FALSE ) {
+				}
+				
+				if(fwrite($handle, $somecontent) === FALSE)
+				{
 					$write = "failed";
-				} else {
-					fclose( $handle );
+				}
+				else
+				{
+					fclose($handle);
 					$write = "success";
 				}
 				
-				chmod( $filename, 0644 );
+				chmod($filename, 0644);
 			}
-		} else {
+		}
+		else
+		{
 			$write = "failed";
 		}
 		break;
 	
 	/* step 4 handles creating the database structure */
-	case 3:
-		/* pull in the DB connection variables */
+	case 4:
 		require_once( '../framework/dbconnect.php' );
-		
-		/* pull in the structure file */
 		require_once( "resource_structure.php" );
 		break;
 	
@@ -128,11 +148,8 @@ switch( $step ) {
 		step 5 handles inserting the necessary data into the database that lines up
 		with the tables created in step 3
 	*/
-	case 4:
-		/* pull in the DB connection variables */
+	case 5:
 		require_once( '../framework/dbconnect.php' );
-		
-		/* pull in the data file */
 		require_once( "resource_data.php" );
 		break;
 	
@@ -140,8 +157,7 @@ switch( $step ) {
 		step 6 handles inserting the admin's character into the database, setting their
 		access level, and adjusting the position they chose in step 4
 	*/
-	case 5:
-		/* pull in the DB connection variables */
+	case 6:
 		require_once( '../framework/dbconnect.php' );
 		
 		$md5password = md5( $_POST['password'] );
@@ -175,8 +191,7 @@ switch( $step ) {
 		step 7 handles updating the globals that are set during step 5, including ship name,
 		ship prefix, and ship registry
 	*/
-	case 6:
-		/* pull in the DB connection variables */
+	case 7:
 		require_once( '../framework/dbconnect.php' );
 		
 		/* update the globals */
@@ -187,12 +202,13 @@ switch( $step ) {
 } /* close the switch */
 
 $installSteps = array(
-	1	=>	array('Basic Information', 'step-1.png', 'step-1-active.png'),
-	2	=>	array('Build the Database', 'step-2.png', 'step-2-active.png'),
-	3	=>	array('Populate the Database', 'step-3.png', 'step-3-active.png'),
-	4	=>	array('Create Your Character', 'step-4.png', 'step-4-active.png'),
-	5	=>	array('Simm Information', 'step-5.png', 'step-5-active.png'),
-	6	=>	array('Finalize Installation', 'step-6.png', 'step-6-active.png'),
+	1	=>	array('Compatibility Tests', 'step-1.png', 'step-1-active.png'),
+	2	=>	array('Basic Information', 'step-2.png', 'step-2-active.png'),
+	3	=>	array('Build the Database', 'step-3.png', 'step-3-active.png'),
+	4	=>	array('Populate with Data', 'step-4.png', 'step-4-active.png'),
+	5	=>	array('Create Your Character', 'step-5.png', 'step-5-active.png'),
+	6	=>	array('Simm Information', 'step-6.png', 'step-6-active.png'),
+	7	=>	array('Finalize Installation', 'step-7.png', 'step-7-active.png'),
 );
 
 ?>
@@ -239,14 +255,246 @@ $installSteps = array(
 			
 		<?php
 		
-		switch( $step )
+		switch($step)
 		{
 			case 1:
+				$req = array(
+					'register_globals' => array('Off', ini_get('register_globals')),
+					'display_errors' => array('Off', ini_get('display_errors')),
+					'short_open_tag' => array('On', ini_get('short_open_tag')),
+					'file_open' => array('On', ini_get('allow_url_fopen')),
+					'php' => array('4.1.0', phpversion()),
+					'mysql' => array('3.0.0', mysql_get_client_info())
+				);
+				$disable = 0;
+				
+		?>
+			<p>The following components are required to continue installing SMS 2.6:</p>
+			<table width="100%" cellpadding="5" cellspacing="0">
+				<tr>
+					<th><h2>Component</h2></th>
+					<th width="20%"><h2>Required</h2></th>
+					<th width="20%"><h2>You Have</h2></th>
+				</tr>
+				
+				<?php
+				
+				$explain = NULL;
+				
+				if($req['php'][1] >= $req['php'][0]) {
+					$color = "green";
+				} else {
+					$color = "red";
+					$explain = TRUE;
+					$disable = 1;
+				}
+				
+				?>
+				<tr>
+					<td width="60%">
+						<h3>PHP</h3>
+						<?php if(isset($explain)) { ?>
+						<span class="red">You are running an unsupported version of PHP. The SIMM Management System requires PHP version 4.1.0 or higher. You are running version <?=$req['php'][1];?>. Please contact your host and inquire about the possibility of upgrading to a newer version or you can choose to find another host for your site.</span>
+						<?php } ?>
+					</td>
+					<td align="center"><h3><?=$req['php'][0];?></h3></td>
+					<td align="center" class="<?=$color;?>"><h3><?=$req['php'][1];?></h3></td>
+				</tr>
+				
+				<?php
+				
+				$explain = NULL;
+				
+				if($req['mysql'][1] >= $req['mysql'][0]) {
+					$color = "green";
+				} else {
+					$color = "red";
+					$explain = TRUE;
+					$disable = 1;
+				}
+				
+				?>
+				<tr>
+					<td width="60%">
+						<h3>MySQL</h3>
+						<?php if(isset($explain)) { ?>
+						<span class="red">You are running an unsupported version of MySQL. The SIMM Management System requires MySQL version 3.0.0 or higher. You are running version <?=$req['mysql'][1];?>. Please contact your host and inquire about the possibility of upgrading to a newer version or you can choose to find another host for your site.</span>
+						<?php } ?>
+					</td>
+					<td align="center"><h3><?=$req['mysql'][0];?></h3></td>
+					<td align="center" class="<?=$color;?>"><h3><?=$req['mysql'][1];?></h3></td>
+				</tr>
+			</table>
 			
-			/* start to build the url */
+			<p>The following are Anodyne&rsquo;s recommendations for other server settings for running SMS 2.6:</p>
+			<table width="100%" cellpadding="5" cellspacing="0">
+				<tr>
+					<th><h2>Component</h2></th>
+					<th width="20%"><h2>Recommended</h2></th>
+					<th width="20%"><h2>You Have</h2></th>
+				</tr>
+				
+				<?php
+				
+				$explain = NULL;
+				
+				if($req['short_open_tag'][1] == 1) {
+					$color = "green";
+				} else {
+					$color = "red";
+					$explain = TRUE;
+				}
+				
+				?>
+				<tr>
+					<td width="60%">
+						<h3>PHP Short Open Tags</h3>
+						<?php if(isset($explain)) { ?>
+						<span class="red">You have PHP Short Open Tags turned off. The SIMM Management System makes widespread use of PHP Short Open Tags and having this turned off may negatively impact running SMS on your server. Please contact your host to ask about changing the default value from 0 to 1. Further assistance can be obtained through the <a href="http://forums.anodyne-productions.com" target="_blank">Anodyne Support Forums</a>.</span>
+						<?php } ?>
+					</td>
+					<td align="center"><h3><?=$req['short_open_tag'][0];?></h3></td>
+					<td align="center" class="<?=$color;?>">
+						<h3>
+							<?php
+							
+							if($req['short_open_tag'][1] == 1) {
+								echo "On";
+							} else {
+								echo "Off";
+							}
+							
+							?>
+						</h3>
+					</td>
+				</tr>
+				
+				<?php
+				
+				$explain = NULL;
+				
+				if($req['display_errors'][1] == 0) {
+					$color = "green";
+				} else {
+					$color = "red";
+					$explain = TRUE;
+				}
+				
+				?>
+				<tr>
+					<td width="60%">
+						<h3>Display Errors</h3>
+						<?php if(isset($explain)) { ?>
+						<span class="red">Your server is set to display errors. While this will not have any ill effects on the running or performance of SMS, it could become a nuisance in the event that your server prints out errors it may be having. You can contact your host about changing this or you can continue with error display turned on.</span>
+						<?php } ?>
+					</td>
+					<td align="center"><h3><?=$req['display_errors'][0];?></h3></td>
+					<td align="center" class="<?=$color;?>">
+						<h3>
+							<?php
+							
+							if($req['display_errors'][1] == 1) {
+								echo "On";
+							} else {
+								echo "Off";
+							}
+							
+							?>
+						</h3>
+					</td>
+				</tr>
+				
+				<?php
+				
+				$explain = NULL;
+				
+				if($req['register_globals'][1] == 0) {
+					$color = "green";
+				} else {
+					$color = "red";
+					$explain = TRUE;
+				}
+				
+				?>
+				<tr>
+					<td width="60%">
+						<h3>Register Globals</h3>
+						<?php if(isset($explain)) { ?>
+						<span class="red">Your server has register globals turns on! This is potentially a security risk. Please contact your host about this. If they will not turn register globals off, talk to them about using a .htaccess file to accomplish the same thing in your SMS directory. SMS will work with register globals turned on as well as turned off.</span>
+						<?php } ?>
+					</td>
+					<td align="center"><h3><?=$req['register_globals'][0];?></h3></td>
+					<td align="center" class="<?=$color;?>">
+						<h3>
+							<?php
+							
+							if($req['register_globals'][1] == 1) {
+								echo "On";
+							} else {
+								echo "Off";
+							}
+							
+							?>
+						</h3>
+					</td>
+				</tr>
+				
+				<?php
+				
+				$explain = NULL;
+				
+				if($req['file_open'][1] == 1) {
+					$color = "green";
+				} else {
+					$color = "red";
+					$explain = TRUE;
+				}
+				
+				?>
+				<tr>
+					<td width="60%">
+						<h3>File Handling</h3>
+						<?php if(isset($explain)) { ?>
+						<span class="red">Your server does not allow for the opening, reading, and writing of files on the server by SMS. While allow file handling has its risks, SMS uses the feature during the installation of the system to help speed things up. Proceeding with file handling turned off will not negatively impact SMS, but you will have to manually copy and paste the configuration variables into the appropriate file.</span>
+						<?php } ?>
+					</td>
+					<td align="center"><h3><?=$req['file_open'][0];?></h3></td>
+					<td align="center" class="<?=$color;?>">
+						<h3>
+							<?php
+							
+							if($req['file_open'][1] == 1) {
+								echo "On";
+							} else {
+								echo "Off";
+							}
+							
+							?>
+						</h3>
+					</td>
+				</tr>
+			</table>
+			
+			<?php if($disable == 0) { ?>
+			<p>&nbsp;</p>
+			<form method="post" action="install.php?step=2">
+				<table width="95%">
+					<tr>
+						<td align="right">
+							<input type="submit" name="submit" value="Next Step &raquo;" />
+						</td>
+					</tr>
+				</table>
+			</form>
+			<?php } else { ?>
+			<p class="red bold">Your server does not meet the minimum requirements for running SMS. Please contact your host about upgrading PHP and/or MySQL or find another host.</p>
+			<?php
+				
+				}
+				break;
+				
+			case 2:
 			$url = $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
-			
-			/* toss the url into an array and split at the slashes */
 			$urlArray = explode("/", $url);
 			
 			/* drop the last 2 items off the array (install.php and install/) */
@@ -398,7 +646,7 @@ $installSteps = array(
 		<?php
 		
 			break;
-			case 2:
+			case 3:
 		
 		?>
 			
@@ -480,7 +728,7 @@ $installSteps = array(
 		<?php
 			
 			break;
-			case 3:
+			case 4:
 		
 		?>
 			
@@ -499,7 +747,7 @@ $installSteps = array(
 		<?php
 		
 			break;
-			case 4:
+			case 5:
 		
 		?>
 			
@@ -633,7 +881,7 @@ $installSteps = array(
 		<?php
 		
 			break;
-			case 5:
+			case 6:
 			
 		?>
 					
@@ -675,7 +923,7 @@ $installSteps = array(
 		<?php
 		
 			break;
-			case 6:
+			case 7:
 		
 		?>
 			
