@@ -10,7 +10,7 @@ File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-04-18 2017 EST
+Last Modified: 2008-04-24 1351 EST
 **/
 
 /* access check */
@@ -253,7 +253,7 @@ while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
 			<div id="notes" style="display:none;">
 			<br />
 		
-			Additional information about menu changes is available through Anodyne's <a href="http://docs.anodyne-productions.com/index.php?title=Changing_Menus_Around" target="_blank">
+			Additional information about menu changes is available through Anodyne&rsquo;s <a href="http://docs.anodyne-productions.com/index.php?title=Changing_Menus_Around" target="_blank">
 			online documentation</a>.<br /><br />
 	
 			<? if( $simmType == "starbase" ) { ?>
@@ -261,24 +261,20 @@ while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
 			<ul class="version">
 				<li><b>Main Navigation</b>
 					<ol>
-						<li>Please change your THE SHIP link to read THE STARBASE</li>
-						<li>Please change your THE SHIP link (THE STARBASE after you have changed it) to point to
-						<i>index.php?page=starbase</i></li>
+						<li>Please turn <strong class="red">off</strong> THE SHIP and turn <strong class="green">on</strong> THE STARBASE</li>
 					</ol>
 				</li>
 				<li><b>General Menus (The Ship)</b>
 					<ol>
-						<li>Please change both SHIP HISTORY and SHIP TOUR to reflect the different simm type</li>
-						<li>Please add a menu item called DOCKED SHIPS. It should be part of group 0 and have an
-						onsite link to <i>index.php?page=dockedships</i></li>
-						<li>Please add a menu item called DOCKING REQUEST. It should be part of group 0 and have
-						an onsite link to <i>index.php?page=dockingrequest</i></li>
+						<li>Please turn <strong class="red">off</strong> both SHIP HISTORY and SHIP TOUR and turn <strong class="green">on</strong> STARBASE HISTORY and STARBASE TOUR</li>
+						<li>Please turn <strong class="green">on</strong> the menu item called DOCKED SHIPS</li>
+						<li>Please turn <strong class="green">on</strong> the menu item called DOCKING REQUEST</li>
 					</ol>
 				</li>
 				<li><b>Admin Menus (Manage)</b>
 					<ol>
-						<li>Please add a menu item called DOCKED SHIPS. It should be part of group 4 and have an
-						onsite link to <i>admin.php?page=manage&sub=docking</i></li>
+						<li>Please turn <strong class="green">on</strong> the menu item called DOCKED SHIPS</li>
+						<li>Please turn <strong class="red">off</strong> the menu item called SHIP TOUR and turn <strong class="green">on</strong> STARBASE TOUR</li>
 					</ol>
 				</li>
 			</ul>
