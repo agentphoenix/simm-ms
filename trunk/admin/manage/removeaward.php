@@ -10,7 +10,7 @@ File: admin/manage/removeaward.php
 Purpose: Page that allows an admin to remove an award from a player
 
 System Version: 2.6.0
-Last Modified: 2008-01-19 1450 EST
+Last Modified: 2008-04-23 2044 EST
 **/
 
 /* access check */
@@ -19,54 +19,55 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
+	$query = FALSE;
+	$result = FALSE;
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['crew'] ) && preg_match( "/^\d+$/", $_GET['crew'], $matches ) == 0 ) {
-		errorMessageIllegal( "remove awards page" );
-		exit();
-	} else {
-		/* set the GET variable */
+	if(isset($_GET['crew']) && is_numeric($_GET['crew'])) {
 		$crew = $_GET['crew'];
+	} else {
+		$crew = NULL;
 	}
 	
-	/* do some advanced checking to make sure someone's not trying to do a SQL injection */
-	if( !empty( $_GET['award'] ) && preg_match( "/^\d+$/", $_GET['award'], $matches ) == 0 ) {
-		errorMessageIllegal( "remove awards page" );
-		exit();
-	} else {
-		/* set the GET variable */
-		$award = $_GET['award'];
-	}
-		
 	/* if an award key is in the URL */
-	if( isset($crew) && isset($award) ) {
+	if(isset($_POST['action_type']) && $_POST['action_type'] == "remove")
+	{
+		foreach($_POST as $key => $value)
+		{
+			$$key = $value;
+		}
 		
-		/* fetch the awards from the db */
-		$pullAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
-		$pullAwardsResult = mysql_query( $pullAwards );
-		$stringAwards = mysql_fetch_array( $pullAwardsResult );
-		$arrayAwards = explode( ";", $stringAwards[0] );
+		if(!is_numeric($action_crew)) {
+			$action_crew = NULL;
+		}
 		
-		unset( $arrayAwards[$award] );
+		if(!is_numeric($action_award)) {
+			$action_award = NULL;
+		}
+		
+		$pullAwards = "SELECT awards FROM sms_crew WHERE crewid = $action_crew LIMIT 1";
+		$pullAwardsResult = mysql_query($pullAwards);
+		$stringAwards = mysql_fetch_array($pullAwardsResult);
+		$arrayAwards = explode(";", $stringAwards[0]);
+		
+		/* HAVE TO REVERSE THE ARRAY OR BAD THINGS HAPPEN! */
+		$arrayAwards = array_reverse($arrayAwards);
+		
+		/* remove the award */
+		unset($arrayAwards[$action_award]);
+		
+		/* have to reverse the array again so things do what they are supposed to */
+		$arrayAwards = array_reverse($arrayAwards);
 
 		/* put the string back together */
-		$joinedString = implode( ";", $arrayAwards );
+		$joinedString = implode(";", $arrayAwards);
 		
-		if( !get_magic_quotes_gpc() ) {
-			$string = addslashes( $joinedString );
-		} else {
-			$string = $joinedString;
-		}
-			
 		/* dump the comma separated field back into the db */
-		$updateAwards = "UPDATE sms_crew SET awards = '$string' WHERE crewid = '$crew' LIMIT 1";
-		$result = mysql_query( $updateAwards );
+		$update = "UPDATE sms_crew SET awards = %s WHERE crewid = $action_crew LIMIT 1";
+		$query = sprintf($update, escape_string($joinedString));
+		$result = mysql_query($query);
 		
 		/* optimize the table */
 		optimizeSQLTable( "sms_crew" );
-
-		$action = "remove";
-		
 	}
 
 	if( !isset($crew) ) {
@@ -94,20 +95,12 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 		$getNPC.= "ORDER BY crew.rankid ASC";
 		$getNPCResult = mysql_query( $getNPC );
 		$npcCount = mysql_num_rows( $getNPCResult );
-		
-		if( $inactiveCount == 0 ) {
-			$disableInactive = "2, ";
-		} if( $npcCount == 0 ) {
-			$disableNPC = "3";
-		}
-
-		$disable = $disableInactive . $disableNPC;
 	
 ?>
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable; ?>] });
+			$('#container-1 > ul').tabs();
 		});
 	</script>
 	
@@ -124,6 +117,16 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 			</ul>
 			
 			<div id="one" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if($activeCount == 0)
+				{
+					echo "<strong class='fontLarge orange'>No active users found</strong>";
+				}
+				else
+				{
+				
+				?>
 				<b class="fontLarge">Active Crew</b>
 				<ul class="list-dark">
 					<?
@@ -137,9 +140,20 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 
 					?>
 				</ul>
+				<?php } ?>
 			</div>
 			
 			<div id="two" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if($inactiveCount == 0)
+				{
+					echo "<strong class='fontLarge orange'>No inactive users found</strong>";
+				}
+				else
+				{
+				
+				?>
 				<b class="fontLarge">Inactive Crew</b>
 				<ul class="list-dark">
 					<?
@@ -153,8 +167,20 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 
 					?>
 				</ul>
+				<?php } ?>
 			</div>
+			
 			<div id="three" class="ui-tabs-container ui-tabs-hide">
+				<?php
+				
+				if($npcCount == 0)
+				{
+					echo "<strong class='fontLarge orange'>No NPCs found</strong>";
+				}
+				else
+				{
+				
+				?>
 				<b class="fontLarge">Non-Playing Characters</b>
 				<ul class="list-dark">
 					<?
@@ -168,44 +194,64 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 
 					?>
 				</ul>
+				<?php } ?>
 			</div>
 		</div>
 		
 	</div>
 	<? } elseif( isset($crew) ) { ?>
 	
-	<div class="body">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.zebra tr:nth-child(odd)').addClass('alt');
+
+			$("a[rel*=facebox]").click(function() {
+				var award = $(this).attr("myAward");
+				var crew = $(this).attr("myID");
+
+				jQuery.facebox(function() {
+					jQuery.get('admin/ajax/award_remove.php?c=' + crew + '&a=' + award, function(data) {
+						jQuery.facebox(data);
+					});
+				});
+				return false;
+			});
+		});
+	</script>
 		
-		<?
+	<div class="body">
+		<?php
 		
 		$check = new QueryCheck;
-		$check->checkQuery( $result, $updateAwards );
+		$check->checkQuery($result, $query);
 				
-		if( !empty( $check->query ) ) {
-			$check->message( "crew award", "remove" );
+		if(!empty($check->query))
+		{
+			$check->message("crew award", "remove");
 			$check->display();
 		}
 		
 		?>
 		
 		<span class="fontTitle">Remove Award From <? printCrewName( $crew, "rank", "noLink" ); ?></span><br /><br />
-		<b class="fontMedium">
+		<b class="fontLarge">
 			<a href="<?=$webLocation;?>admin.php?page=manage&sub=removeaward">&laquo; Back to Crew List</a>
 		</b>
 		<br /><br />
 	
-		<table>
+		<table class="zebra" cellpadding="3" cellspacing="0">
 		<?
 	
-		$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew' LIMIT 1";
+		$getAwards = "SELECT awards FROM sms_crew WHERE crewid = $crew LIMIT 1";
 		$getAwardsResult = mysql_query( $getAwards );
 		$fetchAwards = mysql_fetch_array( $getAwardsResult );
 	
 		/* if $myrow isn't empty, continue */
-		if( !empty( $fetchAwards[0] ) ) {
-		
+		if(!empty($fetchAwards[0]))
+		{
 			/* explode the string at the comma */
-			$awardsRaw = explode( ";", $fetchAwards[0] );
+			$awardsRaw = explode(";", $fetchAwards[0]);
+			$awardsRaw = array_reverse($awardsRaw);
 			
 			/* explode the array again */
 			foreach($awardsRaw as $a => $b)
@@ -217,37 +263,63 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 				Start the loop based on whether there are key/value pairs
 				and keep doing 'something' until you run out of pairs
 			*/
-			foreach( $awardsRaw as $key => $value ) {
-	
+			foreach($awardsRaw as $key => $value)
+			{
 				/* do the database query */
 				$pullAward = "SELECT * FROM sms_awards WHERE awardid = '$value[0]'";
 				$pullAwardResult = mysql_query( $pullAward );
+				
+				if(empty($value[1])) {
+					$valign = "middle";
+				} else {
+					$valign = "top";
+				}
 	
 				/* Start pulling the array and populate the variables */
 				while( $awardArray = mysql_fetch_array( $pullAwardResult ) ) {
 					extract( $awardArray, EXTR_OVERWRITE );
-	
-					echo "<tr class='fontNormal'>";
-						echo "<td width='70'>";
-							echo "<a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $crew . "&award=" . $key . "'>";
-							echo "<img src='" . $webLocation . "images/awards/" . $awardImage . "' alt='" . $awardName . "' border='0' class='image' />";
-							echo "</a>";
-						echo "</td>";
-						echo "<td valign='middle'>";
-							echo "<a href='" . $webLocation . "admin.php?page=manage&sub=removeaward&crew=" . $crew . "&award=" . $key . "'>";
-							printText( $awardName );
-							echo "</a>";
-						echo "</td>";
-					echo "</tr>";
+					
+		?>
+		
+			<tr height="40">
+				<td width="70" align="center" valign="middle">
+					<img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" class="image" />
+				</td>
+				<td valign="<?=$valign;?>">
+					<strong><? printText( $awardName ); ?></strong>
+					<?php if(!empty($value[1])) { ?>
+					<br />
+					<span class="fontSmall">Awarded: <?=dateFormat('medium2', $value[1]);?></span>
+					<?php } ?>
+					</span>
+				</td>
+				<td width="55%" valign="middle">
+					<?
+					
+					if(!empty($value[2]))
+					{
+						printText($value[2]);
+					}
+					else
+					{
+						echo "<span class='orange'>No reason given</strong>";
+					}
+					
+					?>
+				</td>
+				<td width="12%" align="center">
+					<a href="#" rel="facebox" myAward="<?=$key;?>" myID="<?=$crew;?>" class="delete"><strong>Remove Award</strong></a>
+				</td>
+			</tr>
+		
+		<?php
 	
 				}
-	
 			}
-	
 		} else {
-			echo "<tr class='fontNormal'>";
-				echo "<td colspan='2'>";
-					echo "There are no awards to remove!";
+			echo "<tr class='fontLarge orange'>";
+				echo "<td colspan='4'>";
+					echo "<strong>There are no awards to remove!</strong>";
 				echo "</td>";
 			echo "</tr>";
 		}
