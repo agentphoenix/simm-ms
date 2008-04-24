@@ -1,4 +1,4 @@
-Last Update: 2008.04.23 2044 EST
+Last Update: 2008.04.24 0148 EST
 
 IN PROGRESS
 =====
@@ -48,8 +48,9 @@ IN PROGRESS
 		x	/admin/user
 
 #	Install File
-		*	Add beginning step with compatibility test [using ini_get()]
+		x	Add beginning step with compatibility test [using ini_get()]
 		*	Verify plugins
+				@	Preload removed
 		*	Verify menu changes
 		*	Ranks
 
@@ -57,6 +58,7 @@ IN PROGRESS
 		*	Ranks
 		*	Verify menu changes
 		*	Verify plugins
+				@	Preload removed
 		
 IN QUEUE
 =====
