@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-04-20 1934 EST
+Last Modified: 2008-04-24 1237 EST
 **/
 
 /* access check */
@@ -188,7 +188,7 @@ if(in_array("p_jp", $sessionAccess))
 		
 		/** EMAIL THE POST **/
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
@@ -200,7 +200,7 @@ if(in_array("p_jp", $sessionAccess))
 		$firstName = str_replace( "'", "", $firstName );
 		$lastName = str_replace( "'", "", $lastName );
 		
-		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+		$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
 		foreach($_POST as $key => $value)
 		{
@@ -335,7 +335,7 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 		$authors_email_string = implode(',', $authors_emails);
 	
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query($userFetch);
@@ -352,7 +352,7 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 			$$k = $v;
 		}
 		
-		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+		$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
 		/* define the variables */
 		$to = $authors_email_string;
@@ -457,7 +457,7 @@ Tag: " . $postTag . "
 		$authors_string = implode( ",", $authors_array );
 	
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
@@ -469,7 +469,7 @@ Tag: " . $postTag . "
 		$firstName = str_replace( "'", "", $firstName );
 		$lastName = str_replace( "'", "", $lastName );
 		
-		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+		$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
 		/* define the variables */
 		$to = $authors_string;

@@ -10,7 +10,7 @@ File: admin/post/news.php
 Purpose: Page to post a news item
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1616 EST
+Last Modified: 2008-04-24 1239 EST
 **/
 
 /* access check */
@@ -96,7 +96,7 @@ if(in_array("p_news", $sessionAccess))
 		/** EMAIL THE NEWS **/
 		
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = $sessionCrewid AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
@@ -107,7 +107,7 @@ if(in_array("p_news", $sessionAccess))
 			$firstName = str_replace( "'", "", $firstName );
 			$lastName = str_replace( "'", "", $lastName );
 			
-			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+			$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 	
 		}
 		

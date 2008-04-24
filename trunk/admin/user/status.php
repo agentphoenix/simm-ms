@@ -10,7 +10,7 @@ File: admin/user/status.php
 Purpose: Page to request a change of status to LOA or ELOA
 
 System Version: 2.6.0
-Last Modified: 2008-04-06 2158 EST
+Last Modified: 2008-04-24 1239 EST
 **/
 
 /* access check */
@@ -52,7 +52,7 @@ if( in_array( "u_status", $sessionAccess ) ) {
 		/** EMAIL THE REQUEST **/
 	
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
@@ -64,7 +64,7 @@ if( in_array( "u_status", $sessionAccess ) ) {
 		$firstName = str_replace( "'", "", $firstName );
 		$lastName = str_replace( "'", "", $lastName );
 		
-		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+		$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
 		/* define the email variables */
 		$to = printCOEmail() . ", " . printXOEmail();

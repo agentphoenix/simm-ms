@@ -10,7 +10,7 @@ File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1601 EST
+Last Modified: 2008-04-24 1238 EST
 **/
 
 /* access check */
@@ -106,7 +106,7 @@ if(in_array("p_mission", $sessionAccess))
 		/** EMAIL THE POST **/
 		
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
@@ -118,7 +118,7 @@ if(in_array("p_mission", $sessionAccess))
 		$firstName = str_replace( "'", "", $firstName );
 		$lastName = str_replace( "'", "", $lastName );
 		
-		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+		$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
 		foreach($_POST as $k => $v)
 		{

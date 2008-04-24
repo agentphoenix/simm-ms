@@ -10,7 +10,7 @@ File: admin/user/inbox.php
 Purpose: Page that views your private message inbox
 
 System Version: 2.6.0
-Last Modified: 2008-04-06 2219 EST
+Last Modified: 2008-04-24 1241 EST
 **/
 
 /* access check */
@@ -86,7 +86,7 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 		/** EMAIL THE PM **/
 		
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName, rank.rankName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
@@ -97,7 +97,7 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 			$firstName = str_replace( "'", "", $firstName );
 			$lastName = str_replace( "'", "", $lastName );
 			
-			$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+			$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 			$name = $userFetchArray['rankName'] . " " . $userFetchArray['firstName'] . " " . $userFetchArray['lastName'];
 	
 		}
@@ -108,7 +108,7 @@ if( in_array( "u_inbox", $sessionAccess ) ) {
 		$toEmail = mysql_fetch_array( $toFetchResult );
 		
 		/* define the variables */
-		$to = $toEmail['0'];
+		$to = $toEmail[0];
 		$subject = $emailSubject . " Private Message - " . $pmSubject;
 		$message = $pmContent . "
 	

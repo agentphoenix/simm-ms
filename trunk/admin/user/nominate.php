@@ -10,7 +10,7 @@ File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
 System Version: 2.6.0
-Last Modified: 2008-04-20 1939 EST
+Last Modified: 2008-04-24 1240 EST
 **/
 
 /* access check */
@@ -51,7 +51,7 @@ if( in_array( "u_nominate", $sessionAccess ) ) {
 		optimizeSQLTable( "sms_awards_queue" );
 	
 		/* set the email author */
-		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankName ";
+		$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, rank.rankShortName ";
 		$userFetch.= "FROM sms_crew AS crew, sms_ranks AS rank ";
 		$userFetch.= "WHERE crew.crewid = '$sessionCrewid' AND crew.rankid = rank.rankid LIMIT 1";
 		$userFetchResult = mysql_query( $userFetch );
@@ -63,7 +63,7 @@ if( in_array( "u_nominate", $sessionAccess ) ) {
 		$firstName = str_replace( "'", "", $firstName );
 		$lastName = str_replace( "'", "", $lastName );
 		
-		$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+		$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 		
 		/* set the TO email addresses */
 		$emFetch = "SELECT crewid, email FROM sms_crew WHERE (accessManage LIKE 'm_giveaward,%' OR accessManage LIKE '%,m_giveaward' ";
