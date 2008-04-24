@@ -13,7 +13,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1438 EST
+Last Modified: 2008-04-24 1517 EST
 **/
 
 session_start();
@@ -154,6 +154,15 @@ switch($step)
 	case 5:
 		require_once( '../framework/dbconnect.php' );
 		require_once( "resource_data.php" );
+		
+		mysql_query("UPDATE sms_menu_items SET menuAvailability = 'off' WHERE menuid = 89");
+		mysql_query("UPDATE sms_menu_items SET menuAvailability = 'off' WHERE menuid = 90");
+		mysql_query("UPDATE sms_menu_items SET menuAvailability = 'off' WHERE menuid = 91");
+		mysql_query("UPDATE sms_menu_items SET menuAvailability = 'off' WHERE menuid = 92");
+		mysql_query("UPDATE sms_menu_items SET menuAvailability = 'off' WHERE menuid = 93");
+		mysql_query("UPDATE sms_menu_items SET menuAvailability = 'off' WHERE menuid = 94");
+		mysql_query("UPDATE sms_menu_items SET menuAvailability = 'off' WHERE menuid = 95");
+		
 		break;
 	
 	/*
@@ -163,18 +172,17 @@ switch($step)
 	case 6:
 		require_once( '../framework/dbconnect.php' );
 		
+		sleep(1);
+		
 		$md5password = md5( $_POST['password'] );
 		
-		/* create the variables for access */
-		$levelsPost = "post,p_addjp,p_addnews,p_log,p_addlog,p_pm,p_mission,p_addmission,p_jp,p_news,p_missionnotes";
-		$levelsManage = "manage,m_globals,m_messages,m_specs,m_posts,m_logs,m_news,m_missionsummaries,m_missionnotes,m_createcrew,m_crew,m_coc,m_npcs2,m_removeaward,m_strike,m_giveaward,m_missions,m_departments,m_moderation,m_ranks,m_awards,m_positions,m_tour,m_decks,m_database,m_newscat3,m_docking,m_catalogue";
-		$levelsReports = "reports,r_about,r_count,r_strikes,r_activity,r_progress,r_versions,r_milestones";
-		$levelsUser = "user,u_nominate,u_inbox,u_account2,u_status,u_options,u_bio3,u_stats,u_site";
-		$levelsOther = "x_skindev,x_approve_users,x_approve_posts,x_approve_logs,x_approve_news,x_approve_docking,x_update,x_access,x_menu";
+		$access = "SELECT * FROM sms_accesslevels WHERE id = 1";
+		$accessR = mysql_query($access);
+		$levels = mysql_fetch_array($accessR);
 		
 		/* create the user */
 		$createUser = "INSERT INTO sms_crew ( crewid, username, password, email, firstName, middleName, lastName, gender, species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, accessOthers ) ";
-		$createUser.= "VALUES ( '1', '$_POST[username]', '$md5password', '$_POST[email]', '$_POST[firstName]', '$_POST[middleName]', '$_POST[lastName]', '$_POST[gender]', '$_POST[species]', '$_POST[rank]', '$_POST[position]', UNIX_TIMESTAMP(), '$levelsPost', '$levelsManage', '$levelsReports', '$levelsUser', '$levelsOther' )";
+		$createUser.= "VALUES ( 1, '$_POST[username]', '$md5password', '$_POST[email]', '$_POST[firstName]', '$_POST[middleName]', '$_POST[lastName]', '$_POST[gender]', '$_POST[species]', '$_POST[rank]', '$_POST[position]', UNIX_TIMESTAMP(), '$levels[1]', '$levels[2]', '$levels[3]', '$levels[4]', '$levels[5]' )";
 		$createUserResult = mysql_query( $createUser );
 		
 		/* update the position they're being given */
@@ -209,7 +217,7 @@ $installSteps = array(
 	2	=>	array('Basic Information', 'step-2.png', 'step-2-active.png'),
 	3	=>	array('Build the Database', 'step-3.png', 'step-3-active.png'),
 	4	=>	array('Populate with Data', 'step-4.png', 'step-4-active.png'),
-	5	=>	array('Create Your Character', 'step-5.png', 'step-5-active.png'),
+	5	=>	array('Your Character', 'step-5.png', 'step-5-active.png'),
 	6	=>	array('Simm Information', 'step-6.png', 'step-6-active.png'),
 	7	=>	array('Finalize Installation', 'step-7.png', 'step-7-active.png'),
 );
@@ -656,12 +664,7 @@ $installSteps = array(
 			<? if( isset( $varError ) ) { ?>
 			
 			<div class="code">
-				<b class="red">The database connection file (framework/variables.php) is
-				not correctly formatted and connecting to the database may fail.
-				This is possibly due to the file being empty or a missing web
-				location variable. You MUST have a web location variable and all
-				of your connection information to continue. Please paste the
-				following information into the file and try again.</b><br /><br />
+				<b class="red">The database connection file (framework/variables.php) is not correctly formatted and connecting to the database may fail. This is possibly due to the file being empty or a missing web location variable. You MUST have a web location variable and all of your connection information to continue. Please paste the following information into the file and try again.</b><br /><br />
 				
 				<? print( htmlentities( '<?php' ) ); ?><br /><br />
 				
@@ -702,8 +705,7 @@ $installSteps = array(
 			
 			<? } else { ?>
 			
-			You have successfully written the file containing all of the database connection
-			parameters!<br /><br />
+			You have successfully written the file containing all of the database connection parameters!<br /><br />
 			
 			<? } ?>
 			
@@ -719,7 +721,13 @@ $installSteps = array(
 			which you'll use to administer SMS.<br /><br /><br />
 			
 			<form method="post" action="install.php?step=4">
-				<input type="submit" name="submit" value="Next Step &raquo;" />
+				<table width="100%">
+					<tr>
+						<td align="right">
+							<input type="submit" name="submit" value="Next Step &raquo;" />
+						</td>
+					</tr>
+				</table>
 			</form>
 			
 		<?php
@@ -732,7 +740,13 @@ $installSteps = array(
 			You have successfully created the SMS database that will drive the site!<br /><br /><br />
 			
 			<form method="post" action="install.php?step=5">
-				<input type="submit" name="submit" value="Next Step &raquo;" />
+				<table width="100%">
+					<tr>
+						<td align="right">
+							<input type="submit" name="submit" value="Next Step &raquo;" />
+						</td>
+					</tr>
+				</table>
 			</form>
 			
 		<?php
@@ -823,7 +837,7 @@ $installSteps = array(
 								while( $rank = mysql_fetch_assoc( $ranksResult ) ) {
 									extract( $rank, EXTR_OVERWRITE );
 							
-									echo "<option value='" . $rank['rankid'] . "' style='background:#000 url( ../images/ranks/default/" . $rank['rankImage'] . " ) no-repeat 0 100%; height:40px; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
+									echo "<option value='" . $rank['rankid'] . "' style='background: url( ../images/ranks/default/" . $rank['rankImage'] . " ) no-repeat 0 100%; height:40px; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
 								
 								}
 								
@@ -841,7 +855,7 @@ $installSteps = array(
 							while( $position = mysql_fetch_assoc( $positionsResult ) ) {
 								extract( $position, EXTR_OVERWRITE );
 						
-								echo "<option value='" . $position['positionid'] . "' style='color:#" . $position['deptColor'] . ";'>" . $position['deptName'] . " - " . $position['positionName'] . "</option>";
+								echo "<option value='" . $position['positionid'] . "'>" . $position['deptName'] . " - " . $position['positionName'] . "</option>";
 								
 							}
 							
@@ -853,8 +867,7 @@ $installSteps = array(
 						<td colspan="3" height="25"></td>
 					</tr>
 					<tr>
-						<td colspan="2"></td>
-						<td>
+						<td colspan="3" align="right">
 							<input type="submit" name="submit" value="Next Step &raquo;" />
 						</td>
 					</tr>
@@ -889,8 +902,7 @@ $installSteps = array(
 						<td colspan="3" height="25"></td>
 					</tr>
 					<tr>
-						<td colspan="2"></td>
-						<td>
+						<td colspan="3" align="right">
 							<input type="submit" name="submit" value="Next Step &raquo;" />
 						</td>
 					</tr>
