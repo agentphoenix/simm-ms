@@ -1,12 +1,12 @@
-Last Update: 2008.04.24 1243 EST
+Last Update: 2008.04.24 1353 EST
 
 IN PROGRESS
 =====
 #	Install File
 		x	Add beginning step with compatibility test [using ini_get()]
 		x	Verify plugins
-		*	Verify menu changes
-				@	Starbase menu items (off by default)
+		x	Verify menu changes
+		x	Starbase menu items (off by default)
 		x	Ranks
 
 #	Update File
