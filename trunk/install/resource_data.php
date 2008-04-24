@@ -10,7 +10,7 @@ File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1633 EST
+Last Modified: 2008-04-24 1226 EST
 **/
 
 /* insert data into the access levels table */
@@ -136,7 +136,7 @@ VALUES (1, 0, 0, 'Main', 'onsite', 'index.php?page=main', '', '', 'n', 'main'),
 
 /* insert data into the messages table */
 mysql_query( "INSERT INTO `sms_messages` (`messageid`, `welcomeMessage`, `simmMessage`, `shipMessage`, `shipHistory`, `cpMessage`, `joinDisclaimer`, `samplePostQuestion`, `rules`, `acceptMessage`, `rejectMessage`, `siteCreditsPermanent`, `siteCredits` ) 
-VALUES (1, 'Define your welcome message through the site messages panel...', 'Define your simm\'s welcome message through the site messages section of the Control Panel.', 'Define your ship\'s welcome message through the site messages section of the Control Panel.', 'Define your ship/starbase\'s history through the site messages section of the Control Panel.', 'Define the control panel welcome message through the site messages section of the Control Panel.', 'Members are expected to follow the rules and regulations of both the sim and fleet at all times, both in character and out of character. By continuing, you affirm that you will sim in a proper and adequate manner. Members who choose to make ultra short posts, post very infrequently, or post posts with explicit content (above PG-13) will be removed immediately, and by continuing, you agree to this. In addition, in compliance with the Children\'s Online Privacy Protection Act of 1998 (COPPA), we do not accept players under the age of 13.  Any players found to be under the age of 13 will be immediately removed without question.  By agreeing to these terms, you are also saying that you are above the age of 13.', 'Define your sample post question/scenario through the site messages section of the Control Panel.', 'Define your ship rules through the site messages section of the Control Panel.', 'Thank you for your interest in our sim. I would like to officially welcome you aboard as the newest member of our crew!', 'Thank you for your interest in our sim. Unfortunately, at this time, I cannot offer you a position onboard our sim.', 'Editing or removal of the following credits constitutes a material breach of the SMS Terms of Use outlined at the <a href=\"http://www.anodyne-productions.com/index.php?cat=sms&page=disclaimers\" target=\"_blank\">SMS ToU</a> page.\r\n\r\nSMS 2 uses the open source browser detection library <a href=\"http://sourceforge.net/projects/phpsniff/\" target=\"_blank\">phpSniff</a> to check for various versions of browsers for maximum compatibility.\r\n\r\nThe SMS 2 Update notification system uses <a href=\"http://magpierss.sourceforge.net/\" target=\"_blank\">MagpieRSS</a> to parse the necessary XML file. Magpie is distributed under the GPL license. Questions and suggestions about MagpieRSS should be sent to <i>magpierss-general@lists.sf.net</i>.\r\n\r\nSMS 2 uses icons from the open source <a href=\"http://tango.freedesktop.org/Tango_Icon_Gallery\" target=\"_blank\">Tango Icon Library</a>. The update icon used by SMS was created by David VanScott as a derivative of work done for the Tango Icon Library.\r\n\r\nThe rank sets (DS9 Era Duty Uniform Style #2 and DS9 Era Dress Uniform Style #2) used in SMS 2 were created by Kuro-chan of <a href=\"http://www.kuro-rpg.net\" target=\"_blank\">Kuro-RPG</a>. Please do not copy or modify the images in any way, simply contact Kuro-chan and he will see to your rank needs.\r\n\r\n<a href=\"http://www.kuro-rpg.net/\" target=\"_blank\"><img src=\"images/kurorpg-banner.jpg\" border=\"0\" alt=\"Kuro-RPG\" /></a>', 'Please define your site credits in the Site Messages page...');" );
+VALUES (1, 'Define your welcome message through the site messages panel...', 'Define your simm\'s welcome message through the site messages section of the Control Panel.', 'Define your ship\'s welcome message through the site messages section of the Control Panel.', 'Define your ship/starbase\'s history through the site messages section of the Control Panel.', 'Define the control panel welcome message through the site messages section of the Control Panel.', 'Members are expected to follow the rules and regulations of both the sim and fleet at all times, both in character and out of character. By continuing, you affirm that you will sim in a proper and adequate manner. Members who choose to make ultra short posts, post very infrequently, or post posts with explicit content (above PG-13) will be removed immediately, and by continuing, you agree to this. In addition, in compliance with the Children\'s Online Privacy Protection Act of 1998 (COPPA), we do not accept players under the age of 13.  Any players found to be under the age of 13 will be immediately removed without question.  By agreeing to these terms, you are also saying that you are above the age of 13.', 'Define your sample post question/scenario through the site messages section of the Control Panel.', 'Define your ship rules through the site messages section of the Control Panel.', 'Thank you for your interest in our sim. I would like to officially welcome you aboard as the newest member of our crew!', 'Thank you for your interest in our sim. Unfortunately, at this time, I cannot offer you a position onboard our sim.', 'Editing or removal of the following credits constitutes a material breach of the SMS Terms of Use outlined at the <a href=\"http://www.anodyne-productions.com/index.php?cat=sms&page=disclaimers\" target=\"_blank\">SMS ToU</a> page.\r\n\r\nSMS 2 uses the open source browser detection library <a href=\"http://sourceforge.net/projects/phpsniff/\" target=\"_blank\">phpSniff</a> to check for various versions of browsers for maximum compatibility.\r\n\r\nThe SMS 2 Update notification system uses <a href=\"http://magpierss.sourceforge.net/\" target=\"_blank\">MagpieRSS</a> to parse the necessary XML file. Magpie is distributed under the GPL license. Questions and suggestions about MagpieRSS should be sent to <i>magpierss-general@lists.sf.net</i>.\r\n\r\nSMS 2 uses icons from the open source <a href=\"http://tango.freedesktop.org/Tango_Icon_Gallery\" target=\"_blank\">Tango Icon Library</a>. The update icon used by SMS was created by David VanScott as a derivative of work done for the Tango Icon Library.\r\n\r\nThe rank sets (DS9 Era Duty Uniform Style 2 and DS9 Era Dress Uniform Style 2) used in SMS 2 were created by Kuro-chan of <a href=\"http://www.kuro-rpg.net\" target=\"_blank\">Kuro-RPG</a>. Please do not copy or modify the images in any way, simply contact Kuro-chan and he will see to your rank needs.\r\n\r\n<a href=\"http://www.kuro-rpg.net/\" target=\"_blank\"><img src=\"images/kurorpg-banner.jpg\" border=\"0\" alt=\"Kuro-RPG\" /></a>', 'Please define your site credits in the Site Messages page...');" );
 
 /* insert data into the news category table */
 mysql_query( "INSERT INTO `sms_news_categories` (`catid`, `catName`, `catUserLevel`, `catVisible`) 
@@ -217,7 +217,7 @@ VALUES (1, 0, 'Commanding Officer', 'Ultimately responsible for the ship and cre
 (68, 1, 'Other', '', 13, 'crew', 1);" );
 
 /* insert the ranks data */
-mysql_query( "INSERT INTO `sms_ranks` (`rankid`, `rankOrder`, `rankName`, `rankShortName`, `rankImage`, `rankType`, `rankDisplay`, `rankClass`) 
+mysql_query( "INSERT INTO `sms_ranks` (`rankid`, `rankOrder`, `rankName`, `rankImage`, `rankShortName`, `rankType`, `rankDisplay`, `rankClass`) 
 VALUES (1, 1, 'Fleet Admiral', 'Starfleet/r-a5.png', 'FADM', 1, 'y', 1),
 (2, 1, 'Fleet Admiral', 'Starfleet/y-a5.png', 'FADM', 1, 'y', 2),
 (3, 1, 'Fleet Admiral', 'Starfleet/t-a5.png', 'FADM', 1, 'y', 3),
@@ -306,37 +306,37 @@ VALUES (1, 1, 'Fleet Admiral', 'Starfleet/r-a5.png', 'FADM', 1, 'y', 1),
 (76, 11, '2nd Lieutenant', 'Marine/g-o1.png', '2LT', 1, 'y', 6),
 (77, 11, 'Ensign', 'Starfleet/c-o1.png', 'ENS', 1, 'y', 7),
 
-(79, 12, 'Chief Warrant Officer 4', 'Starfleet/r-w4.png', 'CWO4', 1, 'y', 1),
-(80, 12, 'Chief Warrant Officer 4', 'Starfleet/y-w4.png', 'CWO4', 1, 'y', 2),
-(81, 12, 'Chief Warrant Officer 4', 'Starfleet/t-w4.png', 'CWO4', 1, 'y', 3),
-(82, 12, 'Chief Warrant Officer 4', 'Starfleet/s-w4.png', 'CWO4', 1, 'y', 4),
-(83, 12, 'Chief Warrant Officer 4', 'Starfleet/v-w4.png', 'CWO4', 1, 'y', 5),
-(84, 12, 'Chief Warrant Officer 4', 'Marine/g-w4.png', 'CWO4', 1, 'y', 6),
-(85, 12, 'Chief Warrant Officer 4', 'Starfleet/c-w4.png', 'CWO4', 1, 'y', 7),
+(79, 12, 'Chief Warrant Officer 1st Class', 'Starfleet/r-w4.png', 'CWO1', 1, 'y', 1),
+(80, 12, 'Chief Warrant Officer 1st Class', 'Starfleet/y-w4.png', 'CWO1', 1, 'y', 2),
+(81, 12, 'Chief Warrant Officer 1st Class', 'Starfleet/t-w4.png', 'CWO1', 1, 'y', 3),
+(82, 12, 'Chief Warrant Officer 1st Class', 'Starfleet/s-w4.png', 'CWO1', 1, 'y', 4),
+(83, 12, 'Chief Warrant Officer 1st Class', 'Starfleet/v-w4.png', 'CWO1', 1, 'y', 5),
+(84, 12, 'Chief Warrant Officer 1st Class', 'Marine/g-w4.png', 'CWO1', 1, 'y', 6),
+(85, 12, 'Chief Warrant Officer 1st Class', 'Starfleet/c-w4.png', 'CWO1', 1, 'y', 7),
 
-(86, 13, 'Chief Warrant Officer 3', 'Starfleet/r-w3.png', 'CWO3', 1, 'y', 1),
-(87, 13, 'Chief Warrant Officer 3', 'Starfleet/y-w3.png', 'CWO3', 1, 'y', 2),
-(88, 13, 'Chief Warrant Officer 3', 'Starfleet/t-w3.png', 'CWO3', 1, 'y', 3),
-(89, 13, 'Chief Warrant Officer 3', 'Starfleet/s-w3.png', 'CWO3', 1, 'y', 4),
-(90, 13, 'Chief Warrant Officer 3', 'Starfleet/v-w3.png', 'CWO3', 1, 'y', 5),
-(91, 13, 'Chief Warrant Officer 3', 'Marine/g-w3.png', 'CWO3', 1, 'y', 6),
-(92, 13, 'Chief Warrant Officer 3', 'Starfleet/c-w3.png', 'CWO3', 1, 'y', 7),
+(86, 13, 'Chief Warrant Officer 2nd Class', 'Starfleet/r-w3.png', 'CWO2', 1, 'y', 1),
+(87, 13, 'Chief Warrant Officer 2nd Class', 'Starfleet/y-w3.png', 'CWO2', 1, 'y', 2),
+(88, 13, 'Chief Warrant Officer 2nd Class', 'Starfleet/t-w3.png', 'CWO2', 1, 'y', 3),
+(89, 13, 'Chief Warrant Officer 2nd Class', 'Starfleet/s-w3.png', 'CWO2', 1, 'y', 4),
+(90, 13, 'Chief Warrant Officer 2nd Class', 'Starfleet/v-w3.png', 'CWO2', 1, 'y', 5),
+(91, 13, 'Chief Warrant Officer 2nd Class', 'Marine/g-w3.png', 'CWO2', 1, 'y', 6),
+(92, 13, 'Chief Warrant Officer 2nd Class', 'Starfleet/c-w3.png', 'CWO2', 1, 'y', 7),
 
-(93, 14, 'Chief Warrant Officer 2', 'Starfleet/r-w2.png', 'CWO2', 1, 'y', 1),
-(94, 14, 'Chief Warrant Officer 2', 'Starfleet/y-w2.png', 'CWO2', 1, 'y', 2),
-(95, 14, 'Chief Warrant Officer 2', 'Starfleet/t-w2.png', 'CWO2', 1, 'y', 3),
-(96, 14, 'Chief Warrant Officer 2', 'Starfleet/s-w2.png', 'CWO2', 1, 'y', 4),
-(97, 14, 'Chief Warrant Officer 2', 'Starfleet/v-w2.png', 'CWO2', 1, 'y', 5),
-(98, 14, 'Chief Warrant Officer 2', 'Marine/g-w2.png', 'CWO2', 1, 'y', 6),
-(99, 14, 'Chief Warrant Officer 2', 'Starfleet/c-w2.png', 'CWO2', 1, 'y', 7),
+(93, 14, 'Chief Warrant Officer 3rd Class', 'Starfleet/r-w2.png', 'CWO3', 1, 'y', 1),
+(94, 14, 'Chief Warrant Officer 3rd Class', 'Starfleet/y-w2.png', 'CWO3', 1, 'y', 2),
+(95, 14, 'Chief Warrant Officer 3rd Class', 'Starfleet/t-w2.png', 'CWO3', 1, 'y', 3),
+(96, 14, 'Chief Warrant Officer 3rd Class', 'Starfleet/s-w2.png', 'CWO3', 1, 'y', 4),
+(97, 14, 'Chief Warrant Officer 3rd Class', 'Starfleet/v-w2.png', 'CWO3', 1, 'y', 5),
+(98, 14, 'Chief Warrant Officer 3rd Class', 'Marine/g-w2.png', 'CWO3', 1, 'y', 6),
+(99, 14, 'Chief Warrant Officer 3rd Class', 'Starfleet/c-w2.png', 'CWO3', 1, 'y', 7),
 
-(100, 15, 'Warrant Officer 1', 'Starfleet/r-w1.png', 'WO1', 1, 'y', 1),
-(101, 15, 'Warrant Officer 1', 'Starfleet/y-w1.png', 'WO1', 1, 'y', 2),
-(102, 15, 'Warrant Officer 1', 'Starfleet/t-w1.png', 'WO1', 1, 'y', 3),
-(103, 15, 'Warrant Officer 1', 'Starfleet/s-w1.png', 'WO1', 1, 'y', 4),
-(104, 15, 'Warrant Officer 1', 'Starfleet/v-w1.png', 'WO1', 1, 'y', 5),
-(105, 15, 'Warrant Officer 1', 'Marine/g-w1.png', 'WO1', 1, 'y', 6),
-(106, 15, 'Warrant Officer 1', 'Starfleet/c-w1.png', 'WO1', 1, 'y', 7),
+(100, 15, 'Warrant Officer', 'Starfleet/r-w1.png', 'WO', 1, 'y', 1),
+(101, 15, 'Warrant Officer', 'Starfleet/y-w1.png', 'WO', 1, 'y', 2),
+(102, 15, 'Warrant Officer', 'Starfleet/t-w1.png', 'WO', 1, 'y', 3),
+(103, 15, 'Warrant Officer', 'Starfleet/s-w1.png', 'WO', 1, 'y', 4),
+(104, 15, 'Warrant Officer', 'Starfleet/v-w1.png', 'WO', 1, 'y', 5),
+(105, 15, 'Warrant Officer', 'Marine/g-w1.png', 'WO', 1, 'y', 6),
+(106, 15, 'Warrant Officer', 'Starfleet/c-w1.png', 'WO', 1, 'y', 7),
 
 (107, 16, 'Master Chief Petty Officer', 'Starfleet/r-e9.png', 'MCPO', 1, 'y', 1),
 (108, 16, 'Master Chief Petty Officer', 'Starfleet/y-e9.png', 'MCPO', 1, 'y', 2),
@@ -407,7 +407,7 @@ VALUES (1, 1, 'Fleet Admiral', 'Starfleet/r-a5.png', 'FADM', 1, 'y', 1),
 (165, 24, 'Crewman Recruit', 'Starfleet/t-e1.png', 'CR', 1, 'y', 3),
 (166, 24, 'Crewman Recruit', 'Starfleet/s-e1.png', 'CR', 1, 'y', 4),
 (167, 24, 'Crewman Recruit', 'Starfleet/v-e1.png', 'CR', 1, 'y', 5),
-(178, 24, 'Private', 'Marine/g-e1.png', 'PV1', 1, 'y', 6),
+(168, 24, 'Private', 'Marine/g-e1.png', 'PV1', 1, 'y', 6),
 (169, 24, 'Crewman Recruit', 'Starfleet/c-e1.png', 'CR', 1, 'y', 7),
 
 (170, 25, 'Cadet Senior Grade', 'Starfleet/r-c4.png', 'CTSR', 1, 'n', 1),
@@ -442,24 +442,24 @@ VALUES (1, 1, 'Fleet Admiral', 'Starfleet/r-a5.png', 'FADM', 1, 'y', 1),
 (196, 28, 'Cadet Freshman Grade', 'Marine/g-c1.png', 'CTFR', 1, 'n', 6),
 (197, 28, 'Cadet Freshman Grade', 'Starfleet/c-c1.png', 'CTFR', 1, 'n', 7),
 
-(191, 29, 'Trainee', 'Starfleet/r-c0.png', 'TRN', 1, 'n', 1),
-(192, 29, 'Trainee', 'Starfleet/y-c0.png', 'TRN', 1, 'n', 2),
-(193, 29, 'Trainee', 'Starfleet/t-c0.png', 'TRN', 1, 'n', 3),
-(194, 29, 'Trainee', 'Starfleet/s-c0.png', 'TRN', 1, 'n', 4),
-(195, 29, 'Trainee', 'Starfleet/v-c0.png', 'TRN', 1, 'n', 5),
-(196, 29, 'Trainee', 'Marine/g-c0.png', 'TRN', 1, 'n', 6),
-(197, 29, 'Trainee', 'Starfleet/c-0.png', 'TRN', 1, 'n', 7),
+(198, 29, 'Trainee', 'Starfleet/r-c0.png', 'TRN', 1, 'n', 1),
+(199, 29, 'Trainee', 'Starfleet/y-c0.png', 'TRN', 1, 'n', 2),
+(200, 29, 'Trainee', 'Starfleet/t-c0.png', 'TRN', 1, 'n', 3),
+(201, 29, 'Trainee', 'Starfleet/s-c0.png', 'TRN', 1, 'n', 4),
+(202, 29, 'Trainee', 'Starfleet/v-c0.png', 'TRN', 1, 'n', 5),
+(203, 29, 'Trainee', 'Marine/g-c0.png', 'TRN', 1, 'n', 6),
+(204, 29, 'Trainee', 'Starfleet/c-c0.png', 'TRN', 1, 'n', 7),
 
-(198, 30, '', 'Starfleet/r-blank.png', '', 1, 'y', 1),
-(199, 30, '', 'Starfleet/y-blank.png', '', 1, 'y', 2),
-(200, 30, '', 'Starfleet/t-blank.png', '', 1, 'y', 3),
-(201, 30, '', 'Starfleet/s-blank.png', '', 1, 'y', 4),
-(202, 30, '', 'Starfleet/v-blank.png', '', 1, 'y', 5),
-(203, 30, '', 'Marine/g-blank.png', '', 1, 'y', 6),
-(204, 30, '', 'Starfleet/c-blank.png', '', 1, 'y', 7),
+(205, 30, '', 'Starfleet/r-blank.png', '', 1, 'y', 1),
+(206, 30, '', 'Starfleet/y-blank.png', '', 1, 'y', 2),
+(207, 30, '', 'Starfleet/t-blank.png', '', 1, 'y', 3),
+(208, 30, '', 'Starfleet/s-blank.png', '', 1, 'y', 4),
+(209, 30, '', 'Starfleet/v-blank.png', '', 1, 'y', 5),
+(210, 30, '', 'Marine/g-blank.png', '', 1, 'y', 6),
+(211, 30, '', 'Starfleet/c-blank.png', '', 1, 'y', 7),
 
-(205, 1, '', 'Starfleet/w-blank.png', '', 1, 'y', 8),
-(206, 2, '', 'Starfleet/b-blank.png', '', 1, 'y', 8);" );
+(212, 1, '', 'Starfleet/w-blank.png', '', 1, 'y', 8),
+(213, 2, '', 'Starfleet/b-blank.png', '', 1, 'y', 8);" );
 
 /* insert the specs data */
 mysql_query( "INSERT INTO `sms_specs` (`specid`, `shipClass`, `shipRole`, `duration`, `durationUnit`, `refit`, `refitUnit`, `resupply`, `resupplyUnit`, `length`, `height`, `width`, `decks`, `complimentEmergency`, `complimentOfficers`, `complimentEnlisted`, `complimentMarines`, `complimentCivilians`, `warpCruise`, `warpMaxCruise`, `warpEmergency`, `warpMaxTime`, `warpEmergencyTime`, `phasers`, `torpedoLaunchers`, `torpedoCompliment`, `defensive`, `shields`, `shuttlebays`, `hasShuttles`, `hasRunabouts`, `hasFighters`, `hasTransports`, `shuttles`, `runabouts`, `fighters`, `transports`) 
@@ -468,7 +468,7 @@ VALUES (1, '', '', '', 'Years', '', 'Years', '', 'Years', '', '', '', '', '', ''
 /** setup the unique sim id **/
 
 /* define the length */
-$length = "20";
+$length = 20;
 
 /* start with a blank password */
 $string = "";
@@ -480,17 +480,17 @@ $possible = "0123456789bcdfghjkmnpqrstvwxyz";
 $i = 0; 
 
 /* add random characters to $password until $length is reached */
-while( $i < $length ) { 
-
+while($i < $length)
+{ 
 	/* pick a random character from the possible ones */
 	$char = substr( $possible, mt_rand( 0, strlen( $possible )-1 ), 1 );
 	
 	/* we don't want this character if it's already in the password */
-	if( !strstr( $string, $char ) ) { 
+	if(!strstr($string, $char))
+	{ 
 		$string .= $char;
 		$i++;
 	}
-
 }
 
 /* populate the system table with data */
@@ -502,14 +502,14 @@ VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library u
 ( '2', 'jQuery UI', '1.0', 'http://ui.jquery.com/', 'Tabs throughout the system', 'framework/js/ui.tabs.js;skins/[your skin]/style-ui.tabs.css' ),
 ( '3', 'clickMenu', '0.1.6', 'http://p.sohei.org/jquery-plugins/clickmenu/', 'Customizable user menu', 'framework/js/clickmenu.js;skins/[your skin]/style-clickmenu.css' ),
 ( '4', 'Link Scrubber', '1.0', 'http://www.crismancich.de/jquery/plugins/linkscrubber/', 'Remove dotted border around clicked links in Firefox', 'framework/js/linkscrubber.js' ),
-( '5', 'Shadowbox', '1.0b4', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
-( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs on the activation page', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
+( '5', 'Shadowbox', '1.0', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
+( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs throughout the system', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
 ( '7', 'Reflect jQuery', '1.0', 'http://plugins.jquery.com/project/reflect', 'Dynamic image reflection on tour pages', 'framework/js/reflect.js' )" );
 
 /* populate the versions table with data */
 mysql_query( "INSERT INTO `sms_system_versions` ( `versionid`, `version`, `versionDate`, `versionShortDesc`, `versionDesc` )
 VALUES (1, '2.0.1', '1153890000', '', 'Fixed issues relating to bio and account management;Fixed bug with the join form;Fixed bug with personal log posting;Fixed issue with database field length issues on several variables;Fixed bio image reference issues that wouldn\'t allow users to specify an off-site location for their character image;Added minor functionality to the crew manifest, specs, and message items'),
-(2, '2.0.2', '1155099600', '', 'Fixed issues relating to bio and account management (try #2);Fixed several issues associated with emails being sent out by the system;Added rank and position error checking for the crew listing in the admin control panel. List now provides an error message for users that have an invalid rank and/or position;Fixed manifest display bug;Fixed bug associated with whitespace and updating skins'),
+(2, '2.0.2', '1155099600', '', 'Fixed issues relating to bio and account management (try 2);Fixed several issues associated with emails being sent out by the system;Added rank and position error checking for the crew listing in the admin control panel. List now provides an error message for users that have an invalid rank and/or position;Fixed manifest display bug;Fixed bug associated with whitespace and updating skins'),
 (3, '2.1.0', '1158123600', '', 'Added database feature left out of the 2.0 release because of time constraints;Added tour feature'),
 (4, '2.1.1', '1158382800', '', 'Fixed bug associated with excessive line breaks in database entries caused by the PHP nl2br() function that was being used;Added ability for COs to edit individual database items'),
 (5, '2.2.0', '1159506000', '', 'Added confirmation prompts for users who have JavaScript turned on in their browser. When deleting an item, the system will prompt the user if they are sure they want to delete it;Added ability for COs to decide whether a JP counts as a single post or as as many posts as there are authors in the JP;Added a tag field to the mission posts to allow users to specify their post tags at the start. The email sent out will display the tag right at the top so another user knows right from the beginning whether or not their character is involved or tagged in the post;Added the ability for users to save posts, logs, and news items to come back to and keep working on;Fixed bug where XOs didn\'t have the right access permissions for creating and editing NPCs;Added ability to set activation and deactivation options for both players as well as NPCs;Fixed bug on the full manifest where positions that were turned off still showed up;Fixed image reference bug that had the tour section looking in the wrong place for tour images;Fixed bug where deleting a database item while it was selected would cause it to stay displayed in the browser despite not existing'),
@@ -528,6 +528,7 @@ VALUES (1, '2.0.1', '1153890000', '', 'Fixed issues relating to bio and account 
 (18, '2.5.2', '1186578000', 'This release patches several outstanding bugs in SMS as well as enhancing existing features with additional functionality.', 'Added page to add/remove a given access level for the entire crew at the same time;Added page that gives full listing of a given user\'s access;Added user access report link to the full crew listing by the stats link;Added display of second position (if applicable) to the active crew list;When the SMS posting system is turned on or off, the system will take actions to make sure the people are either stripped of or given posting access;Added character set and collation to install (hopefully this will fix problems people were having);Fixed bug where if the variables file was written the webLocation variable would be empty;Fixed bug where textareas would show HTML break tags after updating;Fixed bug where join page set wrong timestamp;Added nice message if the join date is empty instead of the 37 years, etc.;Fixed bug where time wouldn\'t display if it was 1 day or less;Updated logic to display date in a nicer fashion;Improved display for dates less than 1 day;Added on/off switch control to each menu item;Fixed bug where error message on login page would extend across entire screen;Reactivated emailing of password;Added visual separation between items that need a password to be changed and those that don\'t in the account managemment page;Removed username from being listed on the account management page unless the person viewing it is the owner of the account;Fixed bug where dates wouldn\'t display by recent posts and logs;Fixed account bug where admin couldn\'t change active status of a player;Fixed bug where saving a joint post with 4 participants would overwrite the third author with a blank variable'),
 (19, '2.5.3', '1187026200', 'This release patches several bugs related to player acceptance and rejection, display problems and account management.', 'Provided potential fix for skinners related to strange spacing in the Latest Posts section on the main page when moving paddings from anchors to list items;Fixed display bug with reply button on PM view page;Fixed bug where updating own account wouldn\'t work;Fixed bug where player being accepted or rejected wouldn\'t get an email;Fixed potential bug where player being accepted wouldn\'t be updated correctly'),
 (20, '2.5.4', '1190036700', 'This release increases the number of allowed JP authors from 6 to 8.', 'Increased allowed JP authors from 6 to 8'),
-(21, '2.5.5', '1194444000', 'This release fixes a critical security issue and patches a bug with default standard player access levels.', 'Fixed critical security issue;Fixed bug where newly created standard players don\'t have the right permissions for sending news items')" );
+(21, '2.5.5', '1194444000', 'This release fixes a critical security issue and patches a bug with default standard player access levels.', 'Fixed critical security issue;Fixed bug where newly created standard players don\'t have the right permissions for sending news items'),
+(22, '2.5.6', '1202230800', 'This release fixes an annoying issue where spammers trying to access un-authenticated pages produced an email claiming SQL injection.', 'Removed email to CO when an illegal operation is attempted (99% of these attempts are in fact spammers, not a malicious hacking attempt)')" );
 
 ?>
