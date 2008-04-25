@@ -10,7 +10,7 @@ File: admin/manage/access.php
 Purpose: Page to access levels for individual users
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 0154 EST
+Last Modified: 2008-04-24 2228 EST
 **/
 
 /* access check */
@@ -297,7 +297,7 @@ if(in_array("x_access", $sessionAccess))
 					<tr>
 						<td width="30%"><input type="checkbox" id="m_database1" name="m_database1" value="m_database1" <? if( in_array( "m_database1", $crewAccess ) ) { echo "checked"; } ?>/> <label for="m_database1">Database-1 <strong class="yellow fontNormal">[ User's Dept ]</strong></label></td>
 						
-						<td width="30%"><input type="checkbox" id="m_newscat1" name="m_newscat1" value="m_newscat1" <? if( in_array( "m_newscat1", $crewAccess ) ) { echo "checked"; } ?>/> <label for="m_newscat1">News Categories-1 <strong class="yellow fontNormal">[ General Access ]</strong></label></td>
+						<td width="30%"><input type="checkbox" id="m_newscat1" name="m_newscat1" value="m_newscat1" <? if( in_array( "m_newscat1", $crewAccess ) ) { echo "checked"; } ?>/> <label for="m_newscat1">News Categories-1 <strong class="yellow fontNormal">[ General ]</strong></label></td>
 						
 						<td width="30%"><input type="checkbox" id="m_globals" name="m_globals" value="m_globals" <? if( in_array( "m_globals", $crewAccess ) ) { echo "checked"; } ?>/> <label for="m_globals">Site Globals</label></td>
 					</tr>
