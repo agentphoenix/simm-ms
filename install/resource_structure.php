@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2008-04-25 1346 EST
+Last Modified: 2008-04-25 1406 EST
 **/
 
 /* query the database for the mysql version */
@@ -358,7 +358,7 @@ mysql_query( "CREATE TABLE `sms_ranks` (
   `rankDisplay` enum('y','n') NOT NULL default 'y',
   `rankClass` int(3) NOT NULL default '0',
   PRIMARY KEY  (`rankid`)
-) " . $tail . " AUTO_INCREMENT=206 ;" );
+) " . $tail . " AUTO_INCREMENT=213 ;" );
 
 /* create the specs table */
 mysql_query( "CREATE TABLE `sms_specs` (
