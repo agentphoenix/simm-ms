@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-04-24 1143 EST
+Last Modified: 2008-04-25 1403 EST
 **/
 
 /*
@@ -50,10 +50,10 @@ $fetch1 = mysql_fetch_array($getR1);
 switch($fetch1[0])
 {
 	case 'full':
-		$defaults = "$('tr.active').show();,$('tr.npc').show();,$('tr.open').show();";
+		$defaults = "$(\'tr.active\').show();,$(\'tr.npc\').show();,$(\'tr.open\').show();";
 		break;
 	case 'split':
-		$defaults = "$('tr.active').show();";
+		$defaults = "$(\'tr.active\').show();";
 		break;
 }
 
@@ -91,18 +91,7 @@ mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentCivilians` `complimentCi
 | include all the cadet ranks, but turn them off by default.
 |
 */
-$get1 = "SELECT * FROM sms_ranks WHERE rankName = '' ORDER BY rankOrder ASC";
-$result1 = mysql_query( $get1 );
-$count1 = mysql_num_rows( $result1 );
 
-if( $count1 > 0 ) {
-	while( $fetch1 = mysql_fetch_assoc( $result1 ) ) {
-		extract( $fetch1, EXTR_OVERWRITE );
-		
-		mysql_query( "UPDATE sms_ranks SET rankOrder = '31' WHERE rankid = '$rankid' LIMIT 1" );
-		
-	}
-}
 
 
 /*
@@ -128,7 +117,7 @@ $getInboxLinkResult = mysql_query( $getInboxLink );
 $inboxLink = mysql_fetch_assoc( $getInboxLinkResult );
 mysql_query( "UPDATE sms_menu_items SET menuTitle = 'Inbox' WHERE menuid = '$inboxLink[menuid]' LIMIT 1" );
 
-$getMenuLink = "SELECT * FROM sms_menu_items WHERE menuAccess = 'x_menu' LIMIT 1";
+$getMenuLink = "SELECT * FROM sms_menu_items WHERE menuLink = 'admin.php?page=manage&sub=menugeneral' LIMIT 1";
 $getMenuLinkResult = mysql_query( $getMenuLink );
 $menuLink = mysql_fetch_assoc( $getMenuLinkResult );
 mysql_query( "UPDATE sms_menu_items SET menuLink = 'admin.php?page=manage&sub=menus' WHERE menuid = '$menuLink[menuid]' LIMIT 1" );
@@ -149,12 +138,16 @@ $logLink = mysql_fetch_assoc( $getLogsResult );
 mysql_query( "UPDATE sms_menu_items SET menuAccess = 'm_logs2' WHERE menuid = '$logLink[menuid]' LIMIT 1" );
 
 /* default access levels menu item */
-mysql_query( "INSERT INTO sms_menu_items ( menuGroup, menuOrder, menuTitle, menuLinkType, menuLink, menuAccess, menuMainSec, menuLogin, menuCat )
-VALUES ( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin' )" );
-
-/* database-1 access menu item */
-mysql_query( "INSERT INTO sms_menu_items ( menuGroup, menuOrder, menuTitle, menuLinkType, menuLink, menuAccess, menuMainSec, menuLogin, menuCat )
-VALUES ( 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_database1', 'manage', 'y', 'admin' )" );
+mysql_query( "INSERT INTO sms_menu_items ( menuGroup, menuOrder, menuTitle, menuLinkType, menuLink, menuAccess, menuMainSec, menuLogin, menuCat, menuAvailability )
+VALUES ( 0, 5, 'Default Access Levels', 'onsite', 'admin.php?page=manage&sub=accesslevels', 'x_access', 'manage', 'y', 'admin', 'y' ),
+( 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_database1', 'manage', 'y', 'admin', 'y' ),
+(1, 0, 'Docking Request', 'onsite', 'index.php?page=dockingrequest', '', 'ship', 'n', 'general', 'n'),
+(1, 1, 'Docked Ships', 'onsite', 'index.php?page=dockedships', '', 'ship', 'n', 'general', 'n'),
+(4, 3, 'Docked Ships', 'onsite', 'admin.php?page=manage&sub=docking', 'm_docking', 'manage', 'y', 'admin', 'n'),
+(0, 0, 'The Starbase', 'onsite', 'index.php?page=starbase', '', '', 'n', 'main', 'n'),
+(0, 0, 'Starbase History', 'onsite', 'index.php?page=history', '', 'ship', 'n', 'general', 'n'),
+(0, 2, 'Starbase Tour', 'onsite', 'index.php?page=tour', '', 'ship', 'n', 'general', 'n'),
+(4, 1, 'Starbase Tour', 'onsite', 'admin.php?page=manage&sub=tour', 'm_tour', 'manage', 'y', 'admin', 'n')" );
 
 
 /*
@@ -169,7 +162,7 @@ VALUES ( 0, 5, 'Database', 'onsite', 'admin.php?page=manage&sub=database', 'm_da
 */
 /* add the user menu item preferences */
 mysql_query("
-	ALTER TABLE  `sms_crew` ADD  `menu1` VARCHAR(8) NOT NULL DEFAULT '0',
+	ALTER TABLE  `sms_crew` ADD  `menu1` VARCHAR(8) NOT NULL DEFAULT '57',
 	ADD  `menu2` VARCHAR(8) NOT NULL DEFAULT '0',
 	ADD  `menu3` VARCHAR(8) NOT NULL DEFAULT '0',
 	ADD  `menu4` VARCHAR(8) NOT NULL DEFAULT '0',
@@ -237,13 +230,13 @@ mysql_query( "ALTER TABLE `sms_news` ADD `newsPrivate` ENUM('y', 'n') NOT NULL D
 mysql_query( "ALTER TABLE `sms_awards` ADD `awardCat` enum('ic','ooc','both') not null default 'both'" );
 
 $getAwards = "SELECT crewid, awards FROM sms_crew";
-$getAwardsR = mysql_query( $getAwardsR );
+$getAwardsR = mysql_query($getAwardsR);
 
-while( $awardsFetch = mysql_fetch_array( $getAwardsR ) ) {
-	extract( $awardsFetch, EXTR_OVERWRITE );
+while($awardsFetch = mysql_fetch_array($getAwardsR)) {
+	extract($awardsFetch, EXTR_OVERWRITE);
 	
-	$award = str_replace( ',', ';', $awardsFetch[1] );
-	mysql_query( "UPDATE sms_crew SET awards = '$award' WHERE crewid = $awardsFetch[0]" );
+	$award = str_replace(',', ';', $awardsFetch[1]);
+	mysql_query("UPDATE sms_crew SET awards = '$award' WHERE crewid = $awardsFetch[0]");
 	
 }
 
@@ -313,6 +306,6 @@ VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library u
 |
 */
 mysql_query( "ALTER TABLE `sms_system_versions` ADD `versionRev` int(5) NOT NULL AFTER `version`" );
-mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.0', '', '', '' )" );
+mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionRev`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.0', '', '', '', '' )" );
 
 ?>
