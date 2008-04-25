@@ -10,7 +10,7 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-04-22 1649 EST
+Last Modified: 2008-04-24 2311 EST
 **/
 
 /* access check */
@@ -738,6 +738,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 			<?php } /* close counting */ ?>
 		</div>
 		
+		<?php if($simmType == 'starbase') { ?>
 		<!-- docking requests -->
 		<div id="six" class="ui-tabs-container ui-tabs-hide">
 			<?php if( $countPendingDocking < 1 ) { ?>
@@ -774,6 +775,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 			</table>
 			<?php } /* close counting */ ?>
 		</div>
+		<?php } ?>
 	</div>
 
 </div>
