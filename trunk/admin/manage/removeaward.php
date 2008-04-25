@@ -10,7 +10,7 @@ File: admin/manage/removeaward.php
 Purpose: Page that allows an admin to remove an award from a player
 
 System Version: 2.6.0
-Last Modified: 2008-04-23 2044 EST
+Last Modified: 2008-04-24 2219 EST
 **/
 
 /* access check */
@@ -307,7 +307,7 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 					
 					?>
 				</td>
-				<td width="12%" align="center">
+				<td width="15%" align="center">
 					<a href="#" rel="facebox" myAward="<?=$key;?>" myID="<?=$crew;?>" class="delete"><strong>Remove Award</strong></a>
 				</td>
 			</tr>
