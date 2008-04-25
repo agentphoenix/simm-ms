@@ -1,4 +1,4 @@
-Last Update: 2008.04.24 2256 EST
+Last Update: 2008.04.24 2314 EST
 
 IN PROGRESS
 =====
@@ -10,8 +10,6 @@ IN PROGRESS
 				@	Starbase menu items (off by default)
 		x	Verify plugins
 		x	Version Files
-
-#	Fix outstanding PHP notices
 
 #	System versions during install
 		
