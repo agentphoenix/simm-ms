@@ -1,14 +1,7 @@
-Last Update: 2008.04.24 1353 EST
+Last Update: 2008.04.24 2256 EST
 
 IN PROGRESS
 =====
-#	Install File
-		x	Add beginning step with compatibility test [using ini_get()]
-		x	Verify plugins
-		x	Verify menu changes
-		x	Starbase menu items (off by default)
-		x	Ranks
-
 #	Update File
 		*	Ranks
 				@	Cadet ranks (off by default)
@@ -17,6 +10,10 @@ IN PROGRESS
 				@	Starbase menu items (off by default)
 		x	Verify plugins
 		x	Version Files
+
+#	Fix outstanding PHP notices
+
+#	System versions during install
 		
 IN QUEUE
 =====
@@ -77,3 +74,4 @@ X	Global setting for default access levels
 X	Update system queries to protect against SQL injection
 X	Take care of Apache errors throughout the system
 X	Short names in the ranks (used in emails)
+X	Install File
