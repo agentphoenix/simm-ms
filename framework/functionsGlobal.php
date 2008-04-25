@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2008-03-22 1657 EST
+Last Modified: 2008-04-24 2313 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -111,6 +111,7 @@ function displayAuthors( $missionID, $link ) {
 	$sql = "SELECT postAuthor FROM sms_posts WHERE postid = '$missionID' LIMIT 1";
 	$result = mysql_query( $sql );
 	$myrow = mysql_fetch_array( $result );
+	$authorsString = FALSE;
 	
 	/* explode the string at the comma */
 	$authors_raw = explode( ",", $myrow['0'] );
