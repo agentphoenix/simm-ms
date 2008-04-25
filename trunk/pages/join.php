@@ -10,7 +10,7 @@ File: pages/join.php
 Purpose: To display the join application and submit it
 
 System Version: 2.6.0
-Last Modified: 2008-04-22 1644 EST
+Last Modified: 2008-04-24 2305 EST
 **/
 
 /* define the page class and vars */
@@ -49,11 +49,11 @@ if( isset( $action ) ) {
 	
 	/* build the insert query that's going to be used */
 	$join = "INSERT INTO sms_crew ( username, password, crewType, email, realName, aim, msn, yim, icq, ";
-	$join.= "positionid, rankid, firstName, middleName, lastName, gender, species, heightFeet, heightInches, ";
+	$join.= "positionid, firstName, middleName, lastName, gender, species, heightFeet, heightInches, ";
 	$join.= "weight, eyeColor, hairColor, age, physicalDesc, personalityOverview, strengths, ambitions, hobbies, ";
 	$join.= "languages, history, serviceRecord, father, mother, brothers, sisters, spouse, children, ";
 	$join.= "otherFamily, image, joinDate ) ";
-	$join.= "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ";
+	$join.= "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ";
 	$join.= "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d )";
 	
 	/* run the query through sprintf and the safety function to scrub for security issues */
@@ -69,7 +69,6 @@ if( isset( $action ) ) {
 		escape_string( $_POST['yim'] ),
 		escape_string( $_POST['icq'] ),
 		escape_string( $_POST['position'] ),
-		escape_string( $_POST['rankid'] ),
 		escape_string( $_POST['firstName'] ),
 		escape_string( $_POST['middleName'] ),
 		escape_string( $_POST['lastName'] ),
@@ -116,7 +115,7 @@ if( isset( $action ) ) {
 		$subject = $emailSubject . " Application Submitted";
 		$to = $email;
 		$from = printCO() . " <" . printCOEmail() . ">";
-		$message = "Greetings $realName,
+		$message = "Greetings $realname,
 	
 You have recently submitted an application to join the $shipPrefix $shipName.  The CO has been informed of this and should be looking over you application.  Expect an answer within the next few days on whether or not you are accepted. 
 	
@@ -135,12 +134,24 @@ This is an automatically generated message, please do not respond.";
 		/* set the subject */
 		$subject = $emailSubject . " Character Awaiting Approval";
 		
-		/* set the to field */
-		$to = printCOEmail();
+		/* set the TO email addresses */
+		$emFetch = "SELECT crewid, email FROM sms_crew WHERE (accessOthers LIKE 'x_approve_users,%' OR accessOthers LIKE '%,x_approve_users' ";
+		$emFetch.= "OR accessOthers LIKE '%,x_approve_users,%')";
+		$emFetchR = mysql_query($emFetch);
 		
-		/* if the XO has permission, send them a copy too */
-		if( $xoCrewApps == "y" ) {
-			$to.= "," . printXOEmail();
+		$email_array = array();
+		
+		while($em_raw = mysql_fetch_array($emFetchR)) {
+			extract($em_raw, EXTR_OVERWRITE);
+			
+			$email_array[] = $em_raw[1];
+		}
+		
+		/* if there isn't anything in the email array, put the CO into the string */
+		if(count($email_array) == 0) {
+			$to = printCOEmail();
+		} else {
+			$to = implode(",", $email_array);
 		}
 	
 		$message = "A new user has applied to join the " . $shipName . ".  Below you will find the information along with the link to the site to login and approve or deny the application.
@@ -187,9 +198,6 @@ SISTER(S): $sisters
 SPOUSE: $spouse
 CHILDREN: $children
 OTHER FAMILY: $otherFamily
-
-== OTHER ==
-$other
 
 IMAGE: $image
 
