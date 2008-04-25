@@ -10,7 +10,7 @@ File: admin/manage/database.php
 Purpose: Page that moderates the database entries
 
 System Version: 2.6.0
-Last Modified: 2008-04-04 2018 EST
+Last Modified: 2008-04-24 2242 EST
 **/
 
 /* access check */
@@ -109,6 +109,17 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 		$departments[] = $deptid;
 	}
 
+	/* pull global entries */
+	$entries = "SELECT * FROM sms_database WHERE dbDept = 0 ORDER BY dbOrder ASC";
+	$entriesR = mysql_query($entries);
+	
+	/* fill in the array */
+	while($entryFetch = mysql_fetch_assoc($entriesR)) {
+		extract($entryFetch, EXTR_OVERWRITE);
+	
+		$database[0][] = array('id' => $dbid, 'title' => $dbTitle, 'type' => $dbType, 'url' => $dbURL, 'order' => $dbOrder);
+	}
+	
 	/* pull all the entries */
 	$entries = "SELECT db.* FROM sms_database AS db, sms_departments AS d WHERE db.dbDisplay = 'y' ";
 	$entries.= "AND db.dbDept = d.deptid AND d.deptDatabaseUse = 'y'";
