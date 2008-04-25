@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1518 EST
+Last Modified: 2008-04-25 1315 EST
 **/
 
 /* query the database for the mysql version */
@@ -453,7 +453,7 @@ mysql_query( "CREATE TABLE `sms_system_plugins` (
 mysql_query( "CREATE TABLE `sms_system_versions` (
 	`versionid` int(3) NOT NULL auto_increment,
 	`version` varchar(50) NOT NULL default '',
-	`versionRev` int(5) NOT NULL default '',
+	`versionRev` int(5) NOT NULL,
 	`versionDate` varchar(50) NOT NULL default '',
 	`versionShortDesc` text NOT NULL,
 	`versionDesc` text NOT NULL,
