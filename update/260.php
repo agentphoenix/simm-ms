@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-04-26 1250 EST
+Last Modified: 2008-04-26 1311 EST
 **/
 
 /*
@@ -311,6 +311,18 @@ VALUES ( '1', 'jQuery', '1.2.3', 'http://www.jquery.com/', 'Javascript library u
 ( '5', 'Shadowbox', '1.0', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
 ( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs throughout the system', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
 ( '7', 'Reflect jQuery', '1.0', 'http://plugins.jquery.com/project/reflect', 'Dynamic image reflection on tour pages', 'framework/js/reflect.js' )" );
+
+
+/*
+|---------------------------------------------------------------
+| SYSTEM MESSAGES
+|---------------------------------------------------------------
+|
+| Some major changes in SMS mean we have to update the permanent
+| credits to reflect some of the new pieces that have been added.
+|
+*/
+mysql_query("UPDATE sms_messages SET siteCreditsPermanent = 'Editing or removal of the following credits constitutes a material breach of the SMS Terms of Use outlined at the <a href=\"http://www.anodyne-productions.com/index.php?cat=sms&page=disclaimers\" target=\"_blank\">SMS Terms of Use</a> page.\r\n\r\nSMS 2 makes extensive use of the <a href=\"http://www.jquery.com\" target=\"_blank\">jQuery</a> Javascript library as well as multiple jQuery plugins. By default, SMS includes the <a href=\"http://ui.jquery.com/\" target=\"_blank\">jQuery UI</a>, <a href=\"http://p.sohei.org/jquery-plugins/clickmenu/\" target=\"_blank\">clickMenu</a>, <a href=\"http://www.crismancich.de/jquery/plugins/linkscrubber/\" target=\"_blank\">Link Scrubber</a>, <a href=\"http://mjijackson.com/shadowbox/\" target=\"_blank\">Shadowbox</a>, <a href=\"http://famspam.com/facebox\" target=\"_blank\">Facebox</a>, and <a href=\"http://plugins.jquery.com/project/reflect\" target=\"_blank\">Reflect jQuery</a>. More information about the versions and uses of the plugins can be obtained from the simm\'s webmaster.\r\n\r\nSMS 2 uses the open source browser detection library <a href=\"http://sourceforge.net/projects/phpsniff/\" target=\"_blank\">phpSniff</a> to check for various versions of browsers for maximum compatibility.\r\n\r\nThe SMS 2 Update notification system uses <a href=\"http://magpierss.sourceforge.net/\" target=\"_blank\">MagpieRSS</a> to parse the necessary XML file. Magpie is distributed under the GPL license. Questions and suggestions about MagpieRSS should be sent to <i>magpierss-general@lists.sf.net</i>.\r\n\r\nSMS 2 uses icons from the open source <a href=\"http://tango.freedesktop.org/Tango_Icon_Gallery\" target=\"_blank\">Tango Icon Library</a>.\r\n\r\nAdd and remove icons from the PI Diagona Pack created by <a href=\"http://pinvoke.com\" target=\"_blank\">Pinvoke.com</a>. Colorization by David VanScott.\r\n\r\nThe rank sets (DS9 Era Duty Uniform Style 2 and DS9 Era Dress Uniform Style 2) used in SMS 2 were created by Kuro-chan of <a href=\"http://www.kuro-rpg.net\" target=\"_blank\">Kuro-RPG</a>. Please do not copy or modify the images in any way, simply contact Kuro-chan and he will see to your rank needs.\r\n\r\n<a href=\"http://www.kuro-rpg.net/\" target=\"_blank\"><img src=\"images/kurorpg-banner.jpg\" border=\"0\" alt=\"Kuro-RPG\" /></a>' WHERE messageid = 1");
 
 
 /*
