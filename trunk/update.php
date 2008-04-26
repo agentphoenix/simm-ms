@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.0
-Last Modified: 2008-04-05 1540 EST
+Last Modified: 2008-04-26 1323 EST
 **/
 
 /* define the step var */
@@ -131,7 +131,7 @@ switch( $step ) {
 		break;
 
 }
-/*
+
 ?>
 
 <html>
@@ -148,55 +148,36 @@ switch( $step ) {
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6 is a minor update that addresses several outstanding bugs in SMS 2.5.x and
-			further enhances several features with additional functionality, including:
+			SMS 2.6 is a major update to SMS which not only fixes a handful of existing bugs, but it also enhances existing features as well as offering brand new functionality. A complete list change log is available after the system has been updated in the Reports > Version History page. Some of the major changes in this version include:
 			
 			<ul>
-				<li>Added page to add/remove a given access level for the entire crew at the same time</li>
-				<li>Added page that gives full listing of a given user&rsquo;s access</li>
-				<li>Added user access report link to the full crew listing by the stats link</li>
-				<li>Added display of second position (if applicable) to the active crew list</li>
-				<li>When the SMS posting system is turned on or off, the system will take actions to make sure the people are either stripped of or given posting access</li>
-				<li>Added character set and collation to install (hopefully this will fix problems people were having)</li>
-				<li>Fixed bug where if the variables file was written the webLocation variable would be empty</li>
-				<li>Fixed bug where textareas would show HTML break tags after updating</li>
-				<li>Fixed bug where join page set wrong timestamp</li>
-				<li>Added nice message if the join date is empty instead of the 37 years, etc.</li>
-				<li>Fixed bug where time wouldn&rsquo;t display if it was 1 day or less</li>
-				<li>Updated logic to display date in a nicer fashion</li>
-				<li>Improved display for dates less than 1 day</li>
-				<li>Added on/off switch control to each menu item</li>
-				<li>Fixed bug where error message on login page would extend across entire screen</li>
-				<li>Reactivated emailing of password</li>
-				<li>Added visual separation between items that need a password to be changed and those that don&rsquo;t in the account managemment page</li>
-				<li>Removed username from being listed on the account management page unless the person viewing it is the owner of the account</li>
-				<li>Fixed bug where dates wouldn&rsquo;t display by recent posts and logs</li>
-				<li>Fixed account bug where admin couldn&rsquo;t change active status of a player</li>
+				<li>Departmental Databases</li>
+				<li>Ability for users to edit their own posts and logs</li>
+				<li>Ability for admins to set the group access defaults (CO, XO, Department Head, Standard Player)</li>
+				<li>Private news items</li>
+				<li>Built-in stardate script</li>
+				<li>Personalized menu</li>
+				<li>New awards system that sends nominated awards to a queue for CO review</li>
+				<li>Better Apache compatibility</li>
+				<li>Brand new activation page</li>
+				<li>Slick new manifest page</li>
+				<li>Cleaned up Private Messages</li>
+				<li>Using the jQuery Javascript library for better tabs, lightbox functionality, and modal windows</li>
+				<li>Two dozen existing bugs fixed</li>
+				<li>Better security</li>
+				<li>And much more!</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
 			
 			<? } elseif( $step == "2" ) { ?>
 			
-			The changes have been made to your system.  Please make sure the necessary files
-			are uploaded to your server.  If you still experience problems with any of the 
-			issues that have been fixed, please report them on the Anodyne Support Forum.<br /><br />
+			The changes have been made to your system.  Please make sure the necessary files are uploaded to your server.  If you still experience problems with any of the issues that have been fixed, please report them on the Anodyne Support Forum.<br /><br />
 			
-			<b>Note:</b> If you were logged in to your site, you may receive an error why trying
-			to go to the Control Panel. To correct this, please log back in to your site.
+			One of the changes to SMS 2.6 required that the ranks table be blown away and re-built. The script makes every effort to update every crew member from the old rank data to the new rank data, but you may find that a handful of crew members have the wrong rank and may require manual editing. We apologize for this inconvenience.<br /><br />
+			
+			<b>Note:</b> If you were logged in to your site, you may receive an error why trying to go to the Control Panel. To correct this, please log back in to your site.
 
-			<h1>
-				<a href="<?=$webLocation;?>index.php?page=main">Return to your site &raquo;</a>
-			</h1>
-			
-			If your simm is a starbase, you can use this additional step to change the necessary menu items for a starbase setup.
-			
-			<h1><a href="update.php?step=3&version=<?=$urlVersion;?>">Change Menu Items &raquo;</a></h1>
-			
-			<? } elseif( $step == "3" ) { ?>
-			
-			The menu changes have been made to your system. Additional changes can be made to the menus through the Menu Management page.
-			
 			<h1>
 				<a href="<?=$webLocation;?>index.php?page=main">Return to your site &raquo;</a>
 			</h1>
@@ -209,4 +190,3 @@ switch( $step ) {
 	</div> <!-- close #install -->
 </body>
 </html>
-<? */ ?>
