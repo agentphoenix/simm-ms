@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-04-25 1403 EST
+Last Modified: 2008-04-26 1250 EST
 **/
 
 /*
@@ -88,10 +88,30 @@ mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentCivilians` `complimentCi
 |
 | SMS now includes more rank information, including a short name
 | that is now used in the emails sent out. In addition, we now
-| include all the cadet ranks, but turn them off by default.
+| include all the cadet ranks, but turn them off by default. This
+| step will blow away the ranks in the database and rebuild the
+| ranks database, then loop through the crew data and attempt to
+| update the crew so their ranks are still accurate.
 |
 */
+$clear = "TRUNCATE TABLE sms_ranks";
+$clearR = mysql_query($clear);
 
+include_once('update/ranks.php');
+sleep(1);
+
+$getCrew = "SELECT * FROM sms_crew";
+$getCrewR = mysql_query($getCrew);
+
+while($fetchCrew = mysql_fetch_assoc($getCrewR)) {
+	extract($fetchCrew, EXTR_OVERWRITE);
+	
+	if(array_key_exists($fetchCrew['rankid'], $old_ranks))
+	{
+		$new_rank = $old_ranks[$fetchCrew['rankid']];
+		mysql_query("UPDATE sms_crew SET rankid = $new_rank WHERE crewid = $fetchCrew[crewid] LIMIT 1");
+	}
+}
 
 
 /*
