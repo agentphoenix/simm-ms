@@ -1,8 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -13,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1517 EST
+Last Modified: 2008-04-26 1257 EST
 **/
 
 session_start();
@@ -683,9 +680,7 @@ $installSteps = array(
 			
 			<? if( !isset( $varError ) && $write == "failed" ) { ?>
 			
-			It appears that, for security reasons, your server does not allow opening and writing files. 
-			Please open the file <b>variables.php</b> from the <b>framework</b> folder and insert 
-			the following code:<br /><br />
+			It appears that, for security reasons, your server does not allow opening and writing files. Please open the file <b>variables.php</b> from the <b>framework</b> folder and insert the following code:<br /><br />
 			
 			<div class="code">
 				<? print( htmlentities( '<?php' ) ); ?><br /><br />
@@ -709,16 +704,9 @@ $installSteps = array(
 			
 			<? } ?>
 			
-			SMS 2 includes many of the features from SMS 1.5, including the awards system and starbase
-			docking system. In addition, SMS 2 introduces a strike system so that COs can easily give,
-			remove, and track strikes against players. Sporting a redesigned framework, SMS 2 makes it
-			easier than ever to do the things you want to do, including the ability for players to hold two
-			positions. With more robust user controls, it's easy now to let your department heads take
-			care of NPCs within their department, leaving you to spend more time simming with your
-			crew instead of taking care of the little things.<br /><br />
+			SMS 2.6 builds on the incredibly popular SMS 2 by further refining the premier RPG manager with new features, bug fixes, and feature enhancements. Some of the major changes to SMS 2.6 include the ability to set access group default levels, users being able to edit their own posts and logs, better tabs, a new awards system that makes nominating much easier, private news items, a built in stardate script, departmental databases, and much much more! A complete feature list is available after you install the system through the Admin Control Panel > Reports > Version History.<br /><br />
 			
-			Please proceed to the next step to build the SMS 2 database and create your character
-			which you'll use to administer SMS.<br /><br /><br />
+			Please proceed to the next step to build the SMS 2.6 database and create your character which you&rsquo;ll use to administer SMS.<br /><br /><br />
 			
 			<form method="post" action="install.php?step=4">
 				<table width="100%">
