@@ -1,21 +1,18 @@
-Last Update: 2008.04.24 2314 EST
+Last Update: 2008.04.26 1252 EST
 
 IN PROGRESS
 =====
-#	Update File
-		*	Ranks
-				@	Cadet ranks (off by default)
-				@	Update script
-		*	Verify menu changes
-				@	Starbase menu items (off by default)
-		x	Verify plugins
-		x	Version Files
 
-#	System versions during install
 		
 IN QUEUE
 =====
 #	Update skins
+
+#	Documentation
+
+#	Website Updates
+
+#	Verify Update Script
 
 COMPLETED
 =====
@@ -73,3 +70,4 @@ X	Update system queries to protect against SQL injection
 X	Take care of Apache errors throughout the system
 X	Short names in the ranks (used in emails)
 X	Install File
+X	Update File
