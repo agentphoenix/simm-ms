@@ -1,0 +1,59 @@
+As I mentioned before, the first step of the beta testing process is Beta-1.  For this
+beta release, please focus on the FRESH INSTALL process and making sure that once a
+fresh install is done that the system operates as expected.  To accomplish this, please
+install the system as you would if you didn't have SMS on your server.
+
+1) Upload all the files to your server, be that local or live.
+
+2) Make sure you have your new database set up properly.  Using a database that already
+has an copy of SMS in it will not work!
+
+3) Navigate to http://<yoursite>/<sms_directory>/install.php
+
+4) Select the Fresh Install option
+
+5) Go through the install process
+
+6) When done, login to your test site and begin testing
+
+==========
+THE BEST WAY
+==========
+I think the best way to start beta testing is to start by just roaming through the system
+just to see what's changed.  Go through the changelog and check out the things that have
+been updated, added, changed, and fixed.  You don't have to focus too hard, just take a
+little bit of time and have some fun looking at the shiny new toys.  After that, the best
+way to tackle the system is to have the directory and file structure open (be that in your
+FTP client or on your desktop) and go through the system page by page.  Go directly to the
+first page (let's say admin/manage/add.php) and make sure that you can add a playing
+character.  Open phpMyAdmin and make sure that everything you typed in was added to the
+database accurately.  After that, try adding an NPC to make sure that everything gets
+dropped into the database as well.
+
+==========
+DON'T FORGET
+==========
+# It's easy sometimes to forget that when you do an installation of SMS, you're automatically
+given the highest permissions.  Make sure you test the system from the other access levels
+as well.  Create a few playing characters with different access levels so you can login with
+those accounts and test the system using the XO levels, department head levels, and standard
+player levels as well.  As a general rule, don't mess around with the access levels, just
+use the defaults, that way, when you file a bug, you can say "CO access levels" and everyone
+knows how to reproduce the bug.
+
+# Browsers, browsers, browsers.  Anodyne currently supports 3 majors browsers and the system
+has to be tested in all of them.  On Windows, we support Internet Explorer 7, Firefox 2, and
+Safari 3.  Please make sure you're testing in those.  If you want to coordinate with the
+other Windows testers so that one person handles one of the browsers, that's fine, we just
+have to make sure the Windows browsers are tested, especially since I don't have access to
+a Windows machine.  On the Mac, we support Safari 2+ and Firefox 2.  On Linux, Firefox 2.
+
+# If you're testing in IE7, keep an eye out of layout anomalies.  If you're reporting a layout
+or presentation bug in IE7, make sure you take screenshots so I can see exactly what's happening
+and hopefully figure out why.
+
+# Make sure you're logging in to the forums at least once day, even just to see what kind of
+bugs have been filed.  If you see a bug there, take a couple minutes and try to reproduce it.
+If you can, reply to the topic and say that you're having the same issue, or if you're not,
+make sure you tell us that too, as well as what browser you're using to help me track down
+exactly what's happening.
