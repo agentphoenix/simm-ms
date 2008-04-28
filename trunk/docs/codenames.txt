@@ -8,21 +8,6 @@ SMS 3.0 - Jefferson
 
 SMS Toolbar - Neptune
 
-LIKELY CODENAMES
-====
-
-SMS3 M0 - Meridian
-SMS3 M1
-SMS3 M2 - Diablo
-SMS3 M3
-SMS3 M4
-SMS3 M5
-SMS3 M6
-SMS3 M7
-
-Each SMS3 milestone has its own codename, then for the betas, we
-will unveil the official name of the product
-
 UNUSED CODENAMES
 ====
 
@@ -52,12 +37,3 @@ Thresher
 Babylon
 Midas
 Pulse
-
-POTENTIAL SMS3 NAMES
-====
-Paladin
-Shift
-Slipstream
-Curve
-Nova
-Eclipse
