@@ -52,8 +52,16 @@ SMS 2.5.0-RC1		34205 / 726
 ===
 New counts exclude phpSniff and MagpieRSS directories
 
+phpSniff	1143 / 8
+MagpieRSS	261 / 28
+CI Guide	- / 140
+
 SMS2 Trunk	39,042 / 1073
-SMS3 Trunk	32,557 / 326
+
+CodeIgniter	37,605 / 196 (minus user guide)
+SMS3 Trunk	13,900 / 600 (minus code igniter) - way off because of the .svn files
 
 SMS 2.5.4	32,528 / 700
 SMS 2.5.5	32,630 / 701
+
+SMS 2.6-b1	37,539 / 515
