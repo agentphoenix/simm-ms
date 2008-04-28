@@ -57,3 +57,7 @@ bugs have been filed.  If you see a bug there, take a couple minutes and try to 
 If you can, reply to the topic and say that you're having the same issue, or if you're not,
 make sure you tell us that too, as well as what browser you're using to help me track down
 exactly what's happening.
+
+# If you have access to your server's error logs, periodically check the logs to see what, if
+any, PHP notices or errors SMS is throwing.  If it is throwing some errors, please copy and
+paste them into a bug report so that I can take care of them before release.
