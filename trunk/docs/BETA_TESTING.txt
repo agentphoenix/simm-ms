@@ -6,8 +6,9 @@ unnoticed, I assure you.  The quality assurance work on the last two major relea
 of SMS were huge successes and we're hoping for the pattern to continue with this, the
 final SMS 2 release.  Without further ado, let's dive in to the heart of the matter.
 
+==========
 YOUR RESPONSIBILITIES
-===
+==========
 So what exactly does a beta tester do?  Put simply, your job is to break SMS.  Some of
 you may be scratching your heads about now wondering why in the world we'd want you
 to break something we've spent the better part of a year building.  It's pretty easy
@@ -15,8 +16,20 @@ actually.  If you break it, we can make sure that those bugs responsible are squ
 so it doesn't happen any more.  By the end of the beta, you shouldn't be able to break
 SMS any more.  That's our goal.
 
+==========
+WHAT IS A BUG?
+==========
+Sounds like a silly question, but we should make sure everyone is on the same page.  A
+bug is defined as a piece of the system that does not do what it's supposed to.  If you
+expect the system to update a field and it doesn't, that's a bug.  If some functionality
+that you expect to happen doesn't, it's a bug.  What isn't a bug?  "I think you should
+change this to do this" ... or "I think you should add Feature X" are NOT bugs.  Since
+this is the last SMS 2 release, we're not terribly concerned about making sure that a
+lot of people's feature requests are in place, that's what SMS 3 is for.
+
+==========
 ACCOMPLISHING THE GOAL
-===
+==========
 So how do you accomplish this goal?  The beta process is a three-part process.  Beta-1
 will focus on primarily on the fresh installation of SMS 2.6.  You'll take SMS and
 install it to your test server like you would if you were starting fresh with SMS.
@@ -35,8 +48,9 @@ You guys will take one final swing through the system with the RC and make sure 
 nothing else busted.  Assuming things are good, the RC will become the Gold Master
 which is the code base that will be released to the community as SMS 2.6.
 
+==========
 THE RULES
-===
+==========
 There are in fact a couple of rules involved in beta testing for Anodyne.  Please make
 sure you understand these rules before you start beta testing.  Violating these rules
 is taken very seriously by Anodyne and we'd hate to have to take any type of punitive
@@ -55,8 +69,9 @@ may be doing your testing on a live server, and that's fine, but you are not all
 install the SMS 2.6 beta on any live site.  Again, those things have a funny way of
 getting back to me, so please don't try.
 
+==========
 THE PERKS
-===
+==========
 SMS beta testing isn't all rules and requirements though, there are in fact a handful of
 great perks that come along with this responsibility.  As a beta tester you get:
 
@@ -82,8 +97,9 @@ well before it's made public.  What kind of information?  For starters, the offi
 of SMS 3!  On top of that, we'll share details about the QA process as well as a handful
 of never before talked about features, just for you guys.
 
+==========
 ON TO THE DETAILS
-===
+==========
 So now that all that information is out of the way and you've gotten in to testing SMS 2.6,
 what happens next?  When you find a bug in the system, it's your responsibility to report
 that bug to the Beta Forum.  There is a section in there just for SMS, and that's where
@@ -92,10 +108,12 @@ everyone involved if they're going to the same place.
 
 There are 2 types of things you can be filing during the beta process: a bug or an enhancement.
 Each comes with their own mini template for reporting the bug/enhancement.  Please try to
-follow these templates so that everyone's on the same page.
+follow these templates so that everyone's on the same page.  Blank templates are available
+in the document BETA_TEMPLATE.txt.
 
+==========
 BUG TEMPLATE
-===
+==========
 If you're filing a bug, please follow this template:
 
 Topic Title - The topic title should include a short description about what the bug is:
@@ -122,21 +140,13 @@ activated is still in the pending list and they aren't shown on the manifest.
 EXPECTED RESULT: After activating a character, they shouldn't show up as a pending character
 any more and they should appear on the manifest.
 
-===
+ACCESS LEVEL: CO
 
-Body goes here.
+BROWSER: Firefox 2
 
-STEPS TO RECREATE:
-1.
-2.
-3.
-
-RESULT:
-
-EXPECTED RESULT:
-
+==========
 ENHANCEMENT TEMPLATE
-===
+==========
 An enhancement is something that works as expected, but you believe could be done a little
 bit better.  This should include user interface issues, misspellings in the paragraphs,
 and the need for better instructions on a page.  If you're filing for an enhancement, please
@@ -159,20 +169,30 @@ SUGGESTIONS:
 1. Make it clear that you can have characters that don't have dolphins for fathers
 2. Use a brief example
 
-===
-
-Body goes here.
-
-SUGGESTIONS:
-1.
-2.
-3.
-
+==========
 DON'T FORGET
-===
-It's easy sometimes to forget that when you do an installation of SMS, you're automatically
+==========
+# It's easy sometimes to forget that when you do an installation of SMS, you're automatically
 given the highest permissions.  Make sure you test the system from the other access levels
 as well.  Create a few playing characters with different access levels so you can login with
 those accounts and test the system using the XO levels, department head levels, and standard
-player levels as well.  When filing a bug, make sure to describe the access levels the account
-has.
+player levels as well.  As a general rule, don't mess around with the access levels, just
+use the defaults, that way, when you file a bug, you can say "CO access levels" and everyone
+knows how to reproduce the bug.
+
+# Browsers, browsers, browsers.  Anodyne currently supports 3 majors browsers and the system
+has to be tested in all of them.  On Windows, we support Internet Explorer 7, Firefox 2, and
+Safari 3.  Please make sure you're testing in those.  If you want to coordinate with the
+other Windows testers so that one person handles one of the browsers, that's fine, we just
+have to make sure the Windows browsers are tested, especially since I don't have access to
+a Windows machine.  On the Mac, we support Safari 2+ and Firefox 2.  On Linux, Firefox 2.
+
+# If you're testing in IE7, keep an eye out of layout anomalies.  If you're reporting a layout
+or presentation bug in IE7, make sure you take screenshots so I can see exactly what's happening
+and hopefully figure out why.
+
+# Make sure you're logging in to the forums at least once day, even just to see what kind of
+bugs have been filed.  If you see a bug there, take a couple minutes and try to reproduce it.
+If you can, reply to the topic and say that you're having the same issue, or if you're not,
+make sure you tell us that too, as well as what browser you're using to help me track down
+exactly what's happening.
