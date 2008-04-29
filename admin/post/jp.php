@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1237 EST
+Last Modified: 2008-04-29 1601 EST
 **/
 
 /* access check */
@@ -211,33 +211,29 @@ if(in_array("p_jp", $sessionAccess))
 		switch($postStatus)
 		{
 			case 'activated':
-				$to = getCrewEmails( "emailPosts" );
+				$to = getCrewEmails("emailPosts");
 				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle;
-				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
-Location: " . $postLocation . "
-Timeline: " . $postTimeline . "
-Tag: " . $postTag . "
-
-" . $postContent;
+				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
+				$message.= "Location: " . stripslashes($postLocation) . "\r\n";
+				$message.= "Timeline: " . stripslashes($postTimeline) . "\r\n";
+				$message.= "Tag: " . stripslashes($postTag) . "\r\n\r\n";
+				$message.= stripslashes($postContent);
 				break;
 				
 			case 'pending':
 				$to = printCOEmail();
 				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle . " (Awaiting Approval)";
-				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
-Location: " . $postLocation . "
-Timeline: " . $postTimeline . "
-Tag: " . $postTag . "
-
-" . $postContent . "
-
-Please log in to approve this post.  " . $webLocation . "login.php?action=login";
+				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
+				$message.= "Location: " . stripslashes($postLocation) . "\r\n";
+				$message.= "Timeline: " . stripslashes($postTimeline) . "\r\n";
+				$message.= "Tag: " . stripslashes($postTag) . "\r\n\r\n";
+				$message.= stripslashes($postContent) . "\r\n\r\n";
+				$message.= "Please log in to approve this post.  " . $webLocation . "login.php?action=login";
 				break;
 		}
 		
 		/* send the nomination email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-		
 	}
 	elseif(isset($_POST['action_save_x']))
 	{
@@ -357,14 +353,12 @@ Please log in to approve this post.  " . $webLocation . "login.php?action=login"
 		/* define the variables */
 		$to = $authors_email_string;
 		$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle . " (Saved Joint Post)";
-		$message = "This email is to notify you that your joint post, " . $postTitle . ", has recently been updated.  Please log in to make any changes you want before it is posted.  The content of the new post is below.  This is an automatically generated email.  Please log in to continue working on this post: " . $webLocation . "login.php?action=login
-	
-A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
-Location: " . $postLocation . "
-Timeline: " . $postTimeline . "
-Tag: " . $postTag . "
-
-" . $postContent;
+		$message = "This email is to notify you that your joint post, " . stripslashes($postTitle) . ", has recently been updated.  Please log in to make any changes you want before it is posted.  The content of the new post is below.  This is an automatically generated email.  Please log in to continue working on this post: " . $webLocation . "login.php?action=login\r\n\r\n";
+		$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
+		$message.= "Location: " . stripslashes($postLocation) . "\r\n";
+		$message.= "Timeline: " . stripslashes($postTimeline) . "\r\n";
+		$message.= "Tag: " . stripslashes($postTag) . "\r\n\r\n";
+		$message.= stripslashes($postContent);
 	
 		/* send the email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
@@ -474,7 +468,7 @@ Tag: " . $postTag . "
 		/* define the variables */
 		$to = $authors_string;
 		$subject = $emailSubject . " Saved Post Deletion Notification";
-		$message = "This email is to notify you that your joint post, " . $authorFetch[1] . ", has been deleted by " . displayEmailAuthors($sessionCrewid, 'noLink') . ".";
+		$message = "This email is to notify you that your joint post, " . stripslashes($authorFetch[1]) . ", has been deleted by " . displayEmailAuthors($sessionCrewid, 'noLink') . ".";
 	
 		/* send the email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );

@@ -10,7 +10,7 @@ File: admin/post/news.php
 Purpose: Page to post a news item
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1239 EST
+Last Modified: 2008-04-29 1635 EST
 **/
 
 /* access check */
@@ -131,19 +131,16 @@ if(in_array("p_news", $sessionAccess))
 			case 'activated':
 				$to = getCrewEmails("emailNews");
 				$subject = $emailSubject . " " . stripslashes($category['catName']) . " - " . stripslashes($newsTitle);
-				$message = "A News Item Posted By " . printCrewNameEmail($sessionCrewid) . "
-
-" . stripslashes( $newsContent );
+				$message = "A News Item Posted By " . printCrewNameEmail($sessionCrewid) . "\r\n\r\n";
+				$message.= stripslashes($newsContent);
 				break;
 				
 			case 'pending':
 				$to = printCOEmail();
 				$subject = $emailSubject . " " . stripslashes($category['catName']) . " - " . stripslashes($newsTitle) . " (Awaiting Approval)";
-				$message = "A News Item Posted By " . printCrewNameEmail($sessionCrewid) . "
-
-" . stripslashes( $newsContent ) . "
-
-Please log in to approve this news item.  " . $webLocation . "login.php?action=login";
+				$message = "A News Item Posted By " . printCrewNameEmail($sessionCrewid) . "\r\n\r\n";
+				$message.= stripslashes($newsContent) . "\r\n\r\n";
+				$message.= "Please log in to approve this news item.  " . $webLocation . "login.php?action=login";
 				break;
 		}
 		
