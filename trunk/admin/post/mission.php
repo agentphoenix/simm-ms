@@ -10,7 +10,7 @@ File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1238 EST
+Last Modified: 2008-04-29 1614 EST
 **/
 
 /* access check */
@@ -130,25 +130,22 @@ if(in_array("p_mission", $sessionAccess))
 			case 'activated':
 				$to = getCrewEmails( "emailPosts" );
 				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle;
-				$message = "A Post By " . printCrewNameEmail($sessionCrewid) . "
-Location: " . $postLocation . "
-Timeline: " . $postTimeline . "
-Tag: " . $postTag . "
-
-" . $postContent;
+				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
+				$message.= "Location: " . stripslashes($postLocation) . "\r\n";
+				$message.= "Timeline: " . stripslashes($postTimeline) . "\r\n";
+				$message.= "Tag: " . stripslashes($postTag) . "\r\n\r\n";
+				$message.= stripslashes($postContent);
 				break;
 				
 			case 'pending':
 				$to = printCOEmail();
 				$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle . " (Awaiting Approval)";
-				$message = "A Post By " . printCrewNameEmail($sessionCrewid) . "
-Location: " . $postLocation . "
-Timeline: " . $postTimeline . "
-Tag: " . $postTag . "
-
-" . $postContent . "
-
-Please log in to approve this post.  " . $webLocation . "login.php?action=login";
+				$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
+				$message.= "Location: " . stripslashes($postLocation) . "\r\n";
+				$message.= "Timeline: " . stripslashes($postTimeline) . "\r\n";
+				$message.= "Tag: " . stripslashes($postTag) . "\r\n\r\n";
+				$message.= stripslashes($postContent) . "\r\n\r\n";
+				$message.= "Please log in to approve this post.  " . $webLocation . "login.php?action=login";
 				break;
 		}
 		

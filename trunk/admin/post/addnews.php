@@ -10,7 +10,7 @@ File: admin/post/addnews.php
 Purpose: Page to add a news item
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1235 EST
+Last Modified: 2008-04-29 1633 EST
 **/
 
 /* access check */
@@ -85,9 +85,8 @@ if(in_array("p_addnews", $sessionAccess))
 			/* define the variables */
 			$to = getCrewEmails("emailNews");
 			$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $newsTitle );
-			$message = "A News Item Posted By " . printCrewNameEmail( $newsAuthor ) . "
-				
-" . stripslashes( $newsContent );
+			$message = "A News Item Posted By " . printCrewNameEmail( $newsAuthor ) . "\r\n\r\n";
+			$message.= stripslashes($newsContent);
 				
 			/* send the email */
 			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );

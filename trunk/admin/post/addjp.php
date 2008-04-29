@@ -10,7 +10,7 @@ File: admin/post/addjp.php
 Purpose: Page to add a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1234 EST
+Last Modified: 2008-04-29 1611 EST
 **/
 
 /* access check */
@@ -162,12 +162,11 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 			/* define the variables */
 			$to = getCrewEmails("emailPosts");
 			$subject = $emailSubject . " " . printMissionTitle( $postMission ) . " - " . $postTitle;
-			$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "
-Location: " . $postLocation . "
-Timeline: " . $postTimeline . "
-Tag: " . $postTag . "
-
-" . $postContent . "";
+			$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
+			$message.= "Location: " . stripslashes($postLocation) . "\r\n";
+			$message.= "Timeline: " . stripslashes($postTimeline) . "\r\n";
+			$message.= "Tag: " . stripslashes($postTag) . "\r\n\r\n";
+			$message.= stripslashes($postContent);
 				
 			/* send the email */
 			mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );

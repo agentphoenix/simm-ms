@@ -10,7 +10,7 @@ File: admin/post/log.php
 Purpose: Page to post a personal log
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1238 EST
+Last Modified: 2008-04-29 1630 EST
 **/
 
 /* access check */
@@ -131,9 +131,8 @@ if(in_array("p_log", $sessionAccess))
 			case 'pending':
 				$to = printCOEmail();
 				$subject = $emailSubject . " " . $name . "'s Personal Log - " . stripslashes($logTitle) . " (Awaiting Approval)";
-				$message = stripslashes($logContent) . "
-
-Please log in to approve this log.  " . $webLocation . "login.php?action=login";
+				$message = stripslashes($logContent) . "\r\n\r\n";
+				$message.= "Please log in to approve this log.  " . $webLocation . "login.php?action=login";
 				break;
 		}
 		
