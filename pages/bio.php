@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 1824 EST
+Last Modified: 2008-04-29 1942 EST
 **/
 
 /* define the page class and set the vars */
@@ -481,23 +481,6 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<div align="center">
 				<b class="fontLarge">Posting Activity</b>&nbsp;
 				<a href="#" id="togglePosting" class="fontSmall">[ Hide/Show ]</a>
-
-				<? if( in_array( "m_giveaward", $sessionAccess ) || in_array( "m_removeaward", $sessionAccess ) ) { ?>
-				<br />
-				<span class="fontSmall">
-					<? if( in_array( "m_giveaward", $sessionAccess ) ) { ?>
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=addaward">Add Award</a>
-					<? } ?>
-
-					<? if( in_array( "m_giveaward", $sessionAccess ) && in_array( "m_removeaward", $sessionAccess ) ) { ?>
-					&nbsp; &middot &nbsp;
-					<? } ?>
-
-					<? if( in_array( "m_removeaward", $sessionAccess ) ) { ?>
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=removeaward&crew=<?=$crew;?>">Remove Award</a>
-					<? } ?>
-				</span>
-				<? } ?>
 			</div>
 			
 			<div id="posting" style="display:none;width:97%;">
