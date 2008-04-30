@@ -10,7 +10,7 @@ File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 2311 EST
+Last Modified: 2008-04-30 0039 EST
 **/
 
 /* access check */
@@ -99,7 +99,7 @@ if(
 
 					/* define the variables */
 					$to = $userEmail[0] . ", " . printCOEmail();
-					$from = printCO() . " < " . printCOEmail() . " >";
+					$from = printCO('short_rank') . " < " . printCOEmail() . " >";
 					$subject = $emailSubject . " Your Application";
 
 					/* new instance of the replacement class */
@@ -131,7 +131,7 @@ if(
 
 					/* define the variables */
 					$to = $userEmail[0] . ", " . printCOEmail();
-					$from = printCO() . " < " . printCOEmail() . " >";
+					$from = printCO('short_rank') . " < " . printCOEmail() . " >";
 					$subject = $emailSubject . " Your Application";
 
 					/* new instance of the replacement class */
@@ -176,7 +176,7 @@ if(
 
 					/* set the email author */
 					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
-					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "rank.rankShortName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
 					$userFetch.= "crew.crewid = '$fetchPost[postAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
 					$userFetchResult = mysql_query( $userFetch );
 
@@ -187,17 +187,16 @@ if(
 					$firstName = str_replace( "'", "", $firstName );
 					$lastName = str_replace( "'", "", $lastName );
 
-					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+					$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 
 					/* define the variables */
 					$to = getCrewEmails( "emailPosts" );
 					$subject = $emailSubject . " " . printMissionTitle( $fetchPost['postMission'] ) . " - " . $fetchPost['postTitle'];
-					$message = "A Post By " . displayEmailAuthors( $fetchPost['postAuthor'], 'noLink' ) . "
-Location: " . $fetchPost['postLocation'] . "
-Timeline: " . $fetchPost['postTimeline'] . "
-Tag: " . $fetchPost['postTag'] . "
-
-" . $fetchPost['postContent'] . "";
+					$message = "A Post By " . displayEmailAuthors( $fetchPost['postAuthor'], 'noLink' ) . "\r\n";
+					$message.= "Location: " . stripslashes($fetchPost['postLocation']) . "\r\n";
+					$message.= "Timeline: " . stripslashes($fetchPost['postTimeline']) . "\r\n";
+					$message.= "Tag: " . stripslashes($fetchPost['postTag']) . "\r\n\r\n";
+					$message.= stripslashes($fetchPost['postContent']);
 
 					/* send the email */
 					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
@@ -234,7 +233,7 @@ Tag: " . $fetchPost['postTag'] . "
 
 					/* set the email author */
 					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
-					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "rank.rankShortName, rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
 					$userFetch.= "crew.crewid = '$fetchLog[logAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
 					$userFetchResult = mysql_query( $userFetch );
 
@@ -245,7 +244,7 @@ Tag: " . $fetchPost['postTag'] . "
 					$firstName = str_replace( "'", "", $firstName );
 					$lastName = str_replace( "'", "", $lastName );
 
-					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+					$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 					$name = $rankName . " " . $firstName . " " . $lastName;
 
 					/* define the variables */
@@ -293,7 +292,7 @@ Tag: " . $fetchPost['postTag'] . "
 
 					/* set the email author */
 					$userFetch = "SELECT crew.crewid, crew.firstName, crew.lastName, crew.email, ";
-					$userFetch.= "rank.rankName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
+					$userFetch.= "rank.rankShortName FROM sms_crew AS crew, sms_ranks AS rank WHERE ";
 					$userFetch.= "crew.crewid = '$fetchNews[newsAuthor]' AND crew.rankid = rank.rankid LIMIT 1";
 					$userFetchResult = mysql_query( $userFetch );
 
@@ -304,14 +303,13 @@ Tag: " . $fetchPost['postTag'] . "
 					$firstName = str_replace( "'", "", $firstName );
 					$lastName = str_replace( "'", "", $lastName );
 
-					$from = $rankName . " " . $firstName . " " . $lastName . " < " . $email . " >";
+					$from = $rankShortName . " " . $firstName . " " . $lastName . " < " . $email . " >";
 
 					/* define the variables */
 					$to = getCrewEmails( "emailNews" );
 					$subject = $emailSubject . " " . stripslashes( $category['catName'] ) . " - " . stripslashes( $fetchNews['newsTitle'] );
-					$message = "A News Item Posted By " . printCrewNameEmail( $fetchNews['newsAuthor'] ) . "
-
-" . stripslashes( $fetchNews['newsContent'] );
+					$message = "A News Item Posted By " . printCrewNameEmail( $fetchNews['newsAuthor'] ) . "\r\n\r\n";
+					$message.= stripslashes( $fetchNews['newsContent'] );
 
 					/* send the email */
 					mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
@@ -408,7 +406,7 @@ Tag: " . $fetchPost['postTag'] . "
 
 					/* define the variables */
 					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();
-					$from = printCO() . " < " . printCOEmail() . " >";
+					$from = printCO('short_rank') . " < " . printCOEmail() . " >";
 					$subject = $emailSubject . " Your Docking Request";
 					$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we are pleased to inform you that your request to dock with our starbase has been approved!
 
@@ -435,7 +433,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 
 					/* define the variables */
 					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();
-					$from = printCO() . " < " . printCOEmail() . " >";
+					$from = printCO('short_rank') . " < " . printCOEmail() . " >";
 					$subject = $emailSubject . " Your Docking Request";
 					$message = "Thank you for submitting a request to dock with the " . $shipPrefix . " " . $shipName . ".  After reviewing your application, we regret to inform you that your request to dock with our starbase has been denied.  There can be many reasons for this.  If you would like clarification, please contact the CO.";
 

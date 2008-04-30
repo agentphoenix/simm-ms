@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2008-04-24 2313 EST
+Last Modified: 2008-04-29 0002 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -275,12 +275,21 @@ function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
 /**
 	Print out the commanding officer
 **/
-function printCO() {
+function printCO($rank = 'long_rank') {
+	switch($rank)
+	{
+		case 'long_rank':
+			$rank_field = "rank.rankName";
+			break;
+		case 'short_rank':
+			$rank_field = "rank.rankShortName";
+			break;
+	}
 	
-	$getCO = "SELECT crew.firstName, crew.lastName, rank.rankName FROM sms_crew AS crew, sms_ranks AS rank ";
+	$getCO = "SELECT crew.firstName, crew.lastName, $rank_field FROM sms_crew AS crew, sms_ranks AS rank ";
 	$getCO.= "WHERE crew.positionid = 1 AND crew.crewType = 'active' AND crew.rankid = rank.rankid LIMIT 1";
-	$getCOResult = mysql_query( $getCO );
-	$coFetch = mysql_fetch_array( $getCOResult );
+	$getCOResult = mysql_query($getCO);
+	$coFetch = mysql_fetch_array($getCOResult);
 	
 	return $coFetch[2] . " " . $coFetch[0] . " " . $coFetch[1];
 
@@ -290,9 +299,18 @@ function printCO() {
 /**
 	Print out the executive officer
 **/
-function printXO() {
+function printXO($rank = 'long_name') {
+	switch($rank)
+	{
+		case 'long_rank':
+			$rank_field = "rank.rankName";
+			break;
+		case 'short_rank':
+			$rank_field = "rank.rankShortName";
+			break;
+	}
 	
-	$getXO = "SELECT crew.firstName, crew.lastName, rank.rankName FROM sms_crew AS crew, sms_ranks AS rank ";
+	$getXO = "SELECT crew.firstName, crew.lastName, $rank_field FROM sms_crew AS crew, sms_ranks AS rank ";
 	$getXO.= "WHERE crew.positionid = 2 AND crew.rankid = rank.rankid AND crew.crewType = 'active' LIMIT 1";
 	$getXOResult = mysql_query( $getXO );
 	$xoFetch = mysql_fetch_array( $getXOResult );
