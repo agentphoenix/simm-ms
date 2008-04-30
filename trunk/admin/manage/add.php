@@ -10,7 +10,7 @@ File: admin/manage/add.php
 Purpose: Page to add a player or NPC
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1057 EST
+Last Modified: 2008-04-30 0040 EST
 **/
 
 /* access check */
@@ -118,7 +118,7 @@ if(in_array("m_createcrew", $sessionAccess))
 
 				/* define the variables */
 				$to = $email . ", " . printCOEmail();
-				$from = printCO() . " < " . printCOEmail() . " >";
+				$from = printCO('short_rank') . " < " . printCOEmail() . " >";
 				$subject = $emailSubject . " New Character Created";
 				$message = "This is an automatic email to notify you that your new character has been created.  Please log in to the site (" . $webLocation . ") using the username and password below to update your biography.  If you have any questions, please contact the CO.
 

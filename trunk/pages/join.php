@@ -10,7 +10,7 @@ File: pages/join.php
 Purpose: To display the join application and submit it
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 2305 EST
+Last Modified: 2008-04-29 0002 EST
 **/
 
 /* define the page class and vars */
@@ -114,7 +114,7 @@ if( isset( $action ) ) {
 		/* set variables and send email to User */
 		$subject = $emailSubject . " Application Submitted";
 		$to = $email;
-		$from = printCO() . " <" . printCOEmail() . ">";
+		$from = printCO('short_rank') . " <" . printCOEmail() . ">";
 		$message = "Greetings $realname,
 	
 You have recently submitted an application to join the $shipPrefix $shipName.  The CO has been informed of this and should be looking over you application.  Expect an answer within the next few days on whether or not you are accepted. 
