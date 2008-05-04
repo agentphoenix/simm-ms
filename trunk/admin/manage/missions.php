@@ -10,7 +10,7 @@ File: admin/manage/missions.php
 Purpose: Page that creates and moderates the missions
 
 System Version: 2.6.0
-Last Modified: 2008-03-29 1721 EST
+Last Modified: 2008-05-04 1541 EST
 **/
 
 /* access check */
@@ -135,7 +135,7 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 			'title' => $missionTitle,
 			'order' => $missionOrder,
 			'start' => $missionStart,
-			'end' => $missionStart,
+			'end' => $missionEnd,
 			'desc' => $missionDesc,
 			'image' => $missionImage,
 			'status' => $missionStatus
