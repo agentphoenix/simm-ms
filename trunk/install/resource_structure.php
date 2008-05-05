@@ -10,7 +10,7 @@ File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
 System Version: 2.6.0
-Last Modified: 2008-04-25 1406 EST
+Last Modified: 2008-05-05 0325 EST
 **/
 
 /* query the database for the mysql version */
@@ -109,7 +109,7 @@ mysql_query( "CREATE TABLE `sms_crew` (
   `children` text NOT NULL,
   `otherFamily` text NOT NULL,
   `awards` text NOT NULL,
-  `image` varchar(255) NOT NULL default '',
+  `image` text NOT NULL,
   `contactInfo` enum('y','n') NOT NULL default 'y',
   `emailPosts` enum('y','n') NOT NULL default 'y',
   `emailLogs` enum('y','n') NOT NULL default 'y',
