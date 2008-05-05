@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-04-29 1942 EST
+Last Modified: 2008-05-05 0319 EST
 **/
 
 /* define the page class and set the vars */
@@ -68,6 +68,17 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('img.reflect').reflect({height: 0.3, opacity: 0.3});
+		
+		var options = {
+			resizeLgImages:     true,
+			displayNav:         true,
+			handleUnsupported:  'remove',
+			keysClose:          ['c', 27] // c or esc
+		};
+
+		Shadowbox.init(options);
+		
 		$('a#togglePosting').click(function() {
 			$('#posting').toggle(75);
 			return false;
@@ -94,28 +105,50 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	&nbsp;&nbsp;
 	<? if( $fetchCrew['crewType'] == "pending" ) { ?><b class="yellow">[ Activation Pending ]</b><? } ?>
 	
-	<? if( $loa == "1" ) { ?><br /><b class="red">[ On Leave of Absence ]</b><? } ?>
-	<? if( $loa == "2" ) { ?><br /><b class="orange">[ On Extended Leave of Absence ]</b><? } ?>
+	<? if( $loa == 1 ) { ?><br /><b class="red">[ On Leave of Absence ]</b><? } ?>
+	<? if( $loa == 2 ) { ?><br /><b class="orange">[ On Extended Leave of Absence ]</b><? } ?>
 	<? if( $fetchCrew['crewType'] == "npc" ) { ?><br /><b class="blue">[ Non-Playing Character ]</b><? } ?>
 	
 	<br /><br />
 	
-	<div class="bioImage">
+	<?php if(!empty($image)) { ?>
+	<div>
+		<?php
 		
-		<? if( !empty( $fetchCrew['image'] ) ) { ?>
-			<div class="pic">
-				<img src="<?=$image;?>" alt="" border="0" />
-			</div>
-		<? } if( !empty( $fetchCrew['crewType'] ) ) { ?>
-			<div class="rank">
-				<img src="<?=$webLocation;?>images/ranks/<?=$rankSet;?>/<?=$fetchRank['rankImage'];?>" alt="" />
-			</div>
-		<? } ?>
+		$pics = explode(",", $image);
+		$count = count($pics);
+		$diff = $count - 5;
 		
+		?>
+		<strong class="fontNormal">&nbsp;There are <?=$diff;?> more pictures in this gallery. Click one of the images to enter the gallery and view all the images.</strong><br />
+		
+		<table cellspacing="3" class="images">
+			<tr>
+			<?php
+			
+			foreach($pics as $key => $value)
+			{
+				$value = trim($value);
+				$display = " style='display:none;'";
+				
+				if($key <= 4) {
+					$display = null;
+				}
+				
+				echo "<td" . $display . ">";
+				echo "<a href='" . $value . "' rel='shadowbox[Bio]'>";
+				echo "<img src='" . $value . "' border='0' alt='' height='90' class='image reflect' />";
+				echo "</a>";
+				echo "</td>";
+			}
+		
+			?>
+			</tr>
+		</table>
 	</div>
+	<?php } ?>
 	
 	<table class="narrowTable">
-		
 		<? if( $contactInfo == "y" && isset( $sessionCrewid ) && ( $fetchCrew['crewType'] == "active" || $fetchCrew['crewType'] == "inactive" || $fetchCrew['crewType'] == "pending") ) { ?>
 		<tr>
 			<td colspan="3" align="center" class="fontLarge"><b>Player Information</b></td>
@@ -134,7 +167,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<td colspan="2">&nbsp;</td>
 			<td class="fontNormal">
 				<a href="<?=$webLocation;?>admin.php?page=user&sub=inbox&crew=<?=$sessionCrewid;?>&tab=3&id=<?=$crewid;?>">
-					Send a Private Message
+					[ Send a Private Message ]
 				</a>
 			</td>
 		</tr>
