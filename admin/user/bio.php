@@ -10,7 +10,7 @@ File: admin/user/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-03-16 0118 EST
+Last Modified: 2008-05-05 0320 EST
 **/
 
 /* do some checking to make sure someone's not trying to do a SQL injection */
@@ -393,12 +393,11 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			</tr>
 			<tr>
 				<td class="tableCellLabel">
-					Image<br />
-					<b class="yellow fontSmall">All images must be no wider than 200 pixels and no taller than 300
-					pixels to preserve the SMS skin.</b>
+					Images<br />
+					<b class="fontSmall">Separate images by commas</b>
 				</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image"  name="image" size="40" value="<?=$image;?>" /></td>
+				<td><textarea name="image" class="desc" rows="3"><?=$image;?></textarea></td>
 			</tr>
 			<tr>
 				<td colspan="3" height="15"></td>
