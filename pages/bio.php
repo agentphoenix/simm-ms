@@ -120,7 +120,28 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		$diff = $count - 5;
 		
 		?>
-		<strong class="fontNormal">&nbsp;There are <?=$diff;?> more pictures in this gallery. Click one of the images to enter the gallery and view all the images.</strong><br />
+		<strong class="fontNormal">&nbsp;
+			<?php
+			
+			if($diff >= 1) {
+				switch($diff)
+				{
+					case 1:
+						echo "There is " . $diff . " more picture in this gallery. ";
+						break;
+					default:
+						echo "There are " . $diff . "more pictures in this gallery. ";
+				}
+			}
+			
+			if($count == 1) {
+				echo "Click the image to see a larger version.";
+			} else {
+				echo "Click one of the images to enter the gallery and view all the images.";
+			}
+			
+			?>
+		</strong><br />
 		
 		<table cellspacing="3" class="images">
 			<tr>
