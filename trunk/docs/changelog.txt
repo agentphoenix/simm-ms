@@ -1,4 +1,4 @@
-Last updated: 2008.04.24 1242 EST
+Last updated: 2008.05.05 0322 EST
 
 NEW FEATURES
 ===
@@ -18,6 +18,7 @@ NEW FEATURES
 *	Users (with proper permissions) can edit their own mission posts (except which mission the post is in and the post status)
 *	Users (with proper permissions) can edit their own personal logs (except the author and log status)
 *	Admins can now set the defaults for the various access levels (CO, XO, Department Head, Standard Player)
+*	Players can now put more than one image in their bio and they'll be displayed as a mini-gallery like the tour item pictures
 
 ENHANCEMENTS
 ===
