@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-04-26 1326 EST
+Last Modified: 2008-05-05 0325 EST
 **/
 
 /*
@@ -193,6 +193,8 @@ mysql_query("
 	ADD  `menu9` VARCHAR(8) NOT NULL DEFAULT '0',
 	ADD  `menu10` VARCHAR(8) NOT NULL DEFAULT '0'
 ");
+
+mysql_query( "ALTER TABLE `sms_crew` CHANGE `image` `image` text NOT NULL" );
 
 
 /*
