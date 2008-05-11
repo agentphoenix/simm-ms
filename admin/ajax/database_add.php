@@ -24,7 +24,8 @@ if(in_array("m_database1", $sessionAccess) || in_array("m_database2",$sessionAcc
 	{
 		$depts = "SELECT crew.positionid, position.positionDept, dept.deptName, dept.deptColor FROM ";
 		$depts.= "sms_crew AS crew, sms_positions AS position, sms_departments AS dept WHERE ";
-		$depts.= "crew.crewid = '$_SESSION[sessionCrewid]' AND crew.positionid = position.positionid LIMIT 1";
+		$depts.= "crew.crewid = '$_SESSION[sessionCrewid]' AND crew.positionid = position.positionid ";
+		$depts.= "AND position.positionDept = dept.deptid LIMIT 1";
 		$deptsR = mysql_query($depts);
 	}
 
