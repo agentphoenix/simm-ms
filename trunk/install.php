@@ -10,7 +10,7 @@ File: install.php
 Purpose: Main page to direct users to one of three installation options
 
 System Version: 2.6.0
-Last Modified: 2008-01-26 1235 EST
+Last Modified: 2008-05-18 1756 EST
 **/
 
 if( $_GET['type'] == "update" ) {
@@ -53,7 +53,6 @@ if( $_GET['type'] == "update" ) {
 				return false;
 			});
 		});
-		
 	</script>
 	<div id="install">
 		<div class="header">
@@ -62,40 +61,25 @@ if( $_GET['type'] == "update" ) {
 		
 		<div class="full">
 			
-			<p>Welcome to the Simm Management System installation center and thank you for choosing the
-			SIMM Management System by Anodyne Productions. We have worked very hard to build the best
-			possible product for you to manage your simm online. If you have questions, please refer
-			to the <a href="http://docs.anodyne-productions.com/" target="_blank">documentation</a> on
-			the Anodyne site or our <a href="http://forums.anodyne-productions.com/" target="_blank">
-			support forums</a> for more help.</p>
+			<p>Welcome to the Simm Management System installation center and thank you for choosing the SIMM Management System by Anodyne Productions. We have worked very hard to build the best possible product for you to manage your simm online. If you have questions, please refer to the <a href="http://docs.anodyne-productions.com/" target="_blank">documentation</a> on the Anodyne site or our <a href="http://forums.anodyne-productions.com/" target="_blank">support forums</a> for more help.</p>
 			
-			<p>From this page you will be able to proceed with the installation or upgrade of SMS to
-			the latest version (2.6) by one of several means:
+			<p>From this page you will be able to proceed with the installation or upgrade of SMS to the latest version (2.6) by one of several means:
 				<ul>
-					<li>If you don't have SMS 2 installed on your server, OR, you want to ignore
-					any previous versions of SMS and start fresh, select the fresh install option.</li>
-					<li>If you have a previous version of SMS 2 on your server and would like to update
-					to 2.6, select the update option.</li>
+					<li>If you don't have SMS 2 installed on your server, OR, you want to ignore any previous versions of SMS and start fresh, select the fresh install option.</li>
+					<li>If you have a previous version of SMS 2 on your server and would like to update to 2.6, select the update option.</li>
 				</ul>
 			</p>
 			
-			<p class="bold red">Before you begin, please make sure you have read the readme file included 
-				with SMS in its entirety. The readme contains important information about setting up SMS
-				on your server. You can view the readme file by <a href="#" id="readme">clicking here</a>.</p>
+			<p class="bold red">Before you begin, please make sure you have read the readme file included with SMS in its entirety. The readme contains important information about setting up SMS on your server. You can view the readme file by <a href="#" id="readme">clicking here</a>.</p>
 			
 			<div class="readme" style="display:none;">
 				<? include_once('install/readme.html');?>
 			</div>
 			
 			<h2>Fresh Install</h2>
-			<p>The fresh install option will guide you through the clean install process for SMS 2.6.
-				Once the installation is complete, you will be able to use SMS for your simm. In order
-				to proceed, you will need the following information:
+			<p>The fresh install option will guide you through the clean install process for SMS 2.6. Once the installation is complete, you will be able to use SMS for your simm. In order to proceed, you will need the following information:
 				<ul>
-					<li>The URL of your website</li>
-					<li>Your database connection parameters (database location, database name, database
-					username, and database password) which you likely received from your host when you
-					opened your account</li>
+					<li>Your database connection parameters (database location, database name, database username, and database password) which you likely received from your host when you opened your account</li>
 					<li>Character information for the character you will be playing</li>
 					<li>Ship information for your sim</li>
 				</ul>
@@ -103,9 +87,7 @@ if( $_GET['type'] == "update" ) {
 			<h3><a href="install/install.php">Go to fresh install &raquo;</a></h3>
 			
 			<h2>Upgrade</h2>
-			<p>The upgrade option will guide you through upgrading your current version of SMS to the
-				latest version. Once the installation is complete, you will be able to use SMS 2.6 for
-				your simm. In order to proceed, you <b>must</b> be running SMS 2.3.0 or higher!</p>
+			<p>The upgrade option will guide you through upgrading your current version of SMS to the latest version. Once the installation is complete, you will be able to use SMS 2.6 for your simm. In order to proceed, you <b>must</b> be running SMS 2.3.0 or higher!</p>
 			<h3><a href="update.php?version=<?=$updateVersion;?>">Go to update &raquo;</a></h3>
 			
 		</div>
