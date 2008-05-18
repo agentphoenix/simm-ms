@@ -1,11 +1,9 @@
 <?php
-	
-$webLocation = "http://eclipse.anodyne-productions.com/";
 
-$dbServer = "localhost:/tmp/mysql5.sock";
-$dbName = "anodyne_trunk";
-$dbUser = "trunkuser";
-$dbPassword = "alpha312";
-$dbErrorMessage = "There was an error connecting to the database, please try again later!";
+$dbServer = "localhost";
+$dbName = "eclipse";
+$dbUser = "root";
+$dbPassword = "root";
+$dbErrorMessage = "A database error has occurred! Please try again later.";
 
 ?>
