@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2008-05-18 1750 EST
+Last Modified: 2008-05-18 1808 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -31,38 +31,17 @@ Included Functions:
 
 /*
 |---------------------------------------------------------------
-| SYSTEM INFORMATION
+| WEB LOCATION
 |---------------------------------------------------------------
 |
-| This is system's file version and the system UID. Do not change
-| either of these variables! Doing so WILL cause problems within
-| the system as a whole.
+| This is the URL of your site. This is generated dynamically. If
+| something is not right, you can add the webLocation variable
+| to the variables.php file and remove the following code.
 |
 */
-$version = "2.6.0";
-$code = $sysuid;
-
 $webLocation = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
 $webLocation.= "://" . $_SERVER['HTTP_HOST'];
 $webLocation.= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
-
-/*
-|---------------------------------------------------------------
-| SYSTEM CONSTANTS
-|---------------------------------------------------------------
-|
-| These constants are used throughout the system for various things,
-| though you may find they aren't used consistently throughout. That
-| will be addressed more in Jefferson.
-|
-*/
-define( 'WEBLOC', $webLocation );
-define( 'VER_FILES', $version );
-define( 'VER_DB', $sysVersion );
-define( 'SHIP_NAME', $shipName );
-define( 'SHIP_PREFIX', $shipPrefix );
-define( 'SHIP_REG', $shipRegistry );
-define( 'SIM_YEAR', $simmYear );
 
 /*
 |---------------------------------------------------------------
@@ -95,6 +74,37 @@ $globalsResult = mysql_query( $globals );
 while( $global = mysql_fetch_assoc( $globalsResult ) ) {
 	extract( $global, EXTR_OVERWRITE );
 }
+
+/*
+|---------------------------------------------------------------
+| SYSTEM INFORMATION
+|---------------------------------------------------------------
+|
+| This is system's file version and the system UID. Do not change
+| either of these variables! Doing so WILL cause problems within
+| the system as a whole.
+|
+*/
+$version = "2.6.0";
+$code = $sysuid;
+
+/*
+|---------------------------------------------------------------
+| SYSTEM CONSTANTS
+|---------------------------------------------------------------
+|
+| These constants are used throughout the system for various things,
+| though you may find they aren't used consistently throughout. That
+| will be addressed more in Jefferson.
+|
+*/
+define( 'WEBLOC', $webLocation );
+define( 'VER_FILES', $version );
+define( 'VER_DB', $sysVersion );
+define( 'SHIP_NAME', $shipName );
+define( 'SHIP_PREFIX', $shipPrefix );
+define( 'SHIP_REG', $shipRegistry );
+define( 'SIM_YEAR', $simmYear );
 
 /*
 |---------------------------------------------------------------
