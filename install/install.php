@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-04-26 1257 EST
+Last Modified: 2008-05-18 1754 EST
 **/
 
 session_start();
@@ -32,7 +32,7 @@ else
 include_once('../framework/variables.php');
 
 /* error checking in case someone hasn't taken care of the variables.php stuff */
-if($step > 3 && !isset($webLocation))
+if($step > 3 && !isset($dbName))
 {
 	$step = 3;
 	$varError = 1;
@@ -47,7 +47,7 @@ switch($step)
 	case 3:
 		/** ERROR CHECKING FOR USER INPUT FROM STEP 1 **/
 		
-		/* make sure the web location has a trailing slash */
+		/*
 		if(substr($_POST['webLocation'], -1) == "/")
 		{
 			$webLocation1 = $_POST['webLocation'];
@@ -57,7 +57,6 @@ switch($step)
 			$webLocation1 = $_POST['webLocation'] . "/";
 		}
 		
-		/* make sure the web location starts with http:// */
 		if(substr($webLocation1, 0, 7) == "http://")
 		{
 			$webLocation = $webLocation1;
@@ -66,6 +65,7 @@ switch($step)
 		{
 			$webLocation = "http://" . $webLocation1;
 		}
+		*/
 		
 		/* make sure the database server doesn't start with http:// */
 		if(substr($_POST['dbServer'], 0, 7) == "http://")
@@ -84,8 +84,6 @@ switch($step)
 		$filename = '../framework/variables.php';
 		$somecontent = "<?php
 	
-\$webLocation = \"$webLocation\";
-
 \$dbServer = \"$dbServer\";
 \$dbName = \"$_POST[dbName]\";
 \$dbUser = \"$_POST[dbUser]\";
@@ -96,7 +94,7 @@ switch($step)
 
 		if(!isset($varError))
 		{
-			$_SESSION['webLocation'] = $webLocation;
+			/* $_SESSION['webLocation'] = $webLocation; */
 			$_SESSION['dbServer'] = $dbServer;
 			$_SESSION['dbName'] = $_POST['dbName'];
 			$_SESSION['dbUser'] = $_POST['dbUser'];
@@ -521,7 +519,7 @@ $installSteps = array(
 			
 			<form method="post" action="install.php?step=3">
 				<table width="100%">
-					<tr>
+					<!--<tr>
 						<td colspan="3" class="fontLarge">Website URL</td>
 					</tr>
 					<tr>
@@ -542,7 +540,7 @@ $installSteps = array(
 					<tr>
 						<td colspan="3" height="15"></td>
 					</tr>
-					
+					-->
 					<tr>
 						<td colspan="3" class="fontLarge">Database Server</td>
 					</tr>
@@ -665,7 +663,7 @@ $installSteps = array(
 				
 				<? print( htmlentities( '<?php' ) ); ?><br /><br />
 				
-				$webLocation = "<?=$_SESSION['webLocation'];?>";<br /><br />
+				<!-- $webLocation = "<?=$_SESSION['webLocation'];?>";<br /><br /> -->
 				$dbServer = "<?=$_SESSION['dbServer'];?>";<br />
 				$dbName = "<?=$_SESSION['dbName'];?>";<br />
 				$dbUser = "<?=$_SESSION['dbUser'];?>";<br />
@@ -685,7 +683,7 @@ $installSteps = array(
 			<div class="code">
 				<? print( htmlentities( '<?php' ) ); ?><br /><br />
 				
-				$webLocation = "<?=$webLocation;?>";<br /><br />
+				<!-- $webLocation = "<?=$webLocation;?>";<br /><br /> -->
 				$dbServer = "<?=$dbServer;?>";<br />
 				$dbName = "<?=$_POST['dbName'];?>";<br />
 				$dbUser = "<?=$_POST['dbUser'];?>";<br />
