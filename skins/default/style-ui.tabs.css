@@ -9,7 +9,7 @@ File: skins/default/style-ui.tabs.css
 Purpose: Stylesheet that controls the tabs throughout the system
 
 Skin Version: 2.5
-Last Modified: 2008-04-06 2042 EST
+Last Modified: 2008-05-20 1931 EST
 **/
 
 /* Caution! Ensure accessibility in print and other media types... */
@@ -33,6 +33,9 @@ Last Modified: 2008-04-06 2042 EST
 	margin-top: 1.5em;
 }
 #container-2, #container-3 { width: 100%; }
+
+/* fixes the IE tab issue */
+#one, #two, #three, #four, #five, #six, #seven { clear: left; }
 
 /* Skin */
 .ui-tabs-nav {
