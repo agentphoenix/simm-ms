@@ -1,4 +1,4 @@
-Last updated: 2008.05.05 0322 EST
+Last updated: 2008.05.23 1937 EST
 
 NEW FEATURES
 ===
@@ -19,6 +19,7 @@ NEW FEATURES
 *	Users (with proper permissions) can edit their own personal logs (except the author and log status)
 *	Admins can now set the defaults for the various access levels (CO, XO, Department Head, Standard Player)
 *	Players can now put more than one image in their bio and they'll be displayed as a mini-gallery like the tour item pictures
+*	SMS now automatically detects your web location variable
 
 ENHANCEMENTS
 ===
