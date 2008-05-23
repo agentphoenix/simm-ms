@@ -10,15 +10,14 @@ File: index.php
 Purpose: The main file that pulls in the requested page
 
 System Version: 2.6.0
-Last Modified: 2008-05-18 1750 EST
+Last Modified: 2008-05-23 1927 EST
 **/
 
 /* start the session */
 session_start();
 
 /* pull in the DB connection variables */
-require_once( 'framework/dbconnect.php' );
-require_once( 'framework/functionsGlobal.php' );
+require_once('framework/dbConnect.php');
 
 /* query the db for the system information */
 $getVer = "SELECT sysVersion FROM sms_system WHERE sysid = 1";
@@ -32,20 +31,20 @@ if( !empty( $getVerResult ) ) {
 make sure the user is running 2.5, and if not, push them
 to the install page to update from the earlier version
 */
-if( $updateVersion[0] < "2.5.0" || empty( $webLocation ) ) {
+if( $updateVersion[0] < "2.5.0" || empty($dbUser) ) {
 	header( 'Location: install.php' );
 	exit;
 } else {
 	
 	/* close the db connection to avoid any problems */
-	mysql_close( $db );
+	mysql_close($db);
 
 	/* pull in the global functions file */
-	require_once( 'framework/functionsGlobal.php' );
-	require_once( 'framework/functionsAdmin.php' );
-	require_once( 'framework/functionsUtility.php' );
-	require_once( 'framework/classes/utility.php' );
-	require_once( 'framework/classMenu.php' );
+	require_once('framework/functionsGlobal.php');
+	require_once('framework/functionsAdmin.php');
+	require_once('framework/functionsUtility.php');
+	require_once('framework/classes/utility.php');
+	require_once('framework/classMenu.php');
 
 	/* get the referenced page from the URL */
 	if( isset( $_GET['page'] ) ) {
