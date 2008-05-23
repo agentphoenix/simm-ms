@@ -52,10 +52,10 @@ $webLocation.= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRI
 | connection variables set in the variables file.
 |
 */
-include_once( 'variables.php' );
+include_once('variables.php');
 
-$db = @mysql_connect( $dbServer, $dbUser, $dbPassword ) or die ( "<b>" . $dbErrorMessage . "</b>" );
-mysql_select_db( $dbName, $db ) or die ( "<b>Unable to select the appropriate database.  Please try again later.</b>" );
+$db = @mysql_connect($dbServer, $dbUser, $dbPassword) or die ("<b>" . $dbErrorMessage . "</b>");
+mysql_select_db($dbName, $db) or die ("<b>Unable to select the appropriate database.  Please try again later.</b>");
 
 /*
 |---------------------------------------------------------------

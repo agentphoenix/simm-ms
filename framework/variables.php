@@ -2,8 +2,8 @@
 
 $dbServer = "localhost";
 $dbName = "eclipse";
-$dbUser = "root";
-$dbPassword = "root";
+$dbUser = "sms";
+$dbPassword = "sms";
 $dbErrorMessage = "A database error has occurred! Please try again later.";
 
 ?>
