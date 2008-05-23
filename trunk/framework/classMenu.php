@@ -11,15 +11,12 @@ Purpose: Page with the menu class that is called by the skin to build the variou
 	menus used throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2008-04-19 0129 EST
+Last Modified: 2008-05-23 1918 EST
 **/
 
 class Menu
 {
 	var $skin;
-	var $arrow = array(
-		'skin_name' => 'images/skin_arrow.png',
-	);
 	
 	/* function that builds the mainNav */
 	function main() {
