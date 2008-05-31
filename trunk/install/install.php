@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-05-18 1754 EST
+Last Modified: 2008-05-31 1323 EST
 **/
 
 session_start();
@@ -913,7 +913,7 @@ $installSteps = array(
 			install file and install folder from your server. Accessing it additional times can cause errors.
 			<br /><br />
 	
-			<h2><a href="<?=$webLocation;?>login.php?action=login">Login to your SMS site now &raquo;</a></h2>
+			<h2><a href="../login.php?action=login">Login to your SMS site now &raquo;</a></h2>
 			
 		<?php
 			
