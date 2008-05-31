@@ -10,7 +10,7 @@ File: admin/manage/messages.php
 Purpose: Page that moderates the various messages found throughout SMS
 
 System Version: 2.6.0
-Last Modified: 2008-04-30 0018 EST
+Last Modified: 2008-05-31 1325 EST
 **/
 
 /* access check */
@@ -150,7 +150,7 @@ if( in_array( "m_messages", $sessionAccess ) ) {
 				</tr>
 				<tr>
 					<td class="tableCellLabel">
-						Sample Post Qustion <? if( $useSamplePost == "n" ) { ?><br />
+						Sample Post Question <? if( $useSamplePost == "n" ) { ?><br />
 						<span class="fontSmall"><b class="yellow">You have chosen not to use a sample 
 						post. If you would like to turn this feature on, please use the site globals panel to 
 						do so.</b></span>
