@@ -11,7 +11,7 @@ Purpose: Provides a full listing from the database of the active crew, available
 	positions, and non-playing characters on the simm.
 
 System Version: 2.6.0
-Last Modified: 2008-03-03 2149 EST
+Last Modified: 2008-05-31 2052 EST
 **/
 
 /* define the page class and vars */
@@ -250,7 +250,7 @@ if(isset($display))
 				<span class="fontSmall">
 					<b><? printText( $u_rank . " " . $u_firstname . " " . $u_lastname ); ?></b><br />
 					<? printText( $u_species . " " . $u_gender ); ?>
-				</spann>
+				</span>
 			</td>
 			<td width="10%" valign="middle">
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$u_id;?>">
