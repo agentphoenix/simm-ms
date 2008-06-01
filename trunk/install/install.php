@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.0
-Last Modified: 2008-05-31 1323 EST
+Last Modified: 2008-06-01 1051 EST
 **/
 
 session_start();
@@ -47,7 +47,6 @@ switch($step)
 	case 3:
 		/** ERROR CHECKING FOR USER INPUT FROM STEP 1 **/
 		
-		/*
 		if(substr($_POST['webLocation'], -1) == "/")
 		{
 			$webLocation1 = $_POST['webLocation'];
@@ -65,7 +64,6 @@ switch($step)
 		{
 			$webLocation = "http://" . $webLocation1;
 		}
-		*/
 		
 		/* make sure the database server doesn't start with http:// */
 		if(substr($_POST['dbServer'], 0, 7) == "http://")
@@ -83,6 +81,8 @@ switch($step)
 		
 		$filename = '../framework/variables.php';
 		$somecontent = "<?php
+
+\$webLocation = \"$webLocation\";
 	
 \$dbServer = \"$dbServer\";
 \$dbName = \"$_POST[dbName]\";
@@ -94,7 +94,7 @@ switch($step)
 
 		if(!isset($varError))
 		{
-			/* $_SESSION['webLocation'] = $webLocation; */
+			$_SESSION['webLocation'] = $webLocation;
 			$_SESSION['dbServer'] = $dbServer;
 			$_SESSION['dbName'] = $_POST['dbName'];
 			$_SESSION['dbUser'] = $_POST['dbUser'];
@@ -500,7 +500,10 @@ $installSteps = array(
 				break;
 				
 			case 2:
-			$url = $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
+			$location = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+			$location.= "://" . $_SERVER['HTTP_HOST'];
+			
+			$url = $_SERVER['PHP_SELF'];
 			$urlArray = explode("/", $url);
 			
 			/* drop the last 2 items off the array (install.php and install/) */
@@ -510,8 +513,7 @@ $installSteps = array(
 			/* put the url back together */
 			$url = implode("/", $urlArray);
 			
-			/* append the http and trailing slash */
-			$url = "http://" . $url . "/";
+			$location.= $url . '/';
 			
 		?>
 			
@@ -519,7 +521,7 @@ $installSteps = array(
 			
 			<form method="post" action="install.php?step=3">
 				<table width="100%">
-					<!--<tr>
+					<tr>
 						<td colspan="3" class="fontLarge">Website URL</td>
 					</tr>
 					<tr>
@@ -534,13 +536,13 @@ $installSteps = array(
 					</tr>
 					<tr>
 						<td colspan="3">
-							<input type="text" name="webLocation" size="45" value="<?php echo $url; ?>" />
+							<input type="text" name="webLocation" size="45" value="<?php echo $location; ?>" />
 						</td>
 					</tr>
 					<tr>
 						<td colspan="3" height="15"></td>
 					</tr>
-					-->
+					
 					<tr>
 						<td colspan="3" class="fontLarge">Database Server</td>
 					</tr>
