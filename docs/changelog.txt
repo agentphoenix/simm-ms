@@ -1,4 +1,4 @@
-Last updated: 2008.05.23 1937 EST
+Last updated: 2008.05.31 2123 EST
 
 NEW FEATURES
 ===
@@ -87,3 +87,4 @@ FIXES
 *	Worked around Webkit bug where post edit icon wouldn't show up
 *	Fixed bug where using the delete link for an individual news item (on the news item page) wouldn't do anything at all
 *	Fixed join page bug where height, weight, physical description, personality overview, and real name weren't be inserted into the database
+*	Fixed bug where admins could put a pound sign in the department color field and break the color system
