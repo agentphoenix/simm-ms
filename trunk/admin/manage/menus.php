@@ -10,7 +10,7 @@ File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
 System Version: 2.6.0
-Last Modified: 2008-04-24 1351 EST
+Last Modified: 2008-06-01 1100 EST
 **/
 
 /* access check */
@@ -336,7 +336,17 @@ while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
 				
 				<?php foreach($menus['main'] as $main_value) { ?>
 				<tr class="fontNormal">
-					<td width="30%"><? printText($main_value['title']);?></td>
+					<td width="30%">
+						<?
+						
+						if( $main_value['display'] == "off" ) {
+							echo "<strong class='red'>[ OFF ]</strong> &nbsp;&nbsp;";
+						}
+						
+						printText($main_value['title']);
+						
+						?>
+					</td>
 					<td width="50%"><?=$main_value['link'];?></td>
 					<td width="10%" align="center"><a href="#" class="delete" rel="facebox" myID="<?=$main_value['id'];?>" myAction="delete"><b>Delete</b></a></td>
 					<td width="10%" align="center"><a href="#" class="edit" rel="facebox" myID="<?=$main_value['id'];?>" myAction="edit"><b>Edit</b></a></td>
