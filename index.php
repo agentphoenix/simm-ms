@@ -66,7 +66,7 @@ if( $updateVersion[0] < "2.5.0" || empty($dbUser) ) {
 	}
 	
 	/* if the sessionAccess isn't an array, make it one */
-	if( !is_array( $sessionAccess ) ) {
+	if( !is_array($sessionAccess) && isset($_SESSION['sessionAccess']) ) {
 		$sessionAccess = explode( ",", $_SESSION['sessionAccess'] );
 	}
 	
