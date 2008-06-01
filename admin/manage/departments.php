@@ -10,7 +10,7 @@ File: admin/manage/departments.php
 Purpose: Page that moderates the simm departments
 
 System Version: 2.6.0
-Last Modified: 2008-05-31 2110 EST
+Last Modified: 2008-06-01 1052 EST
 **/
 
 /* access check */
@@ -44,7 +44,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 			$color = str_replace('#', '', $color);
 		}
 		
-		$update = "UPDATE sms_departments SET deptName = %s, deptClass = %d, deptOrder = %d, deptColor = %s, deptDisplay = %s, ";
+		$update = "UPDATE sms_departments SET deptName = %s, deptClass = %d, deptOrder = %d, deptColor = '%s', deptDisplay = %s, ";
 		$update.= "deptDesc = %s, deptType = %s WHERE deptid = $deptid LIMIT 1";
 		
 		$query = sprintf(
@@ -52,7 +52,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 			escape_string($_POST['deptName']),
 			escape_string($_POST['deptClass']),
 			escape_string($_POST['deptOrder']),
-			escape_string($color),
+			$color,
 			escape_string($_POST['deptDisplay']),
 			escape_string($_POST['deptDesc']),
 			escape_string($_POST['deptType'])
@@ -69,7 +69,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 	elseif(isset($_POST['action_type']) && $_POST['action_type'] == "create")
 	{	
 		$insert = "INSERT INTO sms_departments (deptName, deptClass, deptOrder, deptColor, deptDisplay, deptDesc, deptType) ";
-		$insert.= "VALUES (%s, %d, %d, %s, %s, %s, %s)";
+		$insert.= "VALUES (%s, %d, %d, '%s', %s, %s, %s)";
 		
 		if(isset($_POST['deptColor']))
 		{
@@ -86,7 +86,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 			escape_string($_POST['deptName']),
 			escape_string($_POST['deptClass']),
 			escape_string($_POST['deptOrder']),
-			escape_string($color),
+			$color,
 			escape_string($_POST['deptDisplay']),
 			escape_string($_POST['deptDesc']),
 			escape_string($_POST['deptType'])
