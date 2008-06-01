@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.0
-Last Modified: 2008-05-18 1808 EST
+Last Modified: 2008-06-01 1051 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -28,20 +28,6 @@ Included Functions:
 	escape_string( $value )
 	update_position( $position, $type )
 **/
-
-/*
-|---------------------------------------------------------------
-| WEB LOCATION
-|---------------------------------------------------------------
-|
-| This is the URL of your site. This is generated dynamically. If
-| something is not right, you can add the webLocation variable
-| to the variables.php file and remove the following code.
-|
-*/
-$webLocation = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$webLocation.= "://" . $_SERVER['HTTP_HOST'];
-$webLocation.= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
 
 /*
 |---------------------------------------------------------------
