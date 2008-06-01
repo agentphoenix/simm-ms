@@ -10,7 +10,7 @@ File: admin/manage/departments.php
 Purpose: Page that moderates the simm departments
 
 System Version: 2.6.0
-Last Modified: 2008-04-05 1632 EST
+Last Modified: 2008-05-31 2110 EST
 **/
 
 /* access check */
@@ -34,6 +34,16 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 			exit();
 		}
 		
+		if(isset($_POST['deptColor']))
+		{
+			$color = $_POST['deptColor'];
+		}
+		
+		if($color{0} == '#')
+		{
+			$color = str_replace('#', '', $color);
+		}
+		
 		$update = "UPDATE sms_departments SET deptName = %s, deptClass = %d, deptOrder = %d, deptColor = %s, deptDisplay = %s, ";
 		$update.= "deptDesc = %s, deptType = %s WHERE deptid = $deptid LIMIT 1";
 		
@@ -42,7 +52,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 			escape_string($_POST['deptName']),
 			escape_string($_POST['deptClass']),
 			escape_string($_POST['deptOrder']),
-			escape_string($_POST['deptColor']),
+			escape_string($color),
 			escape_string($_POST['deptDisplay']),
 			escape_string($_POST['deptDesc']),
 			escape_string($_POST['deptType'])
@@ -61,12 +71,22 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 		$insert = "INSERT INTO sms_departments (deptName, deptClass, deptOrder, deptColor, deptDisplay, deptDesc, deptType) ";
 		$insert.= "VALUES (%s, %d, %d, %s, %s, %s, %s)";
 		
+		if(isset($_POST['deptColor']))
+		{
+			$color = $_POST['deptColor'];
+		}
+		
+		if($color{0} == '#')
+		{
+			$color = str_replace('#', '', $color);
+		}
+		
 		$query = sprintf(
 			$insert,
 			escape_string($_POST['deptName']),
 			escape_string($_POST['deptClass']),
 			escape_string($_POST['deptOrder']),
-			escape_string($_POST['deptColor']),
+			escape_string($color),
 			escape_string($_POST['deptDisplay']),
 			escape_string($_POST['deptDesc']),
 			escape_string($_POST['deptType'])
@@ -198,7 +218,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 				</td>
 				<td>
 					<span class="fontNormal"><b>Color</b></span><br />
-                    <input type="text" class="color" style="color:#<?=$deptColor;?>" name="deptColor" size="6" maxlength="6" value="<?=$deptColor;?>" />
+                    <input type="text" class="color" style="color:#<?=$deptColor;?>" name="deptColor" maxlength="7" value="<?=$deptColor;?>" />
 				</td>
 				<td>
 					<span class="fontNormal"><b>Dept Type</b></span><br />
