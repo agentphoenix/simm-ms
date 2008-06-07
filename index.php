@@ -10,14 +10,14 @@ File: index.php
 Purpose: The main file that pulls in the requested page
 
 System Version: 2.6.0
-Last Modified: 2008-05-23 1927 EST
+Last Modified: 2008-06-07 1129 EST
 **/
 
 /* start the session */
 session_start();
 
 /* pull in the DB connection variables */
-require_once('framework/dbConnect.php');
+require_once('framework/dbconnect.php');
 
 /* query the db for the system information */
 $getVer = "SELECT sysVersion FROM sms_system WHERE sysid = 1";
