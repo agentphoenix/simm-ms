@@ -2,9 +2,9 @@
 
 /**
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: update/260.php
+File: update/256.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-06-15 1901 EST
+Last Modified: 2008-06-15 1902 EST
 **/
 
 /*
