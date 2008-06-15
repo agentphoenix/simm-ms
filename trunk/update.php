@@ -11,66 +11,76 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.0
-Last Modified: 2008-04-26 1323 EST
+Last Modified: 2008-06-15 1432 EST
 **/
 
 /* define the step var */
-$step = $_GET['step'];
-$urlVersion = $_GET['version'];
+if (isset($_GET['step']) && is_numeric($_GET['step']))
+{
+	$step = $_GET['step'];
+}
+else
+{
+	$step = 1;
+}
+
+if (isset($_GET['version']) && is_numeric($_GET['version']))
+{
+	$urlVersion = $_GET['version'];
+}
+else
+{
+	$urlVersion = FALSE;
+}
 
 /* array for controlling trailing zeroes */
 $versionArray = array(
-	0 => "20",
-	1 => "21",
-	2 => "22",
-	3 => "23",
-	4 => "24",
-	5 => "25",
-	6 => "26"
+	0 => 20,
+	1 => 21,
+	2 => 22,
+	3 => 23,
+	4 => 24,
+	5 => 25,
+	6 => 26
 );
 
 /* array with all the possible versions */
 $versionsArray = array(
-	"230",
-	"231",
-	"240",
-	"241",
-	"242",
-	"243",
-	"244",
-	"2441",
-	"250",
-	"251",
-	"2511",
-	"252",
-	"253",
-	"254",
-	"255",
-	"256"
+	230,
+	231,
+	240,
+	241,
+	242,
+	243,
+	244,
+	250,
+	251,
+	2511,
+	252,
+	253,
+	254,
+	255,
+	256
 );
 
 /* count the number of items in the versions array */
-$versionsCount = count( $versionsArray );
+$versionsCount = count($versionsArray);
 
 /* make sure the version is formatted right */
-if( in_array( $urlVersion, $versionArray ) ) {
-	$urlVersion = $urlVersion . "0";
-}
-
-/* if there is no step defined, assume they want step 1 */
-if( !isset( $step ) ) {
-	$step = 1;
+if (in_array($urlVersion, $versionArray))
+{
+	$urlVersion = $urlVersion . 0;
 }
 
 /* destroy the session if it exists */
 session_unset();
 
 /* pull in the globals files */
-require_once( '../framework/functionsGlobal.php' );
-include_once( '../framework/functionsUtility.php' );
+require_once('framework/functionsGlobal.php');
+include_once('framework/functionsUtility.php');
 
-switch( $step ) {
-
+switch($step)
+{
 	case 2:
 	
 		/* if there's not version specified in the URL, try to find out what version it is */
@@ -81,38 +91,33 @@ switch( $step ) {
 			$updateVersion = mysql_fetch_array( $getUpdateVersionResult );
 			
 			/* make sure the periods have been removed */
-			$urlVersion = str_replace( ".", "", $updateVersion['0'] );
+			$urlVersion = str_replace(".", "", $updateVersion[0]);
 	
 		}
 		
+		if ($urlVersion == 2441)
+		{
+			$urlVersion = 244;
+		}
+		
 		/** PULL IN THE UPDATE FILE **/
-		foreach( $versionsArray as $key1 => $value1 )
+		foreach ($versionsArray as $key1 => $value1)
 		{
 			/* if we're at the right point in the array, start the update code */
-			if( $urlVersion == $value1 )
+			if ($urlVersion == $value1)
 			{
 				/* duplicate the versions array */
 				$versionsArrayNew = $versionsArray;
 				
 				/* slice the array so it only includes the files that need to be used */
-				$versionsArrayNew = array_slice( $versionsArray, $key1 );
-				
-				if( $value1 < "2441" )
-				{
-					$keyAdjust = array_search( "2441", $versionsArrayNew );
-					unset( $versionsArrayNew[$keyAdjust] );
-					$versionsArrayNew = array_values( $versionsArrayNew );
-				}
+				$versionsArrayNew = array_slice($versionsArray, $key1);
 				
 				/* loop through the new array and pull in the update files */
-				foreach( $versionsArrayNew as $key2 => $value2 )
+				foreach ($versionsArrayNew as $key2 => $value2)
 				{
 					/* pull in the update files sequentially */
-					echo "update/" . $value2 . ".php<br />";
-					/* require_once( "update/" . $value2 . ".php" ); */
-					
-					/* delay execution of the next part for 2 seconds */
-					sleep(2);
+					/* echo "update/" . $value2 . ".php<br />"; */
+					include_once( "update/" . $value2 . ".php" );
 				}
 			}
 		}
@@ -120,7 +125,7 @@ switch( $step ) {
 		/** UPDATE THE VERSION IN THE DATABASE **/
 		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.0', sysBaseVersion = '2.6', ";
 		$updateVersion.= "sysIncrementVersion = '.0', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
-		//$updateVersionResult = mysql_query( $updateVersion );
+		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
 	case 3:
@@ -174,7 +179,7 @@ switch( $step ) {
 			
 			The changes have been made to your system.  Please make sure the necessary files are uploaded to your server.  If you still experience problems with any of the issues that have been fixed, please report them on the Anodyne Support Forum.<br /><br />
 			
-			One of the changes to SMS 2.6 required that the ranks table be blown away and re-built. The script makes every effort to update every crew member from the old rank data to the new rank data, but you may find that a handful of crew members have the wrong rank and may require manual editing. We apologize for this inconvenience.<br /><br />
+			One of the changes to SMS 2.6 required that the ranks table be blown away and re-built. The script makes every effort to update every crew member from the old rank data to the new rank data, but you may find that a handful of crew members have the wrong rank (and therefore the wrong rank image) and may require manual editing. We apologize for this inconvenience.<br /><br />
 			
 			<b>Note:</b> If you were logged in to your site, you may receive an error why trying to go to the Control Panel. To correct this, please log back in to your site.
 
