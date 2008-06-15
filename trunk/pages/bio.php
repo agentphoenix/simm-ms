@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.0
-Last Modified: 2008-05-05 0319 EST
+Last Modified: 2008-06-15 1443 EST
 **/
 
 /* define the page class and set the vars */
@@ -443,7 +443,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		<? } ?>
 	</div>
 	
-	<div id="awards" style="display:none;width:97%;">
+	<div id="awards" style="display:none; width:97%;">
 		<table cellspacing="0" cellpadding="5">
 			<?php
 		
@@ -451,7 +451,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			$getAwards = "SELECT awards FROM sms_crew WHERE crewid = '$crew'";
 			$getAwardsResult = mysql_query( $getAwards );
 			$fetchAwards = mysql_fetch_array( $getAwardsResult );
-	
+			
 			/* if there are awards, continue */
 			if( !empty( $fetchAwards[0] ) ) {
 	
