@@ -10,7 +10,7 @@ File: pages/database.php
 Purpose: Page to display the database entries
 
 System Version: 2.6.0
-Last Modified: 2008-04-04 2034 EST
+Last Modified: 2008-06-15 1456 EST
 **/
 
 /* define the page class and vars */
@@ -100,19 +100,17 @@ while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
 		
 		foreach( $d_array as $key => $value )
 		{
-	
-			echo "<nobr><a href='" . $webLocation . "index.php?page=database&dept=" . $value['id'] . "'>";
+			echo "<nobr><a href='" . $webLocation . "index.php?page=database&dept=" . $value['id'] . "'>" . $value['dept'] . "</a>";
 		
 			/*
 				if it's the last element of the array, just close the HREF
 				otherwise, put a middot between the array values
 			*/
 			if( $key >= $countDeptsFinal ) {
-				echo $value['dept'] . "</a></nobr>";
+				echo "</nobr> ";
 			} else {
-				echo $value['dept'] . "</a> &nbsp; &middot; &nbsp; </nobr>";
+				echo "&nbsp; &middot; &nbsp; </nobr> ";
 			}
-	
 		}
 
 		?>
