@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/260.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-05-23 1903 EST
+Last Modified: 2008-06-15 1458 EST
 **/
 
 /*
@@ -97,8 +97,9 @@ mysql_query( "ALTER TABLE `sms_specs` CHANGE `complimentCivilians` `complimentCi
 $clear = "TRUNCATE TABLE sms_ranks";
 $clearR = mysql_query($clear);
 
-include_once('update/ranks.php');
-sleep(1);
+mysql_query( "ALTER TABLE `sms_ranks` ADD `rankShortName` varchar(32) not null default ''" );
+
+require_once('update/ranks.php');
 
 $getCrew = "SELECT * FROM sms_crew";
 $getCrewR = mysql_query($getCrew);
@@ -252,7 +253,7 @@ mysql_query( "ALTER TABLE `sms_news` ADD `newsPrivate` ENUM('y', 'n') NOT NULL D
 mysql_query( "ALTER TABLE `sms_awards` ADD `awardCat` enum('ic','ooc','both') not null default 'both'" );
 
 $getAwards = "SELECT crewid, awards FROM sms_crew";
-$getAwardsR = mysql_query($getAwardsR);
+$getAwardsR = mysql_query($getAwards);
 
 while($awardsFetch = mysql_fetch_array($getAwardsR)) {
 	extract($awardsFetch, EXTR_OVERWRITE);
