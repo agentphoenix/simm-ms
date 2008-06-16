@@ -31,17 +31,15 @@ $menu->skin = $sessionDisplaySkin;
 ?>
 
 <div id="mainNav">
-	<div class="mainNavInner">
-		<?php
+	<?php
 	
-		$menu->main();
+	$menu->main();
 	
-		if( isset( $sessionCrewid ) ) {
-			$menu->user( $sessionCrewid );
-		}
-	
-		?>
-	</div>
+	if( isset( $sessionCrewid ) ) {
+		$menu->user( $sessionCrewid );
+	}
+
+	?>
 </div>
 
 <div id="header">
