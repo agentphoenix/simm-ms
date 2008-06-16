@@ -36,13 +36,5 @@ define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
 		</script>
 	</head>
 	<body>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$.preload( '.button img', {
-				    find:'-off.png',
-				    replace:'-hover.png'
-				});
-			});
-		</script>
 		<div id="container">
 			<div id="headerTopSpacer"></div>

@@ -63,23 +63,45 @@ body {
 
 /* the main navigation section */
 #mainNav {
+	height: 25px;
+	line-height: 25px;
+	margin: 0 -1px .5em -1px;
+	width: auto;
+	
+	background: #0d0d0d;
+}
+#nav-main {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	float: left; /* this makes sure that the drop down sits to the right of the main nav */
+}
+#nav-main li {
+	display: inline;
+	list-style: none;
+}
+#nav-main li.spacer { padding: 2px 0 0 0; }
+#nav-main li a {
+	font-weight: bold;
+	color: #fff;
+	padding: 0 1em 0 1em;
+}
+#nav-main li a:hover { color: #679ef1; }
+/*
+#mainNav {
 	background-color: #0d0d0d;
 	text-align: right;
 	height: 25px;
 	line-height: 25px;
 	margin: 0 -1px .5em -1px;
 }
-/* container to help with floating the nav right */
-#mainNav .mainNavInner {
-	float: right;
-	width: auto;
-}
 
 #nav-main {
 	display: inline;
 	margin: 0;
 	padding: 0;
-	float: left; /* this makes sure that the drop down sits to the right of the main nav */
+	float: left; /* this makes sure that the drop down sits to the right of the main nav /
+	width: auto;
 }
 #nav-main li {
 	display: inline;
@@ -96,7 +118,7 @@ body {
 #nav-main li a:hover {
 	color: #679ef1;
 }
-
+*/
 #list { float: right; }
 
 /* the content of the template */
