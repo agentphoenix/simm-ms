@@ -11,6 +11,18 @@ Skin Version: 2.5
 Last Modified: 2008-04-19 0130 EST
 **/
 
+$ship = array($shipPrefix, $shipName, $shipRegistry);
+
+foreach ($ship as $key => $value)
+{
+	if (empty($value))
+	{
+		unset($ship[$key]);
+	}
+}
+
+$shipString = implode(' ', $ship);
+
 ?>
 
 <script type="text/javascript">
@@ -33,27 +45,27 @@ if(isset($sessionCrewid))
 ?>
 
 <div id="header">
-	<div class="wrapper">
-		<?=$shipName;?>
+	<img src="<?=SKIN_PATH;?>images/header_left.png" border="0" alt="" style="float:left;" />
+	<img src="<?=SKIN_PATH;?>images/header_right.png" border="0" alt="" style="float:right;" />
+	<div class="head">
+		<img src="<?=SKIN_PATH;?>images/sms.png" border="0" alt="SMS2" style="float:right;" />
+		<?=$shipString;?>
 	</div>
-</div>
-
-<div id="mainNav">
-	<div class="wrapper">
+	<div class="mainNav">
 		<?php
-	
+
 		$menu->main();
-	
+
 		if(isset($sessionCrewid))
 		{
 			$menu->user($sessionCrewid);
 		}
-	
-		?>
-	</div>
-</div><br />
 
-<div id="content">
+		?>
+	</div><br />
+</div>
+
+<div id="content" class="wrapper">
 	<div class="nav">
 		<div class="login">
 		<? if( isset( $sessionCrewid ) ) { ?>

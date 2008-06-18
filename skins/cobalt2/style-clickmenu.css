@@ -81,6 +81,7 @@ span.cmDiv
 	float: left;
 	padding: 0 3px;
 	//height: 20px; /* for ie */
+	line-height: 23px;
 	
 	/* ### START EDIT ### */
 	/* background color behind the arrow */
@@ -99,7 +100,7 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* color of the hover state in the submenu */
-	background-color: #111;
+	background-color: #1C3051;
 	/* ### END EDIT ### */
 }
 .clickMenu a
