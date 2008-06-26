@@ -10,7 +10,7 @@ File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
 System Version: 2.6.0
-Last Modified: 2008-04-29 1614 EST
+Last Modified: 2008-06-27 1934 EST
 **/
 
 /* access check */
@@ -324,7 +324,12 @@ if(in_array("p_mission", $sessionAccess))
 				<td>
 					<input type="image" src="<?=path_userskin;?>buttons/save.png" name="action_save" value="Save" class="button" />
 					&nbsp;&nbsp;
-					<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" value="Post" class="button" />
+					<script type="text/javascript">
+						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this joint mission entry?')\" />" );
+					</script>
+					<noscript>
+						<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
+					</noscript>
 				</td>
 			</tr>
 			<? } ?>
@@ -419,7 +424,12 @@ if(in_array("p_mission", $sessionAccess))
 					&nbsp;&nbsp;
 					<input type="image" src="<?=path_userskin;?>buttons/save.png" name="action_save" value="Save" class="button" />
 					&nbsp;&nbsp;
-					<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" value="Post" class="button" />
+					<script type="text/javascript">
+						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this joint mission entry?')\" />" );
+					</script>
+					<noscript>
+						<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
+					</noscript>
 				</td>
 			</tr>
 			<? } ?>
