@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-04-29 1601 EST
+Last Modified: 2008-06-27 1926 EST
 **/
 
 /* access check */
@@ -315,7 +315,7 @@ if(in_array("p_jp", $sessionAccess))
 		{
 			if(is_numeric($value))
 			{
-				$getSelectEmails = "SELECT email FROM sms_crew WHERE crewid = $value";
+				$getSelectEmails = "SELECT email FROM sms_crew WHERE emailPosts = 'y' AND crewid = $value";
 				$getSelectEmailsResult = mysql_query($getSelectEmails);
 			
 				/* Start pulling the array and populate the variables */
