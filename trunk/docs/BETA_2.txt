@@ -16,7 +16,7 @@ included a SQL file from my own sim for you to use. PLEASE NOTE: all information
 the SQL file included is the property of myself and the players of the Nimitz. Do not
 use, copy, or redistribute the data for any reason!
 
-Finally, Beta 2 included the Cobalt skin in its updated form for SMS 2.6. Please test
+Finally, Beta 2 included the Cobalt 2.0 skin in its updated form for SMS 2.6. Please test
 the Cobalt skin and report any display problems you find.
 
 ==========
@@ -41,6 +41,9 @@ are as follows:
 13	Department color settings were being truncated in certain cases
 14	Discontinuity in menu management
 15	Navigation to the main page resulted in an error on some servers
+16	Confirmation dialog when posting an entry
+17	JP notifications only sent if a player wants to receive mission posts
+18	Verified new Kuro-RPG banner
 
 More information about these can be found in the forum where they were reported originally,
 or you can see the Google Code page for SMS for the issues.
