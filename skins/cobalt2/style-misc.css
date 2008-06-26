@@ -4,12 +4,12 @@ reproduced with the express written consent of the author. Edits to this skin
 are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: skins/default/style-misc.css
+File: skins/cobalt/style-misc.css
 Purpose: Stylesheet that controls several of the miscellaneous items throughout
 	the system
 
-Skin Version: 2.5
-Last Modified: 2008-06-15 1459 EST
+Skin Version: 2.0
+Last Modified: 2008-06-22 1713 EST
 **/
 
 /*
@@ -20,11 +20,21 @@ Last Modified: 2008-06-15 1459 EST
 | Styles that control the various link styles
 |
 */
+
+/* suggested colors:
+	
+	if you change this color, you'll still need to change
+	some other colors throughout the skin
+	
+	red - #701b23
+	green - #228720
+	blue - #4678cb / #a2bbe5
+*/
 a {
 	text-decoration: none;
-	color: #648295;
+	color: #4678cb;
 }
-a:hover { color: #aad1e9; }
+a:hover { color: #a2bbe5; }
 
 /** delete **/
 a.delete { text-decoration: none; }
@@ -109,13 +119,7 @@ input[type=password] {
 }
 
 /** button classes **/
-input.button {
-	padding: 0;
-	background: url( 'buttons/button-off.png' ) no-repeat;
-}
-input.button:hover {
-	background: url( 'buttons/button-hover.png' ) no-repeat;
-}
+input.button { padding: 0; }
 
 /** input classes **/
 input.class, input.order { width:25px; }

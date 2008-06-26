@@ -4,11 +4,11 @@
 Edits to this skin are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: skins/default/footer.php
+File: skins/cobalt/footer.php
 Purpose: The footer file that the system calls in for the template
 
-Skin Version: 2.5
-Last Modified: 2008-01-30 1049 EST
+Skin Version: 2.0
+Last Modified: 2008-06-22 1714 EST
 **/
 
 ?>

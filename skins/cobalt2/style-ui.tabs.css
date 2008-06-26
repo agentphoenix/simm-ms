@@ -5,11 +5,11 @@ are permissible if the original credits stay intact.
 
 Authors: David VanScott [ davidv@anodyne-productions.com ]
 	Klaus Hartl [ http://stilbuero.de/ ]
-File: skins/default/style-ui.tabs.css
+File: skins/cobalt/style-ui.tabs.css
 Purpose: Stylesheet that controls the tabs throughout the system
 
-Skin Version: 2.5
-Last Modified: 2008-05-20 1931 EST
+Skin Version: 2.0
+Last Modified: 2008-06-21 1714 EST
 **/
 
 /* Caution! Ensure accessibility in print and other media types... */
@@ -63,7 +63,7 @@ Last Modified: 2008-05-20 1931 EST
     /* top: 1px; */
     z-index: 2;
     padding-left: 0;
-    color: #648295;
+    color: #4678cb;
     font-size: 11px;
     font-weight: bold;
     line-height: 1.2;
@@ -72,7 +72,7 @@ Last Modified: 2008-05-20 1931 EST
     white-space: nowrap; /* required in IE 6 */    
 }
 .ui-tabs-nav .ui-tabs-selected {
-	background-color: #0d0d0d;
+	background-color: #4678cb;
 }
 .ui-tabs-nav .ui-tabs-selected a {
     color: #fff;
@@ -83,12 +83,12 @@ Last Modified: 2008-05-20 1931 EST
     color: #fff;
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
-    background-color: #0d0d0d;
+    background-color: #4678cb;
 }
 .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active {
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
-    color: #aad1e9;
+    color: #a2bbe5;
     background-color: #0d0d0d;
 }
 
