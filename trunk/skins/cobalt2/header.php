@@ -4,11 +4,11 @@
 Edits to this skin are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: skins/default/header.php
+File: skins/cobalt/header.php
 Purpose: The header file that the system calls for the template
 
-Skin Version: 2.5
-Last Modified: 2008-04-23 1929 EST
+Skin Version: 2.0
+Last Modified: 2008-06-22 1714 EST
 **/
 
 $path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */

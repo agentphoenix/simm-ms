@@ -4,11 +4,11 @@
 Edits to this skin are permissible if the original credits stay intact.
 
 Author: David VanScott [ davidv@anodyne-productions.com ]
-File: skins/default/menu.php
+File: skins/cobalt/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
-Skin Version: 2.5
-Last Modified: 2008-04-19 0130 EST
+Skin Version: 2.0
+Last Modified: 2008-06-22 1715 EST
 **/
 
 $ship = array($shipPrefix, $shipName, $shipRegistry);
