@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.0
-Last Modified: 2008-06-27 1926 EST
+Last Modified: 2008-06-27 1933 EST
 **/
 
 /* access check */
@@ -664,7 +664,12 @@ if(in_array("p_jp", $sessionAccess))
 				<td>
 					<input type="image" src="<?=path_userskin;?>buttons/save.png" name="action_save" class="button" value="Save" />
 					&nbsp;&nbsp;
-					<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
+					<script type="text/javascript">
+						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this joint mission entry?')\" />" );
+					</script>
+					<noscript>
+						<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
+					</noscript>
 				</td>
 			</tr>
 			<? } ?>
@@ -775,7 +780,12 @@ if(in_array("p_jp", $sessionAccess))
 					&nbsp;&nbsp;
 					<input type="image" src="<?=path_userskin;?>buttons/save.png" name="action_save" class="button" value="Save" />
 					&nbsp;&nbsp;
-					<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
+					<script type="text/javascript">
+						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this joint mission entry?')\" />" );
+					</script>
+					<noscript>
+						<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
+					</noscript>
 				</td>
 			</tr>
 			</form>
