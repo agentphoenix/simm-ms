@@ -10,7 +10,7 @@ File: admin/post/log.php
 Purpose: Page to post a personal log
 
 System Version: 2.6.0
-Last Modified: 2008-06-27 1935 EST
+Last Modified: 2008-06-30 1931 EST
 **/
 
 /* access check */
@@ -229,7 +229,7 @@ if(in_array("p_log", $sessionAccess))
 					<input type="image" src="<?=path_userskin;?>buttons/save.png" name="action_save" value="Save" class="button" />
 					&nbsp;&nbsp;
 					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this joint mission entry?')\" />" );
+						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this personal log?')\" />" );
 					</script>
 					<noscript>
 						<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
@@ -276,7 +276,7 @@ if(in_array("p_log", $sessionAccess))
 				<td colspan="2">&nbsp;</td>
 				<td>
 					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\" />" );
+						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/delete.png\" name=\"action_delete\" value=\"Delete\" class=\"button\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this saved personal log?')\" />" );
 					</script>
 					<noscript>
 						<input type="image" src="<?=path_userskin;?>buttons/delete.png" name="action_delete" value="Delete" class="button" />
@@ -285,7 +285,7 @@ if(in_array("p_log", $sessionAccess))
 					<input type="image" src="<?=path_userskin;?>buttons/save.png" name="action_save" class="button" value="Save" />
 					&nbsp;&nbsp;
 					<script type="text/javascript">
-						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this joint mission entry?')\" />" );
+						document.write( "<input type=\"image\" src=\"<?=path_userskin;?>buttons/post.png\" name=\"action_post\" value=\"Post\" class=\"button\" onClick=\"javascript:return confirm('Are you sure you want to post this saved personal log?')\" />" );
 					</script>
 					<noscript>
 						<input type="image" src="<?=path_userskin;?>buttons/post.png" name="action_post" class="button" value="Post" />
