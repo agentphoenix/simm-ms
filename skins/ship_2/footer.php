@@ -14,10 +14,8 @@ Last Modified: 2008-07-04 1609 EST
 **/
 
 ?>
-	
+		</div> <!-- close the wrapper -->
 	</div> <!-- close .content -->
-	
-	</div> <!-- close the sub container -->
 	
 	<!-- Please do not edit this. If you wish to add credits, you can do so through the Site Messages panel -->
 	<div class="footer">
