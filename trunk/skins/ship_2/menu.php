@@ -46,82 +46,85 @@ define('SHIP_CLASS', $class);
 
 ?>
 
-<div id="container" style="background: #000 url('<?=SKIN_PATH;?>images/ship_<?=SHIP_CLASS;?>.jpg') no-repeat top left;">
-	<div class="subContainer">
-
+<div id="container">
+	<div class="top_color"></div>
 	<div class="header">
-		<div class="mainNav">
-			<?
-			
+		<div class="wrapper">
+			<!-- <img src="<?=SKIN_PATH;?>images/ship_<?=SHIP_CLASS;?>.jpg" border="0" alt="" /> -->
+		</div>
+	</div>
+	<div class="mainNav">
+		<div class="wrapper">
+			<?php
+		
 			$menu->main($sessionCrewid);
-			
+		
 			if(isset($sessionCrewid))
 			{
 				$menu->user($sessionCrewid);
 			}
-			
+		
 			?>
-			
-			<br /><img src="<?=SKIN_PATH;?>images/header_<?=SHIP_CLASS;?>.jpg" style="float:right;" border="0" alt="<?=SHIP_CLASS;?>" />
 		</div>
 	</div>
 
 	<div class="content">
-		<div class="nav">
-			<div class="login">
-			<? if( isset( $sessionCrewid ) ) { ?>
-				<i>Hello, <? printCrewName( $sessionCrewid, "noRank", "noLink" ); ?></i><br />
-				{ <a href="<?=$webLocation;?>login.php?action=logout">Log Out</a> }
-			<? } else { ?>
-				<form method="post" action="<?=$webLocation;?>login.php?action=checkLogin" class="login">
-					<b>Username</b><br />
-					<input type="text" name="username" size="12" class="loginSmallText" /><br /><br />
+		<div class="wrapper">
+			<div class="nav">
+				<div class="login">
+				<? if( isset( $sessionCrewid ) ) { ?>
+					<i>Hello, <? printCrewName( $sessionCrewid, "noRank", "noLink" ); ?></i><br />
+					{ <a href="<?=$webLocation;?>login.php?action=logout">Log Out</a> }
+				<? } else { ?>
+					<form method="post" action="<?=$webLocation;?>login.php?action=checkLogin" class="login">
+						<b>Username</b><br />
+						<input type="text" name="username" size="12" class="loginSmallText" /><br /><br />
 				
-					<b>Password</b><br />
-					<input type="password" name="password" size="12" class="loginSmallText" /><br /><br />
+						<b>Password</b><br />
+						<input type="password" name="password" size="12" class="loginSmallText" /><br /><br />
 				
-					<input type="image" src="skins/akira/buttons/login-small.png" name="submit" class="submitButton" value="Login" />
-				</form>
+						<input type="image" src="skins/akira/buttons/login-small.png" name="submit" class="submitButton" value="Login" />
+					</form>
+					<br />
+					<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
+				<? } ?>
+				</div>
 				<br />
-				<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
-			<? } ?>
-			</div>
-			<br />
 
-			<?
+				<?
 		
-			if( $pageClass == "main" ) {
+				if( $pageClass == "main" ) {
 		
-				/* pull in the menu */
-				$menu->general( "main" );
+					/* pull in the menu */
+					$menu->general( "main" );
 		
-				/* include the info page */
-				include_once( "pages/info.php" );
+					/* include the info page */
+					include_once( "pages/info.php" );
 		
-			} elseif( $pageClass == "personnel" ) {
+				} elseif( $pageClass == "personnel" ) {
 		
-				/* pull in the menu */
-				$menu->general( "personnel" );
+					/* pull in the menu */
+					$menu->general( "personnel" );
 		
-			} elseif( $pageClass == "ship" ) {
+				} elseif( $pageClass == "ship" ) {
 		
-				/* pull in the menu */
-				$menu->general( $simmType );
+					/* pull in the menu */
+					$menu->general( $simmType );
 		
-			} elseif( $pageClass == "simm" ) {
+				} elseif( $pageClass == "simm" ) {
 			
-				/* pull in the menu */
-				$menu->general( "simm" );
+					/* pull in the menu */
+					$menu->general( "simm" );
 			
-			} elseif( $pageClass == "admin" ) {
+				} elseif( $pageClass == "admin" ) {
 			
-				/* pull in the admin menus */
-				$menu->admin( "post", $sessionAccess, $sessionCrewid );
-				$menu->admin( "manage", $sessionAccess, $sessionCrewid );
-				$menu->admin( "reports", $sessionAccess, $sessionCrewid );
-				$menu->admin( "user", $sessionAccess, $sessionCrewid );
+					/* pull in the admin menus */
+					$menu->admin( "post", $sessionAccess, $sessionCrewid );
+					$menu->admin( "manage", $sessionAccess, $sessionCrewid );
+					$menu->admin( "reports", $sessionAccess, $sessionCrewid );
+					$menu->admin( "user", $sessionAccess, $sessionCrewid );
 		
-			}
+				}
 		
-			?>
-		</div>
+				?>
+			</div>

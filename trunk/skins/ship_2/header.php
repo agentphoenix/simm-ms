@@ -6,11 +6,11 @@ knowledgeable as to the structure of the system. Modification of this file may
 cause the system to no longer function.
 
 Author: David VanScott [ david.vanscott@gmail.com ]
-File: skins/ship_1/header.php
+File: skins/ship_2/header.php
 Purpose: The header file that the system calls for the template
 
-Skin Version: 2.0
-Last Modified: 2008-07-04 1608 EST
+Skin Version: 1.0
+Last Modified: 2008-07-06 1541 EST
 **/
 
 $path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */
