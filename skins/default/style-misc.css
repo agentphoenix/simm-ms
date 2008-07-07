@@ -172,7 +172,7 @@ table.images { width: auto; }
 | Styles that control the look and feel of the notification panel.
 |
 */
-.update { width: 98%; }
+.update { width: 97%; }
 .update a {
 	border-bottom: 1px solid #333;
 	color: #aaa;
