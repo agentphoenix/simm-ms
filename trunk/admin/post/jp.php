@@ -510,7 +510,6 @@ if(in_array("p_jp", $sessionAccess))
 		
 		<div class="update notify-normal">
 			<a href="#" id="toggle" class="fontNormal" style="float:right;margin-right:.5em;">Show/Hide</a>
-			<img src="<?=$webLocation;?>images/notes.png" style="float:left; padding-right: 12px;" border="0" />
 			<span class="fontTitle">Mission Notes</span>
 			<div id="notes" style="display:none;clear:left;">
 				<br />
