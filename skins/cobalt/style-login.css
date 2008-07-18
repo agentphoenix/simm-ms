@@ -1,103 +1,111 @@
 /**
-This is a necessary system file. Do not modify this page unless you are highly
-knowledgeable as to the structure of the system. Modification of this file may
-cause SMS to no longer function.
+This skin is the property of its owner and should not be duplicated or
+reproduced with the express written consent of the author. Edits to this skin
+are permissible if the original credits stay intact.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/cobalt/style-login.css
 Purpose: Stylesheet that controls the login page
 
-System Version: 2.5.0
-Last Modified: 2007-06-19 1217 EST
+Skin Version: 2.0
+Last Modified: 2008-06-22 1719 EST
 **/
 
-/* main container */
+/*
+|---------------------------------------------------------------
+| LOGIN PAGE STYLES
+|---------------------------------------------------------------
+|
+| Styles controlling the login page.
+|
+*/
 #login {
-	margin: 1em auto;
+	margin: 0 auto;
 	background: #000;
-	width: 85%;
-	border: 2px solid #222;
+	width: 100%;
 }
 
-/* links within the main container */
 #login a {
-	color: #2d58b6;
+	color: #fff;
 	font-weight: bold;
+	border-bottom: 1px dotted;
 }
-#login a:hover {
-	text-decoration: underline;
-}
+#login a:hover { border-bottom: 1px solid; }
 
-/* style for the error class */
-.error {
+#login .error {
 	color: #cc0000;
 	font-weight: bold;
 }
 
-/* the header */
 #login .header {
 	padding: .5em;
+	margin-bottom: .8em;
+	
+	color: #efefef;
 	font-size: 2em;
 	font-weight: bold;
 	text-align: center;
-	color: #efefef;
-	margin-bottom: .8em;
 }
 
-/* the part with all the content */
 #login .content {
-	font-size: 1em;
 	padding: 0;
+	
+	font-size: 1em;
 	text-align: center;
-	padding: 0 0 2em 0;
 }
 
-/* the footer */
 #login .footer {
 	height: 40px;
 	line-height: 40px;
+	
+	background-color: #3860a2;
 }
 
-/* the submit button */
 #login input.submitButton {
 	border: 0px;
 	padding: 0;
-	background: url( 'buttons/button-off.png' ) no-repeat 0 0;
-}
-#login input.submitButton:hover {
-	background: url( 'buttons/button-hover.png' ) no-repeat 0 0;
 }
 
-/* classes for the input fields */
-#login input {
+#login input[type=text],
+#login input[type=password] {
+	padding: .2em;
+	
 	background: #000;
 	border: 1px solid #222;
 	color: #efefef;
-	padding: .2em;
 	font-size: 1em;
-	font-family: "Lucida Grande", Helvetica, "Trebuchet MS", Arial, sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 }
-#login input:focus {
+#login input[type=text]:focus,
+#login input[type=password]:focus {
 	background: #000;
 	border: 1px solid #888;
 }
 
-.login {
-	font-size: .95em;
-}
-.login input {
+/*
+|---------------------------------------------------------------
+| INLINE LOGIN STYLES
+|---------------------------------------------------------------
+|
+| These styles control the inline login controls found in the system.
+|
+*/
+.login { font-size: 95%; }
+.login input.text {
 	background: #000;
 	border: 1px solid #888;
 	color: #efefef;
 	padding: .2em;
+	
 	font-size: 1em;
-	font-family: "Lucida Grande", Helvetica, "Trebuchet MS", Arial, sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+	text-align: right;
 }
-.login input:focus {
+.login input.text:focus {
 	background: #060606;
 	border: 1px solid #cacaca;
 }
 .textboxLarge {
 	font-size: 1.3em;
-	font-family: "Lucida Grande", Helvetica, "Trebuchet MS", Arial, sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 }
