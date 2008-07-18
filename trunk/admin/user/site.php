@@ -344,7 +344,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 				<form method="post" action="<?=$webLocation;?>admin.php?page=user&sub=site&sec=2">
 				<table>
 					<tr>
-						<td colspan="3">Neptune description and instructions here</td>
+						<td colspan="3">Personalized menus allow you to pick up to 10 links that you visit often and access them whenever you&rsquo;re logged in from the main navigation. You are limited to only those menu items which you have access to normally. In addition, you can select any <em>active</em> database item to include your list as well. Once you have updated this list, click Update. The changes will take affect when you visit another page.</td>
 					</tr>
 					<tr>
 						<td colspan="3" height="15"></td>
