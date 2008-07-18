@@ -1,3 +1,17 @@
+/**
+This skin is the property of its owner and should not be duplicated or
+reproduced with the express written consent of the author. Edits to this skin
+are permissible if the original credits stay intact.
+
+Authors: David VanScott [ davidv@anodyne-productions.com ]
+	Klaus Hartl [ http://stilbuero.de/ ]
+File: skins/cobalt/style-ui.tabs.css
+Purpose: Stylesheet that controls the tabs throughout the system
+
+Skin Version: 2.0
+Last Modified: 2008-06-21 1714 EST
+**/
+
 /* Caution! Ensure accessibility in print and other media types... */
 @media projection, screen { /* Use class for showing/hiding tab content, so that visibility can be better controlled in different media types... */
     .ui-tabs-hide {
@@ -12,11 +26,16 @@
     }
 }
 
-#container-1 {
+#container-1, #container-2, #container-3 {
 	float: left;
-	width: 90%;
+	width: 95%;
+	width: 100% !important;
 	margin-top: 1.5em;
 }
+#container-2, #container-3 { width: 100%; }
+
+/* fixes the IE tab issue */
+#one, #two, #three, #four, #five, #six, #seven { clear: left; }
 
 /* Skin */
 .ui-tabs-nav {
@@ -44,7 +63,7 @@
     /* top: 1px; */
     z-index: 2;
     padding-left: 0;
-    color: #a7a590;
+    color: #4678cb;
     font-size: 11px;
     font-weight: bold;
     line-height: 1.2;
@@ -53,7 +72,7 @@
     white-space: nowrap; /* required in IE 6 */    
 }
 .ui-tabs-nav .ui-tabs-selected {
-	background-color: #0d0d0d;
+	background-color: #4678cb;
 }
 .ui-tabs-nav .ui-tabs-selected a {
     color: #fff;
@@ -64,12 +83,12 @@
     color: #fff;
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
-    background-color: #0d0d0d;
+    background-color: #4678cb;
 }
 .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active {
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
-    color: #5b5a4f;
+    color: #a2bbe5;
     background-color: #0d0d0d;
 }
 
@@ -77,13 +96,13 @@
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
     background-color: #000;
-    color: #444;
+    color: #1b1b1b;
 }
 .ui-tabs-disabled a:hover {
     background-position: 100% -150px;
     outline: 0; /* prevent dotted border in Firefox */
     background-color: #000;
-    color: #444;
+    color: #1b1b1b;
 }
 
 .ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active {
@@ -117,7 +136,8 @@
     cursor: pointer;
 }
 .ui-tabs-nav .ui-tabs-disabled {
-    opacity: .4;
+	/* this has to be commented out because it causes problems in firefox 2 (but strangely, not firefox 3) */
+    /* opacity: .4; */
 }
 .ui-tabs-container {
     border-top: 1px solid #111;

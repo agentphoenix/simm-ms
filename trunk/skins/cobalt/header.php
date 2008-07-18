@@ -7,8 +7,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/cobalt/header.php
 Purpose: The header file that the system calls for the template
 
-Skin Version: 2.1
-Last Modified: 2008-02-28 1632 EST
+Skin Version: 2.0
+Last Modified: 2008-06-22 1714 EST
 **/
 
 $path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */
@@ -21,9 +21,7 @@ $pathElement2 = $pcount -1; /* create the second element used */
 /* define the path */
 define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
 
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<title><?=$shipPrefix . " " . $shipName;?></title>
@@ -36,5 +34,3 @@ define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
 		</script>
 	</head>
 	<body>
-		<div id="container">
-			<div id="headerTopSpacer"></div>

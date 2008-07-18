@@ -7,8 +7,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/cobalt/style-clickmenu.css
 Purpose: Stylesheet that controls the look and feel of the site
 
-Skin Version: 2.1
-Last Modified: 2008-02-28 1739 EST
+Skin Version: 2.0
+Last Modified: 2008-06-22 1715 EST
 **/
 
 span.cmDiv
@@ -18,7 +18,7 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* background color of the containing span class */
-	background-color: #0d0d0d;
+	background-color: #000;
 	/* ### END EDIT ### */
 }
 .clickMenu
@@ -42,8 +42,8 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* background color and border color of the flyout menu */
-	border: 1px solid #222;
-	background-color: #0d0d0d;
+	border: 1px solid #111;
+	background-color: #090909;
 	/* ### END EDIT ### */
 }
 .clickMenu div.outerbox
@@ -60,7 +60,7 @@ span.cmDiv
 	/* changing which direction the menu flies out at */
 	/* if you want the menu to fly out to the right (arrow at the upper left corner), use LEFT */
 	/* if you want the menu to fly out to the left (arrow at the upper right corner), use RIGHT */
-	right: 0;
+	left: 0;
 	/* ### START EDIT ### */
 }
 .clickMenu div.inner div.outerbox
@@ -73,7 +73,7 @@ span.cmDiv
 .clickMenu li
 {
 	position: relative;
-	padding: 0 5px 0 20px;
+	padding: 0 20px 0 2px;
 	/*white-space: nowrap; does not really work in ie */
 }
 .clickMenu li.main
@@ -81,10 +81,11 @@ span.cmDiv
 	float: left;
 	padding: 0 3px;
 	//height: 20px; /* for ie */
+	line-height: 23px;
 	
 	/* ### START EDIT ### */
 	/* background color behind the arrow */
-	background-color: #0d0d0d;
+	background-color: transparent;
 	/* ### END EDIT ### */
 }
 .clickMenu li.main li
@@ -99,7 +100,7 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* color of the hover state in the submenu */
-	background-color: #222;
+	background-color: #1C3051;
 	/* ### END EDIT ### */
 }
 .clickMenu a
@@ -118,50 +119,3 @@ ul.hidemenu { display: none; }
 
 /* this keeps the menu from showing a stray bullet */
 ul#list { list-style: none; }
-
-
-/** NOT USED **/
-/*
-.clickMenu img.liArrow
-{
-	position: absolute;
-	right: 5px;
-	top: 0.41em;
-}
-html>body div.outerbox
-{
-	padding: 0 5px 5px 0;
-}
-html>body div.shadowbox1
-{
-	position: absolute;
-	right: 0;
-	bottom: 5px;
-	width: 5px;
-	height: 100%;
-	background: url(myshadow.png) no-repeat right top;
-}
-html>body div.shadowbox2
-{
-	position: absolute;
-	bottom: 0;
-	right: 5px;
-	height: 5px;
-	width: 100%;
-	background: url(myshadow.png) left bottom;
-}
-html>body div.shadowbox3
-{
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	height: 5px;
-	width: 5px;
-	background: url(myshadow.png) no-repeat right bottom;
-}
-html>body .innerbox
-{
-	margin: 0;
-	display: inherit;
-}
-*/
