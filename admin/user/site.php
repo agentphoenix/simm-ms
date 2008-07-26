@@ -441,7 +441,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 							?>
 							
 								<input type="radio" id="rank_<?=$value;?>" name="rankSet" value="<?=$value;?>"<? if( $sessionDisplayRank == trim( $value ) ) { echo " checked"; } ?> />
-								<label for="rank_<?=$value;?>"><img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" alt="" border="0" class="image" /></label><br />
+								<label for="rank_<?=$value;?>"><img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" alt="" border="0" /></label><br />
 		
 							<?php } ?>
 							
@@ -476,7 +476,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 							?>
 							
 								<input type="radio" id="skin_<?=$value1;?>" name="changeSkin" value="<?=$value1;?>"<? if( $sessionDisplaySkin == trim($value1) ) { echo " checked='yes'"; } ?> />
-								<label for="skin_<?=$value1;?>"><img src="<?=$webLocation;?>skins/<?=trim( $value1 );?>/preview.jpg" alt="" border="0" style="border:1px solid #efefef;" class="image" /></label><br /><br />
+								<label for="skin_<?=$value1;?>"><img src="<?=$webLocation;?>skins/<?=trim( $value1 );?>/preview.jpg" alt="" border="0" style="border:1px solid #efefef;" /></label><br /><br />
 		
 							<?php } ?>
 							
