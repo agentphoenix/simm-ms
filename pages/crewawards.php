@@ -40,8 +40,8 @@ $getAwardsResult = mysql_query ( $getAwards );
 	*/
 	if( isset( $sessionCrewid ) && in_array( "m_awards", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=awards'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=awards' class='image'>";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 	

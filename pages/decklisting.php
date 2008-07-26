@@ -40,8 +40,8 @@ if( isset( $sessionCrewid ) ) {
 	*/
 	if( isset( $sessionCrewid ) && in_array( "m_decks", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=decklisting'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=decklisting' class='image'>";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 

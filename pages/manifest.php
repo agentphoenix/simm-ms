@@ -253,14 +253,14 @@ if(isset($display))
 				</span>
 			</td>
 			<td width="10%" valign="middle">
-				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$u_id;?>">
+				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$u_id;?>" class="image">
 				
 				<? if($u_loa == 1) { ?>
-					<img src="images/combadge-loa.png" border="0" class="image" />
+					<img src="images/combadge-loa.png" border="0" />
 				<? } elseif($u_loa == 2) { ?>
-					<img src="images/combadge-eloa.png" border="0" class="image" />
+					<img src="images/combadge-eloa.png" border="0" />
 				<? } else { ?>
-					<img src="images/combadge.png" border="0" class="image" />
+					<img src="images/combadge.png" border="0" />
 				<? } ?>
 				</a>
 			</td>
@@ -307,8 +307,8 @@ if(isset($display))
 				</span>
 			</td>
 			<td width="10%" valign="middle">
-				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$n_id;?>">
-					<img src="images/combadge-npc.png" border="0" class="image" />
+				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$n_id;?>" class="image">
+					<img src="images/combadge-npc.png" border="0" />
 				</a>
 			</td>
 		</tr>

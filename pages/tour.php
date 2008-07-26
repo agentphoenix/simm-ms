@@ -74,8 +74,8 @@ if( !empty( $tour ) ) {
 	*/
 	if(isset($sessionCrewid) && in_array("m_tour", $sessionAccess)) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour' class='image'>";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 	
@@ -89,8 +89,8 @@ if( !empty( $tour ) ) {
 			<tr height="110">
 			<? if( !empty( $tourPicture1 ) ) { ?>
 				<td valign="top" width="10%">
-					<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>" rel="shadowbox[Tour]">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="image reflect" />
+					<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>" rel="shadowbox[Tour]" class="image">
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="reflect" />
 					</a>
 				</td>
 			<? } ?>
@@ -98,8 +98,8 @@ if( !empty( $tour ) ) {
 			<? if( !empty( $tourPicture2 ) ) { ?>
 				<td width="10">&nbsp;</td>
 				<td valign="top" width="10%">
-					<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>" rel="shadowbox[Tour]">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="image reflect" />
+					<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>" rel="shadowbox[Tour]" class="image">
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="reflect" />
 					</a>
 				</td>
 			<? } ?>
@@ -107,8 +107,8 @@ if( !empty( $tour ) ) {
 			<? if( !empty( $tourPicture3 ) ) { ?>
 				<td width="10">&nbsp;</td>
 				<td valign="top" width="10%">
-					<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>" rel="shadowbox[Tour]">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="image reflect" />
+					<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>" rel="shadowbox[Tour]" class="image">
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="reflect" />
 					</a>
 				</td>
 			<? } ?>
@@ -140,8 +140,8 @@ if( !empty( $tour ) ) {
 		*/
 		if( isset( $sessionCrewid ) && in_array( "m_tour", $sessionAccess ) ) {
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour'>";
-			echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=tour' class='image'>";
+			echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 			echo "</a>";
 		}
 
