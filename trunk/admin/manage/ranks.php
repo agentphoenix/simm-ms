@@ -149,8 +149,8 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 		
 		<p><span class="fontSmall">Click on the rank image to view that rank set</span><br /><br />
 		<?php foreach($allowedRanksArray as $key => $value) { ?>
-			<a href="<?=$webLocation;?>admin.php?page=manage&sub=ranks&set=<?=trim( $value );?>">
-				<img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" border="0" alt="" class="image" />
+			<a href="<?=$webLocation;?>admin.php?page=manage&sub=ranks&set=<?=trim( $value );?>" class="image">
+				<img src="<?=$webLocation;?>images/ranks/<?=trim( $value );?>/preview.png" border="0" alt="" />
 			</a>
 		<?php } ?></p>
 		
@@ -167,8 +167,8 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 			extract( $classFetch, EXTR_OVERWRITE );
 	
 		?>
-			<a href="<?=$webLocation;?>admin.php?page=manage&sub=ranks&set=<?=trim( $set );?>&rank=<?=$rankClass;?>">
-				<img src="<?=$webLocation;?>images/ranks/<?=trim( $set );?>/<?=$rankImage;?>" border="0" alt="Rank Class <?=$rankClass;?>" class="image" />
+			<a href="<?=$webLocation;?>admin.php?page=manage&sub=ranks&set=<?=trim( $set );?>&rank=<?=$rankClass;?>" class="image">
+				<img src="<?=$webLocation;?>images/ranks/<?=trim( $set );?>/<?=$rankImage;?>" border="0" alt="Rank Class <?=$rankClass;?>" />
 			</a>
 		<?php } ?></p>
 		

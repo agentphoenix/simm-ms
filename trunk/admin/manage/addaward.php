@@ -247,7 +247,7 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 	
 			<tr height="40">
 				<td width="70" align="center" valign="middle">
-					<img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" class="image" />
+					<img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
 				</td>
 				<td valign="top">
 					<strong><? printText( $awardName ); ?></strong><br />

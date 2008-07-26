@@ -283,7 +283,7 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 		
 			<tr height="40">
 				<td width="70" align="center" valign="middle">
-					<img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" class="image" />
+					<img src="<?=$webLocation;?>images/awards/<?=$awardImage;?>" alt="<?=$awardName;?>" border="0" />
 				</td>
 				<td valign="<?=$valign;?>">
 					<strong><? printText( $awardName ); ?></strong>

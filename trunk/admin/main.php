@@ -248,8 +248,8 @@ if( isset( $sessionCrewid ) ) {
 					
 					?>
 					&nbsp;
-					<a href="<?=WEBLOC;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>">
-						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
+					<a href="<?=WEBLOC;?>admin.php?page=manage&sub=posts&id=<?=$postid;?>" class="image">
+						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" />
 					</a>
 					<?php } ?>
 				</span><br />
@@ -315,8 +315,8 @@ if( isset( $sessionCrewid ) ) {
 						
 					?>
 					&nbsp;
-					<a href="<? WEBLOC;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>">
-						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
+					<a href="<? WEBLOC;?>admin.php?page=manage&sub=logs&id=<?=$logid;?>" class="image">
+						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" />
 					</a>
 					<?php } ?>
 					
@@ -368,8 +368,8 @@ if( isset( $sessionCrewid ) ) {
 					
 					<?php if( in_array( "m_news", $sessionAccess ) ) { ?>
 					&nbsp;
-					<a href="<?=$webLocation;?>admin.php?page=manage&sub=news&id=<?=$newsid;?>">
-						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" class="image" />
+					<a href="<?=$webLocation;?>admin.php?page=manage&sub=news&id=<?=$newsid;?>" class="image">
+						<img src="<?=$webLocation;?>images/edit.png" alt="[ Edit ]" border="0" />
 					</a>
 					<?php } ?>
 					
