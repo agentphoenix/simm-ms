@@ -94,11 +94,11 @@ if(isset($mp_id))
 			
 			/* display the previous and next links in the post details box */
 			if( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) {
-				echo "<a href='" . $webLocation . "/index.php?page=post&id=" . $idNumbers[$prevKey] . "'><img src='" . $webLocation . "/images/previous.png' alt='Previous Entry' border='0' class='image' /></a>";
+				echo "<a href='" . $webLocation . "/index.php?page=post&id=" . $idNumbers[$prevKey] . "' class='image'><img src='" . $webLocation . "/images/previous.png' alt='Previous Entry' border='0' /></a>";
 			} if( ( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) && ( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) ) {
 				echo "&nbsp;";
 			} if( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) {
-				echo "<a href='$webLocation/index.php?page=post&id=$idNumbers[$nextKey]'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' class='image' /></a>";
+				echo "<a href='$webLocation/index.php?page=post&id=$idNumbers[$nextKey]' class='image'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' /></a>";
 			}
 		} /* close if(mp_id == value) */
 	} /* close foreach loop */

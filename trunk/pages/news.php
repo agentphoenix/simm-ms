@@ -175,11 +175,11 @@ if( isset( $sessionCrewid ) ) {
 			
 					/* display the previous and next links in the post details box */
 					if( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) {
-						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$prevKey]'><img src='" . $webLocation . "images/previous.png' alt='Previous Entry' border='0' class='image' /></a>" );
+						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$prevKey]' class='image'><img src='" . $webLocation . "images/previous.png' alt='Previous Entry' border='0' /></a>" );
 					} if( ( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) && ( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) ) {
 						echo "&nbsp;";
 					} if( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) {
-						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$nextKey]'><img src='" . $webLocation . "images/next.png' alt='Next Entry' border='0' class='image' /></a>" );
+						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$nextKey]' class='image'><img src='" . $webLocation . "images/next.png' alt='Next Entry' border='0' /></a>" );
 					}
 				}
 			}

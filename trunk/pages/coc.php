@@ -39,8 +39,8 @@ if( isset( $sessionCrewid ) ) {
 	
 	if( isset( $sessionCrewid ) && in_array( "m_coc", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=coc'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=coc' class='image'>";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 	
@@ -75,13 +75,13 @@ if( isset( $sessionCrewid ) ) {
 				<? printText( $species . " " . $gender ); ?>
 			</td>
 			<td width="37" align="center">
-				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$crewid;?>">
+				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$crewid;?>" class="image">
 				<? if($loa == 1) { ?>
-					<img src="images/combadge-loa.png" border="0" alt="loa" class="image" />
+					<img src="images/combadge-loa.png" border="0" alt="loa" />
 				<? } elseif($loa == 0) { ?>
-					<img src="images/combadge.png" border="0" alt="combadge" class="image" />
+					<img src="images/combadge.png" border="0" alt="combadge" />
 				<? } elseif($loa == 2) { ?>
-					<img src="images/combadge-eloa.png" border="0" alt="combadge" class="image" />
+					<img src="images/combadge-eloa.png" border="0" alt="combadge" />
 				<? } ?>
 				</a>
 			</td>

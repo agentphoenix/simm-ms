@@ -51,8 +51,8 @@ $positionsArray = array();
 	/* if they have access, display an icon that will take them to edit the entry */
 	if( isset( $sessionCrewid ) && in_array( "m_departments", $sessionAccess ) ) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=departments'>";
-		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+		echo "<a href='" . $webLocation . "admin.php?page=manage&sub=departments' class='image'>";
+		echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 		echo "</a>";
 	}
 	

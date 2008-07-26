@@ -150,8 +150,8 @@ while($deptFetch = mysql_fetch_assoc($getDepartmentsResult)) {
 		if($access === TRUE)
 		{
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database'>";
-			echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' class='image' />";
+			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=database' class='image'>";
+			echo "<img src='" . $webLocation . "images/edit.png' alt='Edit' border='0' />";
 			echo "</a>";
 		}
 	}
