@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -84,7 +87,7 @@ switch($step)
 	case 2:
 	
 		/* if there's not version specified in the URL, try to find out what version it is */
-		if( !isset( $urlVersion ) ) {
+		if( $urlVersion === FALSE ) {
 			
 			$getUpdateVersion = "SELECT sysVersion FROM sms_system WHERE sysid = 1 LIMIT 1";
 			$getUpdateVersionResult = mysql_query( $getUpdateVersion );
