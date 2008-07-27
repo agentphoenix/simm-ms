@@ -12,8 +12,8 @@ Purpose: The file that controls logging in, logging out, and checking the
 	SESSION variables that are used through the system: crewid, access levels, and 
 	displaySkin.
 
-System Version: 2.6.0
-Last Modified: 2008-04-19 1916 EST
+System Version: 2.6.1
+Last Modified: 2008-07-27 1548 EST
 **/
 
 /* start the session */
@@ -104,13 +104,19 @@ if( $action == "checkLogin" ) {
 	}
 } if( $action == "resetPassword" ) {
 	
-	$checkEmail = "SELECT crewid, email FROM sms_crew WHERE username = '$_POST[username]' AND email = '$_POST[email]' LIMIT 1";
+	foreach ($_POST as $key => $value)
+	{
+		$$key = escape_string($value);
+	}
+	
+	$checkEmail = "SELECT crewid, email FROM sms_crew WHERE username = $username AND email = $email LIMIT 1";
 	$checkEmailResult = mysql_query($checkEmail);
 	$emailCount = mysql_num_rows($checkEmailResult);
-	$fetch = mysql_fetch_array($getEmailResult);
 	
 	/* determine temporary password */
 	if( $emailCount == 1 ) {
+		
+		$fetch = mysql_fetch_array($checkEmailResult);
 	
 		/* define the length */
 		$length = 8;
@@ -148,7 +154,9 @@ Password: $password
 
 This is an automatically generated email, please do not reply.";
 
-		mail( $to, $subject, $message, "From: " . $shipPrefix . " " . $shipName . " < " . $from . " >\nX-Mailer: PHP/" . phpversion() );
+echo $message;
+
+		//mail( $to, $subject, $message, "From: " . $shipPrefix . " " . $shipName . " < " . $from . " >\nX-Mailer: PHP/" . phpversion() );
 				
 		$updatePassword = "UPDATE sms_crew SET password = '$newPassword' WHERE crewid = '$fetch[0]' LIMIT 1";
 		$passwordResult = mysql_query( $updatePassword );
