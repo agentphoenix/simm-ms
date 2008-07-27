@@ -10,8 +10,8 @@ File: framework/functionsGlobal.php
 Purpose: File that holds all the necessary global function files for JP author printing,
 	database connection, and error catching
 	
-System Version: 2.6.0
-Last Modified: 2008-06-01 1051 EST
+System Version: 2.6.1
+Last Modified: 2008-07-27 1348 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -40,8 +40,18 @@ Included Functions:
 */
 include_once('variables.php');
 
+/* make sure we're setting the right value for the database table */
+if (isset($dbName))
+{
+	$database_table = $dbName;
+}
+elseif (isset($dbTable))
+{
+	$database_table = $dbTable;
+}
+
 $db = @mysql_connect($dbServer, $dbUser, $dbPassword) or die ("<b>" . $dbErrorMessage . "</b>");
-mysql_select_db($dbName, $db) or die ("<b>Unable to select the appropriate database.  Please try again later.</b>");
+mysql_select_db($database_table, $db) or die ("<b>Unable to select the appropriate database.  Please try again later.</b>");
 
 /*
 |---------------------------------------------------------------
@@ -71,7 +81,7 @@ while( $global = mysql_fetch_assoc( $globalsResult ) ) {
 | the system as a whole.
 |
 */
-$version = "2.6.0";
+$version = "2.6.1";
 $code = $sysuid;
 
 /*
@@ -299,7 +309,7 @@ function printCO($rank = 'long_rank') {
 /**
 	Print out the executive officer
 **/
-function printXO($rank = 'long_name') {
+function printXO($rank = 'long_rank') {
 	switch($rank)
 	{
 		case 'long_rank':
@@ -310,8 +320,7 @@ function printXO($rank = 'long_name') {
 			break;
 	}
 	
-	$getXO = "SELECT crew.firstName, crew.lastName, $rank_field FROM sms_crew AS crew, sms_ranks AS rank ";
-	$getXO.= "WHERE crew.positionid = 2 AND crew.rankid = rank.rankid AND crew.crewType = 'active' LIMIT 1";
+	$getXO = "SELECT crew.firstName, crew.lastName, $rank_field FROM sms_crew AS crew, sms_ranks AS rank WHERE crew.positionid = 2 AND crew.crewType = 'active' AND crew.rankid = rank.rankid LIMIT 1";
 	$getXOResult = mysql_query( $getXO );
 	$xoFetch = mysql_fetch_array( $getXOResult );
 	
