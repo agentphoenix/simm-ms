@@ -200,7 +200,7 @@ if( in_array( "m_departments", $sessionAccess ) ) {
 			<tr>
 				<td colspan="5" valign="top">
 					<span class="fontNormal"><b>Department</b></span><br />
-					<input type="text" class="name" name="deptName" value="<?=stripslashes( $deptName );?>" />
+					<input type="text" class="name" name="deptName" value="<?=print_input_text( $deptName );?>" />
 				</td>
 				<td width="75%" rowspan="2" align="center" valign="top">
 					<span class="fontNormal"><b>Description</b></span><br />

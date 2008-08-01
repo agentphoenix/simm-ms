@@ -211,7 +211,7 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 				<tr>
 					<td colspan="2" valign="top">
 						<span class="fontNormal"><b>Title</b></span><br />
-						<input type="text" class="image" name="missionTitle" value="<?=stripslashes( $v1['title'] );?>" />
+						<input type="text" class="image" name="missionTitle" value="<?=print_input_text( $v1['title'] );?>" />
 					</td>
 					<td valign="top">
 						<span class="fontNormal"><b>Start Date</b></span><br />
@@ -277,7 +277,7 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 				<tr>
 					<td colspan="2" valign="top">
 						<span class="fontNormal"><b>Title</b></span><br />
-						<input type="text" class="image" name="missionTitle" value="<?=stripslashes( $v2['title'] );?>" />
+						<input type="text" class="image" name="missionTitle" value="<?=print_input_text( $v2['title'] );?>" />
 					</td>
 					<td valign="top">
 						<span class="fontNormal"><b>Start Date</b></span><br />
@@ -343,7 +343,7 @@ if( in_array( "m_missions", $sessionAccess ) ) {
 				<tr>
 					<td colspan="2" valign="top">
 						<span class="fontNormal"><b>Title</b></span><br />
-						<input type="text" class="image" name="missionTitle" value="<?=stripslashes( $v3['title'] );?>" />
+						<input type="text" class="image" name="missionTitle" value="<?=print_input_text( $v3['title'] );?>" />
 					</td>
 					<td valign="top">
 						<span class="fontNormal"><b>Start Date</b></span><br />

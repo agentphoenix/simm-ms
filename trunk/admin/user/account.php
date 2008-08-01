@@ -318,7 +318,7 @@ if(
 					<td class="tableCellLabel">User Name</td>
 					<td>&nbsp;</td>
 					<td>
-						<input type="text" class="image" name="username" maxlength="16" value="<?=stripslashes( $account['username'] );?>" />
+						<input type="text" class="image" name="username" maxlength="16" value="<?=print_input_text( $account['username'] );?>" />
 					</td>
 				</tr>
 				<tr>
@@ -329,7 +329,7 @@ if(
 				<tr>
 					<td class="tableCellLabel">Real Name</td>
 					<td>&nbsp;</td>
-					<td><input type="text" class="image" name="realName" maxlength="32" value="<?=stripslashes( $account['realName'] );?>" /></td>
+					<td><input type="text" class="image" name="realName" maxlength="32" value="<?=print_input_text( $account['realName'] );?>" /></td>
 				</tr>
 			</table>
 			</div>
@@ -395,22 +395,22 @@ if(
 			<tr>
 				<td class="tableCellLabel" style="color: #f6c731;"><b>AIM</b></td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="aim" maxlength="32" value="<?=stripslashes( $account['aim'] );?>" /></td>
+				<td><input type="text" class="image" name="aim" maxlength="32" value="<?=print_input_text( $account['aim'] );?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel" style="color: #005ca6;"><b>MSN</b></td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="msn" maxlength="32" value="<?=stripslashes( $account['msn'] );?>" /></td>
+				<td><input type="text" class="image" name="msn" maxlength="32" value="<?=print_input_text( $account['msn'] );?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel" style="color: #cf181e;"><b>Yahoo!</b></td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="yim" maxlength="32" value="<?=stripslashes( $account['yim'] );?>" /></td>
+				<td><input type="text" class="image" name="yim" maxlength="32" value="<?=print_input_text( $account['yim'] );?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel" style="color: #18a218;"><b>ICQ</b></td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="icq" maxlength="32" value="<?=stripslashes( $account['icq'] );?>" /></td>
+				<td><input type="text" class="image" name="icq" maxlength="32" value="<?=print_input_text( $account['icq'] );?>" /></td>
 			</tr>
 			
 			<tr>

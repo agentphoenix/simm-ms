@@ -139,7 +139,7 @@ if(in_array("m_awards", $sessionAccess))
 			<tr>
 				<td colspan="2">
 					<span class="fontNormal"><b>Award</b></span><br />
-					<input type="text" class="name" name="awardName" maxlength="100" value="<?=stripslashes( $awardName );?>" />
+					<input type="text" class="name" name="awardName" maxlength="100" value="<?=print_input_text( $awardName );?>" />
 				</td>
 				<td rowspan="3" valign="top" align="center" width="55%">
 					<span class="fontNormal"><b>Description</b></span><br />

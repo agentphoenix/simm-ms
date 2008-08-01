@@ -146,7 +146,7 @@ if(in_array("m_newscat3", $sessionAccess))
 			<tr>
 				<td valign="middle">
 					<b>Category Name</b><br />
-					<input type="text" class="name" name="catName" maxlength="50" value="<?=stripslashes( $catName );?>" />
+					<input type="text" class="name" name="catName" maxlength="50" value="<?=print_input_text( $catName );?>" />
 				</td>
 				<td valign="middle">
 					<b>Required Access Level</b><br />
