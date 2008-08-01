@@ -21,7 +21,7 @@ if(in_array("m_departments", $sessionAccess))
 ?>
 
 	<h2>Create New Rank</h2>
-	<p>Use the fields below to create a new rank to be used throughout the system. Once the rank is created, you can assign it to characters. <strong class="yellow">Note:</strong> ranks can only be assigned to departments that are set to be displayed. If you want to add a rank that&rsquo;s tied to a hidden department, you will need to set the department display to YES, add the rank, then set the department display back to NO.</p>
+	<p>Use the fields below to create a new rank to be used throughout the system. Once the rank is created, you can assign it to characters. <strong class="yellow">Note:</strong> ranks can only be assigned to departments that are set to be displayed. If you want to add a rank that&rsquo;s tied to a hidden department, you will need to set the department display to YES, add the rank, then set the department display back to NO. <strong class="yellow">Note(2):</strong> the first rank you should create is a blank rank so you can access your news ranks from the rank management sub-navigation.</p>
 	<br />
 
 	<form method="post" action="">
