@@ -43,18 +43,19 @@ span.cmDiv
 	/* ### START EDIT ### */
 	/* background color and border color of the flyout menu */
 	border: 1px solid #111;
-	background-color: #090909;
+	background-color: #000;
 	/* ### END EDIT ### */
 }
 .clickMenu div.outerbox
 {
 	display: none;
-	min-width: 160px; /* firefox produces animation-flickering when the box is bigger than this :/ */
+	/*min-width: 160px; /* firefox produces animation-flickering when the box is bigger than this :/ */
 }
 .clickMenu div.inner
 {
 	//top: 20px; /* for ie */
 	margin: 0;
+	line-height: 2;
 	
 	/* ### START EDIT ### */
 	/* changing which direction the menu flies out at */
@@ -62,6 +63,9 @@ span.cmDiv
 	/* if you want the menu to fly out to the left (arrow at the upper right corner), use RIGHT */
 	left: 0;
 	/* ### START EDIT ### */
+	
+	background-color: #090909;
+	border: 1px solid #111;
 }
 .clickMenu div.inner div.outerbox
 {
@@ -81,7 +85,7 @@ span.cmDiv
 	float: left;
 	padding: 0 3px;
 	//height: 20px; /* for ie */
-	line-height: 23px;
+	line-height: 34px;
 	
 	/* ### START EDIT ### */
 	/* background color behind the arrow */
@@ -100,7 +104,7 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* color of the hover state in the submenu */
-	background-color: #1C3051;
+	background-color: #1160b1;
 	/* ### END EDIT ### */
 }
 .clickMenu a
