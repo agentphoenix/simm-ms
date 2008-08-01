@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
-System Version: 2.6.0
-Last Modified: 2008-04-30 0039 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1357 EST
 **/
 
 /* access check */
@@ -684,7 +684,7 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 				?>
 				<tr class="fontNormal">
 					<td><? printText( $pendingNews['newsTitle'] ); ?></td>
-					<td><? printCrewName( $pendingNews['newsid'], 'rank', 'noLink' ); ?></td>
+					<td><? printCrewName( $pendingNews['newsAuthor'], 'rank', 'noLink' ); ?></td>
 					<td align="center"><a href="<?=$webLocation;?>index.php?page=news&id=<?=$pendingNews['newsid'];?>"><b>View News</b></a></td>
 					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="delete"><b>Delete</b></a></td>
 					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingNews['newsid'];?>" myType="news" myAction="activate"><b>Activate</b></a></td>
