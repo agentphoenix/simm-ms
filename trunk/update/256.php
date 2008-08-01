@@ -4,7 +4,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/256.php
 Purpose: Update to 2.6.0
-Last Modified: 2008-07-15 1808 EST
+Last Modified: 2008-08-01 1509 EST
 **/
 
 /*
@@ -196,6 +196,8 @@ mysql_query("
 ");
 
 mysql_query( "ALTER TABLE `sms_crew` CHANGE `image` `image` text NOT NULL" );
+mysql_query( "UPDATE `sms_crew` SET displaySkin = 'default'" );
+mysql_query( "UPDATE `sms_crew` SET displayRank = 'default'" );
 
 
 /*
