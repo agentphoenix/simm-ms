@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
-System Version: 2.6.0
-Last Modified: 2008-06-30 1931 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1347 EST
 **/
 
 /* access check */
@@ -220,6 +220,8 @@ if(in_array("p_mission", $sessionAccess))
 			$check->display();
 		}
 		
+		echo $check->query;
+		
 		if( $useMissionNotes == "y" && !isset($_POST['action_delete_x']))
 		{
 		
@@ -385,22 +387,22 @@ if(in_array("p_mission", $sessionAccess))
 			<tr>
 				<td class="narrowLabel tableCellLabel">Title</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="name" name="postTitle" style="font-weight:bold;" length="100" value="<?=stripslashes( $postTitle );?>" /></td>
+				<td><input type="text" class="name" name="postTitle" style="font-weight:bold;" length="100" value="<?=print_input_text( $postTitle );?>" /></td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Location</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="name" name="postLocation" style="font-weight:bold;" length="100" value="<?=stripslashes( $postLocation );?>" /></td>
+				<td><input type="text" class="name" name="postLocation" style="font-weight:bold;" length="100" value="<?=print_input_text( $postLocation );?>" /></td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Timeline</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="name" name="postTimeline" style="font-weight:bold;" length="100" value="<?=stripslashes( $postTimeline );?>" /></td>
+				<td><input type="text" class="name" name="postTimeline" style="font-weight:bold;" length="100" value="<?=print_input_text( $postTimeline );?>" /></td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Tag</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="name" name="postTag" style="font-weight:bold;" length="100" value="<?=stripslashes( $postTag );?>" /></td>
+				<td><input type="text" class="name" name="postTag" style="font-weight:bold;" length="100" value="<?=print_input_text( $postTag );?>" /></td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Content</td>

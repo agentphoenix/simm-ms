@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/jp.php
 Purpose: Page to post a joint post
 
-System Version: 2.6.0
-Last Modified: 2008-06-30 1931 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1349 EST
 **/
 
 /* access check */
@@ -729,28 +729,28 @@ if(in_array("p_jp", $sessionAccess))
 				<td class="narrowLabel tableCellLabel">Title</td>
 				<td>&nbsp;</td>
 				<td>
-					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postTitle" value="<?=stripslashes( $postTitle );?>" />
+					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postTitle" value="<?=print_input_text( $postTitle );?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Location</td>
 				<td>&nbsp;</td>
 				<td>
-					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postLocation" value="<?=stripslashes( $postLocation );?>" />
+					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postLocation" value="<?=print_input_text( $postLocation );?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Timeline</td>
 				<td>&nbsp;</td>
 				<td>
-					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postTimeline" value="<?=stripslashes( $postTimeline );?>" />
+					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postTimeline" value="<?=print_input_text( $postTimeline );?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Tag</td>
 				<td>&nbsp;</td>
 				<td>
-					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postTag" value="<?=stripslashes( $postTag );?>" />
+					<input type="text" class="name" style="font-weight:bold;" maxlength="100" name="postTag" value="<?=print_input_text( $postTag );?>" />
 				</td>
 			</tr>
 			<tr>

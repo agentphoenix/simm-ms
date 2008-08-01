@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: framework/functionsUtility.php
 Purpose: List of functions specific to the utility of the system
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 1139 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1349 EST
 
 Included Functions:
 	dateFormat( $type, $time )
@@ -82,6 +82,16 @@ function optimizeSQLTable( $table ) {
 function printText( $object ) {
 
 	echo stripslashes( nl2br( $object ) );
+
+}
+/** END FUNCTION **/
+
+/**
+	Strip slashes and use nl2br() to print out text
+**/
+function print_input_text($object) {
+
+	echo stripslashes(htmlentities($object, ENT_COMPAT));
 
 }
 /** END FUNCTION **/
