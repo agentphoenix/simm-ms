@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/log.php
 Purpose: Page to post a personal log
 
-System Version: 2.6.0
-Last Modified: 2008-06-30 1931 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1348 EST
 **/
 
 /* access check */
@@ -262,7 +262,7 @@ if(in_array("p_log", $sessionAccess))
 			<tr>
 				<td class="narrowLabel tableCellLabel">Title</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="name" name="logTitle" style="font-weight:bold;" length="100" value="<?=stripslashes( $logTitle );?>" /></td>
+				<td><input type="text" class="name" name="logTitle" style="font-weight:bold;" length="100" value="<?=print_input_text( $logTitle );?>" /></td>
 			</tr>
 			<tr>
 				<td class="narrowLabel tableCellLabel">Content</td>

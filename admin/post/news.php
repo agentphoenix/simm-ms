@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/news.php
 Purpose: Page to post a news item
 
-System Version: 2.6.0
-Last Modified: 2008-06-30 1930 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1348 EST
 **/
 
 /* access check */
@@ -347,7 +347,7 @@ if(in_array("p_news", $sessionAccess))
 			<tr>
 				<td class="tableCellLabel"><b>Title</b></td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="name" name="newsTitle" style="font-weight:bold;" length="100" value="<?=stripslashes( $newsTitle );?>" /></td>
+				<td><input type="text" class="name" name="newsTitle" style="font-weight:bold;" length="100" value="<?=print_input_text( $newsTitle );?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel"><b>Privacy</b></td>
