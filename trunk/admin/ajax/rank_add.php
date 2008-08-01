@@ -71,7 +71,7 @@ if(in_array("m_departments", $sessionAccess))
 						while($fetch = mysql_fetch_assoc($getR)) {
 							extract($fetch, EXTR_OVERWRITE);
 							
-							echo "<option value='" . $deptid . "'>" . $deptName . "</option>";
+							echo "<option value='" . $deptClass . "'>" . $deptName . "</option>";
 							
 						}
 						
