@@ -41,8 +41,16 @@ $fetch = mysql_fetch_array($getR);
 $class = strtolower($fetch[0]);
 $class = str_replace(' ', '_', $class);
 
+if (file_exists('skins/ship_1/images/ship_' . $class . '.jpg'))
+{
+	$class_final = $class;
+}
+else {
+	$class_final = 'general';
+}
+
 /* define the ship class constant */
-define('SHIP_CLASS', $class);
+define('SHIP_CLASS', $class_final);
 
 ?>
 
@@ -80,11 +88,13 @@ define('SHIP_CLASS', $class);
 					<b>Password</b><br />
 					<input type="password" name="password" size="12" class="loginSmallText" /><br /><br />
 				
-					<input type="image" src="skins/akira/buttons/login-small.png" name="submit" class="submitButton" value="Login" />
+					<input type="image" src="<?=SKIN_PATH;?>buttons/login-small.png" name="submit" class="submitButton" value="Login" />
 				</form>
 				<br />
 				<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
 			<? } ?>
+			<br /><br />
+			<? include_once( 'framework/stardate.php' ); ?>
 			</div>
 			<br />
 
