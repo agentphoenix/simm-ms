@@ -215,7 +215,7 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 				</td>
 				<td>
 					<span class="fontNormal"><b>Rank</b></span><br />
-					<input type="text" class="name" name="rankName" value="<?=stripslashes( $rankName );?>" />
+					<input type="text" class="name" name="rankName" value="<?=print_input_text( $rankName );?>" />
 				</td>
 				<td rowspan="2" width="150" align="center" valign="middle">
 					<img src="<?=$webLocation . 'images/ranks/' . trim( $set ) . '/' . $rankImage;?>" alt="<?=$rankName;?>" border="0" />

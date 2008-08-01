@@ -115,7 +115,7 @@ if(in_array("m_news", $sessionAccess))
 			<tr>
 				<td>
 					<b>Title</b><br />
-					<input type="text" class="name" name="newsTitle" maxlength="100" value="<?=stripslashes( $newsTitle );?>" />
+					<input type="text" class="name" name="newsTitle" maxlength="100" value="<?=print_input_text( $newsTitle );?>" />
 				</td>
 				<td colspan="2">
 					<b>Category</b><br />

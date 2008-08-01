@@ -133,7 +133,7 @@ if(in_array("m_logs1", $sessionAccess) || in_array("m_logs2", $sessionAccess))
 			<tr>
 				<td valign="middle" colspan="2">
 					<b>Title</b><br />
-					<input type="text" class="name" name="logTitle" maxlength="100" value="<?=stripslashes( $logTitle );?>" />
+					<input type="text" class="name" name="logTitle" maxlength="100" value="<?=print_input_text( $logTitle );?>" />
 					<input type="hidden" name="logid" value="<?=$logid;?>" />
 				</td>
 			</tr>

@@ -208,7 +208,7 @@ if(in_array("m_positions", $sessionAccess))
 			<tr>
 				<td colspan="3">
 					<span class="fontNormal"><b>Position</b></span><br />
-					<input type="text" class="name" name="positionName" value="<?=stripslashes( $positionName );?>" />
+					<input type="text" class="name" name="positionName" value="<?=print_input_text( $positionName );?>" />
 				</td>
 				<td width="5" rowspan="3" align="center" valign="top">&nbsp;</td>
 				<td width="80%" rowspan="3" align="center" valign="top">

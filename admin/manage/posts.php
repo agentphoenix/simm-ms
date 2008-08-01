@@ -278,21 +278,21 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 			<tr>
 				<td>
 					<b>Post Title</b><br />
-					<input type="text" class="name" maxlength="100" name="postTitle" value="<?=stripslashes( $fetch['postTitle'] );?>" />
+					<input type="text" class="name" maxlength="100" name="postTitle" value="<?=print_input_text( $fetch['postTitle'] );?>" />
 				</td>
 				<td>
 					<b>Location</b><br />
-					<input type="text" class="name" maxlength="100" name="postLocation" value="<?=stripslashes( $fetch['postLocation'] );?>" />
+					<input type="text" class="name" maxlength="100" name="postLocation" value="<?=print_input_text( $fetch['postLocation'] );?>" />
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<b>Tag</b><br />
-					<input type="text" class="name" maxlength="100" name="postTag" value="<?=stripslashes( $fetch['postTag'] );?>" />
+					<input type="text" class="name" maxlength="100" name="postTag" value="<?=print_input_text( $fetch['postTag'] );?>" />
 				</td>
 				<td>
 					<b>Timeline</b><br />
-					<input type="text" class="name" maxlength="100" name="postTimeline" value="<?=stripslashes( $fetch['postTimeline'] );?>" />
+					<input type="text" class="name" maxlength="100" name="postTimeline" value="<?=print_input_text( $fetch['postTimeline'] );?>" />
 				</td>
 			</tr>
 			<tr>
