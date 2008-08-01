@@ -9,12 +9,16 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: index.php
 Purpose: The main file that pulls in the requested page
 
-System Version: 2.6.0
-Last Modified: 2008-06-07 1129 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1400 EST
 **/
 
 /* start the session */
 session_start();
+
+/* fixing error reporting issues */
+error_reporting(0);
+ini_set('display_errors', 0);
 
 /* pull in the DB connection variables */
 require_once('framework/dbconnect.php');
