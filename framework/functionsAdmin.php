@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: framework/functionsAdmin.php
 Purpose: List of functions specific to the administration control panel
 
-System Version: 2.6.0
-Last Modified: 2008-04-22 0135 EST
+System Version: 2.6.1
+Last Modified: 2008-08-01 1431 EST
 
 Included Functions:
 	printCrewName( $crewid, $rank, $link )
@@ -589,45 +589,10 @@ function checkUnreadMessages( $crew ) {
 	Display error message if someone tries a SQL injection
 **/
 function errorMessageIllegal( $page, $crewid, $expected, $actual ) {
-
-	/* get the IP address */
-	$ipaddr = $_SERVER['REMOTE_ADDR'];
-	
-	/* build the page dynamically */
-	$page = str_replace( $_SERVER['DOCUMENT_ROOT'], '', $page );
-	
-	/* build the reason for the illegal operation */
-	$reason = "An illegal operation was attempted. The system expected a " . $expected . ", but the actual input was " . $actual . ".";
-	
-	/* insert a record into the security table */
-	$insert = "INSERT INTO sms_security ( page, reason, ip_address, crew, time ) VALUES ( '" . $page . "', '" . $reason . "', '" . $ipaddr . "', '" . $crewid . "', UNIX_TIMESTAMP() )";
-	$result = mysql_query( $insert );
-	
-	/* optimize the table */
-	optimizeSQLTable( "sms_security" );
-	
-	/* get the CO email address */
-	$getCOEmail = "SELECT email FROM sms_crew WHERE positionid = '1' and crewType = 'active' LIMIT 1";
-	$getCOEmailResult = mysql_query( $getCOEmail );
-	
-	while( $coEmailFetch = mysql_fetch_assoc( $getCOEmailResult ) ) {
-		extract( $coEmailFetch, EXTR_OVERWRITE );
-	}
-	
-	/* set the email variables */
-	$to = $email;
-	$from = "SMS System < " . $email . " >";
-	$subject = "[SMS Warning] Illegal Operation Attempted!";
-	$message = "WARNING!  A user has attempted an illegal operation on your SMS website.  More information is available in the Security report found within the SMS Administration Control Panel.";
-	
-	/* email the message to the CO */
-	mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
-	
 	echo "<div class='body'>";
 		echo "<span class='fontTitle'>Warning!</span><br /><br />";
-		echo "You have attempted an illegal operation!  Your IP address and a timestamp have been logged and emailed to the sim administrator.";
+		echo "You have attempted an illegal operation!";
 	echo "</div>";
-
 }
 /* END FUNCTION */
 
