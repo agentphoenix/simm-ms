@@ -137,7 +137,23 @@ switch($step)
 		require_once( "update/starbase.php" );
 		
 		break;
-
+	case 99:
+		
+		$sql = "SHOW COLUMNS FROM sms_globals";
+		$result = mysql_query($sql);
+		
+		while($fetch = mysql_fetch_array($result)) {
+			extract($fetch, EXTR_OVERWRITE);
+			
+			$array[] = $fetch[0];
+			
+		}
+		
+		echo '<pre>';
+		print_r($array);
+		echo '</pre>';
+		
+		break;
 }
 
 ?>
