@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/status.php
 Purpose: Page to request a change of status to LOA or ELOA
 
-System Version: 2.6.0
-Last Modified: 2008-05-04 0049 EST
+System Version: 2.6.1
+Last Modified: 2008-08-04 0646 EST
 **/
 
 /* access check */
@@ -24,7 +24,7 @@ if( in_array( "u_status", $sessionAccess ) ) {
 
 	if( isset($_POST['action_x']) )
 	{
-		$update = "UPDATE sms_crew SET loa = %s WHERE crewid = $sessionCrewid LIMIT 1";
+		$update = "UPDATE sms_crew SET loa = '%s' WHERE crewid = $sessionCrewid LIMIT 1";
 		
 		$query = sprintf(
 			$update,

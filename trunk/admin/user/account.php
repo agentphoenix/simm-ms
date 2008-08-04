@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/account.php
 Purpose: Page with the account settings for a user
 
-System Version: 2.6.0
-Last Modified: 2008-03-31 1249 EST
+System Version: 2.6.1
+Last Modified: 2008-08-04 0646 EST
 **/
 
 /* set the page class */
@@ -65,7 +65,7 @@ if(
 					$result = "";
 				} else {
 					$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, emailNews = %s, aim = %s, ";
-					$update.= "msn = %s, yim = %s, icq = %s, loa = %s, crewType = %s, moderatePosts = %s, moderateLogs = %s, ";
+					$update.= "msn = %s, yim = %s, icq = %s, loa = '%s', crewType = %s, moderatePosts = %s, moderateLogs = %s, ";
 					$update.= "moderateNews = %s WHERE crewid = $crew LIMIT 1";
 					
 					$updateAcct = sprintf(
@@ -97,7 +97,7 @@ if(
 					*/
 					if( isset( $_POST['changePass'] ) ) {
 						$update = "UPDATE sms_crew SET username = %s, password = %s, contactInfo = %s, realName = %s, email = %s, ";
-						$update.= "emailPosts = %s, emailLogs = %s, emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, ";
+						$update.= "emailPosts = %s, emailLogs = %s, emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = '%s', ";
 						$update.= "crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s WHERE crewid = $crew LIMIT 1";
 
 						$updateAcct = sprintf(
@@ -128,7 +128,7 @@ if(
 						}
 					} elseif( !isset( $_POST['changePass'] ) ) {
 						$update = "UPDATE sms_crew SET username = %s, contactInfo = %s, realName = %s, email = %s, emailPosts = %s, ";
-						$update.= "emailLogs = %s, emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = %s, crewType = %s, ";
+						$update.= "emailLogs = %s, emailNews = %s, aim = %s, msn = %s, yim = %s, icq = %s, loa = '%s', crewType = %s, ";
 						$update.= "moderatePosts = %s, moderateLogs = %s, moderateNews = %s WHERE crewid = $crew LIMIT 1";
 
 						$updateAcct = sprintf(
