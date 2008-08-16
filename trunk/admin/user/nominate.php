@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 1240 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1743 EST
 **/
 
 /* access check */
@@ -118,13 +118,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 	
 	<span class="fontTitle">Award Nominations</span><br /><br />
 	
-	Awards can now be given to both playing characters as well as non-playing characters. If you want to
-	nominate a fellow player for an award, use the playing character tab; if you&rsquo;d like to nominate
-	an NPC for an award for their in character actions, use the non-playing character tab. Once you nominate
-	someone for an award, it will be added to a queue for the CO to review. If the CO agrees with your
-	award, they will be able to approve the award. Please refer to the 
-	<a href="<?=$webLocation;?>index.php?page=crewawards">Crew Awards page</a> for descriptions and any 
-	requirements for the awards.<br /><br />
+	Awards can now be given to both playing characters as well as non-playing characters (NPCs can only be given in-character awards). If you want to nominate a fellow player for an award, use the playing character tab; if you&rsquo;d like to nominate an NPC for an award for their in character actions, use the non-playing character tab. Once you nominate someone for an award, it will be added to a queue for the CO to review. If the CO agrees with your award, they will be able to approve the award. Please refer to the <a href="<?=$webLocation;?>index.php?page=crewawards">Crew Awards page</a> for descriptions and any requirements for the awards.<br /><br />
 	
 	<div id="container-1">
 		<ul>

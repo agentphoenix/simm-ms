@@ -120,6 +120,8 @@ if(in_array("m_awards", $sessionAccess))
 	
 		<span class="fontTitle">Crew Award Management</span><br /><br />
 		Awards are a great way to reward members of your sim for their hard work, be that in character or out of character. While Anodyne doesn&rsquo;t provide awards by default in SMS, you can use the awards from the fleet you are in or even create awards specific to your sim. When creating an award, we recommend having two images, one small image (that will be displayed in the character bio) and a larger image (that will be displayed in the list of awards). When you create the award, just type the name of the image <em class="orange">(i.e. award.jpg)</em> and not the full path.<br /><br />
+		
+		<strong class="yellow">Note:</strong> NPCs can only be given in-character awards. If no in-character awards exist, then nothing will appear in the NPC section of the award nomination form!<br /><br />
 	
 		<a href="#" rel="facebox" myAction="add" class="add fontMedium"><strong>Add New Award &raquo;</strong></a><br /><br />
 	
