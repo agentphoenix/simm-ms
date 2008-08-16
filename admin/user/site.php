@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/site.php
 Purpose: Page that allows a user to various site options
 
-System Version: 2.6.0
-Last Modified: 2008-04-06 2151 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1631 EST
 **/
 
 /* access check */
@@ -36,14 +36,14 @@ if( in_array( "u_options", $sessionAccess ) ) {
 		$sec = 1;
 	}
 	
-	if( isset( $_POST ) )
+	if(isset($_POST))
 	{
-		foreach( $_POST as $key0 => $value0 )
+		foreach($_POST as $key => $value)
 		{
-			$$key0 = $value0;
+			$$key = $value;
 		}
 		
-		if( isset( $options ) )
+		if(isset($options_x))
 		{
 			/* build the query */
 			$update = "UPDATE sms_crew SET cpShowPosts = %s, cpShowLogs = %s, cpShowNews = %s, ";
@@ -70,7 +70,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 			$type = "site options";
 			
 		} /* close OPTIONS section */
-		if( isset( $menu_update ) )
+		if(isset($menu_update_x))
 		{
 			/* build the query */
 			$update = "UPDATE sms_crew SET menu1 = %s, menu2 = %s, menu3 = %s, menu4 = %s, menu5 = %s, ";
@@ -101,7 +101,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 			$type = "personalized menu";
 			
 		} /* close MENU section */
-		if( isset( $rank_update ) )
+		if(isset($rank_update_x))
 		{
 			/* build the query */
 			$update = "UPDATE sms_crew SET displayRank = %s WHERE crewid = '$sessionCrewid' LIMIT 1";
@@ -126,7 +126,7 @@ if( in_array( "u_options", $sessionAccess ) ) {
 			$sessionDisplayRank = $_SESSION['sessionDisplayRank'];
 			
 		} /* close RANK section */
-		if( isset( $skin_update ) )
+		if(isset($skin_update_x))
 		{
 			/* build the query */
 			$update = "UPDATE sms_crew SET displaySkin = %s WHERE crewid = '$sessionCrewid' LIMIT 1";

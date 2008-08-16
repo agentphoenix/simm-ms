@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/globals.php
 Purpose: Page that moderates the site globals
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 1132 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1639 EST
 **/
 
 /* access check */
@@ -47,11 +47,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	
 	if(isset($action_simm))
 	{
-		/* pop the x, y, and name values off the POST array */
-		array_pop($_POST);
-		array_pop($_POST);
-		array_pop($_POST);
-		
 		foreach($_POST as $key => $value)
 		{
 			$$key = $value;
@@ -73,11 +68,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	}
 	if(isset($action_fleet))
 	{
-		/* pop the x, y, and name values off the POST array */
-		array_pop($_POST);
-		array_pop($_POST);
-		array_pop($_POST);
-		
 		foreach($_POST as $key => $value)
 		{
 			$$key = $value;
@@ -102,11 +92,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	}
 	if(isset($action_options))
 	{
-		/* pop the x, y, and name values off the POST array */
-		array_pop($_POST);
-		array_pop($_POST);
-		array_pop($_POST);
-		
 		foreach($_POST as $key => $value)
 		{
 			$$key = $value;
@@ -170,11 +155,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	}
 	if(isset($action_presentation))
 	{
-		/* pop the x, y, and name values off the POST array */
-		array_pop($_POST);
-		array_pop($_POST);
-		array_pop($_POST);
-		
 		foreach($_POST as $key => $value)
 		{
 			$$key = $value;
@@ -244,11 +224,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	{
 		/* define the POST array */
 		$post = $_POST;
-		
-		/* pop the last 3 items off the array */
-		array_pop($post);
-		array_pop($post);
-		array_pop($post);
 		
 		/* reset all of the positionMainPage flags */
 		$updatePos = "UPDATE sms_positions SET positionMainPage = 'n'";

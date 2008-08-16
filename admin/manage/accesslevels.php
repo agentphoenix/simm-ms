@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/accesslevels.php
 Purpose: Page to set access levels for the different groups
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 2228 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1653 EST
 **/
 
 /* access check */
@@ -65,12 +65,6 @@ if( in_array( "x_access", $sessionAccess ) ) {
 		/* set the POST array */
 		$accessValues = $_POST;
 		$type = $_POST['type'];
-		
-		/* pop off the non-essential items from the POST array */
-		array_pop( $accessValues );
-		array_pop( $accessValues );
-		array_pop( $accessValues );
-		array_pop( $accessValues );
 
 		/* implode the array */
 		$accessString = implode(',', $accessValues);
