@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/join.php
 Purpose: To display the join application and submit it
 
-System Version: 2.6.0
-Last Modified: 2008-04-29 0002 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1723 EST
 **/
 
 /* define the page class and vars */
@@ -62,7 +62,7 @@ if( isset( $action ) ) {
 		escape_string( $_POST['username'] ),
 		escape_string( md5( $_POST['password'] ) ),
 		escape_string( 'pending' ),
-		escape_string( $_POST['email'] ),
+		escape_string( $_POST['email_address'] ),
 		escape_string( $_POST['realname'] ),
 		escape_string( $_POST['aim'] ),
 		escape_string( $_POST['msn'] ),
@@ -113,7 +113,7 @@ if( isset( $action ) ) {
 	
 		/* set variables and send email to User */
 		$subject = $emailSubject . " Application Submitted";
-		$to = $email;
+		$to = $email_address;
 		$from = printCO('short_rank') . " <" . printCOEmail() . ">";
 		$message = "Greetings $realname,
 	
@@ -153,12 +153,14 @@ This is an automatically generated message, please do not respond.";
 		} else {
 			$to = implode(",", $email_array);
 		}
+		
+		$from = $realname . " <" . $email_address . ">";
 	
 		$message = "A new user has applied to join the " . $shipName . ".  Below you will find the information along with the link to the site to login and approve or deny the application.
 
 == USER INFORMATION ==
 Real Name: $realname
-Email Address: $email
+Email Address: $email_address
 Instant Messengers: 	
 AIM - $aim
 MSN - $msn
@@ -271,7 +273,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 		<tr>
 			<td class="tableCellLabel">Email</td>
 			<td>&nbsp;</td>
-			<td><input type="text" class="image" maxlength="64" name="email" /></td>
+			<td><input type="text" class="image" maxlength="64" name="email_address" /></td>
 		</tr>
 		<tr>
 			<td class="tableCellLabel">Instant Messenger</td>
