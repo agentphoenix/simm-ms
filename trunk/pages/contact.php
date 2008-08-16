@@ -9,8 +9,8 @@ Author: Nathan Wharry [ mail@herschwolf.net ]
 File: pages/contact.php
 Purpose: Page used to contact the CO, XO, or Webmaster of a simm for any user
 
-System Version: 2.6.0
-Last Modified: 2008-04-08 1531 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1734 EST
 **/
 
 /* define the page class and set the vars */
@@ -41,10 +41,10 @@ if ( isset( $send ) ) {
 	$recipients = $_POST['recipients'];
 		
 	/* define the subject */
-	if( !empty( $title ) ) {
-		$subject = $emailSubject . " " . $subject . "";
+	if(!empty($subject)) {
+	    $subject = $emailSubject . " " . $subject . "";
 	} else {
-		$subject = $emailSubject . " Information Request";
+	    $subject = $emailSubject . " Information Request";
 	}
 	
 	/* figure out who to send the email to */
