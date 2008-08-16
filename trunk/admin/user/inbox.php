@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/inbox.php
 Purpose: Page that views your private message inbox
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 1241 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1655 EST
 **/
 
 /* access check */
@@ -123,8 +123,6 @@ This private message was sent from " . printCrewNameEmail( $sessionCrewid ) . ".
 	elseif(isset($action))
 	{
 		$postArray = $_POST;
-		array_pop( $postArray );
-		array_pop( $postArray );
 
 		foreach( $postArray as $key => $value ) {
 

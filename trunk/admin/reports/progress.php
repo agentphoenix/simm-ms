@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/reports/progress.php
 Purpose: Page that shows the progress the sim has made
 
-System Version: 2.6.0
-Last Modified: 2008-04-05 1646 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1654 EST
 **/
 
 /* access check */
@@ -54,7 +54,6 @@ if( in_array( "r_progress", $sessionAccess ) ) {
 
 	/* pull the target date into an array */
 	$targetDateArray = explode( "-", $targetDateFormatted );
-	array_pop( $targetDateArray );
 
 	$todayNice = $today['year'] . "-" . ( $today['mon'] +1 ) . "-01 00:00:00";
 	$targetNice = $targetDateArray['0'] . "-" . $targetDateArray['1'] . "-01 00:00:00";

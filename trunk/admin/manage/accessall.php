@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/accessall.php
 Purpose: Page to display all of a user's access levels
 
-System Version: 2.6.0
-Last Modified: 2008-04-18 1902 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1653 EST
 **/
 
 /* set the page class */
@@ -114,11 +114,6 @@ if(in_array("x_access", $sessionAccess))
 	if(isset($_POST['action_add_x']) || isset($_POST['action_remove_x']))
 	{
 		$post = $_POST;
-		
-		/* drop the last 3 items off the list (x, y, and value) */
-		array_pop( $post );
-		array_pop( $post );
-		array_pop( $post );
 		
 		/* building the variables we'll need */
 		$location = strpos($post['access'], "_");
