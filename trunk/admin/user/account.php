@@ -10,7 +10,7 @@ File: admin/user/account.php
 Purpose: Page with the account settings for a user
 
 System Version: 2.6.1
-Last Modified: 2008-08-04 0646 EST
+Last Modified: 2008-08-16 1739 EST
 **/
 
 /* set the page class */
@@ -164,7 +164,7 @@ if(
 		} else {
 			/* if someone is trying to update another person's account, then do it */
 			$update = "UPDATE sms_crew SET contactInfo = %s, emailPosts = %s, emailLogs = %s, emailNews = %s, aim = %s, msn = %s, ";
-			$update.= "yim = %s, icq = %s, loa = %s, crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s ";
+			$update.= "yim = %s, icq = %s, loa = '%s', crewType = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s ";
 			$update.= "WHERE crewid = $crew LIMIT 1";
 
 			$updateAcct = sprintf(
