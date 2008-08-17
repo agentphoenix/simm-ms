@@ -1,8 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 /**
 This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
@@ -13,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.0
-Last Modified: 2008-06-15 1432 EST
+System Version: 2.6.1
+Last Modified: 2008-08-17 1644 EST
 **/
 
 /* define the step var */
@@ -63,7 +60,8 @@ $versionsArray = array(
 	253,
 	254,
 	255,
-	256
+	256,
+	260
 );
 
 /* count the number of items in the versions array */
@@ -119,15 +117,14 @@ switch($step)
 				foreach ($versionsArrayNew as $key2 => $value2)
 				{
 					/* pull in the update files sequentially */
-					/* echo "update/" . $value2 . ".php<br />"; */
 					include_once( "update/" . $value2 . ".php" );
 				}
 			}
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.0', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.0', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.1', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.1', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -135,23 +132,6 @@ switch($step)
 
 		/** PULL IN THE UPDATE FILE **/
 		require_once( "update/starbase.php" );
-		
-		break;
-	case 99:
-		
-		$sql = "SHOW COLUMNS FROM sms_globals";
-		$result = mysql_query($sql);
-		
-		while($fetch = mysql_fetch_array($result)) {
-			extract($fetch, EXTR_OVERWRITE);
-			
-			$array[] = $fetch[0];
-			
-		}
-		
-		echo '<pre>';
-		print_r($array);
-		echo '</pre>';
 		
 		break;
 }
@@ -172,35 +152,36 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6 is a major update to SMS which not only fixes a handful of existing bugs, but it also enhances existing features as well as offering brand new functionality. A complete list change log is available after the system has been updated in the Reports > Version History page. Some of the major changes in this version include:
+			SMS 2.6.1 is an update to latest release of SMS which fixes the following issues:
 			
 			<ul>
-				<li>Departmental Databases</li>
-				<li>Ability for users to edit their own posts and logs</li>
-				<li>Ability for admins to set the group access defaults (CO, XO, Department Head, Standard Player)</li>
-				<li>Private news items</li>
-				<li>Built-in stardate script</li>
-				<li>Personalized menu</li>
-				<li>New awards system that sends nominated awards to a queue for CO review</li>
-				<li>Better Apache compatibility</li>
-				<li>Brand new activation page</li>
-				<li>Slick new manifest page</li>
-				<li>Cleaned up Private Messages</li>
-				<li>Using the jQuery Javascript library for better tabs, lightbox functionality, and modal windows</li>
-				<li>Two dozen existing bugs fixed</li>
-				<li>Better security</li>
-				<li>And much more!</li>
+				<li>Fixed bug where system version wouldn't be passed to the update script if it wasn't in the URL (caused all the issues with improper updates)</li>
+				<li>Fixed bug where XO wasn't printed on the contact page</li>
+				<li>Fixed bug where after doing an update, the system would throw an error about being unable to select the appropriate database</li>
+				<li>Made the database password box during install a password field instead of a text field</li>
+				<li>Fixed several bugs with the reset password form</li>
+				<li>Fixed a potential security issue with the reset password form</li>
+				<li>Fixed bug where after doing an update, the system would display without a skin</li>
+				<li>Fixed bug where the wrong author is listed in the activate news items tab</li>
+				<li>Fixed error message display about wrong data type when not logged in</li>
+				<li>Fixed bug in single author mission entry email</li>
+				<li>Fixed bug where newly created ranks in a new department weren't put where they should be</li>
+				<li>Fixed bug where using quotes in a field that displayed data from the database would cause the data to disappear</li>
+				<li>Fixed illegal operation emails being sent out</li>
+				<li>Fixed bug where users couldn't be put on LOA</li>
+				<li>Fixed bug where player application email was wrong</li>
+				<li>Fixed bug where contact form wouldn't use user-defined subject</li>
+				<li>Added more instructions to the awards pages to highlight the fact that NPCs can only receive in-character awards</li>
+				<li>Fixed bug where some preferences weren't updating properly</li>
+				<li>Fixed IE7 bug where Site Options weren't updated</li>
+				<li>Updated instructions for adding a rank</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
 			
 			<? } elseif( $step == "2" ) { ?>
 			
-			The changes have been made to your system.  Please make sure the necessary files are uploaded to your server.  If you still experience problems with any of the issues that have been fixed, please report them on the Anodyne Support Forum.<br /><br />
-			
-			One of the changes to SMS 2.6 required that the ranks table be blown away and re-built. The script makes every effort to update every crew member from the old rank data to the new rank data, but you may find that a handful of crew members have the wrong rank (and therefore the wrong rank image) and may require manual editing. We apologize for this inconvenience.<br /><br />
-			
-			<b>Note:</b> If you were logged in to your site, you may receive an error why trying to go to the Control Panel. To correct this, please log back in to your site.
+			The changes have been made to your system.  If you still experience problems with any of the issues that have been fixed, please report them on the Anodyne Support Forum.
 
 			<h1>
 				<a href="<?=$webLocation;?>index.php?page=main">Return to your site &raquo;</a>
