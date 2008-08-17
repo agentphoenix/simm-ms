@@ -13,11 +13,15 @@ Purpose: The file that controls logging in, logging out, and checking the
 	displaySkin.
 
 System Version: 2.6.1
-Last Modified: 2008-07-27 1548 EST
+Last Modified: 2008-08-17 1624 EST
 **/
 
 /* start the session */
 session_start();
+
+/* fixing error reporting issues */
+error_reporting(0);
+ini_set('display_errors', 0);
 
 /* get the referenced page from the URL */
 if(isset($_GET['action'])) {
