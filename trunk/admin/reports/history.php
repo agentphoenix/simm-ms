@@ -77,10 +77,6 @@ if( in_array( "r_versions", $sessionAccess ) ) {
 					$desc = explode( ";", $value[1] );
 
 					echo "<b class='fontMedium'>" . $key;
-					if( !empty( $value[2] ) )
-					{
-						echo " [r" . $value[2] . "]";
-					}
 					echo "&nbsp;&nbsp;&nbsp;";
 					echo "<span class='fontSmall blue'>[ " . dateFormat( 'short2', $value[0] ) . " ]</span></b>";
 					echo "<ul class='version'>";
