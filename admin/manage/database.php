@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/database.php
 Purpose: Page that moderates the database entries
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 2242 EST
+System Version: 2.6.2
+Last Modified: 2008-08-22 1007 EST
 **/
 
 /* access check */
@@ -193,21 +193,14 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 
 	<span class="fontTitle">Database Entry Management</span><br /><br />
 	
-	The database feature in SMS 2 allows for the creation of an easy-to-manage list of important links, 
-	both on-site and off-site, as well as the option to create a database entry for those things that 
-	don&rsquo;t require a complete new page created.
+	The database feature in SMS 2 allows for the creation of an easy-to-manage list of important links, both on-site and off-site, as well as the option to create a database entry for those things that don&rsquo;t require a complete new page created.
 	
 	<?php if(in_array("m_database2", $sessionAccess)) { ?>
-	<strong class="yellow">Note:</strong> admins can give and take access to the database feature through
-	the Department management page.
+	<strong class="yellow">Note:</strong> admins can give and take access to the database feature through the Department management page.
 	<?php } ?>
 	<br /><br />
 	
-	If you want to create an entry that uses extensive HTML or any PHP, please create a new SMS page and 
-	use an on-site URL forwarding entry.  The database feature will display basic HTML, but does not support 
-	extensive use of HTML code in the entry.  For off-site URL forwarding entries, give the full URL 
-	(e.g. http://www.something.com/), for on-site URL forwarding entries only give what comes after the location 
-	of SMS (e.g. index.php?page=manifest).  For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
+	If you want to create an entry that uses extensive HTML or any PHP, please create a new SMS page and use an on-site URL forwarding entry.  The database feature will display basic HTML, but does not support extensive use of HTML code in the entry.  For off-site URL forwarding entries, give the full URL (e.g. http://www.something.com/), for on-site URL forwarding entries only give what comes after the location of SMS (e.g. index.php?page=manifest).  For reference, your web location is: <b><?=$webLocation;?></b><br /><br />
 	
 	<?php if( (!in_array("m_database2", $sessionAccess) && in_array($myDept, $arrayKeys)) || in_array("m_database2", $sessionAccess)) { ?>
 	<a href="#" rel="facebox" myAction="add" class="fontMedium add"><strong>Create New Database Entry &raquo;</strong></a>
@@ -262,7 +255,7 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 					switch($v2['type'])
 					{
 						case 'entry':
-							echo "<strong><a href='" . $webLocation . "index.php?page=database&entry=" . $dbid . "'>";
+							echo "<strong><a href='" . $webLocation . "index.php?page=database&entry=" . $v2['id'] . "'>";
 							break;
 						case 'onsite':
 							echo "<strong><a href='" . $webLocation . $dbURL . "'>";
