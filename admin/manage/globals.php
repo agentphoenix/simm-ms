@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/globals.php
 Purpose: Page that moderates the site globals
 
-System Version: 2.6.2
-Last Modified: 2008-08-22 0919 EST
+System Version: 2.6.1
+Last Modified: 2008-08-16 1639 EST
 **/
 
 /* access check */
@@ -224,11 +224,6 @@ if( in_array( "m_globals", $sessionAccess ) ) {
 	{
 		/* define the POST array */
 		$post = $_POST;
-		
-		/* drop the positions and X/Y coordinates off the post array */
-		unset($post['action_update_positions_x']);
-		unset($post['action_update_positions_y']);
-		unset($post['action_update_positions']);
 		
 		/* reset all of the positionMainPage flags */
 		$updatePos = "UPDATE sms_positions SET positionMainPage = 'n'";
