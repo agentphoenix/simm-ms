@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
-System Version: 2.6.1
-Last Modified: 2008-08-16 1743 EST
+System Version: 2.6.2
+Last Modified: 2008-08-22 0952 EST
 **/
 
 /* access check */
@@ -94,11 +94,32 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 		/* send the nomination email */
 		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
 	}
+	
+	/* find out how many IC awards there are */
+	$ic = "SELECT awardid FROM sms_awards WHERE awardCat = 'ic'";
+	$icR = mysql_query($ic);
+	
+	while ($fetch = mysql_fetch_array($icR)) {
+		extract($fetch, EXTR_OVERWRITE);
+		
+		$awards_array[] = $fetch[0];
+	}
+	
+	/* count the number of awards */
+	$award_count = count($awards_array);
+	
+	if ($award_count < 1)
+	{
+		$disable_string = 2;
+	}
+	else {
+		$disable_string = FALSE;
+	}
 
 ?>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#container-1 > ul').tabs(<?php echo $tab; ?>);
+		$('#container-1 > ul').tabs(<?php echo $tab; ?>, { disabled: [<?php echo $disable_string; ?>]});
 	});
 </script>
 
