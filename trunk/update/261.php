@@ -23,6 +23,14 @@ mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionRev`, `versio
 /**
 
 - Fixed bug where top positions couldn't be updated
+- Disabled NPC award nomination tab if there are no in-character awards present
+- Fixed bug where view link in database management always points to the last database entry
+
+@ admin/manage/globals.php
+@ admin/manage/database.php
+@ admin/user/nominate.php
+@ framework/functionsGlobal.php
+@ update/261.php
 
 **/
 
