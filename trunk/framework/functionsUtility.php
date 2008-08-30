@@ -16,6 +16,7 @@ Included Functions:
 	dateFormat( $type, $time )
 	optimizeSQLTable( $table )
 	printText( $object )
+	print_input_text($object)
 	error_report()
 **/
 
