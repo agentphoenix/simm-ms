@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.2
-Last Modified: 2008-08-30 2337 EST
+System Version: 2.6.3
+Last Modified: 2008-08-31 1145 EST
 **/
 
 /* define the step var */
@@ -62,7 +62,8 @@ $versionsArray = array(
 	255,
 	256,
 	260,
-	261
+	261,
+	262
 );
 
 /* count the number of items in the versions array */
@@ -124,8 +125,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.2', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.2', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.3', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.3', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
