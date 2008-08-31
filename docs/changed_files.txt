@@ -20,9 +20,11 @@
 * admin/manage/database.php
 * admin/user/nominate.php
 * framework/functionsGlobal.php
+* framework/functionsUtility.php
 * pages/manifest.php
 * login.php
 * update.php
+* install/resource_data.php
 
 + update/261.php
 + changed_files.txt
