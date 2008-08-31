@@ -1,50 +1,47 @@
 /**
- * reflection.js v1.6 for jquery
- *
- * Contributors: Cow http://cow.neondragon.net
- *               Gfx http://www.jroller.com/page/gfx/
- *               Sitharus http://www.sitharus.com
- *               Andreas Linde http://www.andreaslinde.de
- *               Tralala, coder @ http://www.vbulletin.org
- *				 Danny Ferguson, jquery plugin http://www.brendoman.com/dbc
- *
+ * reflection.js v1.9
+ * http://cow.neondragon.net/stuff/reflection/
  * Freely distributable under MIT-style license.
  */
-
-jQuery.fn.reflect = function(settings) {
-	settings = jQuery.extend({
-		height: 0.5,
-		opacity: 0.5,
-		inline: false
-	}, settings);
-	
-	this.each( function() {
-		var rheight = null;
-		var ropacity = null;
-		
-		if (settings["inline"])
-		{
-			var classes = this.className.split(' ');
-			for (j=0;j<classes.length;j++) {
-				if (classes[j].indexOf("rheight") == 0) {
-					settings["height"] = classes[j].substring(7)/100;
-				} else if (classes[j].indexOf("ropacity") == 0) {
-					settings["opacity"] = classes[j].substring(8)/100;
+ 
+/* From prototype.js */
+if (!document.myGetElementsByClassName) {
+	document.myGetElementsByClassName = function(className) {
+		var children = document.getElementsByTagName('*') || document.all;
+		var elements = new Array();
+	  
+		for (var i = 0; i < children.length; i++) {
+			var child = children[i];
+			var classNames = child.className.split(' ');
+			for (var j = 0; j < classNames.length; j++) {
+				if (classNames[j] == className) {
+					elements.push(child);
+					break;
 				}
 			}
 		}
-
-		jQuery.Reflection.add(this, settings);
-		
-	})
-	return this;
+		return elements;
+	}
 }
 
-jQuery.Reflection = {
+var Reflection = {
+	defaultHeight : 0.5,
+	defaultOpacity: 0.5,
 	
 	add: function(image, options) {
-		jQuery.Reflection.remove(image);
-			
+		Reflection.remove(image);
+		
+		doptions = { "height" : Reflection.defaultHeight, "opacity" : Reflection.defaultOpacity }
+		if (options) {
+			for (var i in doptions) {
+				if (!options[i]) {
+					options[i] = doptions[i];
+				}
+			}
+		} else {
+			options = doptions;
+		}
+	
 		try {
 			var d = document.createElement('div');
 			var p = image;
@@ -67,6 +64,12 @@ jQuery.Reflection = {
 			var reflectionWidth = p.width;
 			
 			if (document.all && !window.opera) {
+				/* Fix hyperlinks */
+                if(p.parentElement.tagName == 'A') {
+	                var d = document.createElement('a');
+	                d.href = p.parentElement.href;
+                }  
+                    
 				/* Copy original image's classes & styles to div */
 				d.className = newClasses;
 				p.className = 'reflected';
@@ -77,6 +80,8 @@ jQuery.Reflection = {
 				var reflection = document.createElement('img');
 				reflection.src = p.src;
 				reflection.style.width = reflectionWidth+'px';
+				reflection.style.display = 'block';
+				reflection.style.height = p.height+"px";
 				
 				reflection.style.marginBottom = "-"+(p.height-reflectionHeight)+'px';
 				reflection.style.filter = 'flipv progid:DXImageTransform.Microsoft.Alpha(opacity='+(options['opacity']*100)+', style=1, finishOpacity=0, startx=0, starty=0, finishx=0, finishy='+(options['height']*100)+')';
@@ -146,4 +151,24 @@ jQuery.Reflection = {
 	}
 }
 
+function addReflections() {
+	var rimages = document.myGetElementsByClassName('reflect');
+	for (i=0;i<rimages.length;i++) {
+		var rheight = null;
+		var ropacity = null;
+		
+		var classes = rimages[i].className.split(' ');
+		for (j=0;j<classes.length;j++) {
+			if (classes[j].indexOf("rheight") == 0) {
+				var rheight = classes[j].substring(7)/100;
+			} else if (classes[j].indexOf("ropacity") == 0) {
+				var ropacity = classes[j].substring(8)/100;
+			}
+		}
+		
+		Reflection.add(rimages[i], { height: rheight, opacity : ropacity});
+	}
+}
 
+var previousOnload = window.onload;
+window.onload = function () { if(previousOnload) previousOnload(); addReflections(); }
