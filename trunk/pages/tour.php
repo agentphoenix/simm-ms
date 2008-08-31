@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/tour.php
 Purpose: Page to display the tour items
 
-System Version: 2.6.0
-Last Modified: 2008-04-23 1929 EST
+System Version: 2.6.3
+Last Modified: 2008-08-31 1201 EST
 **/
 
 /* define the page class and vars */
@@ -36,8 +36,6 @@ if( isset( $sessionCrewid ) ) {
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('img.reflect').reflect({height: 0.3, opacity: 0.3});
-		
 		var options = {
 			resizeLgImages:     true,
 			displayNav:         true,
@@ -90,7 +88,7 @@ if( !empty( $tour ) ) {
 			<? if( !empty( $tourPicture1 ) ) { ?>
 				<td valign="top" width="10%">
 					<a href="<?=$webLocation . "images/tour/" . $tourPicture1;?>" rel="shadowbox[Tour]" class="image">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="reflect" />
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture1;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity40" />
 					</a>
 				</td>
 			<? } ?>
@@ -99,7 +97,7 @@ if( !empty( $tour ) ) {
 				<td width="10">&nbsp;</td>
 				<td valign="top" width="10%">
 					<a href="<?=$webLocation . "images/tour/" . $tourPicture2;?>" rel="shadowbox[Tour]" class="image">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="reflect" />
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture2;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity40" />
 					</a>
 				</td>
 			<? } ?>
@@ -108,7 +106,7 @@ if( !empty( $tour ) ) {
 				<td width="10">&nbsp;</td>
 				<td valign="top" width="10%">
 					<a href="<?=$webLocation . "images/tour/" . $tourPicture3;?>" rel="shadowbox[Tour]" class="image">
-						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="reflect" />
+						<img src="<?=$webLocation . "images/tour/" . $tourPicture3;?>" border="0" alt="" height="90" class="image reflect rheight30 ropacity40" />
 					</a>
 				</td>
 			<? } ?>

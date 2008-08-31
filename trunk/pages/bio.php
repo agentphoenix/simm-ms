@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/bio.php
 Purpose: Page to display the requested bio
 
-System Version: 2.6.0
-Last Modified: 2008-06-15 1443 EST
+System Version: 2.6.3
+Last Modified: 2008-08-31 1201 EST
 **/
 
 /* define the page class and set the vars */
@@ -68,8 +68,6 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('img.reflect').reflect({height: 0.3, opacity: 0.3});
-		
 		var options = {
 			resizeLgImages:     true,
 			displayNav:         true,
@@ -144,7 +142,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 		</strong><br />
 		
 		<table cellspacing="3" class="images">
-			<tr>
+			<tr height="90">
 			<?php
 			
 			foreach($pics as $key => $value)
@@ -156,9 +154,9 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 					$display = null;
 				}
 				
-				echo "<td" . $display . ">";
+				echo "<td width='20'" . $display . ">";
 				echo "<a href='" . $value . "' rel='shadowbox[Bio]'>";
-				echo "<img src='" . $value . "' border='0' alt='' height='90' class='image reflect' />";
+				echo "<img src='" . $value . "' border='0' alt='' height='90' class='image reflect rheight30 ropacity40' />";
 				echo "</a>";
 				echo "</td>";
 			}
