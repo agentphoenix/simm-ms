@@ -27,14 +27,18 @@ mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionRev`, `versio
 - Fixed bug where view link in database management always points to the last database entry
 - Fixed bug where reset password wouldn't send email out and would print new password on the screen
 - Fixed bug where HTML breaks were shown in acceptance and rejection emails
+- Added alt text to combadge images in the event the combadge image is missing, people can still get to the bios
+- Added changed files list to the zip archive again
 
 @ admin/manage/activate.php
 @ admin/manage/globals.php
 @ admin/manage/database.php
 @ admin/user/nominate.php
 @ framework/functionsGlobal.php
+@ pages/manifest.php
 @ update/261.php
 @ login.php
+@ changed_files.txt
 
 **/
 

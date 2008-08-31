@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.1
-Last Modified: 2008-08-17 1644 EST
+System Version: 2.6.2
+Last Modified: 2008-08-30 2337 EST
 **/
 
 /* define the step var */
@@ -61,7 +61,8 @@ $versionsArray = array(
 	254,
 	255,
 	256,
-	260
+	260,
+	261
 );
 
 /* count the number of items in the versions array */
@@ -123,8 +124,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.1', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.1', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.2', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.2', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -152,29 +153,16 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.1 is an update to latest release of SMS which fixes the following issues:
+			SMS 2.6.2 is an update to latest release of SMS which fixes the following issues:
 			
 			<ul>
-				<li>Fixed bug where system version wouldn't be passed to the update script if it wasn't in the URL (caused all the issues with improper updates)</li>
-				<li>Fixed bug where XO wasn't printed on the contact page</li>
-				<li>Fixed bug where after doing an update, the system would throw an error about being unable to select the appropriate database</li>
-				<li>Made the database password box during install a password field instead of a text field</li>
-				<li>Fixed several bugs with the reset password form</li>
-				<li>Fixed a potential security issue with the reset password form</li>
-				<li>Fixed bug where after doing an update, the system would display without a skin</li>
-				<li>Fixed bug where the wrong author is listed in the activate news items tab</li>
-				<li>Fixed error message display about wrong data type when not logged in</li>
-				<li>Fixed bug in single author mission entry email</li>
-				<li>Fixed bug where newly created ranks in a new department weren't put where they should be</li>
-				<li>Fixed bug where using quotes in a field that displayed data from the database would cause the data to disappear</li>
-				<li>Fixed illegal operation emails being sent out</li>
-				<li>Fixed bug where users couldn't be put on LOA</li>
-				<li>Fixed bug where player application email was wrong</li>
-				<li>Fixed bug where contact form wouldn't use user-defined subject</li>
-				<li>Added more instructions to the awards pages to highlight the fact that NPCs can only receive in-character awards</li>
-				<li>Fixed bug where some preferences weren't updating properly</li>
-				<li>Fixed IE7 bug where Site Options weren't updated</li>
-				<li>Updated instructions for adding a rank</li>
+				<li>Fixed bug where top positions couldn't be updated</li>
+				<li>Disabled NPC award nomination tab if there are no in-character awards present</li>
+				<li>Fixed bug where view link in database management always points to the last database entry</li>
+				<li>Fixed bug where reset password wouldn't send email out and would print new password on the screen</li>
+				<li>Fixed bug where HTML breaks were shown in acceptance and rejection emails</li>
+				<li>Added alt text to combadge images in the event the combadge image is missing, people can still get to the bios</li>
+				<li>Added changed files list to the zip archive again</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
