@@ -10,8 +10,8 @@ File: pages/manifest.php
 Purpose: Provides a full listing from the database of the active crew, available 
 	positions, and non-playing characters on the simm.
 
-System Version: 2.6.0
-Last Modified: 2008-05-31 2052 EST
+System Version: 2.6.2
+Last Modified: 2008-08-30 2332 EST
 **/
 
 /* define the page class and vars */
@@ -256,11 +256,11 @@ if(isset($display))
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$u_id;?>" class="image">
 				
 				<? if($u_loa == 1) { ?>
-					<img src="images/combadge-loa.png" border="0" />
+					<img src="images/combadge-loa.png" border="0" alt="[ View Bio ]" />
 				<? } elseif($u_loa == 2) { ?>
-					<img src="images/combadge-eloa.png" border="0" />
+					<img src="images/combadge-eloa.png" border="0" alt="[ View Bio ]" />
 				<? } else { ?>
-					<img src="images/combadge.png" border="0" />
+					<img src="images/combadge.png" border="0" alt="[ View Bio ]" />
 				<? } ?>
 				</a>
 			</td>
@@ -308,7 +308,7 @@ if(isset($display))
 			</td>
 			<td width="10%" valign="middle">
 				<a href="<?=$webLocation;?>index.php?page=bio&crew=<?=$n_id;?>" class="image">
-					<img src="images/combadge-npc.png" border="0" />
+					<img src="images/combadge-npc.png" border="0" alt="[ View Bio ]" />
 				</a>
 			</td>
 		</tr>
