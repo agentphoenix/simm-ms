@@ -3,8 +3,19 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/261.php
 Purpose: Update to 2.6.2
-Last Modified: 2008-08-30 2325 EST
+Last Modified: 2008-08-30 2357 EST
 **/
+
+/*
+|---------------------------------------------------------------
+| ACCESS LEVELS
+|---------------------------------------------------------------
+|
+| This update makes sure that players with XO level access can
+| accurately update NPCs with higher ranks than their own.
+|
+*/
+mysql_query("UPDATE sms_accesslevels SET user = 'user,u_account1,u_nominate,u_inbox,u_status,u_options,u_bio3,u_stats' WHERE id = 2 LIMIT 1");
 
 /*
 |---------------------------------------------------------------
@@ -18,28 +29,6 @@ Last Modified: 2008-08-30 2325 EST
 | for this release.
 |
 */
-mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionRev`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.1', '641', '1219005900', 'This release addresses several bugs and issues with the initial release of SMS 2.6, including bugs while updating and several smaller issues related to emails sent out by the system and creating new ranks.', 'Fixed bug where system version wouldn\'t be passed to the update script if it wasn\'t in the URL (caused all the issues with improper updates);Fixed bug where XO wasn\'t printed on the contact page;Fixed bug where after doing an update, the system would throw an error about being unable to select the appropriate database;Made the database password box during install a password field instead of a text field;Fixed several bugs with the reset password form;Fixed a potential security issue with the reset password form;Fixed bug where after doing an update, the system would display without a skin;Fixed bug where the wrong author is listed in the activate news items tab;Fixed error message display about wrong data type when not logged in;Fixed bug in single author mission entry email;Fixed bug where newly created ranks in a new department weren\'t put where they should be;Fixed bug where using quotes in a field that displayed data from the database would cause the data to disappear;Fixed illegal operation emails being sent out;Fixed bug where users couldn\'t be put on LOA;Fixed bug where player application email was wrong;Fixed bug where contact form wouldn\'t use user-defined subject;Added more instructions to the awards pages to highlight the fact that NPCs can only receive in-character awards;Fixed bug where some preferences weren\'t updating properly;Fixed IE7 bug where Site Options weren\'t updated;Updated instructions for adding a rank' )" );
-
-/**
-
-- Fixed bug where top positions couldn't be updated
-- Disabled NPC award nomination tab if there are no in-character awards present
-- Fixed bug where view link in database management always points to the last database entry
-- Fixed bug where reset password wouldn't send email out and would print new password on the screen
-- Fixed bug where HTML breaks were shown in acceptance and rejection emails
-- Added alt text to combadge images in the event the combadge image is missing, people can still get to the bios
-- Added changed files list to the zip archive again
-
-@ admin/manage/activate.php
-@ admin/manage/globals.php
-@ admin/manage/database.php
-@ admin/user/nominate.php
-@ framework/functionsGlobal.php
-@ pages/manifest.php
-@ update/261.php
-@ login.php
-@ changed_files.txt
-
-**/
+mysql_query("INSERT INTO sms_system_versions ( `version`, `versionRev`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.2', '664', '1220155200', 'This release addresses several bugs and issues with SMS 2.6, including issues with the reset password form, acceptance and rejection emails, the top open positions list, and award nominations.', 'Fixed bug where top positions couldn\'t be updated;Disabled NPC award nomination tab if there are no in-character awards present;Fixed bug where view link in database management always points to the last database entry;Fixed bug where reset password wouldn\'t send email out and would print new password on the screen;Fixed bug where HTML breaks were shown in acceptance and rejection emails;Added alt text to combadge images in the event the combadge image is missing, people can still get to the bios;Added changed files list to the zip archive again;Fixed bug where players with XO level access couldn\'t accurately update NPCs with a higher rank than their own' )");
 
 ?>
