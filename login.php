@@ -12,8 +12,8 @@ Purpose: The file that controls logging in, logging out, and checking the
 	SESSION variables that are used through the system: crewid, access levels, and 
 	displaySkin.
 
-System Version: 2.6.1
-Last Modified: 2008-08-17 1624 EST
+System Version: 2.6.2
+Last Modified: 2008-08-30 1502 EST
 **/
 
 /* start the session */
@@ -158,9 +158,7 @@ Password: $password
 
 This is an automatically generated email, please do not reply.";
 
-echo $message;
-
-		//mail( $to, $subject, $message, "From: " . $shipPrefix . " " . $shipName . " < " . $from . " >\nX-Mailer: PHP/" . phpversion() );
+		mail( $to, $subject, $message, "From: " . $shipPrefix . " " . $shipName . " < " . $from . " >\nX-Mailer: PHP/" . phpversion() );
 				
 		$updatePassword = "UPDATE sms_crew SET password = '$newPassword' WHERE crewid = '$fetch[0]' LIMIT 1";
 		$passwordResult = mysql_query( $updatePassword );
