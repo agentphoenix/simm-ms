@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
-System Version: 2.6.1
-Last Modified: 2008-08-01 1357 EST
+System Version: 2.6.2
+Last Modified: 2008-08-30 2319 EST
 **/
 
 /* access check */
@@ -110,7 +110,7 @@ if(
 					$message->rank = $_POST['rank'];
 					$message->position = $_POST['position'];
 					$message->setArray();
-					$accept = nl2br( stripslashes( $message->changeMessage() ) );
+					$accept = stripslashes($message->changeMessage());
 
 					/* send the email */
 					mail( $to, $subject, $accept, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
@@ -141,7 +141,7 @@ if(
 					$message->player = $action_id;
 					$message->position = $_POST['position'];
 					$message->setArray();
-					$reject = nl2br( stripslashes( $message->changeMessage() ) );
+					$reject = stripslashes($message->changeMessage());
 
 					/* send the email */
 					mail( $to, $subject, $reject, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
