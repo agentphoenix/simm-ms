@@ -8,18 +8,18 @@ File: skins/cobalt/header.php
 Purpose: The header file that the system calls for the template
 
 Skin Version: 2.0
-Last Modified: 2008-06-22 1714 EST
+Last Modified: 2008-08-31 0113 EST
 **/
 
-$path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */
-$path = explode( "/", $path ); /* explode the string into an array */
-$pcount = count( $path ); /* count the number of keys in the array */
+$path = basename(dirname(__FILE__)); /* get the current directory */
+$skins = 'skins/'; /* set the skins directory with slashes */
 
-$pathElement1 = $pcount -2; /* create the first element used */
-$pathElement2 = $pcount -1; /* create the second element used */
+if (substr($webLocation, -1) != '/')
+{ /* make sure the skins directory slashes are right */
+	$skins = '/' . $skins;
+}
 
-/* define the path */
-define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
+define('SKIN_PATH', $skins . $path . '/'); /* define the skin path */
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">

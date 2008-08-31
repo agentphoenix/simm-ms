@@ -8,18 +8,18 @@ File: skins/default/header.php
 Purpose: The header file that the system calls for the template
 
 Skin Version: 2.5
-Last Modified: 2008-04-23 1929 EST
+Last Modified: 2008-08-31 0112 EST
 **/
 
-$path = dirname( __FILE__ ); /* absolute path of the current file (header.php) */
-$path = explode( "/", $path ); /* explode the string into an array */
-$pcount = count( $path ); /* count the number of keys in the array */
+$path = basename(dirname(__FILE__)); /* get the current directory */
+$skins = 'skins/'; /* set the skins directory with slashes */
 
-$pathElement1 = $pcount -2; /* create the first element used */
-$pathElement2 = $pcount -1; /* create the second element used */
+if (substr($webLocation, -1) != '/')
+{ /* make sure the skins directory slashes are right */
+	$skins = '/' . $skins;
+}
 
-/* define the path */
-define( 'SKIN_PATH', $path[$pathElement1] . '/' . $path[$pathElement2] . '/' );
+define('SKIN_PATH', $skins . $path . '/'); /* define the skin path */
 
 ?>
 
