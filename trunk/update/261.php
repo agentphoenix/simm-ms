@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/261.php
 Purpose: Update to 2.6.2
-Last Modified: 2008-08-22 0930 EST
+Last Modified: 2008-08-30 1503 EST
 **/
 
 /*
@@ -25,12 +25,14 @@ mysql_query( "INSERT INTO sms_system_versions ( `version`, `versionRev`, `versio
 - Fixed bug where top positions couldn't be updated
 - Disabled NPC award nomination tab if there are no in-character awards present
 - Fixed bug where view link in database management always points to the last database entry
+- Fixed bug where reset password wouldn't send email out and would print new password on the screen
 
 @ admin/manage/globals.php
 @ admin/manage/database.php
 @ admin/user/nominate.php
 @ framework/functionsGlobal.php
 @ update/261.php
+@ login.php
 
 **/
 
