@@ -22,6 +22,8 @@ mysql_query("INSERT INTO sms_system_versions ( `version`, `versionRev`, `version
 
 /**
 
+# need to fix award issue
+
 - Updated skin location code to work better on Windows machines (local and servers)
 - Fixed display issues with character images and tour images in Firefox 3
 - Updated reflection script to version 1.9
