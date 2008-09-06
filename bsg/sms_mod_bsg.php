@@ -7,7 +7,7 @@
 | File: sms_mod_bsg.php
 | Author: David VanScott [davidv@anodyne-productions.com]
 | Version: 1.0
-| Last Update: 2008.08.19 2328 EST
+| Last Update: 2008.09.05 2239 EST
 |
 | Official Battlestar Galactica mod for SMS 2.6
 |
@@ -42,6 +42,10 @@ switch ($step)
 		mysql_query('DROP TABLE sms_departments');
 		mysql_query('DROP TABLE sms_positions');
 		mysql_query('DROP TABLE sms_ranks');
+		
+		mysql_query("UPDATE sms_globals SET allowedRanks = 'default,alternate', rankSet = 'default' WHERE globalid = 1 LIMIT 1");
+		
+		mysql_query("UPDATE sms_crew SET displayRank = 'default' WHERE crewType = 'active'");
 		
 		echo "Your old departments, positions, and ranks tables have been removed. The next step will re-create those tables with the appropriate default values. Click the link below to continue to the next step.<br /><br /><strong><a href='sms_mod_bsg.php?step=3'>Next Step &raquo;</a></strong>";
 		
