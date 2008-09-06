@@ -40,7 +40,7 @@ if(in_array("m_giveaward", $sessionAccess))
 ?>
 
 	<h2>Give Award</h2>
-	<p>To give this award, please fill our the reason and hit OK.</p>
+	<p>To give this award, please fill out the reason and hit OK. <strong>Please note:</strong> due to the way in which awards are stored in the database, you cannot use semicolons (;) or vertical bars (|) in your reason. Semicolons in the reason will be replaced with commas.</p>
 	
 	<hr size="1" />
 	

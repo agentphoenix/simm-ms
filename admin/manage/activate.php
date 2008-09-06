@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
-System Version: 2.6.2
-Last Modified: 2008-08-30 2319 EST
+System Version: 2.6.3
+Last Modified: 2008-09-06 1047 EST
 **/
 
 /* access check */
@@ -350,9 +350,12 @@ if(
 
 					/* get the date info from PHP */
 					$now = getdate();
+					
+					/* make sure there are no semicolons in the reason */
+					$reason = str_replace(";", ",", $fetch['reason']);
 
 					/* build the new award entry */
-					$awards_array[] = $fetch['award'] . "," . $now[0] . "," . $fetch['reason'];
+					$awards_array[] = $fetch['award'] . "|" . $now[0] . "|" . $reason;
 
 					/* put the string back together */
 					$awards_string = implode(";", $awards_array);

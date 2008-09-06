@@ -10,7 +10,7 @@ File: pages/bio.php
 Purpose: Page to display the requested bio
 
 System Version: 2.6.3
-Last Modified: 2008-08-31 1201 EST
+Last Modified: 2008-09-06 1014 EST
 **/
 
 /* define the page class and set the vars */
@@ -460,7 +460,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 				/* explode the array again */
 				foreach($awardsRaw as $a => $b)
 				{
-					$awardsRaw[$a] = explode( ",", $b );
+					$awardsRaw[$a] = explode( "|", $b );
 				}
 				
 				$rowCount = 0;

@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/removeaward.php
 Purpose: Page that allows an admin to remove an award from a player
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 2219 EST
+System Version: 2.6.3
+Last Modified: 2008-09-06 1016 EST
 **/
 
 /* access check */
@@ -256,7 +256,7 @@ if( in_array( "m_removeaward", $sessionAccess ) ) {
 			/* explode the array again */
 			foreach($awardsRaw as $a => $b)
 			{
-				$awardsRaw[$a] = explode( ",", $b );
+				$awardsRaw[$a] = explode( "|", $b );
 			}
 			
 			/*
