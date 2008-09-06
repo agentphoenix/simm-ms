@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/262.php
 Purpose: Update to 2.6.3
-Last Modified: 2008-08-31 1202 EST
+Last Modified: 2008-09-06 1009 EST
 **/
 
 /*
@@ -27,13 +27,21 @@ mysql_query("INSERT INTO sms_system_versions ( `version`, `versionRev`, `version
 - Updated skin location code to work better on Windows machines (local and servers)
 - Fixed display issues with character images and tour images in Firefox 3
 - Updated reflection script to version 1.9
+- Fixed issue with fresh install which made the system think it was running version 2.6.0
+- Fixed issue with commas not being able to be used in award reasons
 
 * skins/default/header.php
 * skins/cobalt/header.php
 * update.php
 * pages/bio.php
 * pages/tour.php
+* framework/functionsGlobal.php
 * framework/js/reflect.js
+* install/resource_data.php
+* admin/manage/addaward.php
+* admin/manage/removeaward.php
+* admin/manage/activate.php
+* admin/ajax/award_give.php
 
 + update/262.php
 
