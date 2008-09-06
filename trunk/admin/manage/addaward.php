@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/addaward.php
 Purpose: Page that allows an admin to add an award for a player
 
-System Version: 2.6.0
-Last Modified: 2008-04-19 1825 EST
+System Version: 2.6.3
+Last Modified: 2008-09-06 1042 EST
 **/
 
 /* access check */
@@ -63,8 +63,11 @@ if( in_array( "m_giveaward", $sessionAccess ) ) {
 		/* get the date info from PHP */
 		$now = getdate();
 		
+		/* make sure there are no semicolons in the reason */
+		$reason = str_replace(";", ",", $reason);
+		
 		/* build the new award entry */
-		$arrayAwards[] = $action_award . "," . $now[0] . "," . $reason;
+		$arrayAwards[] = $action_award . "|" . $now[0] . "|" . $reason;
 
 		/* put the string back together */
 		$joinedString = implode(";", $arrayAwards);
