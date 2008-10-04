@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/jp.php
 Purpose: Page to post a joint post
 
-System Version: 2.6.1
-Last Modified: 2008-08-01 1349 EST
+System Version: 2.6.3
+Last Modified: 2008-10-05 0935 EST
 **/
 
 /* access check */
@@ -354,7 +354,7 @@ if(in_array("p_jp", $sessionAccess))
 		$to = $authors_email_string;
 		$subject = $emailSubject . " " . printMissionTitle($postMission) . " - " . $postTitle . " (Saved Joint Post)";
 		$message = "This email is to notify you that your joint post, " . stripslashes($postTitle) . ", has recently been updated.  Please log in to make any changes you want before it is posted.  The content of the new post is below.  This is an automatically generated email.  Please log in to continue working on this post: " . $webLocation . "login.php?action=login\r\n\r\n";
-		$message = "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
+		$message.= "A Post By " . displayEmailAuthors($postAuthors, 'noLink') . "\r\n";
 		$message.= "Location: " . stripslashes($postLocation) . "\r\n";
 		$message.= "Timeline: " . stripslashes($postTimeline) . "\r\n";
 		$message.= "Tag: " . stripslashes($postTag) . "\r\n\r\n";
