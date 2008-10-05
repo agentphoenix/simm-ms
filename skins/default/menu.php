@@ -48,7 +48,7 @@ if(isset($sessionCrewid))
 <div class="content">
 	<div class="nav">
 		<div class="login">
-		<? if( isset( $sessionCrewid ) ) { ?>
+		<? if(isset($sessionCrewid)) { ?>
 			<i>Hello, <? printCrewName( $sessionCrewid, "noRank", "noLink" ); ?></i><br />
 			{ <a href="<?=$webLocation;?>login.php?action=logout">Log Out</a> }
 		<? } else { ?>

@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.3
-Last Modified: 2008-09-06 1009 EST
+Last Modified: 2008-10-01 1904 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -82,7 +82,7 @@ while( $global = mysql_fetch_assoc( $globalsResult ) ) {
 |
 */
 $version = "2.6.3";
-$code = $sysuid;
+define('UID', $sysuid);
 
 /*
 |---------------------------------------------------------------

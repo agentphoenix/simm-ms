@@ -9,9 +9,21 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: index.php
 Purpose: The main file that pulls in the requested page
 
-System Version: 2.6.1
-Last Modified: 2008-08-01 1400 EST
+System Version: 2.6.3
+Last Modified: 2008-10-05 0034 EST
 **/
+
+/* pull in the DB connection variables */
+require_once('framework/dbconnect.php');
+
+/* pulling a function from new library */
+require_once('framework/session.name.php');
+
+/* get system unique identifier */
+$sysuid = get_system_uid();
+
+/* rewrite master php.ini session.name */
+ini_set('session.name', $sysuid);
 
 /* start the session */
 session_start();
@@ -19,9 +31,6 @@ session_start();
 /* fixing error reporting issues */
 error_reporting(0);
 ini_set('display_errors', 0);
-
-/* pull in the DB connection variables */
-require_once('framework/dbconnect.php');
 
 /* query the db for the system information */
 $getVer = "SELECT sysVersion FROM sms_system WHERE sysid = 1";
@@ -75,7 +84,7 @@ if( $updateVersion[0] < "2.5.0" || empty($dbUser) ) {
 	}
 	
 	/* grab the user's skin choice, otherwise, use the system default */
-	if( isset( $sessionDisplaySkin ) && $code == $_SESSION['systemUID'] ) {
+	if( isset( $sessionDisplaySkin ) ) {
 		include_once( 'skins/' . $sessionDisplaySkin . '/header.php' );
 	} else {
 		include_once( 'skins/' . $skin . '/header.php' );
@@ -89,7 +98,7 @@ if( $updateVersion[0] < "2.5.0" || empty($dbUser) ) {
 	}
 	
 	/* grab the user's skin choice, otherwise, use the system default */
-	if( isset( $sessionDisplaySkin ) && $code == $_SESSION['systemUID'] ) {
+	if( isset( $sessionDisplaySkin ) ) {
 		include_once( 'skins/' . $sessionDisplaySkin . '/footer.php' );
 	} else {
 		include_once( 'skins/' . $skin . '/footer.php' );

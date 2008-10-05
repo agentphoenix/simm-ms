@@ -10,7 +10,7 @@ File: skins/ship_1/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
 Skin Version: 2.0
-Last Modified: 2008-07-04 1622 EST
+Last Modified: 2008-10-05 0954 EST
 **/
 
 ?>
@@ -40,8 +40,9 @@ $fetch = mysql_fetch_array($getR);
 /* format the ship class right */
 $class = strtolower($fetch[0]);
 $class = str_replace(' ', '_', $class);
+$path = basename(dirname(__FILE__)); /* get the current directory */
 
-if (file_exists('skins/ship_1/images/ship_' . $class . '.jpg'))
+if (file_exists('skins/'. $path .'/images/ship_' . $class . '.jpg'))
 {
 	$class_final = $class;
 }
@@ -77,7 +78,7 @@ define('SHIP_CLASS', $class_final);
 	<div class="content">
 		<div class="nav">
 			<div class="login">
-			<? if( isset( $sessionCrewid ) ) { ?>
+			<? if (isset($sessionCrewid)) { ?>
 				<i>Hello, <? printCrewName( $sessionCrewid, "noRank", "noLink" ); ?></i><br />
 				{ <a href="<?=$webLocation;?>login.php?action=logout">Log Out</a> }
 			<? } else { ?>
