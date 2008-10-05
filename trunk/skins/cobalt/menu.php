@@ -8,7 +8,7 @@ File: skins/cobalt/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
 Skin Version: 2.0
-Last Modified: 2008-06-22 1715 EST
+Last Modified: 2008-10-05 0948 EST
 **/
 
 $ship = array($shipPrefix, $shipName, $shipRegistry);
@@ -68,7 +68,7 @@ if(isset($sessionCrewid))
 <div id="content" class="wrapper">
 	<div class="nav">
 		<div class="login">
-		<? if( isset( $sessionCrewid ) ) { ?>
+		<? if (isset($sessionCrewid)) { ?>
 			<i>Hello, <? printCrewName( $sessionCrewid, "noRank", "noLink" ); ?></i><br />
 			{ <a href="<?=$webLocation;?>login.php?action=logout">Log Out</a> }
 		<? } else { ?>

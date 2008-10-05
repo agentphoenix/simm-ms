@@ -10,8 +10,8 @@ File: framework/classMenu.php
 Purpose: Page with the menu class that is called by the skin to build the various
 	menus used throughout SMS
 
-System Version: 2.6.0
-Last Modified: 2008-05-23 1918 EST
+System Version: 2.6.3
+Last Modified: 2008-10-01 1926 EST
 **/
 
 class Menu
@@ -72,7 +72,7 @@ class Menu
 				echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . ">" . $value['title'] . "</a></li>";
 				
 			} else {
-				if( isset( $_SESSION['sessionCrewid'] ) ) {
+				if (isset($_SESSION['sessionCrewid']) && UID == $_SESSION['systemUID']) {
 					
 					if( $key != 0 ) {
 						echo "<li class='spacer'>&nbsp;</li>";

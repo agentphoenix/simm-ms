@@ -5,13 +5,25 @@ This is a necessary system file. Do not modify this page unless you are highly
 knowledgeable as to the structure of the system. Modification of this file may
 cause SMS to no longer function.
 
-Author: David VanScott [ anodyne.sms@gmail.com ]
+Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin.php
 Purpose: The main file that pulls in the requested administration page
 
-System Version: 2.6.0
-Last Modified: 2007-12-27 0934 EST
+System Version: 2.6.3
+Last Modified: 2008-10-05 0050 EST
 **/
+
+/* pull in the DB connection variables */
+require_once('framework/dbconnect.php');
+
+/* pulling a function from new library */
+require_once('framework/session.name.php');
+
+/* get system unique identifier */
+$sysuid = get_system_uid();
+
+/* rewrite master php.ini session.name */
+ini_set('session.name', $sysuid);
 
 /* start the session */
 session_start();
@@ -75,7 +87,7 @@ if( $updateVersion[0] < "2.5.0" ) {
 	}
 	
 	/* if the session is set, continue, otherwise, send them to the index page */
-	if( isset( $sessionCrewid ) && $code == $_SESSION['systemUID'] ) {
+	if( isset( $sessionCrewid ) ) {
 		
 		/* grab the user's skin choice, otherwise, use the system default */
 		if( isset( $sessionDisplaySkin ) ) {

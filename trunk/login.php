@@ -12,9 +12,21 @@ Purpose: The file that controls logging in, logging out, and checking the
 	SESSION variables that are used through the system: crewid, access levels, and 
 	displaySkin.
 
-System Version: 2.6.2
-Last Modified: 2008-08-30 1502 EST
+System Version: 2.6.3
+Last Modified: 2008-10-05 0035 EST
 **/
+
+/* pull in the DB connection variables */
+require_once('framework/dbconnect.php');
+
+/* pulling a function from new library */
+require_once('framework/session.name.php');
+
+/* get system unique identifier */
+$sysuid = get_system_uid();
+
+/* rewrite master php.ini session.name */
+ini_set('session.name', $sysuid);
 
 /* start the session */
 session_start();
@@ -231,7 +243,7 @@ This is an automatically generated email, please do not reply.";
 	<form method="post" action="<?=$webLocation;?>login.php?action=checkLogin">
 		<div class="content">
 		
-			<? if( $login == "false" ) { ?>
+			<? if(isset($error)) { ?>
 			<div class="error" style="margin:0 auto; width:50%;">
 				<?
 				
@@ -251,12 +263,6 @@ This is an automatically generated email, please do not reply.";
 					case 4:
 						echo "You are not an active member of this sim. In order to log in, your account must be active! If you believe you have received this message in error, please contact the sim's CO.";
 						break;
-				}
-				
-				/* if they have a error 3, destroy the session */
-				if( $error == 3 ) {
-					session_unset();
-					session_destroy();
 				}
 				
 				?>

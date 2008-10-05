@@ -1,5 +1,17 @@
 <?php
 
+/* need to connect to the database */
+require_once('../../framework/dbconnect.php');
+
+/* pulling a function from new library */
+require_once('../../framework/session.name.php');
+
+/* get system unique identifier */
+$sysuid = get_system_uid();
+
+/* rewrite master php.ini session.name */
+ini_set('session.name', $sysuid);
+
 session_start();
 
 if( !isset( $sessionAccess ) ) {
