@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/reports/activity.php
 Purpose: Page that shows the crew activity
 
-System Version: 2.5.2
-Last Modified: 2007-08-02 1347 EST
+System Version: 2.6.3
+Last Modified: 2007-10-06 2239 EST
 **/
 
 /* access check */
@@ -92,10 +92,8 @@ if( in_array( "r_activity", $sessionAccess ) ) {
 								$lastLoginInDays = round( $lastLoginInDays, 0 );
 								echo $lastLoginInDays . " Days Ago";
 							}
-						} elseif( $lastLoginInDays >= 1 && $lastLoginInDays < 2 ) {
-							echo "1 Day Ago";
-						} elseif( $lastLoginInDays < 1 ) {
-							echo "Today";
+						} elseif( $lastLoginInDays >= 0 && $lastLoginInDays < 2 ) {
+							echo "Within 24 Hours";
 						}
 						
 					}
@@ -140,14 +138,8 @@ if( in_array( "r_activity", $sessionAccess ) ) {
 								echo "</b></span>";
 							}
 							
-						} elseif( $lastPostInDays >= 1 && $lastPostInDays < 2 ) {
-	
-							echo "1 Day Ago";
-	
-						} elseif( $lastPostInDays < 1 ) {
-							
-							echo "Today";
-							
+						} elseif( $lastPostInDays >= 0 && $lastPostInDays < 2 ) {
+							echo "Within 24 Hours";
 						}
 						
 					}

@@ -29,6 +29,7 @@ mysql_query("INSERT INTO sms_system_versions ( `version`, `versionRev`, `version
 - Updated reflection script to version 1.9
 - Fixed issue with fresh install which made the system think it was running version 2.6.0
 - Fixed issue with commas not being able to be used in award reasons
+- Fixed confusing issue where crew activity report said Today when it was actually within the last 24 hours
 
 * skins/default/header.php
 * skins/cobalt/header.php
