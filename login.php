@@ -13,7 +13,7 @@ Purpose: The file that controls logging in, logging out, and checking the
 	displaySkin.
 
 System Version: 2.6.3
-Last Modified: 2008-10-05 0035 EST
+Last Modified: 2008-10-11 1217 EST
 **/
 
 /* pull in the DB connection variables */
@@ -125,58 +125,60 @@ if( $action == "checkLogin" ) {
 		$$key = escape_string($value);
 	}
 	
-	$checkEmail = "SELECT crewid, email FROM sms_crew WHERE username = $username AND email = $email LIMIT 1";
-	$checkEmailResult = mysql_query($checkEmail);
-	$emailCount = mysql_num_rows($checkEmailResult);
+	if (!empty($username) || !empty($email))
+	{
+		$checkEmail = "SELECT crewid, email FROM sms_crew WHERE username = $username AND email = $email LIMIT 1";
+		$checkEmailResult = mysql_query($checkEmail);
+		$emailCount = mysql_num_rows($checkEmailResult);
 	
-	/* determine temporary password */
-	if( $emailCount == 1 ) {
+		/* determine temporary password */
+		if( $emailCount == 1 ) {
 		
-		$fetch = mysql_fetch_array($checkEmailResult);
+			$fetch = mysql_fetch_array($checkEmailResult);
 	
-		/* define the length */
-		$length = 8;
+			/* define the length */
+			$length = 8;
 		
-		/* start with a blank password */
-		$password = "";
+			/* start with a blank password */
+			$password = "";
 		
-		/* define possible characters */
-		$possible = "0123456789bcdfghjkmnpqrstvwxyz"; 
+			/* define possible characters */
+			$possible = "0123456789bcdfghjkmnpqrstvwxyz"; 
 		
-		/* set up a counter */
-		$i = 0; 
+			/* set up a counter */
+			$i = 0; 
 		
-		/* add random characters to $password until $length is reached */
-		while( $i < $length ) { 
+			/* add random characters to $password until $length is reached */
+			while( $i < $length ) { 
 		
-			/* pick a random character from the possible ones */
-			$char = substr( $possible, mt_rand( 0, strlen( $possible )-1 ), 1 );
+				/* pick a random character from the possible ones */
+				$char = substr( $possible, mt_rand( 0, strlen( $possible )-1 ), 1 );
 			
-			/* we don't want this character if it's already in the password */
-			if( !strstr( $password, $char ) ) { 
-				$password .= $char;
-				$i++;
+				/* we don't want this character if it's already in the password */
+				if( !strstr( $password, $char ) ) { 
+					$password .= $char;
+					$i++;
+				}
+		
 			}
 		
-		}
-		
-		$from = printCOEmail();
-		$newPassword = md5( $password );
-		$to = $fetch[1];
-		$subject = "[" . $shipPrefix . " " . $shipName . "] Password Reset";
-		$message = "Your new password is listed below. You can log in with this new password and your existing username. It is recommended that you change your password once you log in.
+			$from = printCOEmail();
+			$newPassword = md5( $password );
+			$to = $fetch[1];
+			$from = printCO() .' <'. printCOEmail() .'>';
+			$subject = "[" . $shipPrefix . " " . $shipName . "] Password Reset";
+			$message = "Your new password is listed below. You can log in with this new password and your existing username. It is recommended that you change your password once you log in.
 
-Password: $password
+	Password: $password
 
-This is an automatically generated email, please do not reply.";
+	This is an automatically generated email, please do not reply.";
 
-		mail( $to, $subject, $message, "From: " . $shipPrefix . " " . $shipName . " < " . $from . " >\nX-Mailer: PHP/" . phpversion() );
+			mail($to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion());
 				
-		$updatePassword = "UPDATE sms_crew SET password = '$newPassword' WHERE crewid = '$fetch[0]' LIMIT 1";
-		$passwordResult = mysql_query( $updatePassword );
-		
+			$updatePassword = "UPDATE sms_crew SET password = '$newPassword' WHERE crewid = '$fetch[0]' LIMIT 1";
+			$passwordResult = mysql_query( $updatePassword );
+		}
 	}
-	
 }
 	
 ?>
@@ -200,8 +202,20 @@ This is an automatically generated email, please do not reply.";
 		$redirectTime = "5";
 		$redirectLocation = $webLocation . "index.php?page=main";
 	} elseif( $action == "resetPassword" ) {
-		$redirectTime = "120";
-		$redirectLocation = $webLocation . "login.php?action=login";
+		switch ($error)
+		{
+			case 1:
+				$redirectTime = "0";
+				$redirectLocation = $webLocation . "login.php?action=login&login=false&error=5";
+				
+				break;
+			
+			default:
+				$redirectTime = "120";
+				$redirectLocation = $webLocation . "login.php?action=login";
+				
+				break;
+		}
 	}
 	
 	?>
@@ -263,6 +277,9 @@ This is an automatically generated email, please do not reply.";
 					case 4:
 						echo "You are not an active member of this sim. In order to log in, your account must be active! If you believe you have received this message in error, please contact the sim's CO.";
 						break;
+					case 5:
+						echo "Password reset failed! You must supply both a username and email address to reset your account. Please try again.";
+						break;
 				}
 				
 				?>
@@ -306,16 +323,16 @@ This is an automatically generated email, please do not reply.";
 <? } elseif( $action == "resetPassword" ) {
 
 	/* determine if password was really reset */
-	if ( empty($passwordResult) ) { ?>
+	if (empty($passwordResult)) { ?>
 
 	<form method="post" action="<?=$webLocation;?>login.php?action=resetPassword">
 		<div class="content">
 			<b>Password Not Reset</b><br /><br />
-			<span class="error">
+			<div class="error" style="width:50%; margin:0 auto;">
 				The information that you have supplied is not the same as what is listed in the database.
 				Please re-enter your information.  If you continue to get this error please email the CO 
 				and inform them of this error.
-			</span>
+			</div>
 			<br /><br />
 	
 			<b>Username</b><br />
@@ -324,7 +341,9 @@ This is an automatically generated email, please do not reply.";
 			<input type="text" size="16" maxlength="50" name="email" class="textboxLarge" /><br /><br /><br />
 			<input type="image" src="<?=$webLocation;?>skins/<?=$skin;?>/buttons/reset.png" class="submitButton" /><br /><br /><br />
 			
-			<a href="<?=$webLocation;?>login.php?action=login">&laquo; Back to login</a>
+			<div class="footer">
+				<a href="<?=$webLocation;?>login.php?action=login">&laquo; Back to login</a>
+			</div>
 		</div>
 	</form>
 	
