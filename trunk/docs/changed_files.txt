@@ -12,6 +12,28 @@
 */
 
 |---------------------------------------------------------------
+| SMS 2.6.3
+|---------------------------------------------------------------
+
+* update.php
+* images/ranks/default
+* admin/ajax
+* admin/manage/addaward.php
+* admin/manage/removeaward.php
+* admin/manage/activate.php
+* framework/functionsGlobal.php
+* framework/js/reflect.js
+* install/resource_data.php
+* pages/bio.php
+* pages/tour.php
+* skins/default/header.php
+* skins/cobalt/header.php
+
++ update/262.php
++ framework/session.name.php
+
+
+|---------------------------------------------------------------
 | SMS 2.6.2
 |---------------------------------------------------------------
 
