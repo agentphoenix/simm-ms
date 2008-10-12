@@ -1,0 +1,34 @@
+==========
+BUG REPORT
+==========
+
+Subject: [BUG] Short description
+
+Long description goes here.
+
+STEPS TO RECREATE:
+1.
+2.
+3.
+
+RESULT:
+
+EXPECTED RESULT:
+
+ACCESS LEVEL:
+
+BROWSER:
+
+
+==========
+ENHANCEMENT REPORT
+==========
+
+Subject: [ENHANCEMENT] Short description
+
+Long description goes here.
+
+REASONS/SUGGESTIONS:
+1.
+2.
+3.
