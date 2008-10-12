@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.3
-Last Modified: 2008-08-31 1145 EST
+Last Modified: 2008-10-12 1645 EST
 **/
 
 /* define the step var */
@@ -133,7 +133,7 @@ switch($step)
 	case 3:
 
 		/** PULL IN THE UPDATE FILE **/
-		require_once( "update/starbase.php" );
+		require_once("update/starbase.php");
 		
 		break;
 }
@@ -154,16 +154,20 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.2 is an update to latest release of SMS which fixes the following issues:
+			SMS 2.6.3 is an update to latest release of SMS which fixes the following issues:
 			
 			<ul>
-				<li>Fixed bug where top positions couldn't be updated</li>
-				<li>Disabled NPC award nomination tab if there are no in-character awards present</li>
-				<li>Fixed bug where view link in database management always points to the last database entry</li>
-				<li>Fixed bug where reset password wouldn't send email out and would print new password on the screen</li>
-				<li>Fixed bug where HTML breaks were shown in acceptance and rejection emails</li>
-				<li>Added alt text to combadge images in the event the combadge image is missing, people can still get to the bios</li>
-				<li>Added changed files list to the zip archive again</li>
+				<li>Updated skin location code to work better on Windows machines (local and servers)</li>
+				<li>Fixed display issues with character images and tour images in Firefox 3</li>
+				<li>Updated reflection script to version 1.9</li>
+				<li>Fixed issue with fresh install which made the system think it was running version 2.6.0</li>
+				<li>Fixed issue with commas not being able to be used in award reasons (semicolons can still not be used)</li>
+				<li>Fixed confusing issue where crew activity report said Today when it was actually within the last 24 hours</li>
+				<li>Fixed bug where reset password would reset a password and try to update a password and send an email even if you didn&rsquo;t put anything in the fields</li>
+				<li>Fixed bug where &ldquo;login to update this joint post&rdquo; message was missing from joint post saved notification emails</li>
+				<li>Fixed issue where two SMS installations on the same domain would cause weird access issues (thanks to Jon Matterson for letting us use his MOD to fix this issue)</li>
+				<li>Updated default rank set to use DS9 rank set using alpha channel transparencies, allowing the ranks to look good on any background color</li>
+				<li>Fixed bug in ship skin that would cause it to break when switching directories</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

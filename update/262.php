@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/262.php
 Purpose: Update to 2.6.3
-Last Modified: 2008-09-06 1009 EST
+Last Modified: 2008-10-12 1655 EST
 **/
 
 /*
@@ -18,34 +18,6 @@ Last Modified: 2008-09-06 1009 EST
 | for this release.
 |
 */
-mysql_query("INSERT INTO sms_system_versions ( `version`, `versionRev`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.3', '664', '1220155200', 'This release addresses ...', '...' )");
-
-/**
-
-# need to fix award issue
-
-- Updated skin location code to work better on Windows machines (local and servers)
-- Fixed display issues with character images and tour images in Firefox 3
-- Updated reflection script to version 1.9
-- Fixed issue with fresh install which made the system think it was running version 2.6.0
-- Fixed issue with commas not being able to be used in award reasons
-- Fixed confusing issue where crew activity report said Today when it was actually within the last 24 hours
-
-* skins/default/header.php
-* skins/cobalt/header.php
-* update.php
-* pages/bio.php
-* pages/tour.php
-* framework/functionsGlobal.php
-* framework/js/reflect.js
-* install/resource_data.php
-* admin/manage/addaward.php
-* admin/manage/removeaward.php
-* admin/manage/activate.php
-* admin/ajax/award_give.php
-
-+ update/262.php
-
-**/
+mysql_query("INSERT INTO sms_system_versions ( `version`, `versionRev`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ( '2.6.3', '688', '1223848800', 'This release addresses issues related to award nominations, access problems with SMS systems on the same domain, email issues, and other bug fixes.', 'Updated skin location code to work better on Windows machines (local and servers);Fixed display issues with character images and tour images in Firefox 3;Updated reflection script to version 1.9;Fixed issue with fresh install which made the system think it was running version 2.6.0;Fixed issue with commas not being able to be used in award reasons (semicolons can still not be used);Fixed confusing issue where crew activity report said Today when it was actually within the last 24 hours;Fixed bug where reset password would reset a password and try to update a password and send an email even if you didn\'t put anything in the fields;Fixed bug where \"login to update this joint post\" message was missing from joint post saved notification emails;Fixed issue where two SMS installations on the same domain would cause weird access issues (thanks to Jon Matterson for letting us use his MOD to fix this issue);Updated default rank set to use DS9 rank set using alpha channel transparencies, allowing the ranks to look good on any background color;Fixed bug in ship skin that would cause it to break when switching directories' )");
 
 ?>
