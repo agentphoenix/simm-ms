@@ -146,8 +146,8 @@ switch ($step)
 			('General', 'GEN', 'maco-a4.png', 1, 4, 'y'),
 
 			('Vice-Admiral', 'VADM', 'y-a3.png', 2, 1, 'y'),
-			('Vice-Admiral', 'VADM', 'r-a3.png', 2, 1, 'y'),
-			('Vice-Admiral', 'VADM', 't-a3.png', 2, 1, 'y'),
+			('Vice-Admiral', 'VADM', 'r-a3.png', 2, 2, 'y'),
+			('Vice-Admiral', 'VADM', 't-a3.png', 2, 3, 'y'),
 			('Lieutenant General', 'LT GEN', 'maco-a3.png', 2, 4, 'y'),
 
 			('Rear-Admiral', 'RADM', 'y-a2.png', 3, 1, 'y'),
