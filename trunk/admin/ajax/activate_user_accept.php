@@ -95,9 +95,9 @@ if(in_array("x_approve_users", $sessionAccess))
 						extract( $rank, EXTR_OVERWRITE );
 						
 						if( $pendingArray['rankid'] == $rank['rankid'] ) {
-							echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/default/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+							echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/default/" . $rankImage . " ) no-repeat 0 100%; height:50px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
 						} else {
-							echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/default/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
+							echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/default/" . $rankImage . " ) no-repeat 0 100%; height:50px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
 						}
 						
 					}

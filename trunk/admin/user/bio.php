@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/bio.php
 Purpose: Page to display the requested bio
 
-System Version: 2.6.0
-Last Modified: 2008-05-05 0320 EST
+System Version: 2.6.4
+Last Modified: 2008-10-25 0904 EST
 **/
 
 /* do some checking to make sure someone's not trying to do a SQL injection */
@@ -266,9 +266,9 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 							extract( $rank, EXTR_OVERWRITE );
 							
 							if( $fetchCrew['rankid'] == $rankid ) {
-								echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
+								echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:50px; color:#" . $deptColor . ";' selected>" . $rankName . "</option>";
 							} else {
-								echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:40px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
+								echo "<option value='" . $rankid . "' style='background:#000 url( images/ranks/" . $rankSet . "/" . $rankImage . " ) no-repeat 0 100%; height:50px; color:#" . $deptColor . ";'>" . $rankName . "</option>";
 							}
 						}
 						
