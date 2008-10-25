@@ -12,6 +12,19 @@
 */
 
 |---------------------------------------------------------------
+| SMS 2.6.4
+|---------------------------------------------------------------
+
+* admin/ajax/activate_user_accept.php
+* admin/manage/add.php
+* admin/user/bio.php
+* install/install.php
+* framework/functionsGlobal.php
+* framework/session.name.php
+
++ update/263.php
+
+|---------------------------------------------------------------
 | SMS 2.6.3
 |---------------------------------------------------------------
 

@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install/install.php
 Purpose: Installation script for SMS
 
-System Version: 2.6.1
-Last Modified: 2008-07-27 1138 EST
+System Version: 2.6.4
+Last Modified: 2008-10-25 0906 EST
 **/
 
 session_start();
@@ -825,7 +825,7 @@ $installSteps = array(
 								while( $rank = mysql_fetch_assoc( $ranksResult ) ) {
 									extract( $rank, EXTR_OVERWRITE );
 							
-									echo "<option value='" . $rank['rankid'] . "' style='background: url( ../images/ranks/default/" . $rank['rankImage'] . " ) no-repeat 0 100%; height:40px; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
+									echo "<option value='" . $rank['rankid'] . "' style='background: url( ../images/ranks/default/" . $rank['rankImage'] . " ) no-repeat 0 100%; height:50px; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
 								
 								}
 								
