@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
-System Version: 2.6.2
-Last Modified: 2008-08-22 0952 EST
+System Version: 2.6.4
+Last Modified: 2008-10-25 1401 EST
 **/
 
 /* access check */
@@ -105,10 +105,15 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 		$awards_array[] = $fetch[0];
 	}
 	
+	/* find out how many NPCs there are */
+	$npc_c = "SELECT count(crewid) FROM sms_crew WHERE crewType = 'npc'";
+	$npc_c_r = mysql_query($npc_c);
+	$npc_count = mysql_fetch_array($npc_c_r);
+	
 	/* count the number of awards */
 	$award_count = count($awards_array);
 	
-	if ($award_count < 1)
+	if ($award_count < 1 || $npc_count[0] < 1)
 	{
 		$disable_string = 2;
 	}
@@ -222,7 +227,11 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 				</tr>
 				<tr>
 					<td colspan="2"></td>
-					<td><input type="image" src="<?=path_userskin;?>buttons/nominate.png" name="action" value="Nominate" class="button" /></td>
+					<td>
+						<? if ($award_count > 0): ?>
+							<input type="image" src="<?=path_userskin;?>buttons/nominate.png" name="action" value="Nominate" class="button" />
+						<? endif; ?>
+					</td>
 				</tr>
 			</table>
 			</form>
@@ -303,7 +312,11 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 				</tr>
 				<tr>
 					<td colspan="2"></td>
-					<td><input type="image" src="<?=path_userskin;?>buttons/nominate.png" name="action" value="Nominate" class="button" /></td>
+					<td>
+						<? if ($award_count > 0): ?>
+							<input type="image" src="<?=path_userskin;?>buttons/nominate.png" name="action" value="Nominate" class="button" />
+						<? endif; ?>
+					</td>
 				</tr>
 			</table>
 			</form>

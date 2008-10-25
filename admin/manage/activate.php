@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
-System Version: 2.6.3
-Last Modified: 2008-09-06 1047 EST
+System Version: 2.6.4
+Last Modified: 2008-10-25 1353 EST
 **/
 
 /* access check */
@@ -731,7 +731,11 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 					<td><? printCrewName( $pendingAwards['nominated'], "rank", "noLink" ); ?></td>
 					<td><? printCrewName( $pendingAwards['crew'], "rank", "noLink" ); ?></td>
 					<td align="center"><a href="#" class="delete" rel="facebox" myID="<?=$pendingAwards['id'];?>" myType="award" myAction="deny"><b>Deny</b></a></td>
-					<td align="center"><a href="#" class="add" rel="facebox" myID="<?=$pendingAwards['id'];?>" myType="award" myAction="approve"><b>Approve</b></a></td>
+					<td align="center">
+						<? if (!empty($award)): ?>
+							<a href="#" class="add" rel="facebox" myID="<?=$pendingAwards['id'];?>" myType="award" myAction="approve"><b>Approve</b></a>
+						<? endif; ?>
+					</td>
 				</tr>
 				<?php } ?>
 				
