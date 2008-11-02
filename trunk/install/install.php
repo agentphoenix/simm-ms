@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.4
-Last Modified: 2008-10-25 0906 EST
+Last Modified: 2008-11-01 2250 EST
 **/
 
 session_start();
@@ -665,7 +665,7 @@ $installSteps = array(
 				
 				<? print( htmlentities( '<?php' ) ); ?><br /><br />
 				
-				<!-- $webLocation = "<?=$_SESSION['webLocation'];?>";<br /><br /> -->
+				$webLocation = "<?=$_SESSION['webLocation'];?>";<br /><br />
 				$dbServer = "<?=$_SESSION['dbServer'];?>";<br />
 				$dbName = "<?=$_SESSION['dbName'];?>";<br />
 				$dbUser = "<?=$_SESSION['dbUser'];?>";<br />
@@ -685,7 +685,7 @@ $installSteps = array(
 			<div class="code">
 				<? print( htmlentities( '<?php' ) ); ?><br /><br />
 				
-				<!-- $webLocation = "<?=$webLocation;?>";<br /><br /> -->
+				$webLocation = "<?=$webLocation;?>";<br /><br />
 				$dbServer = "<?=$dbServer;?>";<br />
 				$dbName = "<?=$_POST['dbName'];?>";<br />
 				$dbUser = "<?=$_POST['dbUser'];?>";<br />
