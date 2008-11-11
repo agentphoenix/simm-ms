@@ -21,8 +21,10 @@
 * admin/user/bio.php
 * admin/user/nominate.php
 * install/install.php
+* install/resource_data.php
 * framework/functionsGlobal.php
 * framework/session.name.php
+* update.php
 
 + update/263.php
 
