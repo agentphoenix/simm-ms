@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.3
-Last Modified: 2008-10-12 1645 EST
+System Version: 2.6.4
+Last Modified: 2008-11-11 1333 EST
 **/
 
 /* define the step var */
@@ -63,7 +63,9 @@ $versionsArray = array(
 	256,
 	260,
 	261,
-	262
+	262,
+	263,
+	264
 );
 
 /* count the number of items in the versions array */
@@ -125,8 +127,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.3', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.3', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.4', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.4', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -154,20 +156,14 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.3 is an update to latest release of SMS which fixes the following issues:
+			SMS 2.6.4 is an update to latest release of SMS which fixes the following issues:
 			
 			<ul>
-				<li>Updated skin location code to work better on Windows machines (local and servers)</li>
-				<li>Fixed display issues with character images and tour images in Firefox 3</li>
-				<li>Updated reflection script to version 1.9</li>
-				<li>Fixed issue with fresh install which made the system think it was running version 2.6.0</li>
-				<li>Fixed issue with commas not being able to be used in award reasons (semicolons can still not be used)</li>
-				<li>Fixed confusing issue where crew activity report said Today when it was actually within the last 24 hours</li>
-				<li>Fixed bug where reset password would reset a password and try to update a password and send an email even if you didn&rsquo;t put anything in the fields</li>
-				<li>Fixed bug where &ldquo;login to update this joint post&rdquo; message was missing from joint post saved notification emails</li>
-				<li>Fixed issue where two SMS installations on the same domain would cause weird access issues (thanks to Jon Matterson for letting us use his MOD to fix this issue)</li>
-				<li>Updated default rank set to use DS9 rank set using alpha channel transparencies, allowing the ranks to look good on any background color</li>
-				<li>Fixed bug in ship skin that would cause it to break when switching directories</li>
+				<li>Fixed spacing in rank drop down menus to avoid text and graphic overlap</li>
+				<li>Fixed bug where players could nominate another player for an award, even if no awards exist</li>
+				<li>Fixed a potential bug where a player could manually get to the NPC tab and submit a nomination even if the tab was disabled</li>
+				<li>Removed approve link in Approve Award Nomination list if there is no award associated with that nomination (and award with an id of 0)</li>
+				<li>Fixed bug where web location variable wouldn&rsquo;t be written to the proper DIV in the event the file write failed</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
