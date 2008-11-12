@@ -11,7 +11,7 @@ Purpose: File that holds all the necessary global function files for JP author p
 	database connection, and error catching
 	
 System Version: 2.6.4
-Last Modified: 2008-10-25 0908 EST
+Last Modified: 2008-11-11 2211 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
@@ -63,12 +63,12 @@ mysql_select_db($database_table, $db) or die ("<b>Unable to select the appropria
 | use in the system check.
 |
 */
-$globals = "SELECT globals.*, messages.*, sys.sysuid, sys.sysVersion FROM sms_globals AS globals, sms_messages AS messages, ";
-$globals.= "sms_system AS sys WHERE globals.globalid = '1' AND messages.messageid = '1' AND sys.sysid = '1'";
-$globalsResult = mysql_query( $globals );
+$sms = "SELECT globals.*, messages.*, sys.sysuid, sys.sysVersion FROM sms_globals AS globals, sms_messages AS messages, ";
+$sms.= "sms_system AS sys WHERE globals.globalid = '1' AND messages.messageid = '1' AND sys.sysid = '1'";
+$smsResult = mysql_query($sms);
 
-while( $global = mysql_fetch_assoc( $globalsResult ) ) {
-	extract( $global, EXTR_OVERWRITE );
+while($fetchSMS = mysql_fetch_assoc($smsResult)) {
+	extract($fetchSMS, EXTR_OVERWRITE);
 }
 
 /*
