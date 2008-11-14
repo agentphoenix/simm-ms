@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.4
-Last Modified: 2008-11-11 2214 EST
+Last Modified: 2008-11-14 0831 EST
 **/
 
 /* define the step var */
@@ -165,6 +165,9 @@ switch($step)
 				<li>Removed approve link in Approve Award Nomination list if there is no award associated with that nomination (and award with an id of 0)</li>
 				<li>Fixed bug where web location variable wouldn&rsquo;t be written to the proper DIV in the event the file write failed</li>
 				<li>Fixed issue where SMS violated mod_security rule 340077 on some servers</li>
+				<li>Fixed bug where excess data was being inserted into the access fields</li>
+				<li>Fixed bug where adding an access level from the Other section for the entire crew would fail</li>
+				<li>Fixed bug where leading comma would be added to a user&rsquo;s access levels if they didn&rsquo;t have anything in that field to start with</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

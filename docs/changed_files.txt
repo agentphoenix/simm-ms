@@ -18,6 +18,8 @@
 * admin/ajax/activate_user_accept.php
 * admin/manage/activate.php
 * admin/manage/add.php
+* admin/manage/access.php
+* admin/manage/accessall.php
 * admin/user/bio.php
 * admin/user/nominate.php
 * install/install.php
