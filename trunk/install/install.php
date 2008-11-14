@@ -10,7 +10,7 @@ File: install/install.php
 Purpose: Installation script for SMS
 
 System Version: 2.6.4
-Last Modified: 2008-11-01 2250 EST
+Last Modified: 2008-11-14 0752 EST
 **/
 
 session_start();
@@ -56,7 +56,7 @@ switch($step)
 			$webLocation1 = $_POST['webLocation'] . "/";
 		}
 		
-		if(substr($webLocation1, 0, 7) == "http://")
+		if(substr($webLocation1, 0, 7) == "http://" || substr($webLocation1, 0, 8) == "https://")
 		{
 			$webLocation = $webLocation1;
 		}
