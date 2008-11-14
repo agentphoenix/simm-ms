@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/access.php
 Purpose: Page to access levels for individual users
 
-System Version: 2.6.1
-Last Modified: 2008-08-16 1651 EST
+System Version: 2.6.4
+Last Modified: 2008-11-14 0806 EST
 **/
 
 /* access check */
@@ -57,6 +57,14 @@ if(in_array("x_access", $sessionAccess))
 		/* set the POST array */
 		$accessValues = $_POST;
 		$type = $_POST['type'];
+		
+		foreach ($accessValues as $key => $value)
+		{
+			if (is_numeric($value) || $value == 'update' || $value == 'Update' || $key == 'type')
+			{
+				unset($accessValues[$key]);
+			}
+		}
 
 		/* set implode the array */
 		$accessString = implode( ",", $accessValues );

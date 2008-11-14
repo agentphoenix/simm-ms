@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/accessall.php
 Purpose: Page to display all of a user's access levels
 
-System Version: 2.6.1
-Last Modified: 2008-08-16 1653 EST
+System Version: 2.6.4
+Last Modified: 2008-11-14 0826 EST
 **/
 
 /* set the page class */
@@ -28,7 +28,7 @@ if(in_array("x_access", $sessionAccess))
 		1 => "manage",
 		2 => "reports",
 		3 => "user",
-		4 => "others"
+		4 => "other"
 	);
 	
 	/* set up an array of the different access levels */
@@ -100,7 +100,7 @@ if(in_array("x_access", $sessionAccess))
 			7 => array( "u_site", "Site Options" ),
 			8 => array( "u_nominate", "Award Nominations" )
 		),
-		"others" => array(
+		"other" => array(
 			0 => array( "x_access", "User Access Management" ),
 			1 => array( "x_update", "Update SMS" ),
 			2 => array( "x_approve_users", "Approve Users" ),
@@ -149,30 +149,44 @@ if(in_array("x_access", $sessionAccess))
 		while($fetch = mysql_fetch_assoc($getR)) {
 			extract($fetch, EXTR_OVERWRITE);
 			
-			/* take the item we need ($field) and break it into an array */
+			/* take the user's access field ($field) and put it into an array */
 			$array = explode(',', $$field);
 			
-			/* find out if the one we're trying to add is already there or not */
+			/* find the key of the one we're trying to add if it exists */
 			$key_num = array_search($value, $array);
 			
 			/* if the item isn't in the array */
-			if($key_num === NULL || $key_num === FALSE || $key_num === "" || $key_num === 0)
+			if($key_num === FALSE)
 			{
 				if(isset($_POST['action_add_x']))
 				{
 					$array[] = $value;
 				}
 				elseif(isset($_POST['action_remove_x']))
-				{}
+				{
+					/* don't do anything */
+				}
 			}
 			else
 			{
 				if(isset($_POST['action_add_x']))
-				{}
+				{
+					/* don't do anything */
+				}
 				elseif(isset($_POST['action_remove_x']))
 				{
 					unset($array[$key_num]);
-					$array = array_values($array);
+					array_values($array);
+				}
+			}
+			
+			/* make sure there are no empty array values */
+			foreach ($array as $k => $v)
+			{
+				if (empty($v))
+				{
+					unset($array[$k]);
+					array_values($array);
 				}
 			}
 			
