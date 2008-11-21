@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.4
-Last Modified: 2008-11-20 1342 EST
+Last Modified: 2008-11-20 2057 EST
 **/
 
 /* define the step var */
@@ -64,8 +64,7 @@ $versionsArray = array(
 	260,
 	261,
 	262,
-	263,
-	264
+	263
 );
 
 /* count the number of items in the versions array */
