@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.4
-Last Modified: 2008-11-20 2057 EST
+System Version: 2.6.5
+Last Modified: 2008-11-21 0800 EST
 **/
 
 /* define the step var */
@@ -64,7 +64,8 @@ $versionsArray = array(
 	260,
 	261,
 	262,
-	263
+	263,
+	264
 );
 
 /* count the number of items in the versions array */
@@ -126,8 +127,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.4', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.4', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.5', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.5', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -155,19 +156,10 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.4 is an update to latest release of SMS which fixes the following issues:
+			SMS 2.6.5 is an update to latest release of SMS which fixes the following issue:
 			
 			<ul>
-				<li>Fixed spacing in rank drop down menus to avoid text and graphic overlap</li>
-				<li>Fixed bug where players could nominate another player for an award, even if no awards exist</li>
-				<li>Fixed a potential bug where a player could manually get to the NPC tab and submit a nomination even if the tab was disabled</li>
-				<li>Removed approve link in Approve Award Nomination list if there is no award associated with that nomination (and award with an id of 0)</li>
-				<li>Fixed bug where web location variable wouldn&rsquo;t be written to the proper DIV in the event the file write failed</li>
-				<li>Fixed issue where SMS violated mod_security rule 340077 on some servers</li>
-				<li>Fixed bug where excess data was being inserted into the access fields</li>
-				<li>Fixed bug where adding an access level from the Other section for the entire crew would fail</li>
-				<li>Fixed bug where leading comma would be added to a user&rsquo;s access levels if they didn&rsquo;t have anything in that field to start with</li>
-				<li>Tweaked rank short names for updates and fresh installs (only impacts updates from 2.5.x to 2.6.x)</li>
+				<li>Fixed bug where Nominate button wouldn&rsquo;t appear on the award nomination form for playing character if the sim only had awards in the Out of Character or Both categories</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
