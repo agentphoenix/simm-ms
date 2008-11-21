@@ -1,6 +1,6 @@
 <?php
 
-$webLocation = "http://localhost:8888/sms/trunk/";
+$webLocation = "https://localhost/projects/sms/trunk/";
 	
 $dbServer = "localhost";
 $dbName = "eclipse";
