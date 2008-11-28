@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.5
-Last Modified: 2008-11-21 0800 EST
+System Version: 2.6.6
+Last Modified: 2008-11-28 0934 EST
 **/
 
 /* define the step var */
@@ -65,7 +65,8 @@ $versionsArray = array(
 	261,
 	262,
 	263,
-	264
+	264,
+	265
 );
 
 /* count the number of items in the versions array */
@@ -127,8 +128,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.5', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.5', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.6', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.6', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -156,10 +157,11 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.5 is an update to latest release of SMS which fixes the following issue:
+			SMS 2.6.6 is an update to latest release of SMS which updates the system with the following changes:
 			
 			<ul>
-				<li>Fixed bug where Nominate button wouldn&rsquo;t appear on the award nomination form for playing character if the sim only had awards in the Out of Character or Both categories</li>
+				<li>Updated bio image display to show a main picture and clicking the picture opens a gallery with all the character images</li>
+				<li>Added ability to set moderation flags at character activation</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
