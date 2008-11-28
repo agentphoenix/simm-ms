@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/bio.php
 Purpose: Page to display the requested bio
 
-System Version: 2.6.3
-Last Modified: 2008-09-06 1014 EST
+System Version: 2.6.6
+Last Modified: 2008-11-28 0921 EST
 **/
 
 /* define the page class and set the vars */
@@ -110,60 +110,38 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	<br /><br />
 	
 	<?php if(!empty($image)) { ?>
-	<div>
+	<div style="float:right; max-width:175px; text-align:center;">
 		<?php
 		
 		$pics = explode(",", $image);
 		$count = count($pics);
-		$diff = $count - 5;
+		$diff = $count - 1;
+		
+		switch ($count)
+		{
+			case 1:
+				echo "<strong class='fontSmall'>Click the image for a larger version</strong><br /><br />";
+				
+				break;
+			
+			default:
+				if ($diff == 1)
+				{
+					echo "<strong class='fontSmall'>Click the image to see the other image in the gallery</strong><br /><br />";
+				}
+				else
+				{
+					echo "<strong class='fontSmall'>Click the image to see the other ". $diff ." images in the gallery</strong><br /><br />";
+				}
+				
+				break;
+		}
 		
 		?>
-		<strong class="fontNormal">&nbsp;
-			<?php
-			
-			if($diff >= 1) {
-				switch($diff)
-				{
-					case 1:
-						echo "There is " . $diff . " more picture in this gallery. ";
-						break;
-					default:
-						echo "There are " . $diff . "more pictures in this gallery. ";
-				}
-			}
-			
-			if($count == 1) {
-				echo "Click the image to see a larger version.";
-			} else {
-				echo "Click one of the images to enter the gallery and view all the images.";
-			}
-			
-			?>
-		</strong><br />
 		
-		<table cellspacing="3" class="images">
-			<tr height="90">
-			<?php
-			
-			foreach($pics as $key => $value)
-			{
-				$value = trim($value);
-				$display = " style='display:none;'";
-				
-				if($key <= 4) {
-					$display = null;
-				}
-				
-				echo "<td width='20'" . $display . ">";
-				echo "<a href='" . $value . "' rel='shadowbox[Bio]'>";
-				echo "<img src='" . $value . "' border='0' alt='' height='90' class='image reflect rheight30 ropacity40' />";
-				echo "</a>";
-				echo "</td>";
-			}
-		
-			?>
-			</tr>
-		</table>
+		<a href="<?=$pics[0];?>" rel="shadowbox[Bio]">
+			<img src="<?=$pics[0];?>" alt="" border="0" width="175" class="image reflect rheight30 ropacity40" />
+		</a>
 	</div>
 	<?php } ?>
 	
@@ -642,6 +620,14 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<? } /* close the check on if posting should be shown or not */ ?>
 		
 		<? } /* close the if not NPC */ ?>
-	
 </div>
-<? } ?>
+
+<?php foreach ($pics as $key => $value): ?>
+	<?php if ($key > 0): ?>
+		<a href="<?=trim($value);?>" rel="shadowbox[Bio]">
+			<img src="<?=trim($value);?>" alt="" border="0" width="100" style="display:none" />
+		</a><br />
+	<?php endif; ?>
+<?php endforeach; ?>
+
+<?php } ?>
