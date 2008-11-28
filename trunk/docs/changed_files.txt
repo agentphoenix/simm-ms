@@ -16,6 +16,9 @@
 |---------------------------------------------------------------
 
 * pages/bio.php
+* admin/ajax/activate_user_accept.php
+* admin/manage/activate.php
+* admin/manage/add.php
 * admin/user/bio.php
 * install/resource_data.php
 * framework/functionsGlobal.php

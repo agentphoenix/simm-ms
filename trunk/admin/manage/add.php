@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/add.php
 Purpose: Page to add a player or NPC
 
-System Version: 2.6.4
-Last Modified: 2008-10-25 0906 EST
+System Version: 2.6.6
+Last Modified: 2008-11-28 0951 EST
 **/
 
 /* access check */
@@ -80,8 +80,9 @@ if(in_array("m_createcrew", $sessionAccess))
 				$groups = mysql_fetch_array($getGroupLevelsResult);
 				
 				$insert = "INSERT INTO sms_crew (crewType, username, password, email, firstName, middleName, lastName, gender, ";
-				$insert.= "species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, accessOthers) ";
-				$insert.= "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %d, %s, %s, %s, %s, %s)";
+				$insert.= "species, rankid, positionid, joinDate, accessPost, accessManage, accessReports, accessUser, ";
+				$insert.= "accessOthers, moderatePosts, moderateLogs, moderateNews) ";
+				$insert.= "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %d, %s, %s, %s, %s, %s, %s, %s, %s)";
 				
 				$query = sprintf(
 					$insert,
@@ -101,7 +102,10 @@ if(in_array("m_createcrew", $sessionAccess))
 					escape_string($groups[2]),
 					escape_string($groups[3]),
 					escape_string($groups[4]),
-					escape_string($groups[5])
+					escape_string($groups[5]),
+					escape_string($_POST['moderatePosts']),
+					escape_string($_POST['moderateLogs']),
+					escape_string($_POST['moderateNews'])
 				);
 		
 				$result = mysql_query($query);
@@ -194,6 +198,35 @@ PASSWORD: " . $_POST['password'] . "";
 				<td class="tableCellLabel">Email Address</td>
 				<td>&nbsp;</td>
 				<td><input type="text" class="image" name="email" /></td>
+			</tr>
+			
+			<tr>
+				<td colspan="3" height="15"></td>
+			</tr>
+			
+			<tr>
+				<td class="tableCellLabel">Moderate Posts?</td>
+				<td>&nbsp;</td>
+				<td>
+					<input type="radio" name="moderatePosts" id="posts_y" value="y" /> <label for="posts_y">Yes</label>
+					<input type="radio" name="moderatePosts" id="posts_n" value="n" checked /> <label for="posts_n">No</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="tableCellLabel">Moderate Logs?</td>
+				<td>&nbsp;</td>
+				<td>
+					<input type="radio" name="moderateLogs" id="logs_y" value="y" /> <label for="logs_y">Yes</label>
+					<input type="radio" name="moderateLogs" id="logs_n" value="n" checked /> <label for="logs_n">No</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="tableCellLabel">Moderate News?</td>
+				<td>&nbsp;</td>
+				<td>
+					<input type="radio" name="moderateNews" id="news_y" value="y" /> <label for="news_y">Yes</label>
+					<input type="radio" name="moderateNews" id="news_n" value="n" checked /> <label for="news_n">No</label>
+				</td>
 			</tr>
 			<? } ?>
 			

@@ -70,7 +70,8 @@ if(
 					
 					$update = "UPDATE sms_crew SET positionid = %d, crewType = %s, accessPost = %s, ";
 					$update.= "accessManage = %s, accessReports = %s, accessUser = %s, accessOthers = %s, ";
-					$update.= "rankid = %d, leaveDate = %s WHERE crewid = $action_id LIMIT 1";
+					$update.= "rankid = %d, leaveDate = %s, moderatePosts = %s, moderateLogs = %s, moderateNews = %s ";
+					$update.= "WHERE crewid = $action_id LIMIT 1";
 					
 					$query = sprintf(
 						$update,
@@ -82,7 +83,10 @@ if(
 						escape_string( $groups[4] ),
 						escape_string( $groups[5] ),
 						escape_string( $rank ),
-						escape_string( '' )
+						escape_string( '' ),
+						escape_string( $moderatePosts ),
+						escape_string( $moderateLogs ),
+						escape_string( $moderateNews )
 					);
 
 					$result = mysql_query( $query );

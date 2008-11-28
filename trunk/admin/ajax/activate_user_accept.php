@@ -106,6 +106,40 @@ if(in_array("x_approve_users", $sessionAccess))
 					</select>
 				</td>
 			</tr>
+			
+			<tr>
+				<td colspan="3" height="10"></td>
+			</tr>
+			
+			<tr>
+				<td class="tableCellLabel">Moderate Posts?</td>
+				<td>&nbsp;</td>
+				<td>
+					<input type="radio" name="moderatePosts" id="posts_y" value="y" /> <label for="posts_y">Yes</label>
+					<input type="radio" name="moderatePosts" id="posts_n" value="n" checked /> <label for="posts_n">No</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="tableCellLabel">Moderate Logs?</td>
+				<td>&nbsp;</td>
+				<td>
+					<input type="radio" name="moderateLogs" id="logs_y" value="y" /> <label for="logs_y">Yes</label>
+					<input type="radio" name="moderateLogs" id="logs_n" value="n" checked /> <label for="logs_n">No</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="tableCellLabel">Moderate News?</td>
+				<td>&nbsp;</td>
+				<td>
+					<input type="radio" name="moderateNews" id="news_y" value="y" /> <label for="news_y">Yes</label>
+					<input type="radio" name="moderateNews" id="news_n" value="n" checked /> <label for="news_n">No</label>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="3" height="10"></td>
+			</tr>
+			
 			<tr>
 				<td class="tableCellLabel">Email Message</td>
 				<td>&nbsp;</td>
