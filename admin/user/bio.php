@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/bio.php
 Purpose: Page to display the requested bio
 
-System Version: 2.6.4
-Last Modified: 2008-10-25 0904 EST
+System Version: 2.6.6
+Last Modified: 2008-11-28 0929 EST
 **/
 
 /* do some checking to make sure someone's not trying to do a SQL injection */
@@ -392,13 +392,21 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 				<td><input type="text" class="order"  name="age" size="4" maxlength="3" value="<?=$age;?>" /></td>
 			</tr>
 			<tr>
+				<td colspan="3" height="15"></td>
+			</tr>
+			
+			<tr>
 				<td class="tableCellLabel">
-					Images<br />
-					<b class="fontSmall">Separate images by commas</b>
+					Images
 				</td>
 				<td>&nbsp;</td>
-				<td><textarea name="image" class="desc" rows="3"><?=$image;?></textarea></td>
+				<td>
+					<strong class="fontSmall yellow">Separate images by commas. The first image listed will be used as the
+						main bio image; the rest will be put in a gallery.</strong><br />
+					<textarea name="image" class="desc" rows="3"><?=$image;?></textarea>
+				</td>
 			</tr>
+			
 			<tr>
 				<td colspan="3" height="15"></td>
 			</tr>
