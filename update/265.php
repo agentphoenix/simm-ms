@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/265.php
 Purpose: Update to 2.6.6
-Last Modified: 2008-11-28 0931 EST
+Last Modified: 2008-12-02 0837 EST
 **/
 
 /*
@@ -18,6 +18,6 @@ Last Modified: 2008-11-28 0931 EST
 | for this release.
 |
 */
-mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.6', '', 'This release adds two minor feature updates. The first is the way bio images are displayed and the second is the option to set moderation flags on activation.', 'Updated bio image display to show a main picture and clicking the picture opens a gallery with all the character images;Added ability to set moderation flags at character activation')");
+mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.6', '', 'This release adds two minor feature updates. The first is the way bio images are displayed and the second is the option to set moderation flags on activation. In addition, we have drastically improved the efficiency of building the next/previous links on the view post, log, and news pages.', 'Updated bio image display to show a main picture and clicking the picture opens a gallery with all the character images;Added ability to set moderation flags at character activation;Improved efficiency of next/previous links on viewing post, log, and news pages')");
 
 ?>
