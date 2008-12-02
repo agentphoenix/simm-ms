@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/news.php
 Purpose: Page to display the news items
 
-System Version: 2.6.0
-Last Modified: 2008-04-20 1927 EST
+System Version: 2.6.6
+Last Modified: 2008-12-02 0833 EST
 **/
 
 /* define the page class and vars */
@@ -139,9 +139,18 @@ if( isset( $sessionCrewid ) ) {
 			$news.= "WHERE news.newsid = '$id' AND news.newsCat = cat.catid";
 			$newsResults = mysql_query( $news );
 			
-			$getNews = "SELECT newsid FROM sms_news WHERE newsStatus = 'activated' ";
-			$getNews.= "ORDER BY newsPosted ASC";
-			$getNewsResult = mysql_query( $getNews );
+			/* pull all posts to create the next and prev post links */
+			$getNext = "SELECT newsid FROM sms_news WHERE newsStatus = 'activated' AND newsid > $id ";
+			$getNext.= "ORDER BY newsPosted ASC LIMIT 1";
+			$getNextR = mysql_query($getNext);
+			$fetchNext = mysql_fetch_array($getNextR);
+			$next = $fetchNext[0];
+			
+			$getPrev = "SELECT newsid FROM sms_news WHERE newsStatus = 'activated' AND newsid < $id ";
+			$getPrev.= "ORDER BY newsPosted DESC LIMIT 1";
+			$getPrevR = mysql_query($getPrev);
+			$fetchPrev = mysql_fetch_array($getPrevR);
+			$prev = $fetchPrev[0];
 			
 			while ( $newsList = mysql_fetch_assoc( $newsResults ) ) {
 				extract( $newsList, EXTR_OVERWRITE );
@@ -155,53 +164,41 @@ if( isset( $sessionCrewid ) ) {
 		<span class="fontNormal postDetails">
 		<div align="center">
 		
-		<?
-		
+			<?
+			
 			/* point the previous and next post buttons to the correct posts */
-		
-			$idNumbers = array();
-			
-			while ( $myrow = mysql_fetch_array( $getNewsResult ) ) {
-				$idNumbers[] = $myrow['newsid'];
+			if ($prev != FALSE)
+			{
+				echo "<a href='". $webLocation ."/index.php?page=news&id=". $prev ."' class='image'>";
+					echo "<img src='". $webLocation ."/images/previous.png' alt='Previous Entry' border='0' />";
+				echo "</a>";
 			}
 			
-			$arrayCount = count($idNumbers) -1;	
-			
-			foreach( $idNumbers as $key => $value ) {
-				if( $id == $value ) {
-					
-					$nextKey = $key+1;
-					$prevKey = $key-1;
-			
-					/* display the previous and next links in the post details box */
-					if( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) {
-						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$prevKey]' class='image'><img src='" . $webLocation . "images/previous.png' alt='Previous Entry' border='0' /></a>" );
-					} if( ( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) && ( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) ) {
-						echo "&nbsp;";
-					} if( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) {
-						printText ( "<a href='" . $webLocation . "index.php?page=news&id=$idNumbers[$nextKey]' class='image'><img src='" . $webLocation . "images/next.png' alt='Next Entry' border='0' /></a>" );
-					}
-				}
+			if ($next != FALSE)
+			{
+				echo "<a href='". $webLocation ."/index.php?page=news&id=". $next ."' class='image'>";
+					echo "<img src='". $webLocation ."/images/next.png' alt='Next Entry' border='0' />";
+				echo "</a>";
 			}
 		
-		?>
+			?>
 				
-				<br />
-				<b>News Details</b><br />
-				<?
-			
-				if( in_array( "m_news", $sessionAccess ) ) {
-					echo "<a href='" . $webLocation . "admin.php?page=manage&sub=news&id=" . $id . "' class='edit'><b>Edit</b></a>";
-					echo "&nbsp; &middot; &nbsp;";
+			<br />
+			<strong>News Details</strong><br />
+			<?
+		
+			if( in_array( "m_news", $sessionAccess ) ) {
+				echo "<a href='" . $webLocation . "admin.php?page=manage&sub=news&id=" . $id . "' class='edit'><b>Edit</b></a>";
+				echo "&nbsp; &middot; &nbsp;";
+
+			?>	
 	
-				?>	
-	
-					<script type="text/javascript">
-						document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=news&remove=<?=$id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\"><b>Delete</b></a>" );
-					</script>
-					<noscript>
-						<a href="<?=$webLocation;?>admin.php?page=manage&sub=news&remove=<?=$id;?>" class="delete"><b>Delete</b></a>
-					</noscript>
+				<script type="text/javascript">
+					document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=news&remove=<?=$id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this personal log?')\"><b>Delete</b></a>" );
+				</script>
+				<noscript>
+					<a href="<?=$webLocation;?>admin.php?page=manage&sub=news&remove=<?=$id;?>" class="delete"><b>Delete</b></a>
+				</noscript>
 					
 				<?
 					

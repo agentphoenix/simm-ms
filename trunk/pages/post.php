@@ -9,8 +9,8 @@ Authors: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/post.php
 Purpose: To display the individual posts to a mission
 
-System Version: 2.6.0
-Last Modified: 2008-04-19 1338 EST
+System Version: 2.6.6
+Last Modified: 2008-12-02 0838 EST
 **/
 
 /* define the page class */
@@ -41,8 +41,17 @@ if(isset($mp_id))
 	$getpostResult = mysql_query($getpost);
 	
 	/* pull all posts to create the next and prev post links */
-	$getposts = "SELECT postid FROM sms_posts WHERE postStatus = 'activated' ORDER BY postPosted ASC";
-	$getpostsResult = mysql_query($getposts);
+	$getNext = "SELECT postid FROM sms_posts WHERE postStatus = 'activated' AND postid > $mp_id ";
+	$getNext.= "ORDER BY postPosted ASC LIMIT 1";
+	$getNextR = mysql_query($getNext);
+	$fetchNext = mysql_fetch_array($getNextR);
+	$next = $fetchNext[0];
+	
+	$getPrev = "SELECT postid FROM sms_posts WHERE postStatus = 'activated' AND postid < $mp_id ";
+	$getPrev.= "ORDER BY postPosted DESC LIMIT 1";
+	$getPrevR = mysql_query($getPrev);
+	$fetchPrev = mysql_fetch_array($getPrevR);
+	$prev = $fetchPrev[0];
 	
 	/* extract the post data into the MySQL field name variables */
 	$postinfo = mysql_fetch_array($getpostResult);
@@ -73,53 +82,40 @@ if(isset($mp_id))
 	<span class="fontNormal postDetails">
 	<div align="center">
 
-	<?php
+		<?php
 		
-	/* point the previous and next post buttons to the correct posts */
-	$idNumbers = array();
-	
-	while($myrow = mysql_fetch_array($getpostsResult))
-	{
-		$idNumbers[] = $myrow['postid'];
-	}
-	
-	$arrayCount = count($idNumbers) -1;
-	
-	foreach($idNumbers as $key => $value)
-	{
-		if($mp_id == $value)
+		/* point the previous and next post buttons to the correct posts */
+		if ($prev != FALSE)
 		{
-			$nextKey = $key+1;
-			$prevKey = $key-1;
-			
-			/* display the previous and next links in the post details box */
-			if( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) {
-				echo "<a href='" . $webLocation . "/index.php?page=post&id=" . $idNumbers[$prevKey] . "' class='image'><img src='" . $webLocation . "/images/previous.png' alt='Previous Entry' border='0' /></a>";
-			} if( ( $prevKey >= 0 && $idNumbers[$prevKey] != '' ) && ( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) ) {
-				echo "&nbsp;";
-			} if( $nextKey <= $arrayCount && $idNumbers[$nextKey] != '' ) {
-				echo "<a href='$webLocation/index.php?page=post&id=$idNumbers[$nextKey]' class='image'><img src='$webLocation/images/next.png' alt='Next Entry' border='0' /></a>";
-			}
-		} /* close if(mp_id == value) */
-	} /* close foreach loop */
+			echo "<a href='". $webLocation ."/index.php?page=post&id=". $prev ."' class='image'>";
+				echo "<img src='". $webLocation ."/images/previous.png' alt='Previous Entry' border='0' />";
+			echo "</a>";
+		}
 		
-	?>
+		if ($next != FALSE)
+		{
+			echo "<a href='". $webLocation ."/index.php?page=post&id=". $next ."' class='image'>";
+				echo "<img src='". $webLocation ."/images/next.png' alt='Next Entry' border='0' />";
+			echo "</a>";
+		}
+			
+		?>
 	
-			<br /><strong>Post Details</strong><br />
-			<?
+		<br /><strong>Post Details</strong><br />
+		<?
+	
+		if(
+			in_array("m_posts2", $sessionAccess) ||
+			(in_array("m_posts1", $sessionAccess) && in_array($sessionCrewid, $tempAuthors))
+		) {
+			echo "<a href='" . $webLocation . "admin.php?page=manage&sub=posts&id=" . $mp_id . "' class='edit'><b>Edit</b></a>";
+		}
 		
-			if(
-				in_array("m_posts2", $sessionAccess) ||
-				(in_array("m_posts1", $sessionAccess) && in_array($sessionCrewid, $tempAuthors))
-			) {
-				echo "<a href='" . $webLocation . "admin.php?page=manage&sub=posts&id=" . $mp_id . "' class='edit'><b>Edit</b></a>";
-			}
-			
-			if(in_array("m_posts2", $sessionAccess))
-			{
-				echo "&nbsp; &middot; &nbsp;";
+		if(in_array("m_posts2", $sessionAccess))
+		{
+			echo "&nbsp; &middot; &nbsp;";
 
-			?>	
+		?>	
 
 				<script type="text/javascript">
 					document.write( "<a href=\"<?=$webLocation;?>admin.php?page=manage&sub=posts&remove=<?=$mp_id;?>\" class=\"delete\" onClick=\"javascript:return confirm('This action is permanent and cannot be undone. Are you sure you want to delete this mission entry?')\"><b>Delete</b></a>" );
