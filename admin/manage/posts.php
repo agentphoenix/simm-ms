@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
-System Version: 2.6.0
-Last Modified: 2008-04-17 1916 EST
+System Version: 2.6.6
+Last Modified: 2008-12-08 1259 EST
 **/
 
 /* access check */
@@ -394,31 +394,43 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 			'pending' => array()
 		);
 		
-		$getPostsA = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'activated' ORDER BY postPosted DESC LIMIT 25";
+		$getPostsA = "SELECT postid, postTitle, postPosted FROM sms_posts WHERE postStatus = 'activated' ORDER BY postPosted DESC LIMIT 20";
 		$getPostsAR = mysql_query($getPostsA);
 		
-		$getPostsS = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'saved' ORDER BY postPosted DESC";
+		$getPostsS = "SELECT postid, postTitle, postPosted FROM sms_posts WHERE postStatus = 'saved' ORDER BY postPosted DESC";
 		$getPostsSR = mysql_query($getPostsS);
 		
-		$getPostsP = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'pending' ORDER BY postPosted DESC";
+		$getPostsP = "SELECT postid, postTitle, postPosted FROM sms_posts WHERE postStatus = 'pending' ORDER BY postPosted DESC";
 		$getPostsPR = mysql_query($getPostsP);
 		
 		while($fetch_a = mysql_fetch_array($getPostsAR)) {
 			extract($fetch_a, EXTR_OVERWRITE);
 			
-			$posts_array['activated'][] = array('id' => $fetch_a[0], 'title' => $fetch_a[1]);
+			$posts_array['activated'][] = array(
+				'id' => $fetch_a[0],
+				'title' => $fetch_a[1],
+				'date' => dateFormat('medium2', $fetch_a[2])
+			);
 		}
 		
 		while($fetch_s = mysql_fetch_array($getPostsSR)) {
 			extract($fetch_s, EXTR_OVERWRITE);
 			
-			$posts_array['saved'][] = array('id' => $fetch_s[0], 'title' => $fetch_s[1]);
+			$posts_array['saved'][] = array(
+				'id' => $fetch_s[0],
+				'title' => $fetch_s[1],
+				'date' => dateFormat('medium2', $fetch_s[2])
+			);
 		}
 		
 		while($fetch_p = mysql_fetch_array($getPostsPR)) {
 			extract($fetch_p, EXTR_OVERWRITE);
 			
-			$posts_array['pending'][] = array('id' => $fetch_p[0], 'title' => $fetch_p[1]);
+			$posts_array['pending'][] = array(
+				'id' => $fetch_p[0],
+				'title' => $fetch_p[1],
+				'date' => dateFormat('medium2', $fetch_p[2])
+			);
 		}
 	
 	?>
@@ -462,7 +474,10 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 					
 					<?php foreach($posts_array['activated'] as $value_a) { ?>
 					<tr class="fontNormal">
-						<td><? printText($value_a['title']);?></td>
+						<td>
+							<strong><? printText($value_a['title']);?></strong><br />
+							<span class="fontNormal" style="color:#888;"><?=$value_a['date'];?></span>
+						</td>
 						<td><? displayAuthors($value_a['id'], 'rank', 'link');?></td>
 						<td></td>
 						<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$value_a['id'];?>"><strong>View Post</strong></a></td>
@@ -496,7 +511,10 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 					
 					<?php foreach($posts_array['saved'] as $value_s) { ?>
 					<tr class="fontNormal">
-						<td><? printText($value_s['title']);?></td>
+						<td>
+							<strong><? printText($value_s['title']);?></strong><br />
+							<span class="fontNormal" style="color:#888;"><?=$value_s['date'];?></span>
+						</td>
 						<td><? displayAuthors($value_s['id'], 'rank', 'link');?></td>
 						<td></td>
 						<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$value_s['id'];?>"><strong>View Post</strong></a></td>
@@ -529,7 +547,10 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 					
 					<?php foreach($posts_array['pending'] as $value_p) { ?>
 					<tr class="fontNormal">
-						<td><? printText($value_p['title']);?></td>
+						<td>
+							<strong><? printText($value_p['title']);?></strong><br />
+							<span class="fontNormal" style="color:#888;"><?=$value_p['date'];?></span>
+						</td>
 						<td><? displayAuthors($value_p['id'], 'rank', 'link');?></td>
 						<td></td>
 						<td align="center"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$value_p['id'];?>"><strong>View Post</strong></a></td>
