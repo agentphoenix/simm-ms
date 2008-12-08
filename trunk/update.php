@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.6
-Last Modified: 2008-12-02 0840 EST
+Last Modified: 2008-12-07 2221 EST
 **/
 
 /* define the step var */
@@ -163,6 +163,7 @@ switch($step)
 				<li>Updated bio image display to show a main picture and clicking the picture opens a gallery with all the character images</li>
 				<li>Added ability to set moderation flags at character activation</li>
 				<li>Improved the efficiency of the next/previous links on viewing post, log, and news pages</li>
+				<li>Improved efficiency of mission logs page</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
