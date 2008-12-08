@@ -164,6 +164,7 @@ switch($step)
 				<li>Added ability to set moderation flags at character activation</li>
 				<li>Improved the efficiency of the next/previous links on viewing post, log, and news pages</li>
 				<li>Improved efficiency of mission logs page</li>
+				<li>Added date posted or of last update in manage posts</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
