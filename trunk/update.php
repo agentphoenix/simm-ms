@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.6
-Last Modified: 2008-12-07 2221 EST
+Last Modified: 2008-12-08 1518 EST
 **/
 
 /* define the step var */
@@ -165,6 +165,7 @@ switch($step)
 				<li>Improved the efficiency of the next/previous links on viewing post, log, and news pages</li>
 				<li>Improved efficiency of mission logs page</li>
 				<li>Added date posted or of last update in manage posts</li>
+				<li>Added a loading graphic to the manifest that will stay in place until the page is fully loaded</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
