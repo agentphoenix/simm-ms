@@ -8,8 +8,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
-System Version: 2.6.6
-Last Modified: 2008-12-08 1517 EST
+System Version: 2.6.7
+Last Modified: 2008-12-09 2218 EST
 **/
 
 /* insert data into the access levels table */
@@ -501,7 +501,7 @@ while($i < $length)
 }
 
 /* populate the system table with data */
-mysql_query( "INSERT INTO sms_system ( sysid, sysuid, sysVersion, sysBaseVersion, sysIncrementVersion ) VALUES ( '1', '$string', '2.6.5', '2.6', '.5' )" );
+mysql_query( "INSERT INTO sms_system ( sysid, sysuid, sysVersion, sysBaseVersion, sysIncrementVersion ) VALUES ( '1', '$string', '2.6.7', '2.6', '.7' )" );
 
 /* populate the system plugins with data */
 mysql_query( "INSERT INTO sms_system_plugins ( pid, plugin, pluginVersion, pluginSite, pluginUse, pluginFiles ) 

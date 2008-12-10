@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.6
-Last Modified: 2008-12-08 1518 EST
+System Version: 2.6.7
+Last Modified: 2008-12-09 2216 EST
 **/
 
 /* define the step var */
@@ -66,7 +66,8 @@ $versionsArray = array(
 	262,
 	263,
 	264,
-	265
+	265,
+	266
 );
 
 /* count the number of items in the versions array */
@@ -128,8 +129,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.6', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.6', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.7', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.7', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -157,15 +158,10 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.6 is an update to latest release of SMS which updates the system with the following changes:
+			SMS 2.6.7 is an update to latest release of SMS which updates the system with the following changes:
 			
 			<ul>
-				<li>Updated bio image display to show a main picture and clicking the picture opens a gallery with all the character images</li>
-				<li>Added ability to set moderation flags at character activation</li>
-				<li>Improved the efficiency of the next/previous links on viewing post, log, and news pages</li>
-				<li>Improved efficiency of mission logs page</li>
-				<li>Added date posted or of last update in manage posts</li>
-				<li>Added a loading graphic to the manifest that will stay in place until the page is fully loaded</li>
+				<li>Fixed bug in rank management where department class menu would only be built with departments that are displayed. This can cause issues if you update a rank that is part of a department no longer being displayed, thus causing it to appear in the first department class and throwing off the ranks.</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
