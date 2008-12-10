@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/ranks.php
 Purpose: Page that moderates the ranks
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 1232 EST
+System Version: 2.6.7
+Last Modified: 2008-12-09 2211 EST
 **/
 
 /* access check */
@@ -192,7 +192,7 @@ if( in_array( "m_ranks", $sessionAccess ) ) {
 						<?php
 						
 						$get = "SELECT deptClass, deptName, deptColor FROM sms_departments ";
-						$get.= "WHERE deptDisplay = 'y' GROUP BY deptClass ORDER BY deptOrder ASC";
+						$get.= "GROUP BY deptClass ORDER BY deptOrder ASC";
 						$getR = mysql_query($get);
 						
 						while($fetch = mysql_fetch_array($getR)) {

@@ -27,7 +27,7 @@ if(in_array("m_departments", $sessionAccess))
 	include_once('../../framework/functionsGlobal.php');
 	include_once('../../framework/functionsUtility.php');
 	
-	$get = "SELECT * FROM sms_departments WHERE deptDisplay = 'y' ORDER BY deptOrder ASC";
+	$get = "SELECT * FROM sms_departments ORDER BY deptOrder ASC";
 	$getR = mysql_query($get);
 
 ?>
