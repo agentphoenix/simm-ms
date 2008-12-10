@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/log.php
 Purpose: To display the individual personal logs
 
-System Version: 2.6.6
-Last Modified: 2008-12-02 0832 EST
+System Version: 2.6.7
+Last Modified: 2008-12-10 1419 EST
 **/
 
 /* define the page class */
@@ -39,27 +39,27 @@ if(isset($pl_id))
 	$getlog = "SELECT * FROM sms_personallogs WHERE logid = $pl_id LIMIT 1";
 	$getlogResult = mysql_query ( $getlog );
 	
-	/* pull all posts to create the next and prev post links */
-	$getNext = "SELECT logid FROM sms_personallogs WHERE logStatus = 'activated' AND logid > $pl_id ";
-	$getNext.= "ORDER BY logPosted ASC LIMIT 1";
-	$getNextR = mysql_query($getNext);
-	$fetchNext = mysql_fetch_array($getNextR);
-	$next = $fetchNext[0];
-	
-	$getPrev = "SELECT logid FROM sms_personallogs WHERE logStatus = 'activated' AND logid < $pl_id ";
-	$getPrev.= "ORDER BY logPosted DESC LIMIT 1";
-	$getPrevR = mysql_query($getPrev);
-	$fetchPrev = mysql_fetch_array($getPrevR);
-	$prev = $fetchPrev[0];
-	
 	/* extract the post data into the MySQL field name variables */
 	$loginfo = mysql_fetch_array( $getlogResult );
-		extract( $loginfo, EXTR_OVERWRITE ); 
+		extract( $loginfo, EXTR_OVERWRITE );
+		
+		/* pull all posts to create the next and prev post links */
+		$getNext = "SELECT logid FROM sms_personallogs WHERE logStatus = 'activated' AND ";
+		$getNext.= "logPosted > $loginfo[logPosted] ORDER BY logPosted ASC LIMIT 1";
+		$getNextR = mysql_query($getNext);
+		$fetchNext = mysql_fetch_array($getNextR);
+		$next = $fetchNext[0];
+		
+		$getPrev = "SELECT logid FROM sms_personallogs WHERE logStatus = 'activated' AND ";
+		$getPrev.= "logPosted < $loginfo[logPosted] ORDER BY logPosted DESC LIMIT 1";
+		$getPrevR = mysql_query($getPrev);
+		$fetchPrev = mysql_fetch_array($getPrevR);
+		$prev = $fetchPrev[0];
 	
-	/* if log is untitled give it a title */
-	if ( $logTitle == "" ) {
-		$logTitle = "Untitled";
-	}
+		/* if log is untitled give it a title */
+		if ( $logTitle == "" ) {
+			$logTitle = "Untitled";
+		}
 	
 ?>
 	<div class="body">
