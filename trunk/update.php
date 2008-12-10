@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.7
-Last Modified: 2008-12-09 2216 EST
+Last Modified: 2008-12-10 1441 EST
 **/
 
 /* define the step var */
@@ -162,6 +162,7 @@ switch($step)
 			
 			<ul>
 				<li>Fixed bug in rank management where department class menu would only be built with departments that are displayed. This can cause issues if you update a rank that is part of a department no longer being displayed, thus causing it to appear in the first department class and throwing off the ranks.</li>
+				<li>Fixed bug where next/previous links were ignoring the date posted and just using the ID, resulting in incorrect ordering when moving through posts with the links</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
