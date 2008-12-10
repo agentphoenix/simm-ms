@@ -15,6 +15,9 @@
 | SMS 2.6.7
 |---------------------------------------------------------------
 
+* pages/log.php
+* pages/news.php
+* pages/post.php
 * admin/ajax/rank_add.php
 * admin/manage/ranks.php
 * install/resource_data.php
