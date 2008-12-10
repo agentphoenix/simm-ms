@@ -9,8 +9,8 @@ Authors: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/post.php
 Purpose: To display the individual posts to a mission
 
-System Version: 2.6.6
-Last Modified: 2008-12-02 0838 EST
+System Version: 2.6.7
+Last Modified: 2008-12-10 1417 EST
 **/
 
 /* define the page class */
@@ -40,37 +40,37 @@ if(isset($mp_id))
 	$getpost = "SELECT * FROM sms_posts WHERE postid = $mp_id LIMIT 1";
 	$getpostResult = mysql_query($getpost);
 	
-	/* pull all posts to create the next and prev post links */
-	$getNext = "SELECT postid FROM sms_posts WHERE postStatus = 'activated' AND postid > $mp_id ";
-	$getNext.= "ORDER BY postPosted ASC LIMIT 1";
-	$getNextR = mysql_query($getNext);
-	$fetchNext = mysql_fetch_array($getNextR);
-	$next = $fetchNext[0];
-	
-	$getPrev = "SELECT postid FROM sms_posts WHERE postStatus = 'activated' AND postid < $mp_id ";
-	$getPrev.= "ORDER BY postPosted DESC LIMIT 1";
-	$getPrevR = mysql_query($getPrev);
-	$fetchPrev = mysql_fetch_array($getPrevR);
-	$prev = $fetchPrev[0];
-	
 	/* extract the post data into the MySQL field name variables */
-	$postinfo = mysql_fetch_array($getpostResult);
+	$postinfo = mysql_fetch_assoc($getpostResult);
 		extract($postinfo, EXTR_OVERWRITE);
 		$tempAuthors = explode(",", $postAuthor); /* temporary array for user post editing */
 	
-	/* pull the mission title */
-	$getmission = "SELECT missionid, missionTitle FROM sms_missions WHERE missionid = '$postMission'";
-	$getmissionResult = mysql_query($getmission);
-	
-	/* extract the mission title */
-	$mission = mysql_fetch_array($getmissionResult);
-		extract($mission, EXTR_OVERWRITE);
-	
-	/* if post is untitled give it a title */
-	if($postTitle == "")
-	{
-		$postTitle = "[ Untitled ]";
-	}
+		/* pull all posts to create the next and prev post links */
+		$getNext = "SELECT postid FROM sms_posts WHERE postStatus = 'activated' AND ";
+		$getNext.= "postPosted > $postinfo[postPosted] ORDER BY postPosted ASC LIMIT 1";
+		$getNextR = mysql_query($getNext);
+		$fetchNext = mysql_fetch_array($getNextR);
+		$next = $fetchNext[0];
+		
+		$getPrev = "SELECT postid FROM sms_posts WHERE postStatus = 'activated' AND ";
+		$getPrev.= "postPosted < $postinfo[postPosted] ORDER BY postPosted DESC LIMIT 1";
+		$getPrevR = mysql_query($getPrev);
+		$fetchPrev = mysql_fetch_array($getPrevR);
+		$prev = $fetchPrev[0];
+		
+		/* pull the mission title */
+		$getmission = "SELECT missionid, missionTitle FROM sms_missions WHERE missionid = '$postMission'";
+		$getmissionResult = mysql_query($getmission);
+		
+		/* extract the mission title */
+		$mission = mysql_fetch_array($getmissionResult);
+			extract($mission, EXTR_OVERWRITE);
+		
+		/* if post is untitled give it a title */
+		if($postTitle == "")
+		{
+			$postTitle = "[ Untitled ]";
+		}
 	
 ?>
 

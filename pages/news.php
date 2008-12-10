@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/news.php
 Purpose: Page to display the news items
 
-System Version: 2.6.6
-Last Modified: 2008-12-02 0833 EST
+System Version: 2.6.7
+Last Modified: 2008-12-10 1418 EST
 **/
 
 /* define the page class and vars */
@@ -139,21 +139,21 @@ if( isset( $sessionCrewid ) ) {
 			$news.= "WHERE news.newsid = '$id' AND news.newsCat = cat.catid";
 			$newsResults = mysql_query( $news );
 			
-			/* pull all posts to create the next and prev post links */
-			$getNext = "SELECT newsid FROM sms_news WHERE newsStatus = 'activated' AND newsid > $id ";
-			$getNext.= "ORDER BY newsPosted ASC LIMIT 1";
-			$getNextR = mysql_query($getNext);
-			$fetchNext = mysql_fetch_array($getNextR);
-			$next = $fetchNext[0];
-			
-			$getPrev = "SELECT newsid FROM sms_news WHERE newsStatus = 'activated' AND newsid < $id ";
-			$getPrev.= "ORDER BY newsPosted DESC LIMIT 1";
-			$getPrevR = mysql_query($getPrev);
-			$fetchPrev = mysql_fetch_array($getPrevR);
-			$prev = $fetchPrev[0];
-			
 			while ( $newsList = mysql_fetch_assoc( $newsResults ) ) {
 				extract( $newsList, EXTR_OVERWRITE );
+				
+				/* pull all posts to create the next and prev post links */
+				$getNext = "SELECT newsid FROM sms_news WHERE newsStatus = 'activated' AND ";
+				$getNext.= "newsPosted > $newsList[newsPosted] ORDER BY newsPosted ASC LIMIT 1";
+				$getNextR = mysql_query($getNext);
+				$fetchNext = mysql_fetch_array($getNextR);
+				$next = $fetchNext[0];
+				
+				$getPrev = "SELECT newsid FROM sms_news WHERE newsStatus = 'activated' AND ";
+				$getPrev.= "newsPosted < $newsList[newsPosted] ORDER BY newsPosted DESC LIMIT 1";
+				$getPrevR = mysql_query($getPrev);
+				$fetchPrev = mysql_fetch_array($getPrevR);
+				$prev = $fetchPrev[0];
 				
 				if( $newsPrivate == 'y' && !isset( $sessionCrewid ) ) {} else {
 		
