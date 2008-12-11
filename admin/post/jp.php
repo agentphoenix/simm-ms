@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/jp.php
 Purpose: Page to post a joint post
 
-System Version: 2.6.3
-Last Modified: 2008-10-05 0935 EST
+System Version: 2.6.7
+Last Modified: 2008-12-11 0929 EST
 **/
 
 /* access check */
@@ -156,7 +156,7 @@ if(in_array("p_jp", $sessionAccess))
 		else
 		{
 			$update = "UPDATE sms_posts SET postAuthor = %s, postTitle = %s, postLocation = %s, postTimeline = %s, postContent = %s, ";
-			$update.= "postPosted = %d, postStatus = %s, postTag = %s WHERE postid = $id LIMIT 1";
+			$update.= "postPosted = %d, postStatus = %s, postTag = %s, postMission = %d WHERE postid = $id LIMIT 1";
 			
 			$query = sprintf(
 				$update,
@@ -167,7 +167,8 @@ if(in_array("p_jp", $sessionAccess))
 				escape_string($_POST['postContent']),
 				escape_string($today[0]),
 				escape_string($postStatus),
-				escape_string($_POST['postTag'])
+				escape_string($_POST['postTag']),
+				escape_string($_POST['postMission'])
 			);
 		}
 		
@@ -284,7 +285,7 @@ if(in_array("p_jp", $sessionAccess))
 		else
 		{
 			$update = "UPDATE sms_posts SET postAuthor = %s, postTitle = %s, postLocation = %s, postTimeline = %s, postContent = %s, ";
-			$update.= "postPosted = %d, postStatus = %s, postTag = %s, postSave = %d WHERE postid = $id LIMIT 1";
+			$update.= "postPosted = %d, postStatus = %s, postTag = %s, postSave = %d, postMission = %d WHERE postid = $id LIMIT 1";
 			
 			$query = sprintf(
 				$update,
@@ -296,7 +297,8 @@ if(in_array("p_jp", $sessionAccess))
 				escape_string($today[0]),
 				escape_string('saved'),
 				escape_string($_POST['postTag']),
-				escape_string($sessionCrewid)
+				escape_string($sessionCrewid),
+				escape_string($_POST['postMission'])
 			);
 		}
 		
@@ -515,11 +517,40 @@ if(in_array("p_jp", $sessionAccess))
 				<br />
 				<?
 	
-				$getNotes = "SELECT missionNotes FROM sms_missions WHERE missionStatus = 'current' LIMIT 1";
-				$getNotesResult = mysql_query( $getNotes );
-				$notes = mysql_fetch_array( $getNotesResult );
-	
-				printText( $notes['0'] );
+				$getNotes = "SELECT missionid, missionTitle, missionNotes FROM sms_missions ";
+				$getNotes.= "WHERE missionStatus = 'current'";
+				$getNotesResult = mysql_query($getNotes);
+				
+				while($notes = mysql_fetch_assoc($getNotesResult)) {
+					extract($notes, EXTR_OVERWRITE);
+					
+					$missions[] = array(
+						'id' => $missionid,
+						'title' => $missionTitle,
+						'notes' => $missionNotes
+					);
+				}
+				
+				if (count($missions) == 1)
+				{
+					printText($missions[0]['notes']);
+				}
+				else
+				{
+					foreach ($missions as $row)
+					{
+						echo "<span class='fontMedium bold'>". $row['title'] ."</span><br />";
+						if ($row['notes'] == '')
+						{
+							echo '<span class="orange">No mission notes</span>';
+						}
+						else
+						{
+							printText($row['notes']);
+						}
+						echo "<br /><br />";
+					}
+				}
 	
 				?>
 			</div>
@@ -605,24 +636,34 @@ if(in_array("p_jp", $sessionAccess))
 				<td class="fontNormal">
 					<?
 					
-					$missionTitle = "SELECT missionid, missionTitle FROM sms_missions WHERE missionStatus = 'current' LIMIT 1";
-					$missionTitleResult = mysql_query( $missionTitle );
-					$missionCount = mysql_num_rows( $missionTitleResult );
+					$missionTitle = "SELECT missionid, missionTitle FROM sms_missions WHERE missionStatus = 'current'";
+					$missionTitleResult = mysql_query($missionTitle);
 					
-					while( $titleArray = mysql_fetch_array( $missionTitleResult ) ) {
-						extract( $titleArray, EXTR_OVERWRITE );
+					while($titleArray = mysql_fetch_array($missionTitleResult)) {
+						extract($titleArray, EXTR_OVERWRITE);
+						
+						$missions[] = array(
+							'id' => $missionid,
+							'title' => $missionTitle
+						);
 					}
 					
-					if( $missionCount == 0 ) {
+					if (count($missions) == 0 ):
 						echo "<b>You must <a href='" . $webLocation . "admin.php?page=manage&sub=missions'>create a mission</a> before posting!</b>";
-					} else {
+					elseif (count($missions) > 1):
+						echo "<select name='postMission'>";
+						foreach ($missions as $k => $v):
+							echo "<option value='". $v['id'] ."'>". $v['title'] ."</option>";
+						endforeach;
+						echo "</select>";
+					else:
+						echo "<a href='". $webLocation ."index.php?page=mission&id=". $missions[0]['id'] ."'>";
+						printText($missions[0]['title']);
+						echo "</a>";
+						echo "<input type='hidden' name='postMission' value='". $missions[0]['id'] ."' />";
+					endif;
 					
 					?>
-					
-					<a href="<?=$webLocation;?>index.php?page=mission&id=<?=$missionid;?>"><? printText( $missionTitle ); ?></a>
-					<input type="hidden" name="postMission" value="<?=$missionid;?>" />
-					
-					<? } ?>
 				</td>
 			</tr>
 			<tr>
@@ -657,7 +698,7 @@ if(in_array("p_jp", $sessionAccess))
 				<td colspan="3" height="20"></td>
 			</tr>
 			
-			<? if( $missionCount > 0 ) { ?>
+			<? if( count($missions) > 0 ) { ?>
 			<tr>
 				<td colspan="2">&nbsp;</td>
 				<td>
@@ -705,24 +746,40 @@ if(in_array("p_jp", $sessionAccess))
 				<td class="fontNormal">
 					<?
 					
-					$missionTitle = "SELECT missionid, missionTitle FROM sms_missions WHERE missionStatus = 'current' LIMIT 1";
-					$missionTitleResult = mysql_query( $missionTitle );
-					$missionCount = mysql_num_rows( $missionTitleResult );
+					$missionTitle = "SELECT missionid, missionTitle FROM sms_missions WHERE missionStatus = 'current'";
+					$missionTitleResult = mysql_query($missionTitle);
 					
-					while( $titleArray = mysql_fetch_array( $missionTitleResult ) ) {
-						extract( $titleArray, EXTR_OVERWRITE );
+					while($titleArray = mysql_fetch_array($missionTitleResult)) {
+						extract($titleArray, EXTR_OVERWRITE);
+						
+						$missions[] = array(
+							'id' => $missionid,
+							'title' => $missionTitle
+						);
 					}
 					
-					if( $missionCount == 0 ) {
+					if (count($missions) == 0 ):
 						echo "<b>You must <a href='" . $webLocation . "admin.php?page=manage&sub=missions'>create a mission</a> before posting!</b>";
-					} else {
+					elseif (count($missions) > 1):
+						echo "<select name='postMission'>";
+						foreach ($missions as $k => $v):
+							if ($postMission == $v['id']):
+								$selected = ' selected';
+							else:
+								$selected = '';
+							endif;
+							
+							echo "<option value='". $v['id'] ."'". $selected .">". $v['title'] ."</option>";
+						endforeach;
+						echo "</select>";
+					else:
+						echo "<a href='". $webLocation ."index.php?page=mission&id=". $postMission ."'>";
+						echo printMissionTitle($postMission);
+						echo "</a>";
+						echo "<input type='hidden' name='postMission' value='". $postMission ."' />";
+					endif;
 					
 					?>
-					
-					<a href="<?=$webLocation;?>index.php?page=mission&id=<?=$missionid;?>"><? printText( $missionTitle ); ?></a>
-					<input type="hidden" name="postMission" value="<?=$missionid;?>" />
-					
-					<? } ?>
 				</td>
 			</tr>
 			<tr>

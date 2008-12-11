@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/missions.php
 Purpose: Page to display the list of missions
 
-System Version: 2.6.6
-Last Modified: 2008-12-07 1850 EST
+System Version: 2.6.7
+Last Modified: 2008-12-11 0943 EST
 **/
 
 /* define the page class */
@@ -47,29 +47,12 @@ $upcomingCount = count($missions['upcoming']);
 $currentCount = count($missions['current']);
 $completedCount = count($missions['completed']);
 
-/* disabled tabs */
-$disable = array();
-
-if($currentCount == 0) {
-	$disable[] = 1;
-}
-
-if($upcomingCount == 0) {
-	$disable[] = 2;
-}
-
-if($completedCount == 0) {
-	$disable[] = 3;
-}
-
-$disable_string = implode(",", $disable);
-
 ?>
 
 <div class="body">
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#container-1 > ul').tabs({ disabled: [<?php echo $disable_string; ?>] });
+			$('#container-1 > ul').tabs();
 		});
 	</script>
 	
@@ -77,75 +60,87 @@ $disable_string = implode(",", $disable);
 	
 	<div id="container-1">
 		<ul>
-			<li><a href="#one"><span>Current Mission (<?=$currentCount;?>)</span></a></li>
+			<li><a href="#one"><span>Current Mission(s)</span></a></li>
 			<li><a href="#two"><span>Upcoming Missions (<?=$upcomingCount;?>)</span></a></li>
 			<li><a href="#three"><span>Completed Missions (<?=$completedCount;?>)</span></a></li>
 		</ul>
 		
 		<div id="one" class="ui-tabs-container ui-tabs-hide">
-			<?php
-			
-			foreach ($missions['current'] as $key => $value)
-			{
-				echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $value['id'] . "'><strong class='fontMedium'>";
-				printText($value['title']);
-				echo "</strong></a>";
-
-				if($usePosting == "y")
-				{
-					echo "&nbsp;&nbsp; [ Posts: " . $value['count'] . " ]";
-				}
-
-				echo "<div style='padding: 1em 0 2em 1em;'>";
-				printText($value['desc']);
-				echo "</div>";
-			}
+			<? if (count($missions['current']) < 1): ?>
+				<strong class='orange fontMedium'>No current missions</strong>
+			<? else: ?>
+				<?php
 				
-			?>
+				foreach ($missions['current'] as $key => $value)
+				{
+					echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $value['id'] . "'><strong class='fontMedium'>";
+					printText($value['title']);
+					echo "</strong></a>";
+	
+					if($usePosting == "y")
+					{
+						echo "&nbsp;&nbsp; [ Posts: " . $value['count'] . " ]";
+					}
+	
+					echo "<div style='padding: 1em 0 2em 1em;'>";
+					printText($value['desc']);
+					echo "</div>";
+				}
+					
+				?>
+			<? endif; ?>
 		</div> <!-- close ONE -->
 		
 		<div id="two" class="ui-tabs-container ui-tabs-hide">
-			<?
-
-			foreach ($missions['upcoming'] as $key => $value)
-			{
-				echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $value['id'] . "'><strong class='fontMedium'>";
-				printText($value['title']);
-				echo "</strong></a>";
-
-				if($usePosting == "y")
+			<? if (count($missions['upcoming']) < 1): ?>
+				<strong class='orange fontMedium'>No upcoming missions</strong>
+			<? else: ?>
+				<?
+	
+				foreach ($missions['upcoming'] as $key => $value)
 				{
-					echo "&nbsp;&nbsp; [ Posts: " . $value['count'] . " ]";
+					echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $value['id'] . "'><strong class='fontMedium'>";
+					printText($value['title']);
+					echo "</strong></a>";
+	
+					if($usePosting == "y")
+					{
+						echo "&nbsp;&nbsp; [ Posts: " . $value['count'] . " ]";
+					}
+	
+					echo "<div style='padding: 1em 0 2em 1em;'>";
+					printText($value['desc']);
+					echo "</div>";
 				}
-
-				echo "<div style='padding: 1em 0 2em 1em;'>";
-				printText($value['desc']);
-				echo "</div>";
-			}
-			
-			?>
+				
+				?>
+			<? endif; ?>
 		</div> <!-- close TWO -->
 		
 		<div id="three" class="ui-tabs-container ui-tabs-hide">
-			<?	
-
-			foreach ($missions['completed'] as $key => $value)
-			{
-				echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $value['id'] . "'><strong class='fontMedium'>";
-				printText($value['title']);
-				echo "</strong></a>";
-
-				if($usePosting == "y")
+			<? if (count($missions['completed']) < 1): ?>
+				<strong class='orange fontMedium'>No completed missions</strong>
+			<? else: ?>
+				<?	
+	
+				foreach ($missions['completed'] as $key => $value)
 				{
-					echo "&nbsp;&nbsp; [ Posts: " . $value['count'] . " ]";
+					echo "<a href='" . $webLocation . "index.php?page=mission&id=" . $value['id'] . "'><strong class='fontMedium'>";
+					printText($value['title']);
+					echo "</strong></a>";
+	
+					if($usePosting == "y")
+					{
+						echo "&nbsp;&nbsp; [ Posts: " . $value['count'] . " ]";
+					}
+	
+					echo "<div style='padding: 1em 0 2em 1em;'>";
+					printText($value['desc']);
+					echo "</div>";
 				}
-
-				echo "<div style='padding: 1em 0 2em 1em;'>";
-				printText($value['desc']);
-				echo "</div>";
-			}
-			
-			?>
+				
+				?>
+			<? endif; ?>
 		</div> <!-- close THREE -->
 	</div> <!-- close CONTENT -->
 	
