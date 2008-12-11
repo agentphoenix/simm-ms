@@ -10,15 +10,24 @@ File: pages/info.php
 Purpose: The file that pulls in the current mission, latest posts, latest logs for
 	the main page
 
-System Version: 2.5.3
-Last Modified: 2007-08-13 1033 EST
+System Version: 2.6.7
+Last Modified: 2008-12-11 0855 EST
 **/
 
 /* get the current mission info */
 $getCurrentMission = "SELECT missionid, missionTitle, missionDesc FROM sms_missions ";
-$getCurrentMission.= "WHERE missionStatus = 'current' LIMIT 1";
-$getCurrentMissionResult = mysql_query( $getCurrentMission );
-$fetchMission = mysql_fetch_row( $getCurrentMissionResult );
+$getCurrentMission.= "WHERE missionStatus = 'current'";
+$getCurrentMissionResult = mysql_query($getCurrentMission);
+
+while($missionFetch = mysql_fetch_assoc($getCurrentMissionResult)) {
+	extract($missionFetch, EXTR_OVERWRITE);
+	
+	$missions[] = array(
+		'id' => $missionid,
+		'title' => $missionTitle,
+		'desc' => $missionDesc
+	);
+}
 
 /* get the post info */
 $getPosts = "SELECT postid, postTitle FROM sms_posts WHERE postStatus = 'activated' ORDER BY postPosted DESC LIMIT 3";
@@ -33,17 +42,28 @@ $getPositionsResult = mysql_query( $getPositions );
 
 <div class="info">
 	
-	<? if( $showInfoMission == "y" ) { ?>
-	<span class="fontLarge"><b>Current Mission</b></span><br />
+	<? if($showInfoMission == "y" && count($missions) > 0) { ?>
+	<span class="fontLarge"><strong>
+		<?
+		
+		if (count($missions) == 1):
+			echo 'Current Mission';
+		else:
+			echo 'Current Missions';
+		endif;
+		
+		?>
+	</strong></span><br />
 	<ul>
-		<li><a href="<?=$webLocation;?>index.php?page=mission&id=<?=$fetchMission['0'];?>"><? printText( $fetchMission['1'] ); ?></a></li>
-		<li class="fontNormal"><? printText( $fetchMission['2'] ); ?></li>
+		<? foreach ($missions as $v): ?>
+			<li><a href="<?=$webLocation;?>index.php?page=mission&id=<?=$v['id'];?>"><? printText( $v['title'] ); ?></a></li>
+			<li class="fontNormal"><? printText( $v['desc'] ); ?></li><br />
+		<? endforeach;?>
 	</ul>
 	<? } ?>
 	
 	<? if( $showInfoPosts == "y" && $usePosting == "y" ) { ?>
 	<span class="fontLarge"><b>Latest Posts</b></span><br />
-	<b class="fontNormal"><a href="<?=$webLocation;?>index.php?page=postlist&id=<?=$fetchMission['0'];?>">Complete Post List &raquo;</a></b><br />
 	
 	<ul>
 		<?
@@ -53,7 +73,7 @@ $getPositionsResult = mysql_query( $getPositions );
 			extract( $fetchPost, EXTR_OVERWRITE );
 		
 		?>
-		<li class="fontNormal"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$fetchPost['0'];?>" class="fix"><? printText( $fetchPost['1'] ); ?></a> <span class="fontNormal">by <? displayAuthors( $fetchPost['0'], "rank", "noLink" ); ?></span></li>
+		<li class="fontNormal"><a href="<?=$webLocation;?>index.php?page=post&id=<?=$fetchPost[0];?>" class="fix"><? printText( $fetchPost[1] ); ?></a> <span class="fontNormal">by <? displayAuthors( $fetchPost[0], "rank", "noLink" ); ?></span></li>
 		<li class="spacer">&nbsp;</li>
 		<? } ?>
 	</ul>
@@ -68,10 +88,10 @@ $getPositionsResult = mysql_query( $getPositions );
 		while( $fetchPositions = mysql_fetch_array( $getPositionsResult ) ) {
 			extract( $fetchPositions, EXTR_OVERWRITE );
 			
-			if( $fetchPositions['2'] > 0 ) {
+			if( $fetchPositions[2] > 0 ) {
 			
 		?>
-		<li class="fontNormal"><a href="<?=$webLocation;?>index.php?page=join&position=<?=$fetchPositions['0'];?>"><? printText( $fetchPositions['1'] ); ?></a></li>
+		<li class="fontNormal"><a href="<?=$webLocation;?>index.php?page=join&position=<?=$fetchPositions[0];?>"><? printText( $fetchPositions[1] ); ?></a></li>
 		<? } } ?>
 	</ul>
 	<? } ?>
