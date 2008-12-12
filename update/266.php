@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/266.php
 Purpose: Update to 2.6.7
-Last Modified: 2008-12-11 0939 EST
+Last Modified: 2008-12-12 0832 EST
 **/
 
 /*
@@ -28,6 +28,6 @@ mysql_query("UPDATE sms_menu_items SET menuTitle = 'Current Mission(s)' WHERE me
 | for this release.
 |
 */
-mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.7', '', 'This release...', 'Fixed bug where rank management would only build department class menus for departments that were being displayed, causing issues for unused ranks that were updated;Fixed bug with next/previous links where they didn\'t respect when a log/post/news item was posted;Added the ability to run multiple missions simultaneously')");
+mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.7', '', 'This release...', 'Fixed bug where rank management would only build department class menus for departments that were being displayed, causing issues for unused ranks that were updated;Fixed bug with next/previous links where they didn\'t respect when a log/post/news item was posted;Added the ability to run multiple missions simultaneously;Added more specific information to the award nomination emails (nominee, nominated by, award, and reason) so it isn\'t just a nondescript notice')");
 
 ?>
