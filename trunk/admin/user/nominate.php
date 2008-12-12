@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/nominate.php
 Purpose: Page to nominate another crew member for an award
 
-System Version: 2.6.5
-Last Modified: 2008-11-21 0755 EST
+System Version: 2.6.7
+Last Modified: 2008-12-12 0830 EST
 **/
 
 /* access check */
@@ -85,14 +85,49 @@ if( in_array( "u_nominate", $sessionAccess ) ) {
 			$to = implode(",", $email_array);
 		}
 		
-		/* define the email variables */
+		/* set the other variables */
+		$nominee = FALSE;
+		$nominated_by = FALSE;
+		$award = FALSE;
+		
+		if (is_numeric($_POST['crew']))
+		{
+			$nominee = printCrewNameEmail($_POST['crew']);
+		}
+		
+		if (is_numeric($_POST['nominator']))
+		{
+			$nominated_by = printCrewNameEmail($_POST['nominator']);
+		}
+		
+		if (is_numeric($_POST['award']))
+		{
+			$get = "SELECT awardName FROM sms_awards WHERE awardid = $_POST[award] LIMIT 1";
+			$getR = mysql_query($get);
+			$fetch = mysql_fetch_array($getR);
+			
+			$award = $fetch[0];
+		}
+		
+		$reason = $_POST['reason'];
 		$subject = $emailSubject . " Crew Award Nomination";
-		$message = "A member of your crew has nominated a character for an award. The award has been added to the queue and is available for review and activation from the control panel.
+		
+		$message = "A member of your crew has nominated a character for an award. The award has been added to the queue and is available for review and activation from the control panel. The nomination is available below for reference.
+		
+==========
+		
+Nominee: ". $nominee ."
+Award: ". $award ."
+Nominated By: ". $nominated_by ."
+
+Reason: ". $reason ."
+
+==========
 
 Login to your control panel at " . $webLocation . "login.php?action=login to approve or deny this award.";
 		
 		/* send the nomination email */
-		mail( $to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion() );
+		mail($to, $subject, $message, "From: " . $from . "\nX-Mailer: PHP/" . phpversion());
 	}
 	
 	/* find out how many IC awards there are */
