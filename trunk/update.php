@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.7
-Last Modified: 2008-12-12 0833 EST
+Last Modified: 2008-12-17 0825 EST
 **/
 
 /* define the step var */
@@ -165,6 +165,8 @@ switch($step)
 				<li>Fixed bug where next/previous links were ignoring the date posted and just using the ID, resulting in incorrect ordering when moving through posts with the links</li>
 				<li>Added the ability to run multiple missions simultaneously</li>
 				<li>Added more specific information to the award nomination emails (nominee, nominated by, award, and reason) so it isn&rsquo;t just a nondescript notice</li>
+				<li>Fixed bug where quotation marks couldn&rsquo;t be used in some bio fields</li>
+				<li>Fixed bug where SMS would try to start the version check class even if an admin had set their notification level to none</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

@@ -21,6 +21,7 @@
 * pages/missions.php
 * pages/news.php
 * pages/post.php
+* admin/main.php
 * admin/ajax/rank_add.php
 * admin/manage/missionnotes.php
 * admin/manage/missions.php
@@ -28,6 +29,7 @@
 * admin/manage/ranks.php
 * admin/post/jp.php
 * admin/post/mission.php
+* admin/user/bio.php
 * admin/user/nominate.php
 * install/resource_data.php
 * framework/functionsGlobal.php
