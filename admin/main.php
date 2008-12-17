@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/main.php
 Purpose: Main page of the administrative control panel
 
-System Version: 2.6.0
-Last Modified: 2008-04-20 1922 EST
+System Version: 2.6.7
+Last Modified: 2008-12-17 0823 EST
 **/
 
 /* define the page class */
@@ -69,7 +69,8 @@ if( isset( $sessionCrewid ) ) {
 	$system_check->access = $sessionAccess;
 	
 	/* if the admin wants to be notified, run the check */
-	if( in_array( "x_update", $sessionAccess ) ) {
+	if(in_array("x_update", $sessionAccess) && $updateNotify != 'none')
+	{
 		$system_check->version( $updateNotify );
 	}
 	
