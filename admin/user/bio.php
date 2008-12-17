@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/user/bio.php
 Purpose: Page to display the requested bio
 
-System Version: 2.6.6
-Last Modified: 2008-11-28 0929 EST
+System Version: 2.6.7
+Last Modified: 2008-12-17 0814 EST
 **/
 
 /* do some checking to make sure someone's not trying to do a SQL injection */
@@ -241,17 +241,17 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<tr>
 				<td class="tableCellLabel">First Name</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image"  name="firstName" value="<?=$firstName;?>" /></td>
+				<td><input type="text" class="image"  name="firstName" value="<?=print_input_text($firstName);?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Middle Name</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image"  name="middleName" value="<?=$middleName;?>" /></td>
+				<td><input type="text" class="image"  name="middleName" value="<?=print_input_text($middleName);?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Last Name</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image"  name="lastName" value="<?=$lastName;?>" /></td>
+				<td><input type="text" class="image"  name="lastName" value="<?=print_input_text($lastName);?>" /></td>
 			</tr>
 			
 			<? if( in_array( "u_bio2", $sessionAccess ) || in_array( "u_bio3", $sessionAccess ) ) { ?>
@@ -384,7 +384,7 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<tr>
 				<td class="tableCellLabel">Species</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image"  name="species" value="<?=$species;?>" /></td>
+				<td><input type="text" class="image"  name="species" value="<?=print_input_text($species);?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Age</td>
@@ -430,12 +430,12 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 			<tr>
 				<td class="tableCellLabel">Eye Color</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="eyeColor" value="<?=$eyeColor;?>" /></td>
+				<td><input type="text" class="image" name="eyeColor" value="<?=print_input_text($eyeColor);?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Hair Color</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="hairColor" value="<?=$hairColor;?>" /></td>
+				<td><input type="text" class="image" name="hairColor" value="<?=print_input_text($hairColor);?>" /></td>
 			</tr>
 			<tr>
 				<td class="tableCellLabel">Physical Description</td>
