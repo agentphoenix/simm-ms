@@ -10,7 +10,7 @@ File: admin/post/jp.php
 Purpose: Page to post a joint post
 
 System Version: 2.6.7
-Last Modified: 2008-12-11 0929 EST
+Last Modified: 2008-12-18 0800 EST
 **/
 
 /* access check */
@@ -638,6 +638,7 @@ if(in_array("p_jp", $sessionAccess))
 					
 					$missionTitle = "SELECT missionid, missionTitle FROM sms_missions WHERE missionStatus = 'current'";
 					$missionTitleResult = mysql_query($missionTitle);
+					$missions = FALSE;
 					
 					while($titleArray = mysql_fetch_array($missionTitleResult)) {
 						extract($titleArray, EXTR_OVERWRITE);
