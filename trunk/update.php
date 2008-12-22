@@ -168,6 +168,7 @@ switch($step)
 				<li>Fixed bug where quotation marks couldn&rsquo;t be used in some bio fields</li>
 				<li>Fixed bug where SMS would try to start the version check class even if an admin had set their notification level to none</li>
 				<li>Fixed typo in a position description for fresh installs</li>
+				<li>Fixed the join agree page to say terms of use instead of disclaimer as the former is more accurate</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

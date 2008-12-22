@@ -16,6 +16,7 @@
 |---------------------------------------------------------------
 
 * pages/info.php
+* pages/join.php
 * pages/log.php
 * pages/mission.php
 * pages/missions.php
