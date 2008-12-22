@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/join.php
 Purpose: To display the join application and submit it
 
-System Version: 2.6.1
-Last Modified: 2008-08-16 1723 EST
+System Version: 2.6.7
+Last Modified: 2008-12-22 1304 EST
 **/
 
 /* define the page class and vars */
@@ -238,7 +238,7 @@ Login to your control panel at " . $webLocation . "login.php?action=login to app
 
 	<? if( !isset( $agree ) ) { ?>
 
-	<div style="padding: 1em;">Before continuing, you must agree to the following disclaimer:</div>
+	<div style="padding: 1em;">Before continuing, you must agree to the following terms of use:</div>
 	<div style="padding: 2em;"><i><? printText( $joinDisclaimer ); ?></i></div>
 	<div style="padding: 1em;">
 		<? if( isset( $pid ) ) { ?>
