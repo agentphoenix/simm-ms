@@ -10,8 +10,8 @@ File: pages/departments.php
 Purpose: To display the list of departments offered by the SIMM and their
 	associated positions
 
-System Version: 2.6.0
-Last Modified: 2008-02-25 1735 EST
+System Version: 2.6.8
+Last Modified: 2008-12-29 1524 EST
 **/
 
 /* define the page class and vars */
@@ -25,7 +25,7 @@ if( isset( $sessionCrewid ) ) {
 }
 
 /* pull all the available departments that should be displayed */
-$getDept = "SELECT * FROM sms_departments WHERE deptDisplay = 'y' ORDER BY deptid ASC";
+$getDept = "SELECT * FROM sms_departments WHERE deptDisplay = 'y' ORDER BY deptOrder ASC";
 $getDeptResult = mysql_query( $getDept );
 $positionsArray = array();
 
@@ -68,7 +68,7 @@ $positionsArray = array();
 		extract( $deptinfo, EXTR_OVERWRITE );
 		
 		/* get the positions */
-		$getPositions = "SELECT * FROM sms_positions WHERE positionDisplay = 'y' AND positionDept = '$deptid' ORDER BY positionid ASC";
+		$getPositions = "SELECT * FROM sms_positions WHERE positionDisplay = 'y' AND positionDept = '$deptid' ORDER BY positionOrder ASC";
 		$getPositionsResult = mysql_query( $getPositions );
 		
 		/* rip through the positions and put them into a multi-dimensional array */
