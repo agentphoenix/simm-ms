@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/mission.php
 Purpose: Page to post a mission entry
 
-System Version: 2.6.7
-Last Modified: 2008-12-18 0759 EST
+System Version: 2.6.8
+Last Modified: 2008-12-28 2126 EST
 **/
 
 /* access check */
@@ -408,6 +408,7 @@ if(in_array("p_mission", $sessionAccess))
 					
 					$missionTitle = "SELECT missionid, missionTitle FROM sms_missions WHERE missionStatus = 'current'";
 					$missionTitleResult = mysql_query($missionTitle);
+					$missions = FALSE;
 					
 					while($titleArray = mysql_fetch_array($missionTitleResult)) {
 						extract($titleArray, EXTR_OVERWRITE);
