@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.7
-Last Modified: 2008-12-22 1140 EST
+System Version: 2.6.8
+Last Modified: 2008-12-28 2128 EST
 **/
 
 /* define the step var */
@@ -67,7 +67,8 @@ $versionsArray = array(
 	263,
 	264,
 	265,
-	266
+	266,
+	267
 );
 
 /* count the number of items in the versions array */
@@ -129,8 +130,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.7', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.7', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.8', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.8', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -158,17 +159,10 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.7 is an update to latest release of SMS which updates the system with the following changes:
+			SMS 2.6.8 is an update to latest release of SMS which updates the system with the following changes:
 			
 			<ul>
-				<li>Fixed bug in rank management where department class menu would only be built with departments that are displayed. This can cause issues if you update a rank that is part of a department no longer being displayed, thus causing it to appear in the first department class and throwing off the ranks.</li>
-				<li>Fixed bug where next/previous links were ignoring the date posted and just using the ID, resulting in incorrect ordering when moving through posts with the links</li>
-				<li>Added the ability to run multiple missions simultaneously</li>
-				<li>Added more specific information to the award nomination emails (nominee, nominated by, award, and reason) so it isn&rsquo;t just a nondescript notice</li>
-				<li>Fixed bug where quotation marks couldn&rsquo;t be used in some bio fields</li>
-				<li>Fixed bug where SMS would try to start the version check class even if an admin had set their notification level to none</li>
-				<li>Fixed typo in a position description for fresh installs</li>
-				<li>Fixed the join agree page to say terms of use instead of disclaimer as the former is more accurate</li>
+				<li>Fixed bug where saved mission posts and joint posts showed the missions in the dropdown twice</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
