@@ -20,6 +20,7 @@
 * framework/functionsGlobal.php
 * update.php
 * install/resource_data.php
+* pages/bio.php
 * pages/departments.php
 
 + update/267.php
