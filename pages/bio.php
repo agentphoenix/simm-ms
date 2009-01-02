@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/bio.php
 Purpose: Page to display the requested bio
 
-System Version: 2.6.6
-Last Modified: 2008-11-28 0921 EST
+System Version: 2.6.8
+Last Modified: 2009-01-02 1548 EST
 **/
 
 /* define the page class and set the vars */
@@ -113,7 +113,18 @@ while( $fetchCrew = mysql_fetch_array( $getCrewResult ) ) {
 	<div style="float:right; max-width:175px; text-align:center;">
 		<?php
 		
+		/* put the pics into an array */
 		$pics = explode(",", $image);
+		
+		foreach ($pics as $key => $value)
+		{ /* make sure there isn't a stray RETURN or space and clear out empty values */
+			if ($value == "\n" || $value == '')
+			{
+				unset($pics[$key]);
+			}
+		}
+		
+		/* count them */
 		$count = count($pics);
 		$diff = $count - 1;
 		
