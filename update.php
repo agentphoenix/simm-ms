@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.8
-Last Modified: 2009-01-02 1551 EST
+Last Modified: 2009-01-08 0948 EST
 **/
 
 /* define the step var */
@@ -165,6 +165,8 @@ switch($step)
 				<li>Fixed bug where saved mission posts and joint posts showed the missions in the dropdown twice</li>
 				<li>Fixed bug where commas at the end of the character images string caused an additional image to be counted, and when displayed in the gallery, would appear as the full bio page</li>
 				<li>Fixed bug where positions and departments on the Positions &amp; Departments page didn&rsquo;t respect the order fields but where ordered by ID instead</li>
+				<li>Fixed PHP notice where system UID was&rsquo;t set if the system isn&rsquo;t installed</li>
+				<li>Fixed PHP notice on the installation center</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

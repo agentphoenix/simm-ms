@@ -15,10 +15,11 @@
 | SMS 2.6.8
 |---------------------------------------------------------------
 
+* install.php
+* update.php
 * admin/post/jp.php
 * admin/post/mission.php
 * framework/functionsGlobal.php
-* update.php
 * install/resource_data.php
 * pages/bio.php
 * pages/departments.php
