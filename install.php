@@ -9,11 +9,11 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install.php
 Purpose: Main page to direct users to one of three installation options
 
-System Version: 2.6.0
-Last Modified: 2008-05-18 1756 EST
+System Version: 2.6.8
+Last Modified: 2009-01-08 0942 EST
 **/
 
-if( $_GET['type'] == "update" ) {
+if(isset($_GET['type']) && $_GET['type'] == "update") {
 
 	/* pull in the DB connection variables */
 	require_once( 'framework/variables.php' );
