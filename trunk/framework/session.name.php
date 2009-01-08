@@ -9,9 +9,11 @@ function get_system_uid() {
 	if (!empty($result))
 	{
 		$sysuid = mysql_fetch_array($result);
+		
+		return $sysuid[0];
 	}
 	
-	return $sysuid[0];
+	return FALSE;
 }
 
 //	END "session.name" MOD BY JON MATTERSON
