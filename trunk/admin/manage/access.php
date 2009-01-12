@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/access.php
 Purpose: Page to access levels for individual users
 
-System Version: 2.6.4
-Last Modified: 2008-11-14 0806 EST
+System Version: 2.6.8
+Last Modified: 2009-01-09 0938 EST
 **/
 
 /* access check */
@@ -255,6 +255,7 @@ if(in_array("x_access", $sessionAccess))
 					<li>In order for a player to be able to edit their own personal logs, they need to have the Personal Logs-1 privilege</li>
 					<li>In order to approve award nominations, the user must have Give Crew Award privileges</li>
 					<li>If access is given to Database-1, the user will also need access to Manage privileges</li>
+					<li>If access is given to NPC-2, the user should also be given Bio-3 in order to change ranks for all departments</li>
 				</ul>
 		
 				<div class="pmHeader">
