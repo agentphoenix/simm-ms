@@ -168,6 +168,9 @@ switch($step)
 				<li>Fixed PHP notice where system UID was&rsquo;t set if the system isn&rsquo;t installed</li>
 				<li>Fixed PHP notice on the installation center</li>
 				<li>Added note to access pages that if access is given to NPC-2 access key, the user should also be given Bio-3 in order to change ranks for all departments</li>
+				<li>Removed images from rank dropdowns in Firefox to fix a bug with department heads having their dropdown menus cut off (Firefox bug)</li>
+				<li>Upgraded Facebox to version 1.2</li>
+				<li>Updated the character add page to hide and show the username information based on what's clicked and what permissions the player has</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

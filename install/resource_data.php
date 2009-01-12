@@ -8,8 +8,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install/resource_data.php
 Purpose: Installation resource file that contains the database data
 
-System Version: 2.6.7
-Last Modified: 2008-12-27 1345 EST
+System Version: 2.6.8
+Last Modified: 2009-01-12 1147 EST
 **/
 
 /* insert data into the access levels table */
@@ -510,7 +510,7 @@ VALUES ( '1', 'jQuery', '1.2.6', 'http://www.jquery.com/', 'Javascript library u
 ( '3', 'clickMenu', '0.1.6', 'http://p.sohei.org/jquery-plugins/clickmenu/', 'Customizable user menu', 'framework/js/clickmenu.js;skins/[your skin]/style-clickmenu.css' ),
 ( '4', 'Link Scrubber', '1.0', 'http://www.crismancich.de/jquery/plugins/linkscrubber/', 'Remove dotted border around clicked links in Firefox', 'framework/js/linkscrubber.js' ),
 ( '5', 'Shadowbox', '1.0', 'http://mjijackson.com/shadowbox/', 'Lightbox functionality;Gallery function on tour pages', 'framework/js/shadowbox-jquery.js;framework/js/shadowbox.js;framework/css/shadowbox.css' ),
-( '6', 'Facebox', '1.0', 'http://famspam.com/facebox', 'Modal dialogs throughout the system', 'framework/js/facebox.js;framework/css/facebox.css;images/facebox_b.png;images/facebox_bl.png;images/facebox_br.png;images/facebox_closelabel.gif;images/facebox_loading.gif;images/facebox_tl.png;images/facebox_tr.png' ),
+( '6', 'Facebox', '1.2', 'http://famspam.com/facebox', 'Modal dialogs throughout the system', 'framework/js/facebox.js;framework/css/facebox.css;images/hud_close.png;images/hud_loading.gif' ),
 ( '7', 'Reflect jQuery', '1.0', 'http://plugins.jquery.com/project/reflect', 'Dynamic image reflection on tour pages', 'framework/js/reflect.js' )" );
 
 /* populate the versions table with data */
