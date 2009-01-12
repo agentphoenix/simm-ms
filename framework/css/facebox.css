@@ -6,83 +6,55 @@ Author: David VanScott [ davidv@anodyne-productions.com ], Chris Wanstrath [ chr
 File: framework/css/facebox.css
 Purpose: Stylesheet that controls the HUD display
 
-Last Modified: 2008-03-20 1649 EST
+Last Modified: 2009-01-11 0216 EST
 **/
 
 #facebox {
 	position: absolute;
-	width: 100%;
-	top: 0;
-	left: 0;
+	top: 50px;
+	left: 50%;
 	z-index: 100;
 	text-align: left;
-	
-	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
-	font-size: 10px;
-	color: #fff;
-}
-
-#facebox .popup { position: relative; }
-
-#facebox table {
-	margin: auto;
-	border-collapse: collapse;
-	
-	/* the width has to be set to AUTO here because of the table 100% rule in style-misc.css */
-	width: auto;
-	
-	font-size: 100%;
-	color: #fff;
-}
-
-/*----- HUD title bar -----*/
-#facebox table tr.title_bar {
-	height: 19px;
-	line-height: 19px;
-}
-#facebox table tr.title_bar td.top_left {
-	background: url('../../images/hud_tl.png') no-repeat top left;
-	width: 8px;
-}
-#facebox table tr.title_bar td.top_right {
-	background: url('../../images/hud_tr.png') no-repeat top right;
-	width: 8px;
-}
-#facebox table tr.title_bar td.top_title {
-	background: url('../../images/hud_title_bar.png') repeat-x top left;
-	text-align: center;
-	font-weight: bold;
-}
-
-/*----- side of the HUD -----*/
-#facebox table td.side {
-	background: url('../../images/hud_bg.png') repeat top left;
-}
-
-/*----- HUD footer -----*/
-#facebox table tr.footer { height: 7px; }
-#facebox table tr.footer td.bottom_left {
-	background: url('../../images/hud_bl.png') no-repeat bottom left;
-	width: 8px;
-}
-#facebox table tr.footer td.bottom_right {
-	background: url('../../images/hud_br.png') no-repeat bottom right;
-	width: 8px;
-}
-#facebox table tr.footer td.bottom {
-	background: url('../../images/hud_bg.png') repeat bottom left;
-	height: 7px;
-}
-
-/*----- body of the HUD -----*/
-#facebox .body_hud {
-	padding: 10px;
-	background: url('../../images/hud_bg.png') repeat top left;
-	width: 700px;
+	margin-left: -375px;
 	
 	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 	font-size: 12px;
 	color: #fff;
+}
+
+#facebox .popup {
+	position: relative;
+	width: 750px;
+}
+
+#facebox .hud_body {
+	width: 750px;
+	margin: 0 auto;
+	
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	
+	background: #3a3a3a;
+	border: 1px solid #555;
+}
+
+#facebox .hud_title {
+	height: 22px;
+	line-height: 22px;
+	
+	text-align: center;
+	font-weight: bold;
+	font-size: 110%;
+	border-bottom: 1px solid #252525;
+}
+
+#facebox .content_hud {}
+
+#facebox .content_hud table td.hudLabel {
+	width: 20%;
+	
+	font-weight: bold;
+	text-align: right;
 }
 
 #facebox .loading { text-align: center; }
@@ -91,20 +63,15 @@ Last Modified: 2008-03-20 1649 EST
 
 #facebox img { border: 0; }
 
-/*----- table guts classes -----*/
-#facebox table.hud_guts {
-	width: 650px;
-}
-#facebox table.hud_guts td.hudLabel {
-	width: 20%;
-	font-weight: bold;
-	text-align: right;
+#facebox .close_image {
+	float: left;
+	padding: 4px 0 0 8px;
 }
 
 /*----- input classes -----*/
 #facebox input[type=text] {
 	border: 1px solid #7f8187;
-	background-color: #343434;
+	background-color: #3a3a3a;
 	padding: 4px;
 	
 	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
@@ -115,7 +82,7 @@ Last Modified: 2008-03-20 1649 EST
 #facebox textarea {
 	width: 90%;
 	border: 1px solid #7f8187;
-	background-color: #343434;
+	background-color: #3a3a3a;
 	padding: 4px;
 	
 	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
@@ -124,7 +91,7 @@ Last Modified: 2008-03-20 1649 EST
 }
 #facebox select {
 	border: 1px solid #7f8187;
-	background-color: #343434;
+	background-color: #3a3a3a;
 	padding: 2px;
 }
 
@@ -133,4 +100,21 @@ Last Modified: 2008-03-20 1649 EST
 	overflow-y: auto;
 	max-height: 200px;
 	margin-bottom: 20px;
+}
+
+#facebox_overlay {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+.facebox_hide {
+	z-index: -100;
+}
+
+.facebox_overlayBG {
+	background-color: #000;
+	z-index: 99;
 }
