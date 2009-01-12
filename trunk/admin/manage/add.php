@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/add.php
 Purpose: Page to add a player or NPC
 
-System Version: 2.6.6
-Last Modified: 2008-11-28 0951 EST
+System Version: 2.6.8
+Last Modified: 2009-01-12 1142 EST
 **/
 
 /* access check */
@@ -141,7 +141,17 @@ PASSWORD: " . $_POST['password'] . "";
 	}
 
 ?>
-
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#crewTypeN').click(function(){
+				$('#pc').hide();
+			});
+			
+			$('#crewTypeP').click(function(){
+				$('#pc').show();
+			});
+		});
+	</script>
 	<div class="body">
 		<?php
 		
@@ -166,73 +176,73 @@ PASSWORD: " . $_POST['password'] . "";
 		<? } ?><br /><br />
 		
 		<form method="post" action="<?=$webLocation;?>admin.php?page=manage&sub=add">
+		
+		<strong>Character Type</strong><br />
+		<input type="radio" id="crewTypeP" name="crewType" value="active" <? if( !in_array( "m_crew", $sessionAccess ) ) { echo "disabled"; } else { echo "checked"; } ?>/> <label for="crewTypeP">Playing Character</label>
+		<input type="radio" id="crewTypeN" name="crewType" value="npc" <? if( !in_array( "m_crew", $sessionAccess ) && ( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess ) ) ) { echo " checked"; } ?> /> <label for="crewTypeN">Non-Playing Character</label>
+		
+		<? if( in_array( "m_crew", $sessionAccess ) ) { ?>
+			<div id="pc">
+				<table>
+					
+					<tr>
+						<td colspan="3" height="15"></td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Username</td>
+						<td>&nbsp;</td>
+						<td><input type="text" class="image"  name="username" /></td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Password</td>
+						<td>&nbsp;</td>
+						<td><input type="password" class="image" name="password" /></td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Confirm Password</td>
+						<td>&nbsp;</td>
+						<td><input type="password" class="image" name="confirmPassword" /></td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Email Address</td>
+						<td>&nbsp;</td>
+						<td><input type="text" class="image" name="email" /></td>
+					</tr>
+					
+					<tr>
+						<td colspan="3" height="15"></td>
+					</tr>
+					
+					<tr>
+						<td class="tableCellLabel">Moderate Posts?</td>
+						<td>&nbsp;</td>
+						<td>
+							<input type="radio" name="moderatePosts" id="posts_y" value="y" /> <label for="posts_y">Yes</label>
+							<input type="radio" name="moderatePosts" id="posts_n" value="n" checked /> <label for="posts_n">No</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Moderate Logs?</td>
+						<td>&nbsp;</td>
+						<td>
+							<input type="radio" name="moderateLogs" id="logs_y" value="y" /> <label for="logs_y">Yes</label>
+							<input type="radio" name="moderateLogs" id="logs_n" value="n" checked /> <label for="logs_n">No</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="tableCellLabel">Moderate News?</td>
+						<td>&nbsp;</td>
+						<td>
+							<input type="radio" name="moderateNews" id="news_y" value="y" /> <label for="news_y">Yes</label>
+							<input type="radio" name="moderateNews" id="news_n" value="n" checked /> <label for="news_n">No</label>
+						</td>
+					</tr>
+				</table>
+			</div>
+		<? } ?>
+		
+		<br /><br />
 		<table>
-			<tr>
-				<td class="tableCellLabel">Character Type</td>
-				<td>&nbsp;</td>
-				<td>
-					<input type="radio" id="crewTypeP" name="crewType" value="active" <? if( !in_array( "m_crew", $sessionAccess ) ) { echo "disabled"; } else { echo "checked"; } ?>/> <label for="crewTypeP">Playing Character</label>
-					<input type="radio" id="crewTypeN" name="crewType" value="npc" <? if( !in_array( "m_crew", $sessionAccess ) && ( in_array( "m_npcs1", $sessionAccess ) || in_array( "m_npcs2", $sessionAccess ) ) ) { echo " checked"; } ?> /> <label for="crewTypeN">Non-Playing Character</label>
-				</td>
-			</tr>
-			<? if( in_array( "m_crew", $sessionAccess ) ) { ?>
-			<tr>
-				<td colspan="3" height="15"></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel">Username</td>
-				<td>&nbsp;</td>
-				<td><input type="text" class="image"  name="username" /></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel">Password</td>
-				<td>&nbsp;</td>
-				<td><input type="password" class="image" name="password" /></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel">Confirm Password</td>
-				<td>&nbsp;</td>
-				<td><input type="password" class="image" name="confirmPassword" /></td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel">Email Address</td>
-				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="email" /></td>
-			</tr>
-			
-			<tr>
-				<td colspan="3" height="15"></td>
-			</tr>
-			
-			<tr>
-				<td class="tableCellLabel">Moderate Posts?</td>
-				<td>&nbsp;</td>
-				<td>
-					<input type="radio" name="moderatePosts" id="posts_y" value="y" /> <label for="posts_y">Yes</label>
-					<input type="radio" name="moderatePosts" id="posts_n" value="n" checked /> <label for="posts_n">No</label>
-				</td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel">Moderate Logs?</td>
-				<td>&nbsp;</td>
-				<td>
-					<input type="radio" name="moderateLogs" id="logs_y" value="y" /> <label for="logs_y">Yes</label>
-					<input type="radio" name="moderateLogs" id="logs_n" value="n" checked /> <label for="logs_n">No</label>
-				</td>
-			</tr>
-			<tr>
-				<td class="tableCellLabel">Moderate News?</td>
-				<td>&nbsp;</td>
-				<td>
-					<input type="radio" name="moderateNews" id="news_y" value="y" /> <label for="news_y">Yes</label>
-					<input type="radio" name="moderateNews" id="news_n" value="n" checked /> <label for="news_n">No</label>
-				</td>
-			</tr>
-			<? } ?>
-			
-			<tr>
-				<td colspan="3" height="15"></td>
-			</tr>
 			<tr>
 				<td class="tableCellLabel">First Name</td>
 				<td>&nbsp;</td>
@@ -313,10 +323,10 @@ PASSWORD: " . $_POST['password'] . "";
 					<select name="rank">
 						<?
 						
-						while( $rank = mysql_fetch_assoc( $ranksResult ) ) {
-							extract( $rank, EXTR_OVERWRITE );
+						while($rank = mysql_fetch_assoc($ranksResult)) {
+							extract($rank, EXTR_OVERWRITE);
 							
-							echo "<option value='" . $rank['rankid'] . "' style='background:#000 url( images/ranks/" . $sessionDisplayRank . "/" . $rank['rankImage'] . " ) no-repeat 0 100%; height:50px; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
+							echo "<option value='" . $rank['rankid'] . "' style='background:#000; color:#" . $rank['deptColor'] . ";'>" . $rank['rankName'] . "</option>";
 						
 						}
 						
