@@ -21,6 +21,7 @@
 * admin/post/mission.php
 * admin/manage/access.php
 * admin/manage/accesslevels.php
+* admin/manage/add.php
 * admin/manage/activate.php
 * admin/manage/menus.php
 * admin/user/bio.php
