@@ -167,6 +167,7 @@ switch($step)
 				<li>Fixed bug where positions and departments on the Positions &amp; Departments page didn&rsquo;t respect the order fields but where ordered by ID instead</li>
 				<li>Fixed PHP notice where system UID was&rsquo;t set if the system isn&rsquo;t installed</li>
 				<li>Fixed PHP notice on the installation center</li>
+				<li>Added note to access pages that if access is given to NPC-2 access key, the user should also be given Bio-3 in order to change ranks for all departments</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

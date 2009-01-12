@@ -19,12 +19,28 @@
 * update.php
 * admin/post/jp.php
 * admin/post/mission.php
+* admin/manage/access.php
+* admin/manage/accesslevels.php
+* admin/manage/activate.php
+* admin/manage/menus.php
+* admin/user/bio.php
+* framework/css/facebox.css
 * framework/functionsGlobal.php
+* framework/js/facebox.js
+* images/hud_close.png
 * install/resource_data.php
 * pages/bio.php
 * pages/departments.php
 
 + update/267.php
++ admin/ajax/bio_rank_change.php
+
+- images/hud_title.png
+- images/hud_bg.png
+- images/hud_tl.png
+- images/hud_tr.png
+- images/hud_bl.png
+- images/hud_br.png
 
 |---------------------------------------------------------------
 | SMS 2.6.7
