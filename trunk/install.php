@@ -10,7 +10,7 @@ File: install.php
 Purpose: Main page to direct users to one of three installation options
 
 System Version: 2.6.8
-Last Modified: 2009-01-08 0942 EST
+Last Modified: 2009-01-11 0220 EST
 **/
 
 if(isset($_GET['type']) && $_GET['type'] == "update") {
@@ -73,7 +73,7 @@ if(isset($_GET['type']) && $_GET['type'] == "update") {
 			<p class="bold red">Before you begin, please make sure you have read the readme file included with SMS in its entirety. The readme contains important information about setting up SMS on your server. You can view the readme file by <a href="#" id="readme">clicking here</a>.</p>
 			
 			<div class="readme" style="display:none;">
-				<? include_once('install/readme.html');?>
+				<?php include_once('install/readme.html');?>
 			</div>
 			
 			<h2>Fresh Install</h2>
@@ -88,7 +88,7 @@ if(isset($_GET['type']) && $_GET['type'] == "update") {
 			
 			<h2>Upgrade</h2>
 			<p>The upgrade option will guide you through upgrading your current version of SMS to the latest version. Once the installation is complete, you will be able to use SMS 2.6 for your simm. In order to proceed, you <b>must</b> be running SMS 2.3.0 or higher!</p>
-			<h3><a href="update.php?version=<?=$updateVersion;?>">Go to update &raquo;</a></h3>
+			<h3><a href="update.php?version=<?php echo $updateVersion;?>">Go to update &raquo;</a></h3>
 			
 		</div>
 		

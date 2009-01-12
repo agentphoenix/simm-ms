@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install/install.php
 Purpose: Installation script for SMS
 
-System Version: 2.6.4
-Last Modified: 2008-11-14 0752 EST
+System Version: 2.6.8
+Last Modified: 2009-01-11 0224 EST
 **/
 
 session_start();
@@ -257,7 +257,7 @@ $installSteps = array(
 		</div>
 		
 		<div class="right">
-			<h1>Step <?=$step . " &ndash; " . $installSteps[$step][0];?></h1>
+			<h1>Step <?php echo $step . " &ndash; " . $installSteps[$step][0];?></h1>
 			
 		<?php
 		
@@ -300,11 +300,11 @@ $installSteps = array(
 					<td width="60%">
 						<h3>PHP</h3>
 						<?php if(isset($explain)) { ?>
-						<span class="red">You are running an unsupported version of PHP. The SIMM Management System requires PHP version 4.1.0 or higher. You are running version <?=$req['php'][1];?>. Please contact your host and inquire about the possibility of upgrading to a newer version or you can choose to find another host for your site.</span>
+						<span class="red">You are running an unsupported version of PHP. The SIMM Management System requires PHP version 4.1.0 or higher. You are running version <?php echo $req['php'][1];?>. Please contact your host and inquire about the possibility of upgrading to a newer version or you can choose to find another host for your site.</span>
 						<?php } ?>
 					</td>
-					<td align="center"><h3><?=$req['php'][0];?></h3></td>
-					<td align="center" class="<?=$color;?>"><h3><?=$req['php'][1];?></h3></td>
+					<td align="center"><h3><?php echo $req['php'][0];?></h3></td>
+					<td align="center" class="<?php echo $color;?>"><h3><?php echo $req['php'][1];?></h3></td>
 				</tr>
 				
 				<?php
@@ -324,20 +324,11 @@ $installSteps = array(
 					<td width="60%">
 						<h3>MySQL</h3>
 						<?php if(isset($explain)) { ?>
-						<span class="red">You are running an unsupported version of MySQL. The SIMM Management System requires MySQL version 3.0.0 or higher. You are running version <?=$req['mysql'][1];?>. Please contact your host and inquire about the possibility of upgrading to a newer version or you can choose to find another host for your site.</span>
+						<span class="red">You are running an unsupported version of MySQL. The SIMM Management System requires MySQL version 3.0.0 or higher. You are running version <?php echo $req['mysql'][1];?>. Please contact your host and inquire about the possibility of upgrading to a newer version or you can choose to find another host for your site.</span>
 						<?php } ?>
 					</td>
-					<td align="center"><h3><?=$req['mysql'][0];?></h3></td>
-					<td align="center" class="<?=$color;?>"><h3><?=$req['mysql'][1];?></h3></td>
-				</tr>
-			</table>
-			
-			<p>The following are Anodyne&rsquo;s recommendations for other server settings for running SMS 2.6:</p>
-			<table width="100%" cellpadding="5" cellspacing="0">
-				<tr>
-					<th><h2>Component</h2></th>
-					<th width="20%"><h2>Recommended</h2></th>
-					<th width="20%"><h2>You Have</h2></th>
+					<td align="center"><h3><?php echo $req['mysql'][0];?></h3></td>
+					<td align="center" class="<?php echo $color;?>"><h3><?php echo $req['mysql'][1];?></h3></td>
 				</tr>
 				
 				<?php
@@ -359,8 +350,8 @@ $installSteps = array(
 						<span class="red">You have PHP Short Open Tags turned off. The SIMM Management System makes widespread use of PHP Short Open Tags and having this turned off may negatively impact running SMS on your server. Please contact your host to ask about changing the default value from 0 to 1. Further assistance can be obtained through the <a href="http://forums.anodyne-productions.com" target="_blank">Anodyne Support Forums</a>.</span>
 						<?php } ?>
 					</td>
-					<td align="center"><h3><?=$req['short_open_tag'][0];?></h3></td>
-					<td align="center" class="<?=$color;?>">
+					<td align="center"><h3><?php echo $req['short_open_tag'][0];?></h3></td>
+					<td align="center" class="<?php echo $color;?>">
 						<h3>
 							<?php
 							
@@ -373,6 +364,15 @@ $installSteps = array(
 							?>
 						</h3>
 					</td>
+				</tr>
+			</table>
+			
+			<p>The following are Anodyne&rsquo;s recommendations for other server settings for running SMS 2.6:</p>
+			<table width="100%" cellpadding="5" cellspacing="0">
+				<tr>
+					<th><h2>Component</h2></th>
+					<th width="20%"><h2>Recommended</h2></th>
+					<th width="20%"><h2>You Have</h2></th>
 				</tr>
 				
 				<?php
@@ -394,8 +394,8 @@ $installSteps = array(
 						<span class="red">Your server is set to display errors. While this will not have any ill effects on the running or performance of SMS, it could become a nuisance in the event that your server prints out errors it may be having. You can contact your host about changing this or you can continue with error display turned on.</span>
 						<?php } ?>
 					</td>
-					<td align="center"><h3><?=$req['display_errors'][0];?></h3></td>
-					<td align="center" class="<?=$color;?>">
+					<td align="center"><h3><?php echo $req['display_errors'][0];?></h3></td>
+					<td align="center" class="<?php echo $color;?>">
 						<h3>
 							<?php
 							
@@ -429,8 +429,8 @@ $installSteps = array(
 						<span class="red">Your server has register globals turns on! This is potentially a security risk. Please contact your host about this. If they will not turn register globals off, talk to them about using a .htaccess file to accomplish the same thing in your SMS directory. SMS will work with register globals turned on as well as turned off.</span>
 						<?php } ?>
 					</td>
-					<td align="center"><h3><?=$req['register_globals'][0];?></h3></td>
-					<td align="center" class="<?=$color;?>">
+					<td align="center"><h3><?php echo $req['register_globals'][0];?></h3></td>
+					<td align="center" class="<?php echo $color;?>">
 						<h3>
 							<?php
 							
@@ -464,8 +464,8 @@ $installSteps = array(
 						<span class="red">Your server does not allow for the opening, reading, and writing of files on the server by SMS. While allow file handling has its risks, SMS uses the feature during the installation of the system to help speed things up. Proceeding with file handling turned off will not negatively impact SMS, but you will have to manually copy and paste the configuration variables into the appropriate file.</span>
 						<?php } ?>
 					</td>
-					<td align="center"><h3><?=$req['file_open'][0];?></h3></td>
-					<td align="center" class="<?=$color;?>">
+					<td align="center"><h3><?php echo $req['file_open'][0];?></h3></td>
+					<td align="center" class="<?php echo $color;?>">
 						<h3>
 							<?php
 							
@@ -658,51 +658,51 @@ $installSteps = array(
 		
 		?>
 			
-			<? if( isset( $varError ) ) { ?>
+			<?php if( isset( $varError ) ) { ?>
 			
 			<div class="code">
 				<b class="red">The database connection file (framework/variables.php) is not correctly formatted and connecting to the database may fail. This is possibly due to the file being empty or a missing web location variable. You MUST have a web location variable and all of your connection information to continue. Please paste the following information into the file and try again.</b><br /><br />
 				
-				<? print( htmlentities( '<?php' ) ); ?><br /><br />
+				<?php print( htmlentities( '<?php' ) ); ?><br /><br />
 				
-				$webLocation = "<?=$_SESSION['webLocation'];?>";<br /><br />
-				$dbServer = "<?=$_SESSION['dbServer'];?>";<br />
-				$dbName = "<?=$_SESSION['dbName'];?>";<br />
-				$dbUser = "<?=$_SESSION['dbUser'];?>";<br />
-				$dbPassword = "<?=$_SESSION['dbPassword'];?>";<br />
-				$dbErrorMessage = "<?=$_SESSION['dbErrorMessage'];?>";<br /><br />
+				$webLocation = "<?php echo $_SESSION['webLocation'];?>";<br /><br />
+				$dbServer = "<?php echo $_SESSION['dbServer'];?>";<br />
+				$dbName = "<?php echo $_SESSION['dbName'];?>";<br />
+				$dbUser = "<?php echo $_SESSION['dbUser'];?>";<br />
+				$dbPassword = "<?php echo $_SESSION['dbPassword'];?>";<br />
+				$dbErrorMessage = "<?php echo $_SESSION['dbErrorMessage'];?>";<br /><br />
 				
-				<? print( htmlentities( '?>' ) ); ?>
+				<?php print( htmlentities( '?>' ) ); ?>
 			</div>
 			<br />
 			
-			<? } ?>
+			<?php } ?>
 			
-			<? if( !isset( $varError ) && $write == "failed" ) { ?>
+			<?php if( !isset( $varError ) && $write == "failed" ) { ?>
 			
 			It appears that, for security reasons, your server does not allow opening and writing files. Please open the file <b>variables.php</b> from the <b>framework</b> folder and insert the following code:<br /><br />
 			
 			<div class="code">
-				<? print( htmlentities( '<?php' ) ); ?><br /><br />
+				<?php print( htmlentities( '<?php' ) ); ?><br /><br />
 				
-				$webLocation = "<?=$webLocation;?>";<br /><br />
-				$dbServer = "<?=$dbServer;?>";<br />
-				$dbName = "<?=$_POST['dbName'];?>";<br />
-				$dbUser = "<?=$_POST['dbUser'];?>";<br />
-				$dbPassword = "<?=$_POST['dbPassword'];?>";<br />
-				$dbErrorMessage = "<?=$dbErrorMessage;?>";<br /><br />
+				$webLocation = "<?php echo $webLocation;?>";<br /><br />
+				$dbServer = "<?php echo $dbServer;?>";<br />
+				$dbName = "<?php echo $_POST['dbName'];?>";<br />
+				$dbUser = "<?php echo $_POST['dbUser'];?>";<br />
+				$dbPassword = "<?php echo $_POST['dbPassword'];?>";<br />
+				$dbErrorMessage = "<?php echo $dbErrorMessage;?>";<br /><br />
 				
-				<? print( htmlentities( '?>' ) ); ?>
+				<?php print( htmlentities( '?>' ) ); ?>
 			</div>
 			<br />
 			
 			Once you have completed this, you may continue with the installation.<br /><br />
 			
-			<? } else { ?>
+			<?php } else { ?>
 			
 			You have successfully written the file containing all of the database connection parameters!<br /><br />
 			
-			<? } ?>
+			<?php } ?>
 			
 			SMS 2.6 builds on the incredibly popular SMS 2 by further refining the premier RPG manager with new features, bug fixes, and feature enhancements. Some of the major changes to SMS 2.6 include the ability to set access group default levels, users being able to edit their own posts and logs, better tabs, a new awards system that makes nominating much easier, private news items, a built in stardate script, departmental databases, and much much more! A complete feature list is available after you install the system through the Admin Control Panel > Reports > Version History.<br /><br />
 			
