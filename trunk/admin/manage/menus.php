@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/menus.php
 Purpose: Page to manage the menu items
 
-System Version: 2.6.0
-Last Modified: 2008-06-01 1100 EST
+System Version: 2.6.8
+Last Modified: 2009-01-10 1640 EST
 **/
 
 /* access check */
@@ -204,6 +204,8 @@ while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
 		$('#container-3 > ul').tabs(<?php echo $sub_tab_a;?>);
 		
 		$('.zebra tr:odd').addClass('alt');
+		
+		$.facebox.settings.opacity = 0.85;
 
 		$("a[rel*=facebox]").click(function() {
 			var id = $(this).attr("myID");
