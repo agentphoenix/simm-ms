@@ -295,7 +295,7 @@
   $(document).bind('close.facebox', function() {
     $(document).unbind('keydown.facebox')
     $('#facebox').fadeOut(function() {
-      $('#facebox .content_hud').removeClass().addClass('content')
+      $('#facebox .content_hud').removeClass().addClass('content_hud')
       hideOverlay()
       $('#facebox .loading').remove()
     })
