@@ -1,0 +1,315 @@
+/**
+This skin is the property of its owner and should not be duplicated or
+reproduced with the express written consent of the author. Edits to this skin
+are permissible if the original credits stay intact.
+
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: skins/shiloh-blue/style-misc.css
+Purpose: Stylesheet that controls several of the miscellaneous items throughout
+	the system
+
+Skin Version: 1.0
+Last Modified: 2007-08-13 1203 EST
+**/
+
+/* styles for anchors throughout the system */
+a {
+	text-decoration: none;
+	color: #647282;
+}
+a:hover {
+	border-bottom: 1px solid #647282;
+}
+a.image:hover {
+	border: none;
+}
+a.delete {
+	font-weight: bold;
+	text-decoration: none;
+}
+a:hover.delete {
+	color: #cc0000;
+	border-bottom: 0;
+	font-weight: bold;
+}
+a.edit {
+	font-weight: bold;
+	text-decoration: none;
+}
+a:hover.edit {
+	color: #d8eb52;
+	border-bottom: 0;
+	font-weight: bold;
+}
+a.add {
+	font-weight: bold;
+	text-decoration: none;
+}
+a:hover.add {
+	color: #70c16e;
+	border-bottom: 0;
+	font-weight: bold;
+}
+
+/* special font classes */
+.fontTitle {
+	font-size: 2em;
+	font-weight: bold;
+}
+.fontLarge {
+	font-size: 1.4em;
+}
+.fontMedium {
+	font-size: 1.2em;
+}
+.fontNormal {
+	font-size: .9em;
+}
+.fontSmall {
+	font-size: .75em;
+}
+
+/* styles for select boxes */
+select {
+	background-color: #000;
+	border: 1px solid #666;
+	color: #f1f1f1;
+	padding: .2em .2em .2em 0;
+	font-size: 8.5pt;
+}
+
+/* styles for the input boxes and buttons */
+input[type=text] {
+	background-color: #000;
+	border: 1px solid #888;
+	color: #efefef;
+	font-size: 8.5pt;
+	font-family: "Lucida Grande", "Verdana", sans-serif;
+	padding: 3px;
+}
+input[type=password] {
+	background-color: #000;
+	border: 1px solid #888;
+	color: #efefef;
+	font-size: 8.5pt;
+	font-family: "Lucida Grande", "Verdana", sans-serif;
+	padding: 3px;
+} 
+input.button {
+	padding: 0;
+	border: 1px solid #111;
+}
+input.button:hover {
+	background-color: #0d0d0d;
+	border: 1px solid #333;
+}
+input.class, input.order {
+	width:25px;
+}
+input.name {
+	width:329px;
+}
+input.image {
+	width:225px;
+}
+input.color {
+	width:60px;
+}
+input.date {
+	width:125px;
+}
+
+/* styles for text areas */
+textarea {
+	background-color: #000;
+	border: 1px solid #888;
+	color: #efefef;
+	font-size: 8.5pt;
+	font-family: "Lucida Grande", "Verdana", sans-serif;
+	padding: .2em;
+	width: 90%;
+}
+textarea.desc {
+	/*width: 97%;*/
+}
+.wideTextArea {
+	width: 99%;
+}
+
+/* class for the specs text areas */
+.specsText {
+	width: 85%;
+}
+
+/* classes for the tables */
+table {
+	width: 100%;
+}
+.narrowTable {
+	width: 75%;
+}
+
+/* style that controls the update panel */
+.update { width: 97%; }
+.update a {
+	border-bottom: 1px solid #333;
+	color: #aaa;
+	font-weight: bold;
+	padding: 0 0 1px 0;
+}
+.update a:hover {
+	border-bottom: 1px solid #ddd;
+	color: #f1f1f1;
+}
+
+/** color styles **/
+.notify-orange {
+	padding: .2em .5em .3em 1em;
+	line-height: 1.3;
+	
+	background-color: #231804;
+	border: 1px solid #e99e1c;
+	border-left: 4px solid #e99e1c;
+}
+.notify-red {
+	padding: .2em .5em .3em 1em;
+	line-height: 1.4;
+	
+	background-color: #170707;
+	border: 1px solid #9c2c2c;
+	border-left: 4px solid #9c2c2c;
+}
+.notify-green {
+	padding: .2em .5em .3em 1em;
+	line-height: 1.4;
+	
+	background-color: #0b170b;
+	border: 1px solid #4b994b;
+	border-left: 4px solid #4b994b;
+}
+.notify-blue {
+	padding: .2em .5em .3em 1em;
+	line-height: 1.4;
+	
+	background-color: #0a1023;
+	border: 1px solid #406ceb;
+	border-left: 4px solid #406ceb;
+}
+.notify-yellow {
+	padding: .2em .5em .3em 1em;
+	line-height: 1.4;
+	
+	background-color: #33300b;
+	border: 1px solid #e7dc32;
+	border-left: 4px solid #e7dc32;
+}
+.notify-normal {
+	padding: .2em .5em .3em 1em;
+	line-height: 1.4;
+	
+	background-color: #090909;
+	border: 1px solid #111;
+}
+
+/* various color classes */
+.red {
+	color: #9c2c2c;
+}
+.green {
+	color: #008000;
+}
+.yellow { 
+	color: #dfd530;
+}
+.blue {
+	color: #0a6fd9;
+}
+.orange { 
+	color: #e99e1c;
+}
+
+/* style used on the count page to put a vertical line in the table */
+.countTableBorder {
+	border-right: 1px solid white;
+}
+
+/* if there's an error, use this class */
+.error {
+	color: #cc0000;
+	font-weight: bold;
+}
+
+/* control the table cell's label TD */
+.tableCellLabel {
+	text-align: right;
+	width: 20%;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+/* class that contains the bio image */
+.bioImage {
+	float: right;
+	width: 20%;
+	padding: 0 2.5em 0 0;
+}
+
+/* class that controls the post detail box */
+.postDetails {
+	float: right;
+	width: 35%;
+	padding: 5px 1em 1em 1em;
+	border: 1px solid #222;
+	background-color: #0d0d0d;
+	margin: 0 0 1em 2em;
+}
+
+/* honestly, i'm not sure why i put this in here... */
+.buttonSpacer {
+	height: 1px;
+}
+
+/* styles for alternating row colors */
+.rowColor1 {
+	background-color: #0d0d0d;
+}
+.rowColor2 {
+	background-color: #000;
+}
+
+/* styles for the various ULs throughout the system */
+ul.list-dark {
+	list-style-type: square;
+	color: #222;
+}
+ul.version {
+	list-style-type: square;
+}
+
+/* class that controls the PM headers in the inbox */
+.pmHeader {
+	width: 250px;
+	border-bottom: 1px solid #222;
+	margin-bottom: .5em;
+	font-size: 1.4em;
+	font-weight: bold;
+}
+
+/* class that controls the PM reply button */
+.imageButton {
+	background-color: #0d0d0d;
+	border: 1px solid #0d0d0d;
+}
+
+/* special padding number 1 */
+/* this padding is used on the mission summaries page */
+.specialPadding1 {
+	padding: 1em 0 1em 1em;
+}
+
+.case { text-transform: uppercase; }
+.bold { font-weight: bold; }
+
+/** jQuery zebra tables **/
+tr.alt td { background: #090909; }
+tr.over td { background: #111; }

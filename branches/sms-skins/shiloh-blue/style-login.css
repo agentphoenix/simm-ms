@@ -1,0 +1,110 @@
+/**
+This skin is the property of its owner and should not be duplicated or
+reproduced with the express written consent of the author. Edits to this skin
+are permissible if the original credits stay intact.
+
+Author: David VanScott [ davidv@anodyne-productions.com ]
+File: skins/shiloh-blue/style-login.css
+Purpose: Stylesheet that controls the login page
+
+Skin Version: 1.0
+Last Modified: 2007-10-05 1144 EST
+**/
+
+body {
+}
+
+/* main container */
+#login {
+	margin: 0 auto;
+	background: #000 url( 'images/content-bg.jpg' ) repeat-x top left;
+	width: 100%;
+}
+
+/* style for the error class */
+.error {
+	color: #cc0000;
+	font-weight: bold;
+}
+
+/* the header */
+#login .header {
+	padding: .5em 0 1em 0;
+	font-size: 2em;
+	font-weight: bold;
+	text-align: center;
+	color: #efefef;
+	margin-bottom: .8em;
+	background-color: #000;
+	width: 700px;
+	margin: 0 auto;
+	border-left: 1px solid #111;
+	border-right: 1px solid #111;
+}
+
+/* the part with all the content */
+#login .content {
+	font-size: 1em;
+	padding: 0 0 25px 0;
+	text-align: center;
+	background-color: #000;
+	width: 700px;
+	margin: 0 auto;
+	border-left: 1px solid #111;
+	border-right: 1px solid #111;
+	border-bottom: 1px solid #111;
+}
+
+/* the footer */
+#login .footer {
+	background-color: #090909;
+	height: 40px;
+	line-height: 40px;
+	border-top: 1px solid #111;
+	border-bottom: 1px solid #111;
+	/* margin-bottom: 25px; */
+}
+
+/* the submit button */
+#login input.submitButton {
+	padding: 0;
+	border: 1px solid #111;
+}
+#login input.submitButton:hover {
+	background-color: #0d0d0d;
+	border: 1px solid #333;
+}
+
+/* classes for the input fields */
+#login input[type=text], #login input[type=password] {
+	background: #000;
+	border: 1px solid #111;
+	color: #efefef;
+	padding: .2em;
+	font-size: 1em;
+	font-family: "Lucida Grande", Helvetica, "Trebuchet MS", Arial, sans-serif;
+}
+#login input[type=text]:focus, #login input[type=password]:focus {
+	background: #000;
+	border: 1px solid #333;
+}
+
+.login {
+	font-size: .95em;
+}
+.login input.text {
+	background: #000;
+	border: 1px solid #111;
+	color: #efefef;
+	padding: .2em;
+	font-size: 1em;
+	font-family: "Lucida Grande", Helvetica, "Trebuchet MS", Arial, sans-serif;
+}
+.login input.text:focus {
+	background: #090909;
+	border: 1px solid #333;
+}
+.textboxLarge {
+	font-size: 1.3em;
+	font-family: "Lucida Grande", Helvetica, "Trebuchet MS", Arial, sans-serif;
+}
