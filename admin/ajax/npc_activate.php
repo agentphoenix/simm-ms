@@ -74,7 +74,7 @@ if(in_array("m_npcs2", $sessionAccess))
 			<tr>
 				<td class="hudLabel">Password</td>
 				<td>&nbsp;</td>
-				<td><input type="text" class="image" name="password" maxlength="32" /></td>
+				<td><input type="password" class="image" name="password" maxlength="32" /></td>
 			</tr>
 			<tr>
 				<td colspan="3" height="5"></td>
