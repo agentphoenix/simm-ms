@@ -204,16 +204,14 @@ while($menuAdmin = mysql_fetch_assoc($getAdminResult)) {
 		$('#container-3 > ul').tabs(<?php echo $sub_tab_a;?>);
 		
 		$('.zebra tr:odd').addClass('alt');
-		
-		$.facebox.settings.opacity = 0.85;
 
 		$("a[rel*=facebox]").click(function() {
 			var id = $(this).attr("myID");
 			var action = $(this).attr("myAction");
 
-			jQuery.facebox(function() {
-				jQuery.get('admin/ajax/menu_' + action + '.php?id=' + id, function(data) {
-					jQuery.facebox(data);
+			$.facebox(function() {
+				$.get('admin/ajax/menu_' + action + '.php?id=' + id, function(data) {
+					$.facebox(data);
 				});
 			});
 			return false;

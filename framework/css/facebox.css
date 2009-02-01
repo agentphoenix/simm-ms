@@ -11,8 +11,8 @@ Last Modified: 2009-01-11 0216 EST
 
 #facebox {
 	position: absolute;
-	top: 50px;
-	left: 50%;
+	/*top: 50px;*/
+	/*left: 50%;*/
 	z-index: 100;
 	text-align: left;
 	margin-left: -375px;
