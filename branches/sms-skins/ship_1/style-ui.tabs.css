@@ -143,6 +143,7 @@ Last Modified: 2008-05-20 1931 EST
     border-top: 1px solid #111;
     padding: 1em 8px;
     background: #000; /* declare background color for container to avoid distorted fonts in IE while fading */
+	clear: left;
 }
 .ui-tabs-loading em {
     padding: 0 0 0 20px;
