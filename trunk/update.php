@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.8
-Last Modified: 2009-01-08 0948 EST
+Last Modified: 2009-02-09 0907 EST
 **/
 
 /* define the step var */
@@ -170,7 +170,9 @@ switch($step)
 				<li>Added note to access pages that if access is given to NPC-2 access key, the user should also be given Bio-3 in order to change ranks for all departments</li>
 				<li>Removed images from rank dropdowns in Firefox to fix a bug with department heads having their dropdown menus cut off (Firefox bug)</li>
 				<li>Upgraded Facebox to version 1.2</li>
-				<li>Updated the character add page to hide and show the username information based on what's clicked and what permissions the player has</li>
+				<li>Updated the character add page to hide and show the username information based on what&rsquo;s clicked and what permissions the player has</li>
+				<li>Fixed styling bugs on install pages in IE7</li>
+				<li>Updated readme file to reflect updated server requirements</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
@@ -186,7 +188,7 @@ switch($step)
 			<? } ?>
 		</div>
 		<div class="footer">
-			Copyright &copy; 2005-<?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a>
+			Copyright &copy; <?php echo date('Y'); ?> by <a href="http://www.anodyne-productions.com/" target="_blank">Anodyne Productions</a>
 		</div> <!-- close .footer -->
 	</div> <!-- close #install -->
 </body>
