@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/activate.php
 Purpose: Page to manage pending users, posts, logs, and docking requests
 
-System Version: 2.6.4
-Last Modified: 2008-10-25 1353 EST
+System Version: 2.6.9
+Last Modified: 2009-03-08 2303 EST
 **/
 
 /* access check */
@@ -408,8 +408,8 @@ if(
 
 					/* set the email author */
 					$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
-					$emailFetchResult = mysql_query( $emailFetch );
-					$coEmail = mysql_fetch_row( $emailFetchResult );
+					$emailFetchResult = mysql_query($emailFetch);
+					$coEmail = mysql_fetch_assoc($emailFetchResult);
 
 					/* define the variables */
 					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();
@@ -435,8 +435,8 @@ The CO of the station will be in contact with you shortly.  Thank you for intere
 
 					/* set the email author */
 					$emailFetch = "SELECT dockingShipCOEmail FROM sms_starbase_docking WHERE dockid = $action_id LIMIT 1";
-					$emailFetchResult = mysql_query( $emailFetch );
-					$coEmail = mysql_fetch_row( $emailFetchResult );
+					$emailFetchResult = mysql_query($emailFetch);
+					$coEmail = mysql_fetch_assoc($emailFetchResult);
 
 					/* define the variables */
 					$to = $coEmail['dockingShipCOEmail'] . ", " . printCOEmail();

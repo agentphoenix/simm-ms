@@ -10,8 +10,8 @@ File: update.php
 Purpose: New update system that will dynamically pull the right update file based
 	on what version of the system is in use
 
-System Version: 2.6.8
-Last Modified: 2009-02-09 0907 EST
+System Version: 2.6.9
+Last Modified: 2009-03-08 2309 EST
 **/
 
 /* define the step var */
@@ -68,7 +68,8 @@ $versionsArray = array(
 	264,
 	265,
 	266,
-	267
+	267,
+	268
 );
 
 /* count the number of items in the versions array */
@@ -130,8 +131,8 @@ switch($step)
 		}
 	
 		/** UPDATE THE VERSION IN THE DATABASE **/
-		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.8', sysBaseVersion = '2.6', ";
-		$updateVersion.= "sysIncrementVersion = '.8', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
+		$updateVersion = "UPDATE sms_system SET sysVersion = '2.6.9', sysBaseVersion = '2.6', ";
+		$updateVersion.= "sysIncrementVersion = '.9', sysLaunchStatus = 'n' WHERE sysid = 1 LIMIT 1";
 		$updateVersionResult = mysql_query( $updateVersion );
 		
 		break;
@@ -159,20 +160,11 @@ switch($step)
 			
 			<? if( $step == "1" ) { ?>
 			
-			SMS 2.6.8 is an update to latest release of SMS which updates the system with the following changes:
+			SMS 2.6.9 is an update to latest release of SMS which updates the system with the following changes:
 			
 			<ul>
-				<li>Fixed bug where saved mission posts and joint posts showed the missions in the dropdown twice</li>
-				<li>Fixed bug where commas at the end of the character images string caused an additional image to be counted, and when displayed in the gallery, would appear as the full bio page</li>
-				<li>Fixed bug where positions and departments on the Positions &amp; Departments page didn&rsquo;t respect the order fields but where ordered by ID instead</li>
-				<li>Fixed PHP notice where system UID was&rsquo;t set if the system isn&rsquo;t installed</li>
-				<li>Fixed PHP notice on the installation center</li>
-				<li>Added note to access pages that if access is given to NPC-2 access key, the user should also be given Bio-3 in order to change ranks for all departments</li>
-				<li>Removed images from rank dropdowns in Firefox to fix a bug with department heads having their dropdown menus cut off (Firefox bug)</li>
-				<li>Upgraded Facebox to version 1.2</li>
-				<li>Updated the character add page to hide and show the username information based on what&rsquo;s clicked and what permissions the player has</li>
-				<li>Fixed styling bugs on install pages in IE7</li>
-				<li>Updated readme file to reflect updated server requirements</li>
+				<li>Fixed typos in docking request email sent out to the starbase CO</li>
+				<li>Fixed bug with docked ship activation and rejection where the docking CO wouldn&rsquo;t be sent a copy of the acceptance or rejection email</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

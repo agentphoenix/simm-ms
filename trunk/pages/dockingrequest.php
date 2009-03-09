@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/dockingrequest.php
 Purpose: To display the form for ships to request docking permission at the starbase
 
-System Version: 2.6.0
-Last Modified: 2008-04-18 1953 EST
+System Version: 2.6.9
+Last Modified: 2009-03-08 2304 EST
 **/
 
 /* check the simm type */
@@ -78,7 +78,7 @@ This is an automatically generated message, please do not respond.";
 			$from2 = $dockingShipCO . " < " . $dockingShipCOEmail . " >";
 			$message2 = "Greetings " . printCO() . ",
 		
-$dockingShipCO of the $dockingShipName has sent a request to dock with the $shipName.  To answer the Commanding Officer and premit or deny his request please log in to your Control Panel.
+$dockingShipCO of the $dockingShipName has sent a request to dock with the $shipName.  To answer the Commanding Officer and approve or deny his request, please log in to your Control Panel.
 	
 " . $webLocation . "login.php?action=login";
 		
