@@ -103,7 +103,7 @@
       showOverlay()
 
       $('#facebox .content_hud').empty()
-      $('#facebox .hud_body').children().hide().end().
+      $('#facebox .content_hud').children().hide().end().
         append('<div class="loading"><img src="'+$.facebox.settings.loadingImage+'"/></div>')
 
       $('#facebox').css({

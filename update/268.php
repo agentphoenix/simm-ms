@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/268.php
 Purpose: Update to 2.6.9
-Last Modified: 2009-03-08 2306 EST
+Last Modified: 2009-04-02 1443 EST
 **/
 
 /*
@@ -18,6 +18,6 @@ Last Modified: 2009-03-08 2306 EST
 | for this release.
 |
 */
-mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.9', '', 'This release fixes bugs with the docking request form and docked ship activation.', 'Fixed typos in docking request email sent out to the starbase CO;Fixed bug with docked ship activation and rejection where the docking CO wouldn\'t be sent a copy of the acceptance or rejection email')");
+mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.9', '', 'This release fixes bugs with the docking request form and docked ship activation.', 'Fixed typos in docking request email sent out to the starbase CO;Fixed bug with docked ship activation and rejection where the docking CO wouldn\'t be sent a copy of the acceptance or rejection email;Fixed location of Facebox loading graphic')");
 
 ?>
