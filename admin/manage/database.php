@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/database.php
 Purpose: Page that moderates the database entries
 
-System Version: 2.6.2
-Last Modified: 2008-08-22 1007 EST
+System Version: 2.6.9
+Last Modified: 2009-05-14 0743 EST
 **/
 
 /* access check */
@@ -121,8 +121,8 @@ if( in_array( "m_database1", $sessionAccess ) || in_array( "m_database2", $sessi
 	}
 	
 	/* pull all the entries */
-	$entries = "SELECT db.* FROM sms_database AS db, sms_departments AS d WHERE db.dbDisplay = 'y' ";
-	$entries.= "AND db.dbDept = d.deptid AND d.deptDatabaseUse = 'y'";
+	$entries = "SELECT db.* FROM sms_database AS db, sms_departments AS d WHERE ";
+	$entries.= "db.dbDept = d.deptid AND d.deptDatabaseUse = 'y'";
 	$entriesR = mysql_query($entries);
 	
 	/* fill in the array */

@@ -17,6 +17,7 @@
 
 * update.php
 * admin/manage/activate.php
+* admin/manage/database.php
 * framework/functionsGlobal.php
 * install/resource_data.php
 * pages/dockingrequest.php
