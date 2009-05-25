@@ -57,15 +57,10 @@ body {
 */
 #container {}
 
-/* the template header */
 #header {
-	width: 100%;
-	height: 110px;
-	margin: auto;
+	height: 246px;
 	
-	border-top: 1px solid #111;
-	border-bottom: 1px solid #111;
-	background: #090909 url( 'images/header.png' ) no-repeat top left;
+	background: #040406 url('images/header.jpg') no-repeat top center;
 }
 
 /*
@@ -77,41 +72,41 @@ body {
 |
 */
 .mainNav {
-	height: 55px;
-	line-height: 55px;
+	height: 30px;
+	line-height: 30px;
 	width: auto;
 	
-	background: #555 url('images/head-bg.png') repeat-x 0 0;
-	border: 1px solid #333;
-	border-top: none !important;
+	background: #f3b907 url('images/nav-bg.png') repeat-x 0 0;
 }
 #nav-main {
-	display: inline;
 	margin: 0;
 	padding: 0;
-	float: left;
-	list-style: none;
-}
-#nav-main li {
-	float: left;
 	
+	list-style: none;
 	text-align: center;
 }
+#nav-main li {
+	display: inline;
+	margin: 0 2px;
+	
+	text-transform: lowercase;
+}
 #nav-main li a {
-	display: block;
-	height: 55px;
-	width: 116px;
+	display: inline-block;
+	padding: 0 1em;
 	
 	text-decoration: none;
-	font-variant: small-caps;
-	background: url('images/nav-bg.png') no-repeat top left;
-	color: #eee;
-	font-size: 130%;
+	color: #333;
 	font-weight: bold;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
 }
-#nav-main li a:hover,
-#nav-main li a.active { background-position: 0 -55px; }
-
+#nav-main li a:hover {
+	background: #1b6cae url('images/nav-hover-bg.png') repeat-x 0 0;
+	border-left: 1px solid #0e395c;
+	border-right: 1px solid #0e395c;
+	color: #eee;
+}
 
 /*
 |---------------------------------------------------------------
@@ -190,31 +185,12 @@ body {
 	font-size: 80%;
 }
 
-/** NEEDS TO COME OUT BEFORE RELEASE! **/
-/*
-#mainNav, #userNav {
-	height: 25px;
-	line-height: 25px;
-	width: 100%;
+.stardate {
+	float: right;
+	width: 150px;
 	
-	background: #000;
-	text-align: center;
+	border: 1px solid;
+	
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
-#mainNav ul, #userNav ul {
-	display: inline;
-	margin: 0;
-	padding: 0;
-}
-#mainNav ul li, #userNav ul li {
-	display: inline;
-	list-style-type: none;
-}
-#mainNav ul li.spacer, #userNav ul li.spacer {
-	padding-top: 2px;
-}
-#mainNav a, #userNav a {
-	font-weight: bold;
-	color: #fff;
-	padding: 0 1em 0 1em;
-}
-#mainNav a:hover, #userNav a:hover { color: #5b5a4f; }*/

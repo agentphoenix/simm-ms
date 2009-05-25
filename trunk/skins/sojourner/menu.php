@@ -34,6 +34,10 @@ if(isset($sessionCrewid))
 
 ?>
 
+<div id="header"></div>
+
+<div id="subhead"></div>
+
 <div class="mainNav">
 	<div class="wrapper">
 		<?php
@@ -42,14 +46,12 @@ if(isset($sessionCrewid))
 		
 		if(isset($sessionCrewid))
 		{
-			$menu->user($sessionCrewid);
+			//$menu->user($sessionCrewid);
 		}
 		
 		?>
 	</div>
 </div>
-
-<div id="header"></div>
 
 <div id="container" class="wrapper">
 	<div class="content">
@@ -72,7 +74,7 @@ if(isset($sessionCrewid))
 				<a href="<?=$webLocation;?>login.php?action=reset">&laquo; Reset Password</a>
 			<? } ?>
 			<br /><br />
-			<? include_once( 'framework/stardate.php' ); ?>
+			<?php include_once('framework/stardate.php');?>
 			</div> <!-- close the .login layer -->
 			<br />
 	
