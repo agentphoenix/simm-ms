@@ -1,17 +1,48 @@
 <?php
-
 /**
-Edits to this skin are permissible if the original credits stay intact.
-
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: skins/sojourner/menu.php
 Purpose: Page that creates the navigation menu for SMS 2
 
-Skin Version: 2.5
-Last Modified: 2008-04-19 0130 EST
+Skin Version: 1.0
+Last Modified: 2009-06-01 0832 EST
 **/
 
-$navwidth = (isset($sessionCrewid)) ? 558 : 440;
+include_once('framework/phpsniff/phpSniff.class.php');
+include_once('framework/phpsniff/phpTimer.class.php');
+
+/* initialize some vars */
+$GET_VARS = isset( $_GET ) ? $_GET : $HTTP_GET_VARS;
+$POST_VARS = isset( $_POST ) ? $_GET : $HTTP_POST_VARS;
+if( !isset( $GET_VARS['UA'] ) ) $GET_VARS['UA'] = '';
+if( !isset( $GET_VARS['cc'] ) ) $GET_VARS['cc'] = '';
+if( !isset( $GET_VARS['dl'] ) ) $GET_VARS['dl'] = '';
+if( !isset( $GET_VARS['am'] ) ) $GET_VARS['am'] = '';
+
+$timer =& new phpTimer();
+$timer->start('main');
+$timer->start('client1');
+$sniffer_settings = array(
+	'check_cookies'=>$GET_VARS['cc'],
+	'default_language'=>$GET_VARS['dl'],
+	'allow_masquerading'=>$GET_VARS['am']
+);
+$client =& new phpSniff( $GET_VARS['UA'],$sniffer_settings );
+
+/**
+ * 558 - 440
+ * 573 - 455
+ */
+
+if ($client->property('browser') == 'ie')
+{
+	$navwidth = (isset($sessionCrewid)) ? 573 : 455;
+}
+else
+{
+	$navwidth = (isset($sessionCrewid)) ? 558 : 440;
+}
+
 $bodywidth = (CUR_PAGE == 'admin.php') ? '20%' : '0%';
 
 ?>
