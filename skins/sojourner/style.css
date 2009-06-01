@@ -21,6 +21,7 @@ File: skins/sojourner/style.css
 @import url( "style-login.css" );
 @import url( "style-ui.tabs.css" );
 @import url( "style-clickmenu.css" );
+@import url('style-superfish.css');
 
 /*
 |---------------------------------------------------------------
@@ -81,9 +82,9 @@ body {
 #nav-main {
 	margin: 0;
 	padding: 0;
+	width: auto;
 	
 	list-style: none;
-	text-align: center;
 }
 #nav-main li {
 	display: inline;
@@ -101,12 +102,18 @@ body {
 	border-left: 1px solid transparent;
 	border-right: 1px solid transparent;
 }
-#nav-main li a:hover {
+#nav-main li a:hover, .clickMenu li.hover a {
+	background: #f3d16b url('images/nav-hover-bg.png') repeat-x 0 0;
+	color: #363636;
+}
+#nav-main li a.active {
 	background: #1b6cae url('images/nav-hover-bg.png') repeat-x 0 0;
 	border-left: 1px solid #0e395c;
 	border-right: 1px solid #0e395c;
 	color: #eee;
 }
+
+.wrapper-center { margin: 0 auto; }
 
 /*
 |---------------------------------------------------------------
@@ -128,7 +135,7 @@ body {
 |
 */
 #container .content .body {
-	margin-right: 20%;
+	/* margin-right: 20%; */
 	padding: 1em 0 1em 1em;
 }
 

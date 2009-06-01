@@ -19,7 +19,10 @@ if (substr($webLocation, -1) != '/')
 	$skins = '/' . $skins;
 }
 
+$name = explode('/', $_SERVER['SCRIPT_NAME']);
+
 define('SKIN_PATH', $skins . $path . '/'); /* define the skin path */
+define('CUR_PAGE', end($name));
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
