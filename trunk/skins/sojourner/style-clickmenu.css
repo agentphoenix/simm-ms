@@ -18,7 +18,7 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* background color of the containing span class */
-	background-color: #000;
+	background-color: red;
 	/* ### END EDIT ### */
 }
 .clickMenu
@@ -30,7 +30,6 @@ span.cmDiv
 .clickMenu, .clickMenu ul
 {
 	list-style: none;
-	font-size: 90%;
 }
 .clickMenu ul
 {
@@ -42,14 +41,20 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* background color and border color of the flyout menu */
-	border: 1px solid #111;
+	border: 1px solid #222;
 	background-color: #090909;
 	/* ### END EDIT ### */
+	
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
 }
 .clickMenu div.outerbox
 {
 	display: none;
 	min-width: 160px; /* firefox produces animation-flickering when the box is bigger than this :/ */
+	margin-left: 2px;
 }
 .clickMenu div.inner
 {
@@ -60,7 +65,7 @@ span.cmDiv
 	/* changing which direction the menu flies out at */
 	/* if you want the menu to fly out to the right (arrow at the upper left corner), use LEFT */
 	/* if you want the menu to fly out to the left (arrow at the upper right corner), use RIGHT */
-	left: 0;
+	left: 3px;
 	/* ### START EDIT ### */
 }
 .clickMenu div.inner div.outerbox
@@ -84,7 +89,7 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* background color behind the arrow */
-	background-color: #000;
+	background-color: transparent;
 	/* ### END EDIT ### */
 }
 .clickMenu li.main li
@@ -92,14 +97,14 @@ span.cmDiv
 	z-index: 2;
 	min-width: 78px;
 }
-.clickMenu li.hover
+.clickMenu li.hover a
 {
 	z-index: 1 !important; /* the hover z-index has to be below the normal one the hovering items may be drawn over a submenu */
 	cursor: pointer;
 	
 	/* ### START EDIT ### */
 	/* color of the hover state in the submenu */
-	background-color: #111;
+	/* background-color: red; */
 	/* ### END EDIT ### */
 }
 .clickMenu a
@@ -109,12 +114,46 @@ span.cmDiv
 	
 	/* ### START EDIT ### */
 	/* color of the links in the flyout menu ... to have them match the site's links, remove these */
-	color: #eee;
+	color: #fff;
 	/* ### END EDIT ### */
 }
 
-/* this keeps the menu from showing prematurely */
-ul.hidemenu { display: none; }
-
 /* this keeps the menu from showing a stray bullet */
 ul#list { list-style: none; }
+
+.inner ul.hidemenu {
+	display: none;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.inner ul.hidemenu li {
+	width: 100% !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	
+	font-size: 90% !important;
+	background: transparent !important;
+}
+.inner ul.hidemenu li:hover {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.inner ul.hidemenu li a {
+	margin: 0 !important;
+	padding: 2px 0 2px 10px !important;
+	width: 100% !important;
+	line-height: 1.8 !important;
+	
+	background: transparent !important;
+	border: none !important;
+	color: #888 !important;
+}
+.inner ul.hidemenu li a:hover {
+	margin: 0 !important;
+	padding: 2px 0 2px 10px !important;
+	width: 100% !important;
+	
+	background: none !important;
+	border: none !important;
+	color: #fff !important;
+}

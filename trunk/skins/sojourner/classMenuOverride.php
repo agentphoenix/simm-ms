@@ -14,8 +14,8 @@ class MenuOverride extends Menu
 		'database' => array('database')
 	);
 	
-	function main() {
-
+	function main()
+	{
 		/* get the mainNav items from the DB */
 		$getMenu = "SELECT * FROM sms_menu_items WHERE menuCat = 'main' ";
 		$getMenu.= "AND menuAvailability = 'on' ORDER BY menuGroup, menuOrder ASC";
@@ -49,6 +49,8 @@ class MenuOverride extends Menu
 		
 		$ext = $server[$k];
 		
+		$sections = array('main', 'personnel', 'simm', 'ship');
+		
 		echo "<ul id='nav-main'>";
 		
 		foreach ($menuArray as $key => $value)
@@ -64,11 +66,19 @@ class MenuOverride extends Menu
 				$target = " target='_blank'";
 			}
 			
-			$active = ($this->_page_check($page) == $value['section']) ? ' class="active"' : NULL;
+			$active = ($this->_page_check($page) == $value['section']) ? ' class="active"' : FALSE;
 				
 			if ($value['login'] == "n")
 			{
-				echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . " ". $active .">" . $value['title'] . "</a></li>";
+				echo "<li>";
+				echo "<a id='". $value['section'] ."' href='" . $prefix . $value['link'] . "'" . $target . " ". $active .">" . $value['title'] . "</a>";
+				
+				if (in_array($value['section'], $sections))
+				{
+					$this->general($value['section']);
+				}
+				
+				echo "</li>";
 			}
 			else
 			{
@@ -76,6 +86,94 @@ class MenuOverride extends Menu
 				{
 					echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . " ". $active .">" . $value['title'] . "</a></li>";
 				}
+			}
+		}
+		
+		echo "</ul>";
+	}
+	
+	function general($class)
+	{	
+		$cat = ($class == 'starbase') ? 'ship' : $class;
+
+		/* get the mainNav items from the DB */
+		$getMenu = "SELECT * FROM sms_menu_items ";
+		$getMenu.= "WHERE menuCat = 'general' AND menuMainSec = '$cat' ";
+		$getMenu.= "AND menuAvailability = 'on' ORDER BY menuGroup, menuOrder ASC";
+		$getMenuResult = mysql_query( $getMenu );
+		
+		/* loop through whatever comes out of the database */
+		while( $fetchMenu = mysql_fetch_array( $getMenuResult ) ) {
+			extract( $fetchMenu, EXTR_OVERWRITE );
+			
+			/* create a multi-dimensional array with the data
+				[x] => array
+				[x]['title'] => title
+				[x]['link'] => link
+				[x]['login'] => login
+				[x]['linkType'] => link type
+				[x]['group'] => group
+			*/
+			$menuArray[] = array(
+				'title' => $menuTitle,
+				'link' => $menuLink,
+				'login' => $menuLogin,
+				'linkType' => $menuLinkType,
+				'group' => $menuGroup,
+				'section' => $menuMainSec
+			);
+			
+			if (!isset($groupArray))
+			{
+				$groupArray = "";
+			}
+			
+			if (!is_array($groupArray))
+			{
+				$groupArray = array( $menuGroup );
+			}
+			elseif (is_array($groupArray) && !in_array($menuGroup, $groupArray))
+			{
+				$groupArray[] = $menuGroup;
+			}	
+		}
+		
+		echo "<ul class='hidemenu'>";
+		
+		foreach ($groupArray as $key2 => $value2)
+		{
+			if ($key2 != 0)
+			{
+				echo "<li class='spacer'>&nbsp;</li>";
+			}
+		
+			foreach ($menuArray as $key => $value)
+			{
+				if ($value2 == $value['group'])
+				{
+					if ($value['linkType'] == "onsite")
+					{
+						$prefix = WEBLOC;
+						$target = "";
+					}
+					else
+					{
+						$prefix = "";
+						$target = " target='_blank'";
+					}
+					
+					if ($value['login'] == "n")
+					{
+						echo "<li><a class='". $value['section'] ."' href='" . $prefix . $value['link'] . "'" . $target . ">" . $value['title'] . "</a></li>";
+					}
+					else
+					{
+						if (isset($sessionCrewid))
+						{
+							echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . ">" . $value['title'] . "</a></li>";	
+						}
+					}
+				}	
 			}
 		}
 		
