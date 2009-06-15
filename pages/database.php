@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/database.php
 Purpose: Page to display the database entries
 
-System Version: 2.6.0
-Last Modified: 2008-06-15 1456 EST
+System Version: 2.6.9
+Last Modified: 2009-06-15 0617 EST
 **/
 
 /* define the page class and vars */
@@ -55,7 +55,7 @@ else
 }
 
 /* get the departments from the database */
-$getDepartments = "SELECT * FROM sms_departments ORDER BY deptOrder ASC";
+$getDepartments = "SELECT * FROM sms_departments WHERE deptDatabaseUse = 'y' ORDER BY deptOrder ASC";
 $getDepartmentsResult = mysql_query($getDepartments);
 $countDepts = mysql_num_rows($getDepartmentsResult);
 $countDeptsFinal = $countDepts - 1;
