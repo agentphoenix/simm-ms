@@ -11,7 +11,7 @@ Purpose: New update system that will dynamically pull the right update file base
 	on what version of the system is in use
 
 System Version: 2.6.9
-Last Modified: 2009-05-14 0746 EST
+Last Modified: 2009-06-15 0623 EST
 **/
 
 /* define the step var */
@@ -167,6 +167,7 @@ switch($step)
 				<li>Fixed bug with docked ship activation and rejection where the docking CO wouldn&rsquo;t be sent a copy of the acceptance or rejection email</li>
 				<li>Fixed location of the Facebox loading graphic</li>
 				<li>Fixed bug in database management page where only entries with a display flag of yes would be shown instead of all entries</li>
+				<li>Fixed bug in database display page where departments with database use turned off still appeared</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>

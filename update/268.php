@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/268.php
 Purpose: Update to 2.6.9
-Last Modified: 2009-05-14 0743 EST
+Last Modified: 2009-06-15 0622 EST
 **/
 
 /*
@@ -18,6 +18,6 @@ Last Modified: 2009-05-14 0743 EST
 | for this release.
 |
 */
-mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.9', '', 'This release fixes bugs with the docking request form, docked ship activation and database entry management.', 'Fixed typos in docking request email sent out to the starbase CO;Fixed bug with docked ship activation and rejection where the docking CO wouldn\'t be sent a copy of the acceptance or rejection email;Fixed location of Facebox loading graphic;Fixed bug in database management page where only entries with a display flag of yes would be shown instead of all entries')");
+mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.9', '', 'This release fixes bugs with the docking request form, docked ship activation and database entry management.', 'Fixed typos in docking request email sent out to the starbase CO;Fixed bug with docked ship activation and rejection where the docking CO wouldn\'t be sent a copy of the acceptance or rejection email;Fixed location of Facebox loading graphic;Fixed bug in database management page where only entries with a display flag of yes would be shown instead of all entries;Fixed bug in database display page where departments with database use turned off still appeared')");
 
 ?>
