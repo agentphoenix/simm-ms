@@ -34,7 +34,7 @@ class SystemCheck
 		
 		/* set the url of the XML file */
 		/* DO NOT CHANGE THIS URL! Doing so will break the version checking function! */
-		$url = "http://www.anodyne-productions.com/feeds/version.xml";
+		$url = "http://www.anodyne-productions.com/feeds/version_sms.xml";
 		$rss = fetch_rss( $url );
 		$continue = 1;
 		
@@ -52,6 +52,15 @@ class SystemCheck
 			$continue = 0;
 		}
 		
+		/* check the major version info */
+		$major = substr($rssVersion, 0, 1);
+		
+		/* make sure we're using the right label, Nova/SMS */
+		$label = ($major >= 3) ? 'Nova' : 'SMS';
+		
+		/* do some replacement for a fixed version based on the product */
+		$versionFixed = ($major >= 3) ? substr_replace($rssVersion, '1', 0, 1) : $rssVersion;
+		
 		/* if we're supposed to show the update info, do it */
 		if($continue == 1)
 		{
@@ -61,7 +70,7 @@ class SystemCheck
 			
 				$this->output_array[0][1] = "<div class='notify-red'>";
 				$this->output_array[0][1].= "<b class='red case'>Update Available</b> &mdash; ";
-				$this->output_array[0][1].= "SMS " . $rssVersion . " is now available.<br /><br />";
+				$this->output_array[0][1].= $label ." ". $versionFixed . " is now available.<br /><br />";
 			
 				$this->output_array[0][1].= $notes;
 				$this->output_array[0][1].= "<br /><br />";
