@@ -51,14 +51,12 @@ $bodywidth = (CUR_PAGE == 'admin.php') ? '20%' : '0%';
 	$(document).ready(function(){
 		$('#nav-main').clickMenu();
 		$('ul.hidemenu').show();
-		
-		$('.wrapper-center').css('width', <?php echo $navwidth;?>);
-		$('#container .content .body').css('margin-right', '<?php echo $bodywidth;?>');
 	});
 </script>
 
 <?php
 
+include_once(SKIN_PATH . 'functions.php');
 include_once(SKIN_PATH . 'classMenuOverride.php');
 
 /* create a new instance of the menu class */
@@ -71,17 +69,16 @@ if(isset($sessionCrewid))
 
 ?>
 
-<div id="header"></div>
-
-<div id="subhead"></div>
-
-<div class="mainNav">
-	<div class="wrapper">
-		<div class="wrapper-center">
+<div id="header">
+	<div class="mainNav">
+		<div class="wrapper">
+			<div class="float-right"><img src="<?php echo SKIN_PATH;?>images/sojourner.png" alt="" /></div>
 			<?php $menu->main();?>
 		</div>
 	</div>
 </div>
+
+<div id="subhead"></div>
 
 <div id="container" class="wrapper">
 	<div class="content">

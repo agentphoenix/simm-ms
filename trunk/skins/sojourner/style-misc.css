@@ -311,3 +311,5 @@ ul.version { list-style-type: square; }
 */
 /** this padding is used on the mission summaries page **/
 .specialPadding1 { padding: 1em 0 1em 1em; }
+
+.float-right { float: right; }
