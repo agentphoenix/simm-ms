@@ -1,0 +1,45 @@
+.cycle-content {
+	width: 960px;
+	height: 200px;
+	overflow: hidden;
+	margin: 0 auto;
+	
+	background: #333;
+	border: 1px solid #444;
+    
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.cycle-inner {
+	width: 900px;
+	height: 200px;
+	overflow: hidden;
+}
+
+.cycle-inner div {  
+    width: 900px;
+    height: 200px;
+    top: 0;
+    left: 0;
+    padding: 1em 2em;
+}
+
+.nav-link {
+	display: block;
+	height: 77px;
+	width: 30px;
+	margin-top: 61px;
+	
+	text-indent: -9000em;
+}
+.prev-link {
+	float: left;
+	
+	background: url(images/btn_prev.gif) no-repeat 0 0;
+}
+.next-link {
+	float: right;
+	
+	background: url(images/btn_next.gif) no-repeat 0 0;
+}

@@ -35,6 +35,6 @@ define('CUR_PAGE', end($name));
 		<script type="text/javascript">
 			<?php include_once('framework/functionsJavascript.js');?>
 		</script>
-		<script type="text/javascript" src="<?php echo SKIN_PATH;?>assets/jquery.valign.js"></script>
+		<script type="text/javascript" src="<?php echo SKIN_PATH;?>assets/jquery.cycle.js"></script>
 	</head>
 	<body>
