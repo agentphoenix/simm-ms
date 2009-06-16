@@ -21,6 +21,7 @@ File: skins/sojourner/style.css
 @import url( "style-login.css" );
 @import url( "style-ui.tabs.css" );
 @import url( "style-clickmenu.css" );
+@import url('style-cycle.css');
 
 /*
 |---------------------------------------------------------------
@@ -56,6 +57,8 @@ body {
 #container {}
 
 #header {}
+
+#subhead { margin: 2em 0 0 0; }
 
 /*
 |---------------------------------------------------------------
@@ -119,7 +122,7 @@ body {
 | the body and side navigation as well)
 |
 */
-#container .content { padding: 0 2em 0 2em; }
+#container .content {}
 
 /*
 |---------------------------------------------------------------
@@ -129,7 +132,7 @@ body {
 | Styles that control the body of the system (where all the content is held)
 |
 */
-#container .content .body { padding: 1em 0 1em 1em; }
+#container .content .body { padding: 1em 0; }
 
 /*
 |---------------------------------------------------------------

@@ -8,42 +8,9 @@ Skin Version: 1.0
 Last Modified: 2009-06-01 0832 EST
 **/
 
-include_once('framework/phpsniff/phpSniff.class.php');
-include_once('framework/phpsniff/phpTimer.class.php');
-
-/* initialize some vars */
-$GET_VARS = isset( $_GET ) ? $_GET : $HTTP_GET_VARS;
-$POST_VARS = isset( $_POST ) ? $_GET : $HTTP_POST_VARS;
-if( !isset( $GET_VARS['UA'] ) ) $GET_VARS['UA'] = '';
-if( !isset( $GET_VARS['cc'] ) ) $GET_VARS['cc'] = '';
-if( !isset( $GET_VARS['dl'] ) ) $GET_VARS['dl'] = '';
-if( !isset( $GET_VARS['am'] ) ) $GET_VARS['am'] = '';
-
-$timer =& new phpTimer();
-$timer->start('main');
-$timer->start('client1');
-$sniffer_settings = array(
-	'check_cookies'=>$GET_VARS['cc'],
-	'default_language'=>$GET_VARS['dl'],
-	'allow_masquerading'=>$GET_VARS['am']
-);
-$client =& new phpSniff( $GET_VARS['UA'],$sniffer_settings );
-
-/**
- * 558 - 440
- * 573 - 455
- */
-
-if ($client->property('browser') == 'ie')
-{
-	$navwidth = (isset($sessionCrewid)) ? 573 : 455;
-}
-else
-{
-	$navwidth = (isset($sessionCrewid)) ? 558 : 440;
-}
-
-$bodywidth = (CUR_PAGE == 'admin.php') ? '20%' : '0%';
+$name_raw = explode('/', $_SERVER['SCRIPT_NAME']);
+$name = end($name_raw);
+$page = (isset($_GET['page'])) ? $_GET['page'] : FALSE;
 
 ?>
 
@@ -51,13 +18,21 @@ $bodywidth = (CUR_PAGE == 'admin.php') ? '20%' : '0%';
 	$(document).ready(function(){
 		$('#nav-main').clickMenu();
 		$('ul.hidemenu').show();
+		
+		$('#cycle').cycle({ 
+		    fx:     'fade', 
+		    speed:  'slow', 
+		    timeout: 8000, 
+		    next:   '#next', 
+		    prev:   '#prev' 
+		});
 	});
 </script>
 
 <?php
 
-include_once(SKIN_PATH . 'functions.php');
-include_once(SKIN_PATH . 'classMenuOverride.php');
+include_once(SKIN_PATH . 'assets/functions.php');
+include_once(SKIN_PATH . 'assets/classMenuOverride.php');
 
 /* create a new instance of the menu class */
 $menu = new MenuOverride;
@@ -78,7 +53,25 @@ if(isset($sessionCrewid))
 	</div>
 </div>
 
-<div id="subhead"></div>
+<div id="subhead">
+	<div class="wrapper">
+		<?php if ($name == 'index.php' && $page == 'main'): ?>
+			<div class="cycle-content">
+				<div class="cycle-nav">
+					<a href="#" id="prev" class="nav-link prev-link">Prev</a>
+					<a href="#" id="next" class="nav-link next-link">Next</a>
+				</div>
+				<div id="cycle" class="cycle-inner">
+					<div>Content 1</div>
+					<div>Content 2</div>
+					<div>Content 3</div>
+				</div>
+			</div>
+		<?php else: ?>
+		
+		<?php endif;?>
+	</div>
+</div>
 
 <div id="container" class="wrapper">
 	<div class="content">
