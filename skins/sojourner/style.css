@@ -35,15 +35,13 @@ body {
 	padding: 0;
 	
 	background: #000;
-	color: #fff;
+	color: #ddd;
 	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
-	font-size: 12px;
+	font-size: 13px;
 }
 
 .wrapper {
-	min-width: 960px;
-	max-width: 1280px;
-	padding: 0 45px;
+	width: 960px;
 	margin: 0 auto;
 }
 
@@ -57,11 +55,7 @@ body {
 */
 #container {}
 
-#header {
-	height: 246px;
-	
-	background: #040406 url('images/header.jpg') no-repeat top center;
-}
+#header {}
 
 /*
 |---------------------------------------------------------------
@@ -72,8 +66,8 @@ body {
 |
 */
 .mainNav {
-	height: 30px;
-	line-height: 30px;
+	height: 40px;
+	line-height: 40px;
 	width: auto;
 	
 	background: #f3b907 url('images/nav-bg.png') repeat-x 0 0;
@@ -111,8 +105,10 @@ body {
 	border-right: 1px solid #0e395c;
 	color: #eee;
 }
-
-.wrapper-center { margin: 0 auto; }
+#nav-main li.spacer {
+	height: 10px !important;
+	line-height: 1;
+}
 
 /*
 |---------------------------------------------------------------
@@ -133,10 +129,7 @@ body {
 | Styles that control the body of the system (where all the content is held)
 |
 */
-#container .content .body {
-	/* margin-right: 20%; */
-	padding: 1em 0 1em 1em;
-}
+#container .content .body { padding: 1em 0 1em 1em; }
 
 /*
 |---------------------------------------------------------------
@@ -182,21 +175,14 @@ body {
 	clear: both;
 	height: 25px;
 	line-height: 25px;
+	margin: 2em 0;
 	
-	background: #090909;
-	color: #fff;
-	border-top: 1px solid #111;
-	border-bottom: 1px solid #111;
+	color: #333;
 	text-align: center;
 	font-size: 80%;
 }
-
-.stardate {
-	float: right;
-	width: 150px;
-	
-	border: 1px solid;
-	
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
+#container .footer a {
+	color: #555;
+	border-bottom: 1px solid;
 }
+#container .footer a:hover { border-bottom: 1px transparent; }
