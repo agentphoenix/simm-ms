@@ -38,6 +38,8 @@ span.cmDiv
 	min-width: 100px; /* ie doesnt know this :/ */
 	//float: left;/*ie again*/
 	//width: 100%;/*and again*/
+	position: relative;
+	z-index: 100;
 	
 	/* ### START EDIT ### */
 	/* background color and border color of the flyout menu */

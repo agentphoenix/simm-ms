@@ -22,7 +22,7 @@ $page = (isset($_GET['page'])) ? $_GET['page'] : FALSE;
 		$('#cycle').cycle({ 
 		    fx:     'fade', 
 		    speed:  'slow', 
-		    timeout: 8000, 
+		    timeout: 0, 
 		    next:   '#next', 
 		    prev:   '#prev' 
 		});
@@ -62,9 +62,11 @@ if(isset($sessionCrewid))
 					<a href="#" id="next" class="nav-link next-link">Next</a>
 				</div>
 				<div id="cycle" class="cycle-inner">
-					<div>Content 1</div>
-					<div>Content 2</div>
-					<div>Content 3</div>
+					<div class="cycle-container cycle-1">
+						<div class="cycle-1-content"><?php echo missionInfo();?></div>
+					</div>
+					<div class="cycle-container">Content 2</div>
+					<div class="cycle-container">Content 3</div>
 				</div>
 			</div>
 		<?php else: ?>
