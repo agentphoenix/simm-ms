@@ -4,8 +4,7 @@
 	overflow: hidden;
 	margin: 0 auto;
 	
-	background: #333;
-	border: 1px solid #444;
+	background: #202020;
     
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -15,14 +14,15 @@
 	width: 900px;
 	height: 200px;
 	overflow: hidden;
+	position: relative;
 }
 
-.cycle-inner div {  
-    width: 900px;
-    height: 200px;
+.cycle-inner .cycle-container {  
+    width: 880px;
+    height: 180px;
     top: 0;
     left: 0;
-    padding: 1em 2em;
+	padding: 10px 20px 10px 0;
 }
 
 .nav-link {
@@ -36,10 +36,19 @@
 .prev-link {
 	float: left;
 	
-	background: url(images/btn_prev.gif) no-repeat 0 0;
+	background: url('images/cycle-button-prev.png') no-repeat 0 0;
 }
 .next-link {
 	float: right;
 	
-	background: url(images/btn_next.gif) no-repeat 0 0;
+	background: url('images/cycle-button-next.png') no-repeat 0 0;
 }
+
+.cycle-1 { background: transparent url('images/cycle-1.png') no-repeat 0 0; }
+.cycle-1-content {
+	width: 300px;
+	float: right;
+	
+	text-align: right;
+}
+.cycle-1-content p { font-size: 90%; }
