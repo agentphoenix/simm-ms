@@ -58,7 +58,10 @@ body {
 
 #header {}
 
-#subhead { margin: 2em 0 0 0; }
+#subhead {
+	background: #111;
+	border-bottom: 1px solid #222;
+}
 
 /*
 |---------------------------------------------------------------
