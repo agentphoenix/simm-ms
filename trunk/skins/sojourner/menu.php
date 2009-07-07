@@ -54,25 +54,23 @@ if(isset($sessionCrewid))
 </div>
 
 <div id="subhead">
-	<div class="wrapper">
-		<?php if ($name == 'index.php' && $page == 'main'): ?>
-			<div class="cycle-content">
-				<div class="cycle-nav">
-					<a href="#" id="prev" class="nav-link prev-link">Prev</a>
-					<a href="#" id="next" class="nav-link next-link">Next</a>
-				</div>
-				<div id="cycle" class="cycle-inner">
-					<div class="cycle-container cycle-1">
-						<div class="cycle-1-content"><?php echo missionInfo();?></div>
-					</div>
-					<div class="cycle-container">Content 2</div>
-					<div class="cycle-container">Content 3</div>
-				</div>
+	<?php if ($name == 'index.php' && $page == 'main'): ?>
+		<div class="cycle-content">
+			<div class="cycle-nav">
+				<a href="#" id="prev" class="nav-link prev-link">Prev</a>
+				<a href="#" id="next" class="nav-link next-link">Next</a>
 			</div>
-		<?php else: ?>
-		
-		<?php endif;?>
-	</div>
+			<div id="cycle" class="cycle-inner">
+				<div class="cycle-container cycle-1">
+					<div class="cycle-1-content"><?php echo missionInfo();?></div>
+				</div>
+				<div class="cycle-container">Content 2</div>
+				<div class="cycle-container">Content 3</div>
+			</div>
+		</div>
+	<?php else: ?>
+	
+	<?php endif;?>
 </div>
 
 <div id="container" class="wrapper">

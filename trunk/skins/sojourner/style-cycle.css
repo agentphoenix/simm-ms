@@ -3,11 +3,6 @@
 	height: 200px;
 	overflow: hidden;
 	margin: 0 auto;
-	
-	background: #202020;
-    
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
 }
 
 .cycle-inner {
@@ -27,9 +22,9 @@
 
 .nav-link {
 	display: block;
-	height: 77px;
+	height: 44px;
 	width: 30px;
-	margin-top: 61px;
+	margin-top: 76px;
 	
 	text-indent: -9000em;
 }
@@ -38,13 +33,15 @@
 	
 	background: url('images/cycle-button-prev.png') no-repeat 0 0;
 }
+.prev-link:hover { background-position: 0 -44px; }
 .next-link {
 	float: right;
 	
 	background: url('images/cycle-button-next.png') no-repeat 0 0;
 }
+.next-link:hover { background-position: 0 -44px; }
 
-.cycle-1 { background: transparent url('images/cycle-1.png') no-repeat 0 0; }
+.cycle-1 { background: transparent url('images/cycle-1.jpg') no-repeat 0 0; }
 .cycle-1-content {
 	width: 300px;
 	float: right;
