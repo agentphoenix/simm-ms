@@ -1,5 +1,8 @@
 <?php
 
+include_once 'framework/classMenu.php';
+//include_once 'framework/dbconnect.php';
+
 class MenuOverride extends Menu
 {
 	var $skin;
@@ -14,11 +17,6 @@ class MenuOverride extends Menu
 		'database' => array('database')
 	);
 	
-	function MenuOverride()
-	{
-		parent::Menu();
-	}
-	
 	function main()
 	{
 		/* get the mainNav items from the DB */
@@ -27,8 +25,8 @@ class MenuOverride extends Menu
 		$getMenuResult = mysql_query( $getMenu );
 		
 		/* loop through whatever comes out of the database */
-		while( $fetchMenu = mysql_fetch_array( $getMenuResult ) ) {
-			extract( $fetchMenu, EXTR_OVERWRITE );
+		while($fetchMenu = mysql_fetch_assoc($getMenuResult)) {
+			extract($fetchMenu, EXTR_OVERWRITE);
 			
 			/* create a multi-dimensional array with the data
 				[x] => array
@@ -38,11 +36,11 @@ class MenuOverride extends Menu
 				[x]['linkType'] => link type
 			*/
 			$menuArray[] = array(
-				'title' => $menuTitle,
-				'link' => $menuLink,
-				'login' => $menuLogin,
-				'linkType' => $menuLinkType,
-				'section' => $menuMainSec
+				'title'		=> $fetchMenu['menuTitle'],
+				'link'		=> $fetchMenu['menuLink'],
+				'login'		=> $fetchMenu['menuLogin'],
+				'linkType'	=> $fetchMenu['menuLinkType'],
+				'section'	=> $fetchMenu['menuMainSec']
 			);
 		}
 		
@@ -76,7 +74,7 @@ class MenuOverride extends Menu
 			if ($value['login'] == "n")
 			{
 				echo "<li>";
-				echo "<a id='". $value['section'] ."' href='" . $prefix . $value['link'] . "'" . $target . " ". $active .">" . $value['title'] . "</a>";
+				echo "<a id='". $value['section'] ."' href='" . $prefix . $value['link'] . "'" . $target . $active .">" . $value['title'] . "</a>";
 				
 				if (in_array($value['section'], $sections))
 				{
@@ -89,7 +87,7 @@ class MenuOverride extends Menu
 			{
 				if (isset($_SESSION['sessionCrewid']) && UID == $_SESSION['systemUID'])
 				{
-					echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . " ". $active .">" . $value['title'] . "</a></li>";
+					echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . $active .">" . $value['title'] . "</a></li>";
 				}
 			}
 		}
@@ -189,7 +187,9 @@ class MenuOverride extends Menu
 	{
 		$page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
 		
-		return $page;
+		$check = $this->_page_check($page);
+		
+		return $check;
 	}
 	
 	function _page_check($page = '')
