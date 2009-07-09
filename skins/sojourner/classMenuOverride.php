@@ -14,6 +14,11 @@ class MenuOverride extends Menu
 		'database' => array('database')
 	);
 	
+	function MenuOverride()
+	{
+		parent::Menu();
+	}
+	
 	function main()
 	{
 		/* get the mainNav items from the DB */
@@ -41,7 +46,7 @@ class MenuOverride extends Menu
 			);
 		}
 		
-		$page = (isset($_GET['page'])) ? $_GET['page'] : FALSE;
+		$page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
 		
 		$server = explode('/', $_SERVER['PHP_SELF']);
 		$count = count($server);
@@ -178,6 +183,13 @@ class MenuOverride extends Menu
 		}
 		
 		echo "</ul>";
+	}
+	
+	function foo()
+	{
+		$page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
+		
+		return $page;
 	}
 	
 	function _page_check($page = '')

@@ -10,7 +10,7 @@ Last Modified: 2009-06-01 0832 EST
 
 $name_raw = explode('/', $_SERVER['SCRIPT_NAME']);
 $name = end($name_raw);
-$page = (isset($_GET['page'])) ? $_GET['page'] : FALSE;
+$page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
 
 ?>
 
@@ -42,6 +42,9 @@ if(isset($sessionCrewid))
 	$menu->skin = $sessionDisplaySkin;
 }
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 ?>
 
 <div id="header">
@@ -54,7 +57,7 @@ if(isset($sessionCrewid))
 </div>
 
 <div id="subhead">
-	<?php if ($name == 'index.php' && $page == 'main'): ?>
+	<?php if ($name == 'index.php'): ?>
 		<div class="cycle-content">
 			<div class="cycle-nav">
 				<a href="#" id="prev" class="nav-link prev-link">Prev</a>
