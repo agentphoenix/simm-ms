@@ -12,3 +12,14 @@ function missionInfo()
 	
 	return $output;
 }
+
+function unreadMessages($crew)
+{
+	$countMessages = "SELECT pmid, pmSubject, pmAuthor FROM sms_privatemessages ";
+	$countMessages.= "WHERE pmRecipient = '$crew' AND pmStatus = 'unread' ";
+	$countMessages.= "AND pmRecipientDisplay = 'y'";
+	$countMessagesResult = mysql_query( $countMessages );
+	$countMessagesFinal = mysql_num_rows( $countMessagesResult );
+	
+	return $countMessagesFinal;
+}

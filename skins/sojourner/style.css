@@ -22,6 +22,7 @@ File: skins/sojourner/style.css
 @import url( "style-ui.tabs.css" );
 @import url( "style-clickmenu.css" );
 @import url('style-cycle.css');
+@import url('style-panel.css');
 
 /*
 |---------------------------------------------------------------
