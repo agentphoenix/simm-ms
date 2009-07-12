@@ -298,6 +298,12 @@ ul.list-dark {
 	color: #222;
 }
 ul.version { list-style-type: square; }
+ul.none {
+	margin: 0;
+	padding: 0 1em;
+	
+	list-style: none;
+}
 
 /*
 |---------------------------------------------------------------
@@ -314,3 +320,4 @@ ul.version { list-style-type: square; }
 
 .float-right { float: right; }
 .align-right { text-align: right; }
+.align-top { vertical-align: top; }
