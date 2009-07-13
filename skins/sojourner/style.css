@@ -23,6 +23,7 @@ File: skins/sojourner/style.css
 @import url( "style-clickmenu.css" );
 @import url('style-cycle.css');
 @import url('style-panel.css');
+@import url('style-sfmenu.css');
 
 /*
 |---------------------------------------------------------------
@@ -87,13 +88,13 @@ body {
 	list-style: none;
 }
 #nav-main li {
-	display: inline;
+	display: block;
 	margin: 0 2px;
 	
 	text-transform: lowercase;
 }
 #nav-main li a {
-	display: inline-block;
+	display: block;
 	padding: 0 1em;
 	
 	text-decoration: none;
@@ -102,7 +103,7 @@ body {
 	border-left: 1px solid transparent;
 	border-right: 1px solid transparent;
 }
-#nav-main li a:hover, .clickMenu li.hover a {
+#nav-main li a:hover {
 	background: #f3d16b url('images/nav-hover-bg.png') repeat-x 0 0;
 	color: #363636;
 }
@@ -111,6 +112,8 @@ body {
 	border-left: 1px solid #0e395c;
 	border-right: 1px solid #0e395c;
 	color: #eee;
+	
+	height: 40px;
 }
 #nav-main li.spacer {
 	height: 10px !important;
