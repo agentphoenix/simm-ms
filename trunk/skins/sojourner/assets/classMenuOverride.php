@@ -56,19 +56,27 @@ class MenuOverride extends Menu
 		
 		$sections = array('main', 'personnel', 'simm', 'ship');
 		
-		echo "<ul id='nav-main'>";
+		echo "<ul class='sf-menu' id='nav-main'>\n";
 		
 		foreach ($menuArray as $key => $value)
 		{
-			if ($value['linkType'] == "onsite")
+			if (!in_array($value['section'], $sections))
 			{
-				$prefix = WEBLOC;
-				$target = "";
+				if ($value['linkType'] == "onsite")
+				{
+					$link = WEBLOC . $value['link'];
+					$target = "";
+				}
+				else
+				{
+					$link = $value['link'];
+					$target = " target='_blank'";
+				}
 			}
 			else
 			{
-				$prefix = "";
-				$target = " target='_blank'";
+				$link = '#';
+				$target = '';
 			}
 			
 			$active = ($this->_page_check($page) == $value['section'] && $name == 'index.php') ? ' class="active"' : FALSE;
@@ -76,27 +84,30 @@ class MenuOverride extends Menu
 			if ($value['login'] == "n")
 			{
 				echo "<li>";
-				echo "<a id='". $value['section'] ."' href='" . $prefix . $value['link'] . "'" . $target . $active .">". $value['title'];
+				echo "<a id='". $value['section'] ."' href='" . $link . "'" . $target . $active .">". $value['title'];
 				
 				if (in_array($value['section'], $sections))
 				{
-					echo " <img src='skins/sojourner/images/nav-arrow.png' alt='' border='0' />";
+					echo " <img src='skins/sojourner/images/nav-arrow.png' alt='' border='0' /></a>";
 					$this->general($value['section']);
 				}
+				else
+				{
+					echo "</a>";
+				}
 				
-				echo "</a>";
-				echo "</li>";
+				echo "</li>\n";
 			}
 			else
 			{
 				if (isset($_SESSION['sessionCrewid']) && UID == $_SESSION['systemUID'])
 				{
-					echo "<li><a href='" . $prefix . $value['link'] . "'" . $target . $active .">" . $value['title'] . "</a></li>";
+					echo "<li><a href='" . $link . "'" . $target . $active .">" . $value['title'] . "</a></li>";
 				}
 			}
 		}
 		
-		echo "</ul>";
+		echo "</ul>\n";
 	}
 	
 	function general($class)
@@ -145,7 +156,7 @@ class MenuOverride extends Menu
 			}	
 		}
 		
-		echo "<ul class='hidemenu'>";
+		echo "<ul>";
 		
 		foreach ($groupArray as $key2 => $value2)
 		{

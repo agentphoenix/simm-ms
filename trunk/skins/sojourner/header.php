@@ -36,5 +36,7 @@ define('CUR_PAGE', end($name));
 			<?php include_once('framework/functionsJavascript.js');?>
 		</script>
 		<script type="text/javascript" src="<?php echo SKIN_PATH;?>assets/jquery.cycle.js"></script>
+		<script type="text/javascript" src="<?php echo SKIN_PATH;?>assets/hoverIntent.js"></script>
+		<script type="text/javascript" src="<?php echo SKIN_PATH;?>assets/superfish.js"></script>
 	</head>
 	<body>

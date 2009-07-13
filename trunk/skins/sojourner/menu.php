@@ -8,6 +8,17 @@ Skin Version: 1.0
 Last Modified: 2009-06-01 0832 EST
 **/
 
+include_once(SKIN_PATH . 'assets/functions.php');
+include_once(SKIN_PATH . 'assets/classMenuOverride.php');
+
+/* create a new instance of the menu class */
+$menu = new MenuOverride;
+
+if(isset($sessionCrewid))
+{
+	$menu->skin = $sessionDisplaySkin;
+}
+
 $name_raw = explode('/', $_SERVER['SCRIPT_NAME']);
 $name = end($name_raw);
 $page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
@@ -18,8 +29,7 @@ $page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
 	$(document).ready(function(){
 		var name = '<?php echo $name;?>';
 		
-		$('#nav-main').clickMenu();
-		$('ul.hidemenu').show();
+		$('ul.sf-menu').superfish();
 		
 		$('#cycle').cycle({ 
 		    fx:     'fade', 
@@ -30,16 +40,10 @@ $page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
 		});
 		
 		$('a#userpanel').toggle(function(){
-			$('div.panel-body').slideDown('normal', function(){
-				$('.panel-trigger div.ui-icon').removeClass('ui-icon-triangle-1-s');
-				$('.panel-trigger div.ui-icon').addClass('ui-icon-triangle-1-n');
-			});
+			$('div.panel-body').slideDown('normal');
 			return false;
 		}, function(){
-			$('div.panel-body').slideUp('normal', function(){
-				$('.panel-trigger div.ui-icon').removeClass('ui-icon-triangle-1-n');
-				$('.panel-trigger div.ui-icon').addClass('ui-icon-triangle-1-s');
-			});
+			$('div.panel-body').slideUp('normal');
 			return false;
 		});
 		
@@ -51,17 +55,6 @@ $page = (isset($_GET['page'])) ? $_GET['page'] : 'main';
 </script>
 
 <?php
-
-include_once(SKIN_PATH . 'assets/functions.php');
-include_once(SKIN_PATH . 'assets/classMenuOverride.php');
-
-/* create a new instance of the menu class */
-$menu = new MenuOverride;
-
-if(isset($sessionCrewid))
-{
-	$menu->skin = $sessionDisplaySkin;
-}
 
 $unread = unreadMessages($sessionCrewid);
 
@@ -155,7 +148,7 @@ $unreadImage = '<img src="skins/sojourner/images/'. $unreadIcon .'.png" border="
 	<div class="mainNav">
 		<div class="wrapper">
 			<div class="float-right"><img src="<?php echo SKIN_PATH;?>images/sojourner.png" alt="" /></div>
-			<?php echo $menu->main();?>
+			<?php $menu->main();?>
 		</div>
 	</div>
 </div>
