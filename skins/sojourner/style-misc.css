@@ -111,11 +111,11 @@ input[type=password] {
 /** button classes **/
 input.button {
 	padding: 0;
-	background: url( 'buttons/button-off.png' ) no-repeat;
+	height: 25px;
+	
+	background: url('buttons/_button.png' ) no-repeat;
 }
-input.button:hover {
-	background: url( 'buttons/button-hover.png' ) no-repeat;
-}
+input.button:hover { background-position: 0 -25px; }
 
 /** input classes **/
 input.class, input.order { width:25px; }
