@@ -192,6 +192,9 @@ table.images { width: auto; }
 	background-color: #231804;
 	border: 1px solid #e99e1c;
 	border-left: 4px solid #e99e1c;
+	
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .notify-red {
 	padding: .2em .5em .3em 1em;
@@ -200,6 +203,9 @@ table.images { width: auto; }
 	background-color: #170707;
 	border: 1px solid #9c2c2c;
 	border-left: 4px solid #9c2c2c;
+	
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .notify-green {
 	padding: .2em .5em .3em 1em;
@@ -208,6 +214,9 @@ table.images { width: auto; }
 	background-color: #0b170b;
 	border: 1px solid #4b994b;
 	border-left: 4px solid #4b994b;
+	
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .notify-blue {
 	padding: .2em .5em .3em 1em;
@@ -216,6 +225,9 @@ table.images { width: auto; }
 	background-color: #0a1023;
 	border: 1px solid #406ceb;
 	border-left: 4px solid #406ceb;
+	
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .notify-yellow {
 	padding: .2em .5em .3em 1em;
@@ -224,6 +236,9 @@ table.images { width: auto; }
 	background-color: #33300b;
 	border: 1px solid #e7dc32;
 	border-left: 4px solid #e7dc32;
+	
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .notify-normal {
 	padding: .2em .5em .3em 1em;
@@ -231,6 +246,9 @@ table.images { width: auto; }
 	
 	background-color: #090909;
 	border: 1px solid #111;
+	
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 
 /*
