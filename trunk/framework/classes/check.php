@@ -10,8 +10,8 @@ File: framework/classes/check.php
 Purpose: Page with the class that is called by the system to check for
 	ACP items liked saved posts, pending items, SMS updates and PMs
 
-System Version: 2.6.0
-Last Modified: 2008-04-24 2250 EST
+System Version: 2.6.9
+Last Modified: 2009-08-11 0911 EST
 
 Included Classes:
 	SystemCheck
@@ -30,25 +30,30 @@ class SystemCheck
 	function version( $notify )
 	{
 		/* pull in the main fetch file */
-		require_once( 'framework/rss/rss_fetch.inc' );
+		require_once 'framework/rss/rss_fetch.inc';
 		
 		/* set the url of the XML file */
 		/* DO NOT CHANGE THIS URL! Doing so will break the version checking function! */
 		$url = "http://www.anodyne-productions.com/feeds/version_sms.xml";
-		$rss = fetch_rss( $url );
+		$rss = fetch_rss($url);
 		$continue = 1;
 		
 		/* define the variables coming out of the XML file */
-		foreach( $rss->items as $item ) {
+		foreach ($rss->items as $item)
+		{
 			$rssVersion = $item['version'];
 			$notes = $item['notes'];
 			$severity = $item['severity'];
 		}
 		
 		/* logic to figure out if we're supposed to show the update notification */
-		if($notify == "none") {
+		if ($notify == "none")
+		{
 			$continue = 0;
-		} if($notify == "major" && $severity == "minor") {
+		}
+		
+		if ($notify == "major" && $severity == "minor")
+		{
 			$continue = 0;
 		}
 		
@@ -64,7 +69,6 @@ class SystemCheck
 		/* if we're supposed to show the update info, do it */
 		if($continue == 1)
 		{
-		
 			/* if the version the user has and the version from the XML file are different, display the notice */
 			if( VER_FILES < $rssVersion && VER_DB < $rssVersion ) {
 			
@@ -74,7 +78,7 @@ class SystemCheck
 			
 				$this->output_array[0][1].= $notes;
 				$this->output_array[0][1].= "<br /><br />";
-				$this->output_array[0][1].= "Go to the <a href='http://www.anodyne-productions.com/index.php?cat=sms&page=downloads' target='_blank'>Anodyne SMS Site</a> to download this update.";
+				$this->output_array[0][1].= "Go to the <a href='http://www.anodyne-productions.com/' target='_blank'>Anodyne site</a> to download this update.";
 				$this->output_array[0][1].= "</div>";
 			
 			} if( VER_DB > VER_FILES && VER_DB == $rssVersion ) {
