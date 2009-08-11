@@ -168,6 +168,13 @@ switch($step)
 				<li>Fixed location of the Facebox loading graphic</li>
 				<li>Fixed bug in database management page where only entries with a display flag of yes would be shown instead of all entries</li>
 				<li>Fixed bug in database display page where departments with database use turned off still appeared</li>
+				<li>Updated the version check class with the following changes:
+					<ul>
+						<li>SMS now understands that version 3.0 is actually Nova 1.0</li>
+						<li>Updated the download link to go straight to the Anodyne site instead of the SMS download page (done because the Anodyne site has been re-built from the ground up and the old URLs won't work</li>
+						<li>Updated the XML file to version_sms.xml so that SMS and Nova can use separate version files</li>
+					</ul>
+				</li>
 			</ul>
 			
 			<h1><a href="update.php?step=2&version=<?=$urlVersion;?>">Next Step &raquo;</a></h1>
