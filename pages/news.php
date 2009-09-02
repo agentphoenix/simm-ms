@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: pages/news.php
 Purpose: Page to display the news items
 
-System Version: 2.6.7
-Last Modified: 2008-12-10 1418 EST
+System Version: 2.6.10
+Last Modified: 2009-09-02 0658 EST
 **/
 
 /* define the page class and vars */
@@ -96,7 +96,7 @@ if( isset( $sessionCrewid ) ) {
 		} else {
 		
 			$news = "SELECT news.*, cat.* FROM sms_news AS news, sms_news_categories AS cat ";
-			$news.= "WHERE news.newsCat = '$display' AND news.newsStatus = 'activated' ";
+			$news.= "WHERE news.newsCat = '$display' AND news.newsStatus = 'activated' AND news.newsCat = cat.catid ";
 			$news.= "GROUP BY news.newsid ORDER BY news.newsPosted DESC";
 			$newsResults = mysql_query( $news );
 
@@ -114,10 +114,10 @@ if( isset( $sessionCrewid ) ) {
 			
 		?>
 		
-		<span class="fontMedium"><b><? printText( $newsTitle ); ?></b></span><br />
+		<span class="fontMedium"><b><? printText( $newsList['newsTitle'] ); ?></b></span><br />
 		<span class="fontSmall">
 			Posted by <? printCrewName( $newsAuthor, "rank", "link" ); ?> on <?=dateFormat( "long", $newsPosted );?><br />
-			Category: <? printText( $catName ); ?>
+			Category: <? printText( $newsList['catName'] ); ?>
 		</span><br />
 		<div style="padding: 1em 0 3em 1em;">
 			<?
