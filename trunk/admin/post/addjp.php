@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/addjp.php
 Purpose: Page to add a joint post
 
-System Version: 2.6.0
-Last Modified: 2008-04-29 1611 EST
+System Version: 2.6.10
+Last Modified: 2009-09-08 0843 EST
 **/
 
 /* access check */
@@ -64,38 +64,21 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 	
 	if(!isset($number)) {
 		$number = 2;
-	} elseif( $number > 8 ) {
-		$number = 8;
+	} elseif( $number > JP_AUTHORS ) {
+		$number = JP_AUTHORS;
 	}
 	
 	if(isset($_POST['action_x']))
 	{
 		$jpnumber = $_POST['jpNumber'];
 		
-		switch($jpnumber)
+		for ($n=1; $n<=$jpnumber; $n++)
 		{
-			case 2:
-				$postAuthors = $_POST['author1'] . "," . $_POST['author2'];
-				break;
-			case 3:
-				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3'];
-				break;
-			case 4:
-				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4'];
-				break;
-			case 5:
-				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'];
-				break;
-			case 6:
-				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'];
-				break;
-			case 7:
-				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'];
-				break;
-			case 8:
-				$postAuthors = $_POST['author1'] . "," . $_POST['author2']  . "," . $_POST['author3']  . "," . $_POST['author4']  . "," . $_POST['author5'] . "," . $_POST['author6'] . "," . $_POST['author7'] . "," . $_POST['author8'];
-				break;
+			$authors[] = $_POST['author' . $n];
 		}
+		
+		/* make a string of the authors */
+		$postAuthors = implode(',', $authors);
 		
 		$insert = "INSERT INTO sms_posts (postAuthor, postTitle, postLocation, postTimeline, postContent, postPosted, postMission, ";
 		$insert.= "postStatus, postTag) VALUES (%s, %s, %s, %s, %s, UNIX_TIMESTAMP(), %d, %s, %s)";
@@ -175,6 +158,16 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 	
 	?>
 	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#participants').change(function(){
+				var number = $(this).val();
+				
+				window.location = "<?php echo $webLocation;?>admin.php?page=post&sub=addjp&number=" + number;
+			});
+		});
+	</script>
+	
 	<div class="body">
 		<?php
 		
@@ -194,19 +187,14 @@ if( in_array( "p_addjp", $sessionAccess ) ) {
 	
 		<span class="fontNormal">
 			<b>Select the number of participants:</b> &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=addjp&number=2">2 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=addjp&number=3">3 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=addjp&number=4">4 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=addjp&number=5">5 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=addjp&number=6">6 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=addjp&number=7">7 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=addjp&number=8">8 people</a>
+			
+			<select id="participants">
+				<option value="">Please Choose One</option>
+				
+				<?php for ($k=2; $k<=JP_AUTHORS; $k++): ?>
+					<option value="<?php echo $k;?>"><?php echo $k;?> People</option>
+				<?php endfor;?>
+			</select>
 		</span><br /><br />
 		
 		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=addjp">

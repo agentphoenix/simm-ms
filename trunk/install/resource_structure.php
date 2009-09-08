@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: install/resource_structure.php
 Purpose: Installation resource file with the database structure
 
-System Version: 2.6.0
-Last Modified: 2008-05-05 0325 EST
+System Version: 2.6.10
+Last Modified: 2009-09-08 0804 EST
 **/
 
 /* query the database for the mysql version */
@@ -320,7 +320,7 @@ mysql_query( "CREATE TABLE `sms_positions` (
 /* create the post table */
 mysql_query( "CREATE TABLE `sms_posts` (
   `postid` int(4) NOT NULL auto_increment,
-  `postAuthor` varchar(40) NOT NULL default '',
+  `postAuthor` text NOT NULL,
   `postTitle` varchar(100) NOT NULL default '',
   `postLocation` varchar(100) NOT NULL default '',
   `postTimeline` varchar(100) NOT NULL default '',

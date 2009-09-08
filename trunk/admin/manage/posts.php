@@ -10,13 +10,12 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.10
-Last Modified: 2009-09-07 2033 EST
+Last Modified: 2009-09-08 0850 EST
 **/
 
 /* access check */
 if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 {
-
 	/* set the page class */
 	$pageClass = "admin";
 	$subMenuClass = "manage";
@@ -67,7 +66,7 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 	
 	$authors_array = array();
 	
-	for($i = 0; $i < 8; $i++)
+	for($i = 0; $i < JP_AUTHORS; $i++)
 	{
 		if(isset($_POST['postAuthor' . $i])) {
 			$authors_array[] = $_POST['postAuthor' . $i];

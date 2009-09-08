@@ -19,6 +19,7 @@
 * framework/functionsGlobal.php
 * framework/classMenu.php
 * install/resource_data.php
+* install/resource_structure.php
 * admin/manage/posts.php
 * pages/news.php
 
