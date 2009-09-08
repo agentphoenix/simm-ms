@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
-System Version: 2.6.6
-Last Modified: 2008-12-08 1259 EST
+System Version: 2.6.10
+Last Modified: 2009-09-07 2033 EST
 **/
 
 /* access check */
@@ -129,7 +129,7 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 	}
 	elseif(isset( $_POST['action_delete_x']))
 	{
-		$query = "DELETE FROM sms_posts WHERE postid = '$postid' LIMIT 1";
+		$query = "DELETE FROM sms_posts WHERE postid = $id LIMIT 1";
 		$result = mysql_query( $query );
 		
 		/* optimize the table */

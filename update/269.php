@@ -3,7 +3,7 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/269.php
 Purpose: Update to 2.6.10
-Last Modified: 2009-09-03 1227 EST
+Last Modified: 2009-09-07 2034 EST
 **/
 
 /*
@@ -18,6 +18,6 @@ Last Modified: 2009-09-03 1227 EST
 | for this release.
 |
 */
-mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.10', '', 'This release fixes bugs with ...', 'Fixed bug on news page where selecting a category would narrow down news but the category listed next to each news item wouldn't be accurate;Fixed bug in menu class where setting a general menu item to require login wouldn't allow anyone to see the link, logged in or not)");
+mysql_query("INSERT INTO sms_system_versions ( `version`, `versionDate`, `versionShortDesc`, `versionDesc` ) VALUES ('2.6.10', '', 'This release fixes bugs with ...', 'Fixed bug on news page where selecting a category would narrow down news but the category listed next to each news item wouldn't be accurate;Fixed bug in menu class where setting a general menu item to require login wouldn't allow anyone to see the link, logged in or not;Fixed bug where mission posts wouldn't be deleted when the delete action was triggered from the manage posts page)");
 
 ?>
