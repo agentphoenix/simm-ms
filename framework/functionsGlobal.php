@@ -15,7 +15,6 @@ Last Modified: 2009-09-07 2036 EST
 
 Included Functions:
 	displayAuthors( $missionID, $link )
-	print_active_crew_select_menu( $type, $author, $id, $section, $sub )
 	printCO()
 	printXO()
 	printCOEmail()
@@ -163,122 +162,6 @@ function displayAuthors( $missionID, $link ) {
 	
 	echo stripslashes( $authorsString );
 		
-}
-/* END FUNCTION */
-
-/**
-	Active Crew Select Menu
-**/
-function print_active_crew_select_menu( $type, $author, $id, $section, $sub ) {
-	
-	if( $type != "post" ) {
-
-		if( $type == "pm" ) {
-			echo "<select name='" . $type . "Recipient'>";
-		} else {
-			echo "<select name='" . $type . "Author'>";
-		}
-		
-		$users = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
-		$users.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-		$users.= "WHERE crew.crewType = 'active' AND crew.rankid = rank.rankid ORDER BY crew.rankid";
-		$usersResult = mysql_query( $users );
-		
-		if( empty( $author ) ) { 
-			echo "<option value='0'>No Author Selected</option>";
-		}
-		
-		while( $userFetch = mysql_fetch_assoc( $usersResult ) ) {
-			extract( $userFetch, EXTR_OVERWRITE );
-				
-			if( $author == $userFetch['crewid'] ) {
-				echo "<option value='$author' selected>$rankName $firstName $lastName</option>";
-			} else {
-				echo "<option value='$userFetch[crewid]'>$rankName $firstName $lastName</option>";
-			}
-		}
-	
-	echo "</select>";
-	
-	} elseif( $type == "post" ) {
-		
-		$authorArray = explode( ",", $author );
-		
-		$i = 0;
-		
-		foreach( $authorArray as $key=>$value ) {
-			
-			echo "<select name='" . $type . "Author" . $i . "'>";
-			
-			$users = "SELECT crew.crewid, crew.firstName, crew.lastName, rank.rankName ";
-			$users.= "FROM sms_crew AS crew, sms_ranks AS rank ";
-			$users.= "WHERE crew.crewType = 'active' AND crew.rankid = rank.rankid ORDER BY crew.rankid";
-			$usersResult = mysql_query( $users );
-			
-			while( $userFetch = mysql_fetch_assoc( $usersResult ) ) {
-				extract( $userFetch, EXTR_OVERWRITE );
-				
-				if( in_array( $authorArray[$i], $userFetch ) ) {
-					echo "<option value='$authorArray[$i]' selected>$rankName $firstName $lastName</option>";
-				} else {
-					echo "<option value='$userFetch[crewid]'>$rankName $firstName $lastName</option>";
-				}
-				
-			}
-			
-			echo "</select>";
-			
-			/*
-				if there are less than 8 array keys, allow a user to add another one
-				if there is a second array key, allow a user to delete a user, otherwise don't
-			*/
-			if( $i < 7 ) {
-				echo "&nbsp;&nbsp;";
-				
-				if(isset($_GET['id']))
-				{
-					$href = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&add=1&postid=" . $id;
-				}
-				else
-				{
-					$href = WEBLOC . "admin.php?page=manage&sub=posts&add=1&postid=" . $id;
-				}
-				
-				echo "<a href='" . $href . "' class='add_icon image'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
-				
-			} if( array_key_exists( "1", $authorArray ) ) {
-				echo "&nbsp;";
-				
-				if(isset($_GET['id']))
-				{
-					$href2 = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&id=" . $_GET['id'] . "&delete=" . $i . "&postid=" . $id;
-				}
-				else
-				{
-					$href2 = WEBLOC . "admin.php?page=" . $section . "&sub=" . $sub . "&delete=" . $i . "&postid=" . $id;
-				}
-				
-				echo "<a href='" . $href2 . "' class='remove_icon image'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
-				
-			}
-			
-			/* as long as $i is under 7, keep adding 1 to it */
-			if( $i < 7 ) {
-				$i = $i +1;
-			}
-			
-			echo "<br />\n";
-			
-		}
-		
-		/* count the number of items in the array */
-		$authorCount = count( $authorArray );
-		
-		/* return the array count to be used to put the author string together */
-		return $authorCount;
-		
-	}
-	
 }
 /* END FUNCTION */
 

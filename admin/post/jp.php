@@ -9,8 +9,8 @@ Author: David VanScott [ davidv@anodyne-productions.com ]
 File: admin/post/jp.php
 Purpose: Page to post a joint post
 
-System Version: 2.6.8
-Last Modified: 2008-12-28 2125 EST
+System Version: 2.6.10
+Last Modified: 2009-09-08 0832 EST
 **/
 
 /* access check */
@@ -61,8 +61,8 @@ if(in_array("p_jp", $sessionAccess))
 	
 	if(!isset($number)) {
 		$number = 2;
-	} elseif( $number > 8 ) {
-		$number = 8;
+	} elseif( $number > JP_AUTHORS ) {
+		$number = JP_AUTHORS;
 	}
 	
 	if(isset($_POST['action_post_x']))
@@ -507,6 +507,12 @@ if(in_array("p_jp", $sessionAccess))
 					$('#notes').slideToggle('slow');
 					return false;
 				});
+				
+				$('#participants').change(function(){
+					var number = $(this).val();
+					
+					window.location = "<?php echo $webLocation;?>admin.php?page=post&sub=jp&number=" + number;
+				});
 			});
 		</script>
 		
@@ -561,19 +567,14 @@ if(in_array("p_jp", $sessionAccess))
 		<span class="fontTitle">Post <?=$number;?>-Way Joint Mission Entry</span><br /><br />
 		<span class="fontNormal">
 			<b>Select the number of participants:</b> &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=jp&number=2">2 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=jp&number=3">3 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=jp&number=4">4 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=jp&number=5">5 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=jp&number=6">6 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=jp&number=7">7 people</a>
-			&nbsp; &middot; &nbsp;
-			<a href="<?=$webLocation;?>admin.php?page=post&sub=jp&number=8">8 people</a>
+			
+			<select id="participants">
+				<option value="">Please Choose One</option>
+				
+				<?php for ($k=2; $k<=JP_AUTHORS; $k++): ?>
+					<option value="<?php echo $k;?>"><?php echo $k;?> People</option>
+				<?php endfor;?>
+			</select>
 		</span><br /><br />
 		
 		<form method="post" action="<?=$webLocation;?>admin.php?page=post&sub=jp&number=<?=$number;?>">

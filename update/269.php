@@ -3,8 +3,18 @@
 Author: David VanScott [ davidv@anodyne-productions.com ]
 File: update/269.php
 Purpose: Update to 2.6.10
-Last Modified: 2009-09-07 2034 EST
+Last Modified: 2009-09-08 0806 EST
 **/
+
+/*
+|---------------------------------------------------------------
+| POST AUTHORS
+|---------------------------------------------------------------
+|
+| Changing the database format of the postAuthor field
+|
+*/
+mysql_query("ALTER TABLE `sms_posts` CHANGE `postAuthor` `postAuthor` text NOT NULL");
 
 /*
 |---------------------------------------------------------------
