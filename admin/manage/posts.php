@@ -10,7 +10,7 @@ File: admin/manage/posts.php
 Purpose: Page that moderates the mission posts
 
 System Version: 2.6.10
-Last Modified: 2009-09-08 0850 EST
+Last Modified: 2009-09-16 1936 EST
 **/
 
 /* access check */
@@ -90,7 +90,7 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 		if(!in_array("m_posts2", $sessionAccess))
 		{
 			$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, ";
-			$update.= "postAuthor = %s, postContent = %s WHERE postid = $postid LIMIT 1";
+			$update.= "postAuthor = %s, postTag = %s, postContent = %s WHERE postid = $postid LIMIT 1";
 		
 			$query = sprintf(
 				$update,
@@ -98,13 +98,14 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 				escape_string($_POST['postLocation']),
 				escape_string($_POST['postTimeline']),
 				escape_string($postAuthor),
+				escape_string($_POST['postTag']),
 				escape_string($_POST['postContent'])
 			);
 		}
 		else
 		{
 			$update = "UPDATE sms_posts SET postTitle = %s, postLocation = %s, postTimeline = %s, ";
-			$update.= "postAuthor = %s, postContent = %s, postStatus = %s, postMission = %d ";
+			$update.= "postAuthor = %s, postContent = %s, postStatus = %s, postMission = %d, postTag = %s ";
 			$update.= "WHERE postid = $postid LIMIT 1";
 		
 			$query = sprintf(
@@ -115,7 +116,8 @@ if(in_array("m_posts1", $sessionAccess) || in_array("m_posts2", $sessionAccess))
 				escape_string($postAuthor),
 				escape_string($_POST['postContent']),
 				escape_string($_POST['postStatus']),
-				escape_string($_POST['postMission'])
+				escape_string($_POST['postMission']),
+				escape_string($_POST['postTag'])
 			);
 		}
 		
