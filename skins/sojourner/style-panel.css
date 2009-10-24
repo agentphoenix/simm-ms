@@ -71,7 +71,7 @@
 #panel-handle-left {
 	width: auto;
 	margin: 0;
-	padding: 0 .5em;
+	padding: 0 2px;
 }
 #panel-handle-left li {
 	float: left;
